@@ -4,7 +4,7 @@ OpenAI Dive is a Rust API client that allows you to interact with the OpenAI API
 
 ```ini
 [dependencies]
-openai_dive = "0.1.0"
+openai_dive = "0.1"
 ```
 
 ## Endpoints
@@ -28,7 +28,7 @@ Lists the currently available models, and provides basic information about each 
 **Method** `GET`
 
 ```rs
-use openai_rs::v1::api::Client;
+use openai_dive::v1::api::Client;
 
 #[tokio::main]
 async fn main() -> Result<()> {
@@ -53,8 +53,8 @@ Retrieves a model instance, providing basic information about the model such as 
 **Method** `GET`
 
 ```rs
-use openai_rs::v1::api::Client;
-use openai_rs::v1::models::OpenAIModel;
+use openai_dive::v1::api::Client;
+use openai_dive::v1::models::OpenAIModel;
 
 #[tokio::main]
 async fn main() -> Result<()> {
@@ -81,9 +81,9 @@ Creates a completion for the provided prompt and parameters.
 **Method** `POST`
 
 ```rs
-use openai_rs::v1::api::Client;
-use openai_rs::v1::resources::completion::CompletionParameters;
-use openai_rs::v1::models::OpenAIModel;
+use openai_dive::v1::api::Client;
+use openai_dive::v1::resources::completion::CompletionParameters;
+use openai_dive::v1::models::OpenAIModel;
 
 #[tokio::main]
 async fn main() -> Result<()> {
@@ -116,9 +116,9 @@ Creates a completion for the chat message.
 **Method** `POST`
 
 ```rs
-use openai_rs::v1::api::Client;
-use openai_rs::v1::resources::chat_completion::{ChatCompletionParameters, ChatMessage};
-use openai_rs::v1::models::OpenAIModel;
+use openai_dive::v1::api::Client;
+use openai_dive::v1::resources::chat_completion::{ChatCompletionParameters, ChatMessage};
+use openai_dive::v1::models::OpenAIModel;
 
 #[tokio::main]
 async fn main() -> Result<()> {
@@ -155,9 +155,9 @@ Creates a new edit for the provided input, instruction, and parameters.
 **Method** `POST`
 
 ```rs
-use openai_rs::v1::api::Client;
-use openai_rs::v1::resources::edit::EditParameters;
-use openai_rs::v1::models::OpenAIModel;
+use openai_dive::v1::api::Client;
+use openai_dive::v1::resources::edit::EditParameters;
+use openai_dive::v1::models::OpenAIModel;
 
 #[tokio::main]
 async fn main() -> Result<()> {
