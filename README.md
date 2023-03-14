@@ -1,6 +1,6 @@
 # OpenAI Dive
 
-OpenAI Dive is a Rust API client that allows you to interact with the OpenAI API.
+OpenAI Dive is an async Rust API client that allows you to interact with the OpenAI API.
 
 ```ini
 [dependencies]
