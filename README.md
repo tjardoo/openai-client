@@ -1,6 +1,6 @@
-# OpenAI Rust
+# OpenAI Client
 
-OpenAI Rust is a Rust API client that allows you to interact with the OpenAI API.
+OpenAI Client is a Rust API client that allows you to interact with the OpenAI API.
 
 ```ini
 [dependencies]
