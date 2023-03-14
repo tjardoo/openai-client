@@ -27,7 +27,7 @@ Lists the currently available models, and provides basic information about each 
 
 **Method** `GET`
 
-```rs
+```rust
 use openai_dive::v1::api::Client;
 
 #[tokio::main]
@@ -52,7 +52,7 @@ Retrieves a model instance, providing basic information about the model such as 
 
 **Method** `GET`
 
-```rs
+```rust
 use openai_dive::v1::api::Client;
 use openai_dive::v1::models::OpenAIModel;
 
@@ -80,7 +80,7 @@ Creates a completion for the provided prompt and parameters.
 
 **Method** `POST`
 
-```rs
+```rust
 use openai_dive::v1::api::Client;
 use openai_dive::v1::resources::completion::CompletionParameters;
 use openai_dive::v1::models::OpenAIModel;
@@ -115,7 +115,7 @@ Creates a completion for the chat message.
 
 **Method** `POST`
 
-```rs
+```rust
 use openai_dive::v1::api::Client;
 use openai_dive::v1::resources::chat_completion::{ChatCompletionParameters, ChatMessage};
 use openai_dive::v1::models::OpenAIModel;
@@ -154,7 +154,7 @@ Creates a new edit for the provided input, instruction, and parameters.
 
 **Method** `POST`
 
-```rs
+```rust
 use openai_dive::v1::api::Client;
 use openai_dive::v1::resources::edit::EditParameters;
 use openai_dive::v1::models::OpenAIModel;
