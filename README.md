@@ -16,8 +16,10 @@ openai_dive = "0.1"
   - [Create completion](#create-completion)
 - Chat
   - [Create chat completion](#create-chat-completion)
-- Edit
+- Edits
   - [Create edit](#create-edit)
+- Images
+  - [Create image](#create-image)
 
 ### List models
 
@@ -28,6 +30,7 @@ Lists the currently available models, and provides basic information about each 
 **Method** `GET`
 
 ```rust
+use std::io::Result;
 use openai_dive::v1::api::Client;
 
 #[tokio::main]
@@ -53,6 +56,7 @@ Retrieves a model instance, providing basic information about the model such as 
 **Method** `GET`
 
 ```rust
+use std::io::Result;
 use openai_dive::v1::api::Client;
 use openai_dive::v1::models::OpenAIModel;
 
@@ -81,6 +85,7 @@ Creates a completion for the provided prompt and parameters.
 **Method** `POST`
 
 ```rust
+use std::io::Result;
 use openai_dive::v1::api::Client;
 use openai_dive::v1::resources::completion::CompletionParameters;
 use openai_dive::v1::models::OpenAIModel;
@@ -116,6 +121,7 @@ Creates a completion for the chat message.
 **Method** `POST`
 
 ```rust
+use std::io::Result;
 use openai_dive::v1::api::Client;
 use openai_dive::v1::resources::chat_completion::{ChatCompletionParameters, ChatMessage};
 use openai_dive::v1::models::OpenAIModel;
@@ -155,6 +161,7 @@ Creates a new edit for the provided input, instruction, and parameters.
 **Method** `POST`
 
 ```rust
+use std::io::Result;
 use openai_dive::v1::api::Client;
 use openai_dive::v1::resources::edit::EditParameters;
 use openai_dive::v1::models::OpenAIModel;
@@ -179,3 +186,37 @@ async fn main() -> Result<()> {
 ```
 
 More information: [Create edit](https://platform.openai.com/docs/api-reference/edits/create)
+
+### Create image
+
+Creates an image given a prompt.
+
+**URL** `https://api.openai.com/v1/images/generations`
+
+**Method** `POST`
+
+```rust
+use std::io::Result;
+use openai_dive::v1::api::Client;
+use openai_dive::v1::resources::image::{CreateImageParameters, ImageSize};
+
+#[tokio::main]
+async fn main() -> Result<()> {
+    let api_key = "YOUR API KEY".to_string();
+
+    let parameters = CreateImageParameters {
+        prompt: "A cute baby dog".to_string(),
+        number_of_images: Some(1),
+        image_size: Some(ImageSize::Size256X256),
+        response_format: None,
+    };
+
+    let client = Client::new(api_key);
+
+    let result = client.images().create(parameters).await.unwrap();
+
+    println!("{:?}", result);
+}
+```
+
+More information: [Create image](https://platform.openai.com/docs/api-reference/images/create)
