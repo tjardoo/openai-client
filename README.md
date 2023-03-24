@@ -21,6 +21,7 @@ openai_dive = "0.1"
 - Images
   - [Create image](#create-image)
   - [Edit image](#edit-image)
+  - [Image variation](#image-variation)
 
 ### List models
 
@@ -257,3 +258,37 @@ async fn main() -> Result<()> {
 ```
 
 More information: [Create image edit](https://platform.openai.com/docs/api-reference/images/create-edit)
+
+### Image variation
+
+Creates a variation of a given image.
+
+**URL** `https://api.openai.com/v1/images/variations`
+
+**Method** `POST`
+
+```rust
+use std::io::Result;
+use openai_dive::v1::api::Client;
+use openai_dive::v1::resources::image::{CreateImageVariationParameters, ImageSize};
+
+#[tokio::main]
+async fn main() -> Result<()> {
+    let api_key = "YOUR API KEY".to_string();
+
+    let parameters = CreateImageVariationParameters {
+        image: "./images/image_edit_original.png".to_string(), // https://github.com/betalgo/openai/blob/master/OpenAI.Playground/SampleData/image_edit_original.png
+        number_of_images: Some(1),
+        image_size: Some(ImageSize::Size256X256),
+        response_format: None,
+    };
+
+    let client = Client::new(api_key);
+
+    let result = client.images().variation(parameters).await.unwrap();
+
+    println!("{:?}", result);
+}
+```
+
+More information: [Create image variation](https://platform.openai.com/docs/api-reference/images/create-variation)

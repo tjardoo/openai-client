@@ -1,5 +1,7 @@
-use reqwest::multipart::Form;
+use reqwest::multipart::{Form, Part};
 use serde::Serialize;
+use tokio::fs::File;
+use tokio_util::codec::{FramedRead, BytesCodec};
 use super::error::APIError;
 
 const OPENAI_API_V1_ENDPOINT: &str = "https://api.openai.com/v1";
@@ -78,4 +80,18 @@ impl Client {
 
         Ok(response.text().await.unwrap())
     }
+}
+
+pub async fn image_from_disk_to_form_part(path: String) -> Result<Part, APIError> {
+    let file = File::open(path).await.map_err(|error| APIError::FileError(error.to_string()))?;
+
+    let stream = FramedRead::new(file, BytesCodec::new());
+    let file_body = reqwest::Body::wrap_stream(stream);
+
+    let image = reqwest::multipart::Part::stream(file_body)
+        .file_name("image.png")
+        .mime_str("application/octet-stream")
+        .unwrap();
+
+    Ok(image)
 }

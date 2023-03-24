@@ -26,6 +26,17 @@ pub struct EditImageParameters {
     pub response_format: Option<ResponseFormat>,
 }
 
+#[derive(Serialize, Debug)]
+pub struct CreateImageVariationParameters {
+    pub image: String,
+    #[serde(rename = "n", skip_serializing_if = "Option::is_none")]
+    pub number_of_images: Option<u32>,
+    #[serde(rename = "size", skip_serializing_if = "Option::is_none")]
+    pub image_size: Option<ImageSize>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub response_format: Option<ResponseFormat>,
+}
+
 #[derive(Serialize, Deserialize, Debug)]
 pub enum ImageSize {
     #[serde(rename = "256x256")]
