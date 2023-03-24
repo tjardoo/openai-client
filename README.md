@@ -20,6 +20,7 @@ openai_dive = "0.1"
   - [Create edit](#create-edit)
 - Images
   - [Create image](#create-image)
+  - [Edit image](#edit-image)
 
 ### List models
 
@@ -220,3 +221,39 @@ async fn main() -> Result<()> {
 ```
 
 More information: [Create image](https://platform.openai.com/docs/api-reference/images/create)
+
+### Edit image
+
+Creates an edited or extended image given an original image and a prompt.
+
+**URL** `https://api.openai.com/v1/images/edits`
+
+**Method** `POST`
+
+```rust
+use std::io::Result;
+use openai_dive::v1::api::Client;
+use openai_dive::v1::resources::image::{EditImageParameters, ImageSize};
+
+#[tokio::main]
+async fn main() -> Result<()> {
+    let api_key = "YOUR API KEY".to_string();
+
+    let parameters = EditImageParameters {
+        image: "./images/image_edit_original.png".to_string(), // https://github.com/betalgo/openai/blob/master/OpenAI.Playground/SampleData/image_edit_original.png
+        mask: Some("./images/image_edit_mask.png".to_string()), // https://github.com/betalgo/openai/blob/master/OpenAI.Playground/SampleData/image_edit_mask.png
+        prompt: "A cute baby sea otter weaing a beret".to_string(),
+        number_of_images: Some(1),
+        image_size: Some(ImageSize::Size256X256),
+        response_format: None,
+    };
+
+    let client = Client::new(api_key);
+
+    let result = client.images().edit(parameters).await.unwrap();
+
+    println!("{:?}", result);
+}
+```
+
+More information: [Create image edit](https://platform.openai.com/docs/api-reference/images/create-edit)

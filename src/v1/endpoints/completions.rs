@@ -1,4 +1,6 @@
-use crate::v1::{api::Client, error::APIError, resources::completion::{CompletionParameters, CompletionResponse}};
+use crate::v1::api::Client;
+use crate::v1::error::APIError;
+use crate::v1::resources::completion::{CompletionParameters, CompletionResponse};
 use serde_json::Value;
 
 pub struct Completions<'a> {

@@ -1,3 +1,4 @@
+use reqwest::multipart::Form;
 use serde::Serialize;
 use super::error::APIError;
 
@@ -46,6 +47,27 @@ impl Client {
             .header(reqwest::header::CONTENT_TYPE, "application/json")
             .bearer_auth(&self.api_key)
             .json(&parameters)
+            .send()
+            .await
+            .unwrap();
+
+        if response.status().is_success() == false {
+            return Err(APIError::EndpointError(response.text().await.unwrap()));
+        }
+
+        Ok(response.text().await.unwrap())
+    }
+
+    pub async fn post_with_form(&self, path: &str, form: Form) -> Result<String, APIError> {
+        let client = reqwest::Client::new();
+
+        let url = format!("{}{}", &self.base_url, path);
+
+        let response = client
+            .post(url)
+            .header(reqwest::header::CONTENT_TYPE, "multipart/form-data")
+            .bearer_auth(&self.api_key)
+            .multipart(form)
             .send()
             .await
             .unwrap();
