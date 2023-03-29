@@ -99,9 +99,9 @@ async fn main() -> Result<()> {
     let parameters = CompletionParameters {
         model: OpenAIModel::TextDavinci003.to_string(), // text-davinci-003
         prompt: "Say this is a test".to_string(),
+        suffix: None,
         max_tokens: 10,
         temperature: None,
-        suffix: None,
     };
 
     let client = Client::new(api_key);

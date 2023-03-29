@@ -1,8 +1,10 @@
 use reqwest::multipart::{Form, Part};
+use reqwest_eventsource::{RequestBuilderExt, EventSource, Event};
 use serde::Serialize;
 use tokio::fs::File;
 use tokio_util::codec::{FramedRead, BytesCodec};
 use super::error::APIError;
+use futures::stream::StreamExt;
 
 const OPENAI_API_V1_ENDPOINT: &str = "https://api.openai.com/v1";
 
@@ -79,6 +81,65 @@ impl Client {
         }
 
         Ok(response.text().await.unwrap())
+    }
+
+    pub async fn post_stream<T>(
+        &self,
+        path: &str,
+        parameters: &T
+    ) -> Result<String, APIError>
+    where
+        T: Serialize,
+    {
+        let client = reqwest::Client::new();
+
+        let url = format!("{}{}", &self.base_url, path);
+
+        let event_source = client
+            .post(url)
+            .header(reqwest::header::CONTENT_TYPE, "application/json")
+            .bearer_auth(&self.api_key)
+            .json(&parameters)
+            .eventsource()
+            .unwrap();
+
+        Client::process_stream(event_source).await;
+
+        // @todo
+        Ok("ok".to_string())
+    }
+
+    pub async fn process_stream(mut event_soure: EventSource) {
+        // @todo
+        // let (tx, rx) = tokio::sync::mpsc::unbounded_channel();
+
+        tokio::spawn(async move {
+            while let Some(event) = event_soure.next().await {
+                match event {
+                    Ok(item) => match item {
+                        Event::Open => continue,
+                        Event::Message(message) => {
+                            // https://platform.openai.com/docs/api-reference/completions/create#completions/create-stream
+                            if message.data == "[DONE]" {
+                                break;
+                            }
+
+                            let _response = match serde_json::from_str::<String>(&message.data) {
+                                Ok(result) => Ok(result),
+                                Err(error) => Err(APIError::StreamError(error.to_string())),
+                            };
+
+                            // @todo
+                        }
+                    },
+                    Err(_error) => {
+                        break;
+                    },
+                }
+            }
+
+            event_soure.close();
+        });
     }
 }
 
