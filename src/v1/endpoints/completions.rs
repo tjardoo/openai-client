@@ -1,6 +1,9 @@
+use std::pin::Pin;
 use crate::v1::api::Client;
 use crate::v1::error::APIError;
-use crate::v1::resources::completion::{CompletionParameters, CompletionResponse, CompletionStreamParameters};
+use crate::v1::resources::completion::{CompletionParameters, CompletionResponse};
+use crate::v1::resources::completion_stream::{CompletionStreamParameters, CompletionStreamResponse};
+use futures::Stream;
 use serde_json::Value;
 
 pub struct Completions<'a> {
@@ -25,7 +28,7 @@ impl Completions<'_> {
         Ok(completion_response)
     }
 
-    pub async fn create_stream(&self, parameters: CompletionParameters) -> Result<String, APIError> {
+    pub async fn create_stream(&self, parameters: CompletionParameters) -> Result<Pin<Box<dyn Stream<Item = Result<CompletionStreamResponse, APIError>> + Send>>, APIError> {
         let stream_parameters = CompletionStreamParameters {
             model: parameters.model,
             prompt: parameters.prompt,
@@ -35,8 +38,6 @@ impl Completions<'_> {
             stream: true,
         };
 
-        let response = self.client.post_stream("/completions", &stream_parameters).await?;
-
-        Ok(response)
+        Ok(self.client.post_stream("/completions", &stream_parameters).await)
     }
 }

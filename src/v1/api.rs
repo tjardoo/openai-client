@@ -1,10 +1,11 @@
+use std::pin::Pin;
 use reqwest::multipart::{Form, Part};
 use reqwest_eventsource::{RequestBuilderExt, EventSource, Event};
-use serde::Serialize;
+use serde::{Serialize, de::DeserializeOwned};
 use tokio::fs::File;
 use tokio_util::codec::{FramedRead, BytesCodec};
 use super::error::APIError;
-use futures::stream::StreamExt;
+use futures::{stream::StreamExt, Stream};
 
 const OPENAI_API_V1_ENDPOINT: &str = "https://api.openai.com/v1";
 
@@ -83,13 +84,14 @@ impl Client {
         Ok(response.text().await.unwrap())
     }
 
-    pub async fn post_stream<T>(
+    pub async fn post_stream<I, O>(
         &self,
         path: &str,
-        parameters: &T
-    ) -> Result<String, APIError>
+        parameters: &I
+    ) -> Pin<Box<dyn Stream<Item = Result<O, APIError>> + Send>>
     where
-        T: Serialize,
+        I: Serialize,
+        O: DeserializeOwned + std::marker::Send + 'static,
     {
         let client = reqwest::Client::new();
 
@@ -103,43 +105,51 @@ impl Client {
             .eventsource()
             .unwrap();
 
-        Client::process_stream(event_source).await;
-
-        // @todo
-        Ok("ok".to_string())
+        Client::process_stream::<O>(event_source).await
     }
 
-    pub async fn process_stream(mut event_soure: EventSource) {
-        // @todo
-        // let (tx, rx) = tokio::sync::mpsc::unbounded_channel();
+    pub async fn process_stream<O>(
+        mut event_soure: EventSource
+    ) -> Pin<Box<dyn Stream<Item = Result<O, APIError>> + Send>>
+    where
+        O: DeserializeOwned + Send + 'static,
+    {
+        let (tx, rx) = tokio::sync::mpsc::unbounded_channel();
 
         tokio::spawn(async move {
-            while let Some(event) = event_soure.next().await {
-                match event {
-                    Ok(item) => match item {
+            while let Some(event_result) = event_soure.next().await {
+                match event_result {
+                    Ok(event) => match event {
                         Event::Open => continue,
                         Event::Message(message) => {
-                            // https://platform.openai.com/docs/api-reference/completions/create#completions/create-stream
                             if message.data == "[DONE]" {
                                 break;
                             }
 
-                            let _response = match serde_json::from_str::<String>(&message.data) {
+                            let response = match serde_json::from_str::<O>(&message.data) {
                                 Ok(result) => Ok(result),
-                                Err(error) => Err(APIError::StreamError(error.to_string())),
+                                Err(error) => {
+                                    Err(APIError::StreamError(error.to_string()))
+                                }
                             };
 
-                            // @todo
+                            if let Err(_error) = tx.send(response) {
+                                break;
+                            }
                         }
                     },
-                    Err(_error) => {
-                        break;
+                    Err(error) => {
+                        if let Err(_error) = tx.send(Err(APIError::StreamError(error.to_string()))) {
+                            break;
+                        }
                     },
                 }
             }
 
             event_soure.close();
         });
+
+        Box::pin(tokio_stream::wrappers::UnboundedReceiverStream::new(rx))
     }
 }
 
