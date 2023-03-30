@@ -14,6 +14,7 @@ openai_dive = "0.1"
   - [Retrieve model](#retrieve-model)
 - Completions
   - [Create completion](#create-completion)
+  - [Create completion (stream)](#create-completion-stream)
 - Chat
   - [Create chat completion](#create-chat-completion)
 - Edits
@@ -32,11 +33,10 @@ Lists the currently available models, and provides basic information about each 
 **Method** `GET`
 
 ```rust
-use std::io::Result;
 use openai_dive::v1::api::Client;
 
 #[tokio::main]
-async fn main() -> Result<()> {
+async fn main() {
     let api_key = "YOUR API KEY".to_string();
 
     let client = Client::new(api_key);
@@ -58,12 +58,11 @@ Retrieves a model instance, providing basic information about the model such as 
 **Method** `GET`
 
 ```rust
-use std::io::Result;
 use openai_dive::v1::api::Client;
 use openai_dive::v1::models::OpenAIModel;
 
 #[tokio::main]
-async fn main() -> Result<()> {
+async fn main() {
     let api_key = "YOUR API KEY".to_string();
 
     let model_id = OpenAIModel::TextDavinci003.to_string(); // text-davinci-003
@@ -87,13 +86,12 @@ Creates a completion for the provided prompt and parameters.
 **Method** `POST`
 
 ```rust
-use std::io::Result;
 use openai_dive::v1::api::Client;
 use openai_dive::v1::resources::completion::CompletionParameters;
 use openai_dive::v1::models::OpenAIModel;
 
 #[tokio::main]
-async fn main() -> Result<()> {
+async fn main() {
     let api_key = "YOUR API KEY".to_string();
 
     let parameters = CompletionParameters {
@@ -114,6 +112,48 @@ async fn main() -> Result<()> {
 
 More information: [Create completion](https://platform.openai.com/docs/api-reference/completions/create)
 
+### Create completion (stream)
+
+Creates a completion for the provided prompt and parameters.
+
+**URL** `https://api.openai.com/v1/completions`
+
+**Method** `POST`
+
+```rust
+use openai_dive::v1::api::Client;
+use openai_dive::v1::resources::completion::CompletionParameters;
+use openai_dive::v1::models::OpenAIModel;
+
+#[tokio::main]
+async fn main() {
+    let api_key = "YOUR API KEY".to_string();
+
+    let parameters = CompletionParameters {
+        model: OpenAIModel::TextDavinci003.to_string(), // text-davinci-003
+        prompt: "Create an outline for an essay about Nikola Tesla and his contributions to technology:".to_string(),
+        suffix: None,
+        max_tokens: 100,
+        temperature: None,
+    };
+
+    let client = Client::new(api_key);
+
+    let mut stream = client.completions().create_stream(parameters).await.unwrap();
+
+    while let Some(response) = stream.next().await {
+        match response {
+            Ok(completion_response) => completion_response.choices.iter().for_each(|choice| {
+                print!("{}", choice.text);
+            }),
+            Err(e) => eprintln!("{}", e),
+        }
+    }
+}
+```
+
+More information: [Create completion](https://platform.openai.com/docs/api-reference/completions/create)
+
 ### Create chat completion
 
 Creates a completion for the chat message.
@@ -123,13 +163,12 @@ Creates a completion for the chat message.
 **Method** `POST`
 
 ```rust
-use std::io::Result;
 use openai_dive::v1::api::Client;
 use openai_dive::v1::resources::chat_completion::{ChatCompletionParameters, ChatMessage};
 use openai_dive::v1::models::OpenAIModel;
 
 #[tokio::main]
-async fn main() -> Result<()> {
+async fn main() {
     let api_key = "YOUR API KEY".to_string();
 
     let parameters = ChatCompletionParameters {
@@ -163,13 +202,12 @@ Creates a new edit for the provided input, instruction, and parameters.
 **Method** `POST`
 
 ```rust
-use std::io::Result;
 use openai_dive::v1::api::Client;
 use openai_dive::v1::resources::edit::EditParameters;
 use openai_dive::v1::models::OpenAIModel;
 
 #[tokio::main]
-async fn main() -> Result<()> {
+async fn main() {
     let api_key = "YOUR API KEY".to_string();
 
     let parameters = EditParameters {
@@ -198,12 +236,11 @@ Creates an image given a prompt.
 **Method** `POST`
 
 ```rust
-use std::io::Result;
 use openai_dive::v1::api::Client;
 use openai_dive::v1::resources::image::{CreateImageParameters, ImageSize};
 
 #[tokio::main]
-async fn main() -> Result<()> {
+async fn main() {
     let api_key = "YOUR API KEY".to_string();
 
     let parameters = CreateImageParameters {
@@ -232,12 +269,11 @@ Creates an edited or extended image given an original image and a prompt.
 **Method** `POST`
 
 ```rust
-use std::io::Result;
 use openai_dive::v1::api::Client;
 use openai_dive::v1::resources::image::{EditImageParameters, ImageSize};
 
 #[tokio::main]
-async fn main() -> Result<()> {
+async fn main() {
     let api_key = "YOUR API KEY".to_string();
 
     let parameters = EditImageParameters {
@@ -268,12 +304,11 @@ Creates a variation of a given image.
 **Method** `POST`
 
 ```rust
-use std::io::Result;
 use openai_dive::v1::api::Client;
 use openai_dive::v1::resources::image::{CreateImageVariationParameters, ImageSize};
 
 #[tokio::main]
-async fn main() -> Result<()> {
+async fn main() {
     let api_key = "YOUR API KEY".to_string();
 
     let parameters = CreateImageVariationParameters {
