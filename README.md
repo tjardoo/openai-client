@@ -17,6 +17,7 @@ openai_dive = "0.1"
   - [Create completion (stream)](#create-completion-stream)
 - Chat
   - [Create chat completion](#create-chat-completion)
+  - [Create chat completion (stream)](#create-chat-completion-stream)
 - Edits
   - [Create edit](#create-edit)
 - Images
@@ -189,6 +190,56 @@ async fn main() {
     let result = client.chat().create(parameters).await.unwrap();
 
     println!("{:?}", result);
+}
+```
+
+More information: [Create chat completion](https://platform.openai.com/docs/api-reference/chat/create)
+
+### Create chat completion (stream)
+
+Creates a completion for the chat message.
+
+**URL** `https://api.openai.com/v1/chat/completions`
+
+**Method** `POST`
+
+```rust
+use openai_dive::v1::api::Client;
+use openai_dive::v1::resources::chat_completion::{ChatCompletionParameters, ChatMessage};
+use openai_dive::v1::models::OpenAIModel;
+
+#[tokio::main]
+async fn main() {
+    let api_key = "YOUR API KEY".to_string();
+
+    let parameters = ChatCompletionParameters {
+        model: OpenAIModel::Chat3X5Turbo0301.to_string(), // gpt-3.5-turbo-0301
+        messages: vec![
+            ChatMessage {
+                role: "user".to_string(),
+                content: "Hello!".to_string(),
+            },
+        ],
+        max_tokens: 12,
+        temperature: None,
+    };
+
+    let client = Client::new(api_key);
+
+    let mut stream = client.chat().create_stream(parameters).await.unwrap();
+
+    while let Some(response) = stream.next().await {
+        match response {
+            Ok(chat_response) => chat_response.choices.iter().for_each(|choice| {
+                if choice.delta.role.is_some() {
+                    println!("role: {}", choice.delta.role.as_ref().unwrap());
+                } else if choice.delta.content.is_some() {
+                    print!("{}", choice.delta.content.as_ref().unwrap());
+                }
+            }),
+            Err(e) => eprintln!("{}", e),
+        }
+    }
 }
 ```
 
