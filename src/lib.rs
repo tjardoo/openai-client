@@ -136,6 +136,7 @@
 //! **Method** `POST`
 //!
 //! ```rust
+//! use futures::StreamExt;
 //! use openai_dive::v1::api::Client;
 //! use openai_dive::v1::resources::completion::CompletionParameters;
 //! use openai_dive::v1::models::OpenAIModel;
