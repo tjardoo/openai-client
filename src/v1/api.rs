@@ -76,7 +76,7 @@ impl Client {
 
         let response = client
             .post(url)
-            .header(reqwest::header::CONTENT_TYPE, "multipart/form-data")
+            // .header(reqwest::header::CONTENT_TYPE, "multipart/form-data")
             .bearer_auth(&self.api_key)
             .multipart(form)
             .send()
@@ -161,16 +161,16 @@ impl Client {
     }
 }
 
-pub async fn image_from_disk_to_form_part(path: String) -> Result<Part, APIError> {
-    let file = File::open(path).await.map_err(|error| APIError::FileError(error.to_string()))?;
+pub async fn file_from_disk_to_form_part(path: String) -> Result<Part, APIError> {
+    let file = File::open(&path).await.map_err(|error| APIError::FileError(error.to_string()))?;
 
     let stream = FramedRead::new(file, BytesCodec::new());
     let file_body = reqwest::Body::wrap_stream(stream);
 
-    let image = reqwest::multipart::Part::stream(file_body)
-        .file_name("image.png")
+    let file_part = reqwest::multipart::Part::stream(file_body)
+        .file_name(path)
         .mime_str("application/octet-stream")
         .unwrap();
 
-    Ok(image)
+    Ok(file_part)
 }

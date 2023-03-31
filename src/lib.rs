@@ -28,17 +28,23 @@
 //!   - [Image variation](#image-variation)
 //! - Embeddings
 //!   - [Create embedding](#create-embedding)
+//! - Audio
+//!   - [Create transcription](#create-transcription)
+//!   - [Create translation](#create-translation)
 //!
 //! ## Models
 //!
 //! You can hard-code any model name or use one of Enum options of `OpenAIModel`.
 //!
 //! - OpenAIModel::Chat3X5Turbo0301 = `gpt-3.5-turbo-0301`
-//! - OpenAIModel::TextDavinciEdit001 = `text-davinci-edit-001`
+//! - OpenAIModel::Chat3X5Turbo = `gpt-3.5-turbo`
 //! - OpenAIModel::TextDavinci003 = `text-davinci-003`
+//! - OpenAIModel::TextDavinciEdit001 = `text-davinci-edit-001`
 //! - OpenAIModel::TextCurie001 = `text-curie-001`
 //! - OpenAIModel::TextBabbage001 = `text-babbage-001`
 //! - OpenAIModel::TextAda001 = `text-ada-001`
+//! - OpenAIModel::TextEmbeddingAda002 = `text-embedding-ada-002`
+//! - OpenAIModel::Whisper1 = `whisper-1`
 //!
 //! # Examples
 //!
@@ -429,4 +435,74 @@
 //!
 //! More information: [Create embedding](https://platform.openai.com/docs/api-reference/embeddings/create)
 //!
+//! ### Create transcription
+//!
+//! Transcribes audio into the input language.
+//!
+//! **URL** `https://api.openai.com/v1/audio/transcriptions`
+//!
+//! **Method** `POST`
+//!
+//! ```rust
+//! use openai_dive::v1::api::Client;
+//! use openai_dive::v1::models::OpenAIModel;
+//! use openai_dive::v1::resources::audio::{AudioTranscriptOutputFormat, AudioTranslationParameters};
+//!
+//! #[tokio::main]
+//! async fn main() {
+//!     let api_key = "YOUR API KEY".to_string();
+//!
+//!     let parameters = AudioTranslationParameters {
+//!         file: "./audio/micro-machines.mp3".to_string(), // https://github.com/betalgo/openai/blob/master/OpenAI.Playground/SampleData/micro-machines.mp3
+//!         model: OpenAIModel::Whisper1.to_string(),
+//!         prompt: None,
+//!         response_format: Some(AudioTranscriptOutputFormat::Srt),
+//!         temperature: None,
+//!     };
+//!
+//!     let client = Client::new(api_key);
+//!
+//!     let result = client.audio().create_transcription(parameters).await.unwrap();
+//!
+//!     println!("{:?}", result);
+//! }
+//! ```
+//!
+//! More information: [Create transcription](https://platform.openai.com/docs/api-reference/audio/create)
+//!
+//! ### Create translation
+//!
+//! Translates audio into English.
+//!
+//! **URL** `https://api.openai.com/v1/audio/translations`
+//!
+//! **Method** `POST`
+//!
+//! ```rust
+//! use openai_dive::v1::api::Client;
+//! use openai_dive::v1::models::OpenAIModel;
+//! use openai_dive::v1::resources::audio::{AudioTranscriptOutputFormat, AudioTranslationParameters};
+//!
+//! #[tokio::main]
+//! async fn main() {
+//!     let api_key = "YOUR API KEY".to_string();
+//!
+//!     let parameters = AudioTranslationParameters {
+//!         file: "./audio/multilingual.mp3".to_string(), // https://github.com/betalgo/openai/blob/master/OpenAI.Playground/SampleData/multilingual.mp3
+//!         model: OpenAIModel::Whisper1.to_string(),
+//!         prompt: None,
+//!         response_format: Some(AudioTranscriptOutputFormat::Srt),
+//!         temperature: None,
+//!     };
+//!
+//!     let client = Client::new(api_key);
+//!
+//!     let result = client.audio().create_translation(parameters).await.unwrap();
+//!
+//!     println!("{:?}", result);
+//! }
+//! ```
+//!
+//! More information: [Create translation](https://platform.openai.com/docs/api-reference/audio/create)
+
 pub mod v1;

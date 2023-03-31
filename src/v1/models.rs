@@ -19,19 +19,24 @@ pub enum OpenAIModel {
     TextAda001,
     #[serde(rename = "text-embedding-ada-002")]
     TextEmbeddingAda002,
+    #[serde(rename = "whisper-1")]
+    Whisper1,
 }
 
 impl Display for OpenAIModel {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
-        match self {
-            OpenAIModel::Chat3X5Turbo0301 => f.write_str("gpt-3.5-turbo-0301"),
-            OpenAIModel::Chat3X5Turbo => f.write_str("gpt-3.5-turbo"),
-            OpenAIModel::TextDavinci003 => f.write_str("text-davinci-003"),
-            OpenAIModel::TextDavinciEdit001 => f.write_str("text-davinci-edit-001"),
-            OpenAIModel::TextCurie001 => f.write_str("text-curie-001"),
-            OpenAIModel::TextBabbage001 => f.write_str("text-babbage-001"),
-            OpenAIModel::TextAda001 => f.write_str("text-ada-001"),
-            OpenAIModel::TextEmbeddingAda002 => f.write_str("text-embedding-ada-002"),
-        }
+        write!(f, "{}",
+            match self {
+                OpenAIModel::Chat3X5Turbo0301 => "gpt-3.5-turbo-0301",
+                OpenAIModel::Chat3X5Turbo => "gpt-3.5-turbo",
+                OpenAIModel::TextDavinci003 => "text-davinci-003",
+                OpenAIModel::TextDavinciEdit001 => "text-davinci-edit-001",
+                OpenAIModel::TextCurie001 => "text-curie-001",
+                OpenAIModel::TextBabbage001 => "text-babbage-001",
+                OpenAIModel::TextAda001 => "text-ada-001",
+                OpenAIModel::TextEmbeddingAda002 => "text-embedding-ada-002",
+                OpenAIModel::Whisper1 => "whisper-1",
+            }
+        )
     }
 }

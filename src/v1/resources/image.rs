@@ -39,19 +39,14 @@ pub struct CreateImageVariationParameters {
 
 #[derive(Serialize, Deserialize, Debug)]
 pub enum ImageSize {
-    #[serde(rename = "256x256")]
     Size256X256,
-    #[serde(rename = "512x512")]
     Size512X512,
-    #[serde(rename = "1024x1024")]
     Size1024X1024,
 }
 
 #[derive(Serialize, Deserialize, Debug)]
 pub enum ResponseFormat {
-    #[serde(rename = "url")]
     Url,
-    #[serde(rename = "b64_json")]
     B64Json,
 }
 
@@ -68,19 +63,23 @@ pub struct ImageUrl {
 
 impl Display for ImageSize {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
-        match self {
-            ImageSize::Size256X256 => write!(f, "256x256"),
-            ImageSize::Size512X512 => write!(f, "512x512"),
-            ImageSize::Size1024X1024 => write!(f, "1024x1024"),
-        }
+        write!(f, "{}",
+            match self {
+                ImageSize::Size256X256 => "256x256",
+                ImageSize::Size512X512 => "512x512",
+                ImageSize::Size1024X1024 => "1024x1024",
+            }
+        )
     }
 }
 
 impl Display for ResponseFormat {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
-        match self {
-            ResponseFormat::Url => write!(f, "url"),
-            ResponseFormat::B64Json => write!(f, "b64_json"),
-        }
+        write!(f, "{}",
+            match self {
+                ResponseFormat::Url => "url",
+                ResponseFormat::B64Json => "b64_json",
+            }
+        )
     }
 }

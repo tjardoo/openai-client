@@ -1,4 +1,4 @@
-use crate::v1::api::image_from_disk_to_form_part;
+use crate::v1::api::file_from_disk_to_form_part;
 use crate::v1::resources::image::{CreateImageParameters, ImageResponse, EditImageParameters, CreateImageVariationParameters};
 use crate::v1::{api::Client, error::APIError};
 use serde_json::Value;
@@ -28,13 +28,13 @@ impl Images<'_> {
     pub async fn edit(&self, parameters: EditImageParameters) -> Result<ImageResponse, APIError> {
         let mut form = reqwest::multipart::Form::new();
 
-        let image = image_from_disk_to_form_part(parameters.image).await?;
+        let image = file_from_disk_to_form_part(parameters.image).await?;
         form = form.part("image", image);
 
         form = form.text("prompt", parameters.prompt);
 
         if let Some(mask) = parameters.mask {
-            let image = image_from_disk_to_form_part(mask).await?;
+            let image = file_from_disk_to_form_part(mask).await?;
             form = form.part("mask", image);
         }
 
@@ -61,7 +61,7 @@ impl Images<'_> {
     pub async fn variation(&self, parameters: CreateImageVariationParameters) -> Result<ImageResponse, APIError> {
         let mut form = reqwest::multipart::Form::new();
 
-        let image = image_from_disk_to_form_part(parameters.image).await?;
+        let image = file_from_disk_to_form_part(parameters.image).await?;
         form = form.part("image", image);
 
         if let Some(number_of_images) = parameters.number_of_images {
