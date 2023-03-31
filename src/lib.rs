@@ -26,6 +26,8 @@
 //!   - [Create image](#create-image)
 //!   - [Edit image](#edit-image)
 //!   - [Image variation](#image-variation)
+//! - Embeddings
+//!   - [Create embedding](#create-embedding)
 //!
 //! ## Models
 //!
@@ -128,7 +130,7 @@
 //!
 //! More information: [Create completion](https://platform.openai.com/docs/api-reference/completions/create)
 //!
-//! ### Create completion (stream)
+//! ## Create completion (stream)
 //!
 //! Creates a completion for the provided prompt and parameters.
 //!
@@ -210,7 +212,7 @@
 //!
 //! More information: [Create chat completion](https://platform.openai.com/docs/api-reference/chat/create)
 //!
-//! ### Create chat completion (stream)
+//! ## Create chat completion (stream)
 //!
 //! Creates a completion for the chat message.
 //!
@@ -294,7 +296,7 @@
 //!
 //! More information: [Create edit](https://platform.openai.com/docs/api-reference/edits/create)
 //!
-//! ### Create image
+//! ## Create image
 //!
 //! Creates an image given a prompt.
 //!
@@ -327,7 +329,7 @@
 //!
 //! More information: [Create image](https://platform.openai.com/docs/api-reference/images/create)
 //!
-//! ### Edit image
+//! ## Edit image
 //!
 //! Creates an edited or extended image given an original image and a prompt.
 //!
@@ -362,7 +364,7 @@
 //!
 //! More information: [Create image edit](https://platform.openai.com/docs/api-reference/images/create-edit)
 //!
-//! ### Image variation
+//! ## Image variation
 //!
 //! Creates a variation of a given image.
 //!
@@ -395,5 +397,36 @@
 //!
 //! More information: [Create image variation](https://platform.openai.com/docs/api-reference/images/create-variation)
 //!
-
+//! ### Create embedding
+//!
+//! Creates an embedding vector representing the input text.
+//!
+//! **URL** `https://api.openai.com/v1/embeddings`
+//!
+//! **Method** `POST`
+//!
+//! ```rust
+//! use openai_dive::v1::api::Client;
+//! use openai_dive::v1::models::OpenAIModel;
+//! use openai_dive::v1::resources::embedding::EmbeddingParameters;
+//!
+//! #[tokio::main]
+//! async fn main() {
+//!     let api_key = "YOUR API KEY".to_string();
+//!
+//!     let parameters = EmbeddingParameters {
+//!         model: OpenAIModel::TextEmbeddingAda002.to_string(), // text-embedding-ada-002
+//!         input: "The food was delicious and the waiter...".to_string(),
+//!     };
+//!
+//!     let client = Client::new(api_key);
+//!
+//!     let result = client.embeddings().create(parameters).await.unwrap();
+//!
+//!     println!("{:?}", result);
+//! }
+//! ```
+//!
+//! More information: [Create embedding](https://platform.openai.com/docs/api-reference/embeddings/create)
+//!
 pub mod v1;

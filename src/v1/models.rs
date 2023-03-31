@@ -17,6 +17,8 @@ pub enum OpenAIModel {
     TextBabbage001,
     #[serde(rename = "text-ada-001")]
     TextAda001,
+    #[serde(rename = "text-embedding-ada-002")]
+    TextEmbeddingAda002,
 }
 
 impl Display for OpenAIModel {
@@ -29,6 +31,7 @@ impl Display for OpenAIModel {
             OpenAIModel::TextCurie001 => f.write_str("text-curie-001"),
             OpenAIModel::TextBabbage001 => f.write_str("text-babbage-001"),
             OpenAIModel::TextAda001 => f.write_str("text-ada-001"),
+            OpenAIModel::TextEmbeddingAda002 => f.write_str("text-embedding-ada-002"),
         }
     }
 }
