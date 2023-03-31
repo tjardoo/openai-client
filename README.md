@@ -117,6 +117,8 @@ More information: [Create completion](https://platform.openai.com/docs/api-refer
 
 ### Create completion (stream)
 
+> Feature `stream` required
+
 Creates a completion for the provided prompt and parameters.
 
 **URL** `https://api.openai.com/v1/completions`
@@ -198,6 +200,8 @@ async fn main() {
 More information: [Create chat completion](https://platform.openai.com/docs/api-reference/chat/create)
 
 ### Create chat completion (stream)
+
+> Feature `stream` required
 
 Creates a completion for the chat message.
 

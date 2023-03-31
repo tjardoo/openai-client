@@ -1,11 +1,17 @@
-use std::pin::Pin;
 use reqwest::multipart::{Form, Part};
-use reqwest_eventsource::{RequestBuilderExt, EventSource, Event};
-use serde::{Serialize, de::DeserializeOwned};
+use serde::Serialize;
 use tokio::fs::File;
 use tokio_util::codec::{FramedRead, BytesCodec};
 use super::error::APIError;
+
+#[cfg(feature = "stream")]
+use std::pin::Pin;
+#[cfg(feature = "stream")]
+use reqwest_eventsource::{RequestBuilderExt, EventSource, Event};
+#[cfg(feature = "stream")]
 use futures::{stream::StreamExt, Stream};
+#[cfg(feature = "stream")]
+use serde::de::DeserializeOwned;
 
 const OPENAI_API_V1_ENDPOINT: &str = "https://api.openai.com/v1";
 
@@ -84,6 +90,7 @@ impl Client {
         Ok(response.text().await.unwrap())
     }
 
+    #[cfg(feature = "stream")]
     pub async fn post_stream<I, O>(
         &self,
         path: &str,
@@ -108,6 +115,7 @@ impl Client {
         Client::process_stream::<O>(event_source).await
     }
 
+    #[cfg(feature = "stream")]
     pub async fn process_stream<O>(
         mut event_soure: EventSource
     ) -> Pin<Box<dyn Stream<Item = Result<O, APIError>> + Send>>

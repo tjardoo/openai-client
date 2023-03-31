@@ -1,9 +1,13 @@
-use std::pin::Pin;
 use crate::v1::resources::chat_completion::{ChatCompletionParameters, ChatCompletionResponse};
-use crate::v1::resources::chat_completion_stream::{ChatCompletionStreamParameters, ChatCompletionStreamResponse};
 use crate::v1::{api::Client, error::APIError};
-use futures::Stream;
 use serde_json::Value;
+
+#[cfg(feature = "stream")]
+use std::pin::Pin;
+#[cfg(feature = "stream")]
+use crate::v1::resources::chat_completion_stream::{ChatCompletionStreamParameters, ChatCompletionStreamResponse};
+#[cfg(feature = "stream")]
+use futures::Stream;
 
 pub struct Chat<'a> {
     pub client: &'a Client,
@@ -27,6 +31,7 @@ impl Chat<'_> {
         Ok(chat_completion_response)
     }
 
+    #[cfg(feature = "stream")]
     pub async fn create_stream(&self, parameters: ChatCompletionParameters) -> Result<Pin<Box<dyn Stream<Item = Result<ChatCompletionStreamResponse, APIError>> + Send>>, APIError> {
         let stream_parameters = ChatCompletionStreamParameters {
             model: parameters.model,
