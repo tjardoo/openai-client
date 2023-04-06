@@ -69,6 +69,26 @@ impl Client {
         Ok(response.text().await.unwrap())
     }
 
+    pub async fn delete(&self, path: &str) -> Result<String, APIError> {
+        let client = reqwest::Client::new();
+
+        let url = format!("{}{}", &self.base_url, path);
+
+        let response = client
+            .delete(url)
+            .header(reqwest::header::CONTENT_TYPE, "application/json")
+            .bearer_auth(&self.api_key)
+            .send()
+            .await
+            .unwrap();
+
+        if response.status().is_server_error() {
+            return Err(APIError::EndpointError(response.text().await.unwrap()));
+        }
+
+        Ok(response.text().await.unwrap())
+    }
+
     pub async fn post_with_form(&self, path: &str, form: Form) -> Result<String, APIError> {
         let client = reqwest::Client::new();
 

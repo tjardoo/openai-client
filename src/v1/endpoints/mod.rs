@@ -5,3 +5,4 @@ pub mod edits;
 pub mod images;
 pub mod embeddings;
 pub mod audio;
+pub mod files;

@@ -10,3 +10,4 @@ pub mod edit;
 pub mod image;
 pub mod embedding;
 pub mod audio;
+pub mod file;

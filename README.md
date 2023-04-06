@@ -29,6 +29,12 @@ openai_dive = "0.1"
 - Audio
   - [Create transcription](#create-transcription)
   - [Create translation](#create-translation)
+- Files
+  - [List files](#list-files)
+  - [Upload file](#upload-file)
+  - [Delete file](#delete-file)
+  - [Retrieve file](#retrieve-file)
+  - [Retrieve file content](#retrieve-file-content)
 
 ### List models
 
@@ -490,3 +496,137 @@ async fn main() {
 ```
 
 More information: [Create translation](https://platform.openai.com/docs/api-reference/audio/create)
+
+### List files
+
+Returns a list of files that belong to the user's organization.
+
+**URL** `https://api.openai.com/v1/files`
+
+**Method** `GET`
+
+```rust
+use openai_dive::v1::api::Client;
+
+#[tokio::main]
+async fn main() {
+    let api_key = "YOUR API KEY".to_string();
+
+    let client = Client::new(api_key);
+
+    let result = client.files().list().await.unwrap();
+
+    println!("{:?}", result);
+}
+```
+
+More information: [List files](https://platform.openai.com/docs/api-reference/files/list)
+
+### Upload file
+
+Upload a file that contains document(s) to be used across various endpoints/features.
+
+**URL** `https://api.openai.com/v1/files`
+
+**Method** `POST`
+
+```rust
+use openai_dive::v1::api::Client;
+use openai_dive::v1::UploadFileParameters;
+
+#[tokio::main]
+async fn main() {
+    let api_key = "YOUR API KEY".to_string();
+
+    let parameters = UploadFileParameters {
+        file: "./files/SentimentAnalysisSample.jsonl".to_string(), // https://github.com/betalgo/openai/blob/master/OpenAI.Playground/SampleData/SentimentAnalysisSample.jsonl
+        purpose: "fine-tune".to_string(), // currently the only supported purpose by OpenAI is `fine-tune`
+    };
+
+    let client = Client::new(api_key);
+
+    let result = client.files().upload(parameters).await.unwrap();
+
+    println!("{:?}", result);
+}
+```
+
+More information: [Upload file](https://platform.openai.com/docs/api-reference/files/upload)
+
+### Delete file
+
+Delete a file.
+
+**URL** `https://api.openai.com/v1/files/{file_id}`
+
+**Method** `DELETE`
+
+```rust
+use openai_dive::v1::api::Client;
+
+#[tokio::main]
+async fn main() {
+    let api_key = "YOUR API KEY".to_string();
+
+    let client = Client::new(api_key);
+
+    let result = client.files().delete("file-XXX".to_string()).await.unwrap();
+
+    println!("{:?}", result);
+}
+```
+
+More information: [Delete file](https://platform.openai.com/docs/api-reference/files/delete)
+
+### Retrieve file
+
+Returns information about a specific file.
+
+**URL** `https://api.openai.com/v1/files/{file_id}`
+
+**Method** `GET`
+
+```rust
+use openai_dive::v1::api::Client;
+
+#[tokio::main]
+async fn main() {
+    let api_key = "YOUR API KEY".to_string();
+
+    let client = Client::new(api_key);
+
+    let result = client.files().retrieve("file-XXX".to_string()).await.unwrap();
+
+    println!("{:?}", result);
+}
+```
+
+More information: [Retrieve file](https://platform.openai.com/docs/api-reference/files/retrieve)
+
+### Retrieve file content
+
+> **Note**
+> To help mitigate abuse, downloading of fine-tune training files is disabled for free accounts.
+
+Returns the contents of the specified file.
+
+**URL** `https://api.openai.com/v1/files/{file_id}/content`
+
+**Method** `GET`
+
+```rust
+use openai_dive::v1::api::Client;
+
+#[tokio::main]
+async fn main() {
+    let api_key = "YOUR API KEY".to_string();
+
+    let client = Client::new(api_key);
+
+    let result = client.files().retrieve_content("file-XXX".to_string()).await.unwrap();
+
+    println!("{:?}", result);
+}
+```
+
+More information: [Retrieve file content](https://platform.openai.com/docs/api-reference/files/retrieve-content)
