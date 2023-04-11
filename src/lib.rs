@@ -37,10 +37,10 @@
 //!   - [Delete file](#delete-file)
 //!   - [Retrieve file](#retrieve-file)
 //!   - [Retrieve file content](#retrieve-file-content)
+//! - Moderations
+//!   - [Create moderation](#create-moderation)
 //!
-//! ## Models
-//!
-//! You can hard-code any model name or use one of Enum options of `OpenAIModel`.
+//! ## Model names
 //!
 //! - OpenAIModel::Chat3X5Turbo0301 = `gpt-3.5-turbo-0301`
 //! - OpenAIModel::Chat3X5Turbo = `gpt-3.5-turbo`
@@ -51,8 +51,9 @@
 //! - OpenAIModel::TextAda001 = `text-ada-001`
 //! - OpenAIModel::TextEmbeddingAda002 = `text-embedding-ada-002`
 //! - OpenAIModel::Whisper1 = `whisper-1`
+//! - OpenAIModel::TextModerationLatest = `text-moderation-latest`
 //!
-//! # Examples
+//! # Endpoints
 //!
 //! ## List models
 //!
@@ -641,5 +642,37 @@
 //! ```
 //!
 //! More information: [Retrieve file content](https://platform.openai.com/docs/api-reference/files/retrieve-content)
+//!
+//! ## Create moderation
+//!
+//! Classifies if text violates OpenAI's Content Policy.
+//!
+//! **URL** `https://api.openai.com/v1/files/{file_id}/content`
+//!
+//! **Method** `POST`
+//!
+//! ```rust
+//! use openai_dive::v1::api::Client;
+//! use openai_dive::v1::models::OpenAIModel;
+//! use openai_dive::v1::resources::moderation::ModerationParameters;
+//!
+//! #[tokio::main]
+//! async fn main() {
+//!     let api_key = "YOUR API KEY".to_string();
+//!
+//!     let parameters = ModerationParameters {
+//!         input: "I want to kill them.".to_string(),
+//!         model: OpenAIModel::TextModerationLatest.to_string(),
+//!     };
+//!
+//!     let client = Client::new(api_key);
+//!
+//!     let result = client.moderations().create(parameters).await.unwrap();
+//!
+//!     println!("{:?}", result);
+//! }
+//! ```
+//!
+//! More information: [Create moderation](https://platform.openai.com/docs/api-reference/moderations)
 
 pub mod v1;

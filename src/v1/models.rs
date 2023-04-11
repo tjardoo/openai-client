@@ -21,6 +21,10 @@ pub enum OpenAIModel {
     TextEmbeddingAda002,
     #[serde(rename = "whisper-1")]
     Whisper1,
+    #[serde(rename = "text-moderation-stable")]
+    TextModerationStable,
+    #[serde(rename = "text-moderation-latest")]
+    TextModerationLatest,
 }
 
 impl Display for OpenAIModel {
@@ -36,6 +40,8 @@ impl Display for OpenAIModel {
                 OpenAIModel::TextAda001 => "text-ada-001",
                 OpenAIModel::TextEmbeddingAda002 => "text-embedding-ada-002",
                 OpenAIModel::Whisper1 => "whisper-1",
+                OpenAIModel::TextModerationStable => "text-moderation-stable",
+                OpenAIModel::TextModerationLatest => "text-moderation-latest",
             }
         )
     }
