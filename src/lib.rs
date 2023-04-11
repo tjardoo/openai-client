@@ -674,5 +674,31 @@
 //! ```
 //!
 //! More information: [Create moderation](https://platform.openai.com/docs/api-reference/moderations)
+//!
+//! ## Proxy support
+//!
+//! This crate uses `reqwest` as HTTP Client. Reqwest has proxies enabled by default. You can either set the proxy via the system environment variable or by overriding the default Client.
+//!
+//! ### System environment variable
+//!
+//! You can set the proxy in the system environment variables ([https://docs.rs/reqwest/latest/reqwest/#proxies](https://docs.rs/reqwest/latest/reqwest/#proxies)).
+//!
+//! ```sh
+//! export https_proxy=socks5://127.0.0.1:1086
+//! ```
+//!
+//! ### Overriding the default Client
+//!
+//! ```rust
+//! let http_client = reqwest::Client::builder()
+//!     .proxy(reqwest::Proxy::https("socks5://127.0.0.1:1086")?)
+//!     .build()?;
+//!
+//! let client = Client {
+//!     http_client,
+//!     base_url: "https://api.openai.com/v1".to_string(),
+//!     api_key: "YOUR API KEY".to_string(),
+//! };
+//! ```
 
 pub mod v1;

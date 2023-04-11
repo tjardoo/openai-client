@@ -16,9 +16,9 @@ use serde::de::DeserializeOwned;
 const OPENAI_API_V1_ENDPOINT: &str = "https://api.openai.com/v1";
 
 pub struct Client {
-    http_client: reqwest::Client,
-    base_url: String,
-    api_key: String,
+    pub http_client: reqwest::Client,
+    pub base_url: String,
+    pub api_key: String,
 }
 
 impl Client {
