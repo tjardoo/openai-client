@@ -1,6 +1,6 @@
 //! # Getting started
 //!
-//! OpenAI Dive is an async Rust API client that allows you to interact with the OpenAI API.
+//! OpenAI Dive is an unofficial async Rust library that allows you to interact with the OpenAI API.
 //!
 //! Sign up for an account on [https://platform.openai.com/overview](https://platform.openai.com/overview) to get your API token.
 //!
@@ -9,7 +9,7 @@
 //! openai_dive = "0.1"
 //! ```
 //!
-//! ## Supported endpoints
+//! ## Endpoints
 //!
 //! - Models
 //!   - [List models](#list-models)
@@ -68,7 +68,7 @@
 //!
 //! #[tokio::main]
 //! async fn main() {
-//!     let api_key = "YOUR API KEY".to_string();
+//!     let api_key = env::var("OPENAI_API_KEY").expect("$OPENAI_API_KEY is not set");
 //!
 //!     let client = Client::new(api_key);
 //!
@@ -94,7 +94,7 @@
 //!
 //! #[tokio::main]
 //! async fn main() {
-//!     let api_key = "YOUR API KEY".to_string();
+//!     let api_key = env::var("OPENAI_API_KEY").expect("$OPENAI_API_KEY is not set");
 //!
 //!     let model_id = OpenAIModel::TextDavinci003.to_string(); // text-davinci-003
 //!
@@ -123,7 +123,7 @@
 //!
 //! #[tokio::main]
 //! async fn main() {
-//!     let api_key = "YOUR API KEY".to_string();
+//!     let api_key = env::var("OPENAI_API_KEY").expect("$OPENAI_API_KEY is not set");
 //!
 //!     let parameters = CompletionParameters {
 //!         model: OpenAIModel::TextDavinci003.to_string(), // text-davinci-003
@@ -159,7 +159,7 @@
 //!
 //! #[tokio::main]
 //! async fn main() {
-//!     let api_key = "YOUR API KEY".to_string();
+//!     let api_key = env::var("OPENAI_API_KEY").expect("$OPENAI_API_KEY is not set");
 //!
 //!     let parameters = CompletionParameters {
 //!         model: OpenAIModel::TextDavinci003.to_string(), // text-davinci-003
@@ -201,7 +201,7 @@
 //!
 //! #[tokio::main]
 //! async fn main() {
-//!     let api_key = "YOUR API KEY".to_string();
+//!     let api_key = env::var("OPENAI_API_KEY").expect("$OPENAI_API_KEY is not set");
 //!
 //!     let parameters = ChatCompletionParameters {
 //!         model: OpenAIModel::Chat3X5Turbo0301.to_string(), // gpt-3.5-turbo-0301
@@ -240,7 +240,7 @@
 //!
 //! #[tokio::main]
 //! async fn main() {
-//!     let api_key = "YOUR API KEY".to_string();
+//!     let api_key = env::var("OPENAI_API_KEY").expect("$OPENAI_API_KEY is not set");
 //!
 //!     let parameters = ChatCompletionParameters {
 //!         model: OpenAIModel::Chat3X5Turbo0301.to_string(), // gpt-3.5-turbo-0301
@@ -290,7 +290,7 @@
 //!
 //! #[tokio::main]
 //! async fn main() {
-//!     let api_key = "YOUR API KEY".to_string();
+//!     let api_key = env::var("OPENAI_API_KEY").expect("$OPENAI_API_KEY is not set");
 //!
 //!     let parameters = EditParameters {
 //!         model: OpenAIModel::TextDavinciEdit001.to_string(), // text-davinci-edit-001
@@ -323,7 +323,7 @@
 //!
 //! #[tokio::main]
 //! async fn main() {
-//!     let api_key = "YOUR API KEY".to_string();
+//!     let api_key = env::var("OPENAI_API_KEY").expect("$OPENAI_API_KEY is not set");
 //!
 //!     let parameters = CreateImageParameters {
 //!         prompt: "A cute baby dog".to_string(),
@@ -356,7 +356,7 @@
 //!
 //! #[tokio::main]
 //! async fn main() {
-//!     let api_key = "YOUR API KEY".to_string();
+//!     let api_key = env::var("OPENAI_API_KEY").expect("$OPENAI_API_KEY is not set");
 //!
 //!     let parameters = EditImageParameters {
 //!         image: "./images/image_edit_original.png".to_string(), // https://github.com/betalgo/openai/blob/master/OpenAI.Playground/SampleData/image_edit_original.png
@@ -391,7 +391,7 @@
 //!
 //! #[tokio::main]
 //! async fn main() {
-//!     let api_key = "YOUR API KEY".to_string();
+//!     let api_key = env::var("OPENAI_API_KEY").expect("$OPENAI_API_KEY is not set");
 //!
 //!     let parameters = CreateImageVariationParameters {
 //!         image: "./images/image_edit_original.png".to_string(), // https://github.com/betalgo/openai/blob/master/OpenAI.Playground/SampleData/image_edit_original.png
@@ -425,7 +425,7 @@
 //!
 //! #[tokio::main]
 //! async fn main() {
-//!     let api_key = "YOUR API KEY".to_string();
+//!     let api_key = env::var("OPENAI_API_KEY").expect("$OPENAI_API_KEY is not set");
 //!
 //!     let parameters = EmbeddingParameters {
 //!         model: OpenAIModel::TextEmbeddingAda002.to_string(), // text-embedding-ada-002
@@ -457,7 +457,7 @@
 //!
 //! #[tokio::main]
 //! async fn main() {
-//!     let api_key = "YOUR API KEY".to_string();
+//!     let api_key = env::var("OPENAI_API_KEY").expect("$OPENAI_API_KEY is not set");
 //!
 //!     let parameters = AudioTranslationParameters {
 //!         file: "./audio/micro-machines.mp3".to_string(), // https://github.com/betalgo/openai/blob/master/OpenAI.Playground/SampleData/micro-machines.mp3
@@ -492,7 +492,7 @@
 //!
 //! #[tokio::main]
 //! async fn main() {
-//!     let api_key = "YOUR API KEY".to_string();
+//!     let api_key = env::var("OPENAI_API_KEY").expect("$OPENAI_API_KEY is not set");
 //!
 //!     let parameters = AudioTranslationParameters {
 //!         file: "./audio/multilingual.mp3".to_string(), // https://github.com/betalgo/openai/blob/master/OpenAI.Playground/SampleData/multilingual.mp3
@@ -525,7 +525,7 @@
 //!
 //! #[tokio::main]
 //! async fn main() {
-//!     let api_key = "YOUR API KEY".to_string();
+//!     let api_key = env::var("OPENAI_API_KEY").expect("$OPENAI_API_KEY is not set");
 //!
 //!     let client = Client::new(api_key);
 //!
@@ -551,7 +551,7 @@
 //!
 //! #[tokio::main]
 //! async fn main() {
-//!     let api_key = "YOUR API KEY".to_string();
+//!     let api_key = env::var("OPENAI_API_KEY").expect("$OPENAI_API_KEY is not set");
 //!
 //!     let parameters = UploadFileParameters {
 //!         file: "./files/SentimentAnalysisSample.jsonl".to_string(), // https://github.com/betalgo/openai/blob/master/OpenAI.Playground/SampleData/SentimentAnalysisSample.jsonl
@@ -581,7 +581,7 @@
 //!
 //! #[tokio::main]
 //! async fn main() {
-//!     let api_key = "YOUR API KEY".to_string();
+//!     let api_key = env::var("OPENAI_API_KEY").expect("$OPENAI_API_KEY is not set");
 //!
 //!     let client = Client::new(api_key);
 //!
@@ -606,7 +606,7 @@
 //!
 //! #[tokio::main]
 //! async fn main() {
-//!     let api_key = "YOUR API KEY".to_string();
+//!     let api_key = env::var("OPENAI_API_KEY").expect("$OPENAI_API_KEY is not set");
 //!
 //!     let client = Client::new(api_key);
 //!
@@ -631,7 +631,7 @@
 //!
 //! #[tokio::main]
 //! async fn main() {
-//!     let api_key = "YOUR API KEY".to_string();
+//!     let api_key = env::var("OPENAI_API_KEY").expect("$OPENAI_API_KEY is not set");
 //!
 //!     let client = Client::new(api_key);
 //!
@@ -658,7 +658,7 @@
 //!
 //! #[tokio::main]
 //! async fn main() {
-//!     let api_key = "YOUR API KEY".to_string();
+//!     let api_key = env::var("OPENAI_API_KEY").expect("$OPENAI_API_KEY is not set");
 //!
 //!     let parameters = ModerationParameters {
 //!         input: "I want to kill them.".to_string(),
@@ -677,9 +677,9 @@
 //!
 //! ## Proxy support
 //!
-//! This crate uses `reqwest` as HTTP Client. Reqwest has proxies enabled by default. You can either set the proxy via the system environment variable or by overriding the default Client.
+//! This crate uses `reqwest` as HTTP Client. Reqwest has proxies enabled by default. You can set the proxy via the system environment variable or by overriding the default client.
 //!
-//! ### System environment variable
+//! ### Example: set system environment variable
 //!
 //! You can set the proxy in the system environment variables ([https://docs.rs/reqwest/latest/reqwest/#proxies](https://docs.rs/reqwest/latest/reqwest/#proxies)).
 //!
@@ -687,7 +687,7 @@
 //! export https_proxy=socks5://127.0.0.1:1086
 //! ```
 //!
-//! ### Overriding the default Client
+//! ### Example: overriding the default client
 //!
 //! ```rust
 //! let http_client = reqwest::Client::builder()
