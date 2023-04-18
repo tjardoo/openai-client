@@ -1,12 +1,13 @@
 use crate::v1::api::Client;
 use crate::v1::error::APIError;
 use crate::v1::resources::completion::{CompletionParameters, CompletionResponse};
+use serde::Serialize;
 use serde_json::Value;
 
 #[cfg(feature = "stream")]
 use std::pin::Pin;
 #[cfg(feature = "stream")]
-use crate::v1::resources::completion_stream::{CompletionStreamParameters, CompletionStreamResponse};
+use crate::v1::resources::completion_stream::CompletionStreamResponse;
 #[cfg(feature = "stream")]
 use futures::Stream;
 
@@ -45,4 +46,17 @@ impl Completions<'_> {
 
         Ok(self.client.post_stream("/completions", &stream_parameters).await)
     }
+}
+
+#[cfg(feature = "stream")]
+#[derive(Serialize, Debug)]
+struct CompletionStreamParameters {
+    model: String,
+    prompt: String,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    suffix: Option<String>,
+    max_tokens: u32,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    temperature: Option<f32>,
+    stream: bool,
 }

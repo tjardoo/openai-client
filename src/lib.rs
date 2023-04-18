@@ -2,12 +2,14 @@
 //!
 //! OpenAI Dive is an unofficial async Rust library that allows you to interact with the OpenAI API.
 //!
-//! Sign up for an account on [https://platform.openai.com/overview](https://platform.openai.com/overview) to get your API token.
+//! Sign up for an account on [https://platform.openai.com/overview](https://platform.openai.com/overview) to get your API key.
 //!
 //! ```ini
 //! [dependencies]
 //! openai_dive = "0.1"
 //! ```
+//!
+//! More information: [set API key](#set-api-key), [add proxy](#add-proxy)
 //!
 //! ## Endpoints
 //!
@@ -90,17 +92,14 @@
 //!
 //! ```rust
 //! use openai_dive::v1::api::Client;
-//! use openai_dive::v1::models::OpenAIModel;
 //!
 //! #[tokio::main]
 //! async fn main() {
 //!     let api_key = env::var("OPENAI_API_KEY").expect("$OPENAI_API_KEY is not set");
 //!
-//!     let model_id = OpenAIModel::TextDavinci003.to_string(); // text-davinci-003
-//!
 //!     let client = Client::new(api_key);
 //!
-//!     let result = client.models().get(model_id).await.unwrap();
+//!     let result = client.models().get("text-davinci-003").await.unwrap();
 //!
 //!     println!("{:?}", result);
 //! }
@@ -119,14 +118,13 @@
 //! ```rust
 //! use openai_dive::v1::api::Client;
 //! use openai_dive::v1::resources::completion::CompletionParameters;
-//! use openai_dive::v1::models::OpenAIModel;
 //!
 //! #[tokio::main]
 //! async fn main() {
 //!     let api_key = env::var("OPENAI_API_KEY").expect("$OPENAI_API_KEY is not set");
 //!
 //!     let parameters = CompletionParameters {
-//!         model: OpenAIModel::TextDavinci003.to_string(), // text-davinci-003
+//!         model: "text-davinci-003".to_string(),
 //!         prompt: "Say this is a test".to_string(),
 //!         suffix: None,
 //!         max_tokens: 10,
@@ -155,14 +153,13 @@
 //! use futures::StreamExt;
 //! use openai_dive::v1::api::Client;
 //! use openai_dive::v1::resources::completion::CompletionParameters;
-//! use openai_dive::v1::models::OpenAIModel;
 //!
 //! #[tokio::main]
 //! async fn main() {
 //!     let api_key = env::var("OPENAI_API_KEY").expect("$OPENAI_API_KEY is not set");
 //!
 //!     let parameters = CompletionParameters {
-//!         model: OpenAIModel::TextDavinci003.to_string(), // text-davinci-003
+//!         model: "text-davinci-003".to_string(),
 //!         prompt: "Create an outline for an essay about Nikola Tesla and his contributions to technology:".to_string(),
 //!         suffix: None,
 //!         max_tokens: 100,
@@ -197,14 +194,13 @@
 //! ```rust
 //! use openai_dive::v1::api::Client;
 //! use openai_dive::v1::resources::chat_completion::{ChatCompletionParameters, ChatMessage};
-//! use openai_dive::v1::models::OpenAIModel;
 //!
 //! #[tokio::main]
 //! async fn main() {
 //!     let api_key = env::var("OPENAI_API_KEY").expect("$OPENAI_API_KEY is not set");
 //!
 //!     let parameters = ChatCompletionParameters {
-//!         model: OpenAIModel::Chat3X5Turbo0301.to_string(), // gpt-3.5-turbo-0301
+//!         model: "gpt-3.5-turbo-0301".to_string(),
 //!         messages: vec![
 //!             ChatMessage {
 //!                 role: "user".to_string(),
@@ -236,14 +232,13 @@
 //! ```rust
 //! use openai_dive::v1::api::Client;
 //! use openai_dive::v1::resources::chat_completion::{ChatCompletionParameters, ChatMessage};
-//! use openai_dive::v1::models::OpenAIModel;
 //!
 //! #[tokio::main]
 //! async fn main() {
 //!     let api_key = env::var("OPENAI_API_KEY").expect("$OPENAI_API_KEY is not set");
 //!
 //!     let parameters = ChatCompletionParameters {
-//!         model: OpenAIModel::Chat3X5Turbo0301.to_string(), // gpt-3.5-turbo-0301
+//!         model: "gpt-3.5-turbo-0301".to_string(),
 //!         messages: vec![
 //!             ChatMessage {
 //!                 role: "user".to_string(),
@@ -286,14 +281,13 @@
 //! ```rust
 //! use openai_dive::v1::api::Client;
 //! use openai_dive::v1::resources::edit::EditParameters;
-//! use openai_dive::v1::models::OpenAIModel;
 //!
 //! #[tokio::main]
 //! async fn main() {
 //!     let api_key = env::var("OPENAI_API_KEY").expect("$OPENAI_API_KEY is not set");
 //!
 //!     let parameters = EditParameters {
-//!         model: OpenAIModel::TextDavinciEdit001.to_string(), // text-davinci-edit-001
+//!         model: "text-davinci-edit-001".to_string(),
 //!         input: "What day of the wek is it?".to_string(),
 //!         instruction: "Fix the spelling mistakes".to_string(),
 //!         temperature: None,
@@ -420,7 +414,6 @@
 //!
 //! ```rust
 //! use openai_dive::v1::api::Client;
-//! use openai_dive::v1::models::OpenAIModel;
 //! use openai_dive::v1::resources::embedding::EmbeddingParameters;
 //!
 //! #[tokio::main]
@@ -428,7 +421,7 @@
 //!     let api_key = env::var("OPENAI_API_KEY").expect("$OPENAI_API_KEY is not set");
 //!
 //!     let parameters = EmbeddingParameters {
-//!         model: OpenAIModel::TextEmbeddingAda002.to_string(), // text-embedding-ada-002
+//!         model: "text-embedding-ada-002".to_string(),
 //!         input: "The food was delicious and the waiter...".to_string(),
 //!     };
 //!
@@ -452,7 +445,6 @@
 //!
 //! ```rust
 //! use openai_dive::v1::api::Client;
-//! use openai_dive::v1::models::OpenAIModel;
 //! use openai_dive::v1::resources::audio::{AudioTranscriptOutputFormat, AudioTranslationParameters};
 //!
 //! #[tokio::main]
@@ -461,7 +453,7 @@
 //!
 //!     let parameters = AudioTranslationParameters {
 //!         file: "./audio/micro-machines.mp3".to_string(), // https://github.com/betalgo/openai/blob/master/OpenAI.Playground/SampleData/micro-machines.mp3
-//!         model: OpenAIModel::Whisper1.to_string(),
+//!         model: "whisper-1".to_string(),
 //!         prompt: None,
 //!         response_format: Some(AudioTranscriptOutputFormat::Srt),
 //!         temperature: None,
@@ -487,7 +479,6 @@
 //!
 //! ```rust
 //! use openai_dive::v1::api::Client;
-//! use openai_dive::v1::models::OpenAIModel;
 //! use openai_dive::v1::resources::audio::{AudioTranscriptOutputFormat, AudioTranslationParameters};
 //!
 //! #[tokio::main]
@@ -496,7 +487,7 @@
 //!
 //!     let parameters = AudioTranslationParameters {
 //!         file: "./audio/multilingual.mp3".to_string(), // https://github.com/betalgo/openai/blob/master/OpenAI.Playground/SampleData/multilingual.mp3
-//!         model: OpenAIModel::Whisper1.to_string(),
+//!         model: "whisper-1".to_string(),
 //!         prompt: None,
 //!         response_format: Some(AudioTranscriptOutputFormat::Srt),
 //!         temperature: None,
@@ -653,7 +644,6 @@
 //!
 //! ```rust
 //! use openai_dive::v1::api::Client;
-//! use openai_dive::v1::models::OpenAIModel;
 //! use openai_dive::v1::resources::moderation::ModerationParameters;
 //!
 //! #[tokio::main]
@@ -662,7 +652,7 @@
 //!
 //!     let parameters = ModerationParameters {
 //!         input: "I want to kill them.".to_string(),
-//!         model: OpenAIModel::TextModerationLatest.to_string(),
+//!         model: "text-moderation-latest".to_string(),
 //!     };
 //!
 //!     let client = Client::new(api_key);
@@ -674,6 +664,21 @@
 //! ```
 //!
 //! More information: [Create moderation](https://platform.openai.com/docs/api-reference/moderations)
+//!
+//! ## Set API key
+//!
+//! Add the OpenAI API key to your environment variables.
+//!
+//! ```sh
+//! # Windows PowerShell
+//! $Env:OPENAI_API_KEY='sk-...'
+//!
+//! # Windows cmd
+//! set OPENAI_API_KEY=sk-...
+//!
+//! # Linux/macOS
+//! export OPENAI_API_KEY='sk-...'
+//! ```
 //!
 //! ## Proxy support
 //!

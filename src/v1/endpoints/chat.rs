@@ -1,11 +1,12 @@
-use crate::v1::resources::chat_completion::{ChatCompletionParameters, ChatCompletionResponse};
+use crate::v1::resources::chat_completion::{ChatCompletionParameters, ChatCompletionResponse, ChatMessage};
 use crate::v1::{api::Client, error::APIError};
+use serde::Serialize;
 use serde_json::Value;
 
 #[cfg(feature = "stream")]
 use std::pin::Pin;
 #[cfg(feature = "stream")]
-use crate::v1::resources::chat_completion_stream::{ChatCompletionStreamParameters, ChatCompletionStreamResponse};
+use crate::v1::resources::chat_completion_stream::ChatCompletionStreamResponse;
 #[cfg(feature = "stream")]
 use futures::Stream;
 
@@ -43,4 +44,15 @@ impl Chat<'_> {
 
         Ok(self.client.post_stream("/chat/completions", &stream_parameters).await)
     }
+}
+
+#[cfg(feature = "stream")]
+#[derive(Serialize, Debug)]
+struct ChatCompletionStreamParameters {
+    model: String,
+    messages: Vec<ChatMessage>,
+    max_tokens: u32,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    temperature: Option<f32>,
+    stream: bool,
 }

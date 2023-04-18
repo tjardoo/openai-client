@@ -1,15 +1,4 @@
 use serde::{Serialize, Deserialize};
-use super::{chat_completion::ChatMessage};
-
-#[derive(Serialize, Debug)]
-pub struct ChatCompletionStreamParameters {
-    pub model: String,
-    pub messages: Vec<ChatMessage>,
-    pub max_tokens: u32,
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub temperature: Option<f32>,
-    pub stream: bool,
-}
 
 #[derive(Serialize, Deserialize, Debug)]
 pub struct ChatCompletionStreamResponse {

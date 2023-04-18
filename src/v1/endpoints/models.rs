@@ -24,7 +24,7 @@ impl Models<'_> {
         Ok(models)
     }
 
-    pub async fn get(&self, model_id: String) -> Result<Model, APIError> {
+    pub async fn get(&self, model_id: &str) -> Result<Model, APIError> {
         let path = format!("/models/{}", model_id);
 
         let response = self.client.get(&path).await?;

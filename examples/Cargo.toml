@@ -1,0 +1,9 @@
+[workspace]
+members = [
+    "models",
+    "completions",
+    "completions_stream",
+    "chat",
+    "chat_stream",
+    "edits",
+]
