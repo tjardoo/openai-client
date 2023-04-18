@@ -1,5 +1,8 @@
 # OpenAI Dive
 
+[![crates.io](https://img.shields.io/crates/v/openai_dive.svg)](https://crates.io/crates/openai_dive)
+[![docs.rs](https://docs.rs/openai_dive/badge.svg)](https://docs.rs/openai_dive)
+
 OpenAI Dive is an unofficial async Rust library that allows you to interact with the OpenAI API.
 
 Sign up for an account on [https://platform.openai.com/overview](https://platform.openai.com/overview) to get your API key.
