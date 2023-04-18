@@ -123,6 +123,8 @@
 //! async fn main() {
 //!     let api_key = env::var("OPENAI_API_KEY").expect("$OPENAI_API_KEY is not set");
 //!
+//!     let client = Client::new(api_key);
+//!
 //!     let parameters = CompletionParameters {
 //!         model: "text-davinci-003".to_string(),
 //!         prompt: "Say this is a test".to_string(),
@@ -130,8 +132,6 @@
 //!         max_tokens: 10,
 //!         temperature: None,
 //!     };
-//!
-//!     let client = Client::new(api_key);
 //!
 //!     let result = client.completions().create(parameters).await.unwrap();
 //!
@@ -158,6 +158,8 @@
 //! async fn main() {
 //!     let api_key = env::var("OPENAI_API_KEY").expect("$OPENAI_API_KEY is not set");
 //!
+//!     let client = Client::new(api_key);
+//!
 //!     let parameters = CompletionParameters {
 //!         model: "text-davinci-003".to_string(),
 //!         prompt: "Create an outline for an essay about Nikola Tesla and his contributions to technology:".to_string(),
@@ -165,8 +167,6 @@
 //!         max_tokens: 100,
 //!         temperature: None,
 //!     };
-//!
-//!     let client = Client::new(api_key);
 //!
 //!     let mut stream = client.completions().create_stream(parameters).await.unwrap();
 //!
@@ -199,6 +199,8 @@
 //! async fn main() {
 //!     let api_key = env::var("OPENAI_API_KEY").expect("$OPENAI_API_KEY is not set");
 //!
+//!     let client = Client::new(api_key);
+//!
 //!     let parameters = ChatCompletionParameters {
 //!         model: "gpt-3.5-turbo-0301".to_string(),
 //!         messages: vec![
@@ -210,8 +212,6 @@
 //!         max_tokens: 12,
 //!         temperature: None,
 //!     };
-//!
-//!     let client = Client::new(api_key);
 //!
 //!     let result = client.chat().create(parameters).await.unwrap();
 //!
@@ -237,6 +237,8 @@
 //! async fn main() {
 //!     let api_key = env::var("OPENAI_API_KEY").expect("$OPENAI_API_KEY is not set");
 //!
+//!     let client = Client::new(api_key);
+//!
 //!     let parameters = ChatCompletionParameters {
 //!         model: "gpt-3.5-turbo-0301".to_string(),
 //!         messages: vec![
@@ -248,8 +250,6 @@
 //!         max_tokens: 12,
 //!         temperature: None,
 //!     };
-//!
-//!     let client = Client::new(api_key);
 //!
 //!     let mut stream = client.chat().create_stream(parameters).await.unwrap();
 //!
@@ -286,14 +286,14 @@
 //! async fn main() {
 //!     let api_key = env::var("OPENAI_API_KEY").expect("$OPENAI_API_KEY is not set");
 //!
+//!     let client = Client::new(api_key);
+//!
 //!     let parameters = EditParameters {
 //!         model: "text-davinci-edit-001".to_string(),
 //!         input: "What day of the wek is it?".to_string(),
 //!         instruction: "Fix the spelling mistakes".to_string(),
 //!         temperature: None,
 //!     };
-//!
-//!     let client = Client::new(api_key);
 //!
 //!     let result = client.edits().create(parameters).await.unwrap();
 //!
@@ -319,14 +319,14 @@
 //! async fn main() {
 //!     let api_key = env::var("OPENAI_API_KEY").expect("$OPENAI_API_KEY is not set");
 //!
+//!     let client = Client::new(api_key);
+//!
 //!     let parameters = CreateImageParameters {
 //!         prompt: "A cute baby dog".to_string(),
 //!         number_of_images: Some(1),
 //!         image_size: Some(ImageSize::Size256X256),
 //!         response_format: None,
 //!     };
-//!
-//!     let client = Client::new(api_key);
 //!
 //!     let result = client.images().create(parameters).await.unwrap();
 //!
@@ -352,6 +352,8 @@
 //! async fn main() {
 //!     let api_key = env::var("OPENAI_API_KEY").expect("$OPENAI_API_KEY is not set");
 //!
+//!     let client = Client::new(api_key);
+//!
 //!     let parameters = EditImageParameters {
 //!         image: "./images/image_edit_original.png".to_string(), // https://github.com/betalgo/openai/blob/master/OpenAI.Playground/SampleData/image_edit_original.png
 //!         mask: Some("./images/image_edit_mask.png".to_string()), // https://github.com/betalgo/openai/blob/master/OpenAI.Playground/SampleData/image_edit_mask.png
@@ -360,8 +362,6 @@
 //!         image_size: Some(ImageSize::Size256X256),
 //!         response_format: None,
 //!     };
-//!
-//!     let client = Client::new(api_key);
 //!
 //!     let result = client.images().edit(parameters).await.unwrap();
 //!
@@ -387,14 +387,14 @@
 //! async fn main() {
 //!     let api_key = env::var("OPENAI_API_KEY").expect("$OPENAI_API_KEY is not set");
 //!
+//!     let client = Client::new(api_key);
+//!
 //!     let parameters = CreateImageVariationParameters {
 //!         image: "./images/image_edit_original.png".to_string(), // https://github.com/betalgo/openai/blob/master/OpenAI.Playground/SampleData/image_edit_original.png
 //!         number_of_images: Some(1),
 //!         image_size: Some(ImageSize::Size256X256),
 //!         response_format: None,
 //!     };
-//!
-//!     let client = Client::new(api_key);
 //!
 //!     let result = client.images().variation(parameters).await.unwrap();
 //!
@@ -420,12 +420,12 @@
 //! async fn main() {
 //!     let api_key = env::var("OPENAI_API_KEY").expect("$OPENAI_API_KEY is not set");
 //!
+//!     let client = Client::new(api_key);
+//!
 //!     let parameters = EmbeddingParameters {
 //!         model: "text-embedding-ada-002".to_string(),
 //!         input: "The food was delicious and the waiter...".to_string(),
 //!     };
-//!
-//!     let client = Client::new(api_key);
 //!
 //!     let result = client.embeddings().create(parameters).await.unwrap();
 //!
@@ -451,6 +451,8 @@
 //! async fn main() {
 //!     let api_key = env::var("OPENAI_API_KEY").expect("$OPENAI_API_KEY is not set");
 //!
+//!     let client = Client::new(api_key);
+//!
 //!     let parameters = AudioTranslationParameters {
 //!         file: "./audio/micro-machines.mp3".to_string(), // https://github.com/betalgo/openai/blob/master/OpenAI.Playground/SampleData/micro-machines.mp3
 //!         model: "whisper-1".to_string(),
@@ -458,8 +460,6 @@
 //!         response_format: Some(AudioTranscriptOutputFormat::Srt),
 //!         temperature: None,
 //!     };
-//!
-//!     let client = Client::new(api_key);
 //!
 //!     let result = client.audio().create_transcription(parameters).await.unwrap();
 //!
@@ -485,6 +485,8 @@
 //! async fn main() {
 //!     let api_key = env::var("OPENAI_API_KEY").expect("$OPENAI_API_KEY is not set");
 //!
+//!     let client = Client::new(api_key);
+//!
 //!     let parameters = AudioTranslationParameters {
 //!         file: "./audio/multilingual.mp3".to_string(), // https://github.com/betalgo/openai/blob/master/OpenAI.Playground/SampleData/multilingual.mp3
 //!         model: "whisper-1".to_string(),
@@ -492,8 +494,6 @@
 //!         response_format: Some(AudioTranscriptOutputFormat::Srt),
 //!         temperature: None,
 //!     };
-//!
-//!     let client = Client::new(api_key);
 //!
 //!     let result = client.audio().create_translation(parameters).await.unwrap();
 //!
@@ -544,12 +544,12 @@
 //! async fn main() {
 //!     let api_key = env::var("OPENAI_API_KEY").expect("$OPENAI_API_KEY is not set");
 //!
+//!     let client = Client::new(api_key);
+//!
 //!     let parameters = UploadFileParameters {
 //!         file: "./files/SentimentAnalysisSample.jsonl".to_string(), // https://github.com/betalgo/openai/blob/master/OpenAI.Playground/SampleData/SentimentAnalysisSample.jsonl
 //!         purpose: "fine-tune".to_string(),
 //!     };
-//!
-//!     let client = Client::new(api_key);
 //!
 //!     let result = client.files().upload(parameters).await.unwrap();
 //!
@@ -650,12 +650,12 @@
 //! async fn main() {
 //!     let api_key = env::var("OPENAI_API_KEY").expect("$OPENAI_API_KEY is not set");
 //!
+//!     let client = Client::new(api_key);
+//!
 //!     let parameters = ModerationParameters {
 //!         input: "I want to kill them.".to_string(),
 //!         model: "text-moderation-latest".to_string(),
 //!     };
-//!
-//!     let client = Client::new(api_key);
 //!
 //!     let result = client.moderations().create(parameters).await.unwrap();
 //!

@@ -1,7 +1,6 @@
 use crate::v1::api::Client;
 use crate::v1::error::APIError;
 use crate::v1::resources::completion::{CompletionParameters, CompletionResponse};
-use serde::Serialize;
 use serde_json::Value;
 
 #[cfg(feature = "stream")]
@@ -10,6 +9,8 @@ use std::pin::Pin;
 use crate::v1::resources::completion_stream::CompletionStreamResponse;
 #[cfg(feature = "stream")]
 use futures::Stream;
+#[cfg(feature = "stream")]
+use serde::Serialize;
 
 pub struct Completions<'a> {
     pub client: &'a Client,

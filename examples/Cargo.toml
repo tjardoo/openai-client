@@ -6,4 +6,6 @@ members = [
     "chat",
     "chat_stream",
     "edits",
+    "embeddings",
+    "moderations",
 ]

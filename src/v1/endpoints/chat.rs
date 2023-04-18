@@ -1,6 +1,5 @@
-use crate::v1::resources::chat_completion::{ChatCompletionParameters, ChatCompletionResponse, ChatMessage};
+use crate::v1::resources::chat_completion::{ChatCompletionParameters, ChatCompletionResponse};
 use crate::v1::{api::Client, error::APIError};
-use serde::Serialize;
 use serde_json::Value;
 
 #[cfg(feature = "stream")]
@@ -8,7 +7,11 @@ use std::pin::Pin;
 #[cfg(feature = "stream")]
 use crate::v1::resources::chat_completion_stream::ChatCompletionStreamResponse;
 #[cfg(feature = "stream")]
+use crate::v1::resources::chat_completion::ChatMessage;
+#[cfg(feature = "stream")]
 use futures::Stream;
+#[cfg(feature = "stream")]
+use serde::Serialize;
 
 pub struct Chat<'a> {
     pub client: &'a Client,
