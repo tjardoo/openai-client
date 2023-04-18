@@ -14,6 +14,5 @@ async fn main() {
     };
 
     let result = client.embeddings().create(parameters).await.unwrap();
-
     println!("{:?}", result);
 }
