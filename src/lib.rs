@@ -576,7 +576,7 @@
 //!
 //!     let client = Client::new(api_key);
 //!
-//!     let result = client.files().delete("file-XXX".to_string()).await.unwrap();
+//!     let result = client.files().delete("file-XXX").await.unwrap();
 //!
 //!     println!("{:?}", result);
 //! }
@@ -601,7 +601,7 @@
 //!
 //!     let client = Client::new(api_key);
 //!
-//!     let result = client.files().retrieve("file-XXX".to_string()).await.unwrap();
+//!     let result = client.files().retrieve("file-XXX").await.unwrap();
 //!
 //!     println!("{:?}", result);
 //! }
@@ -626,7 +626,7 @@
 //!
 //!     let client = Client::new(api_key);
 //!
-//!     let result = client.files().retrieve_content("file-XXX".to_string()).await.unwrap();
+//!     let result = client.files().retrieve_content("file-XXX").await.unwrap();
 //!
 //!     println!("{:?}", result);
 //! }

@@ -41,7 +41,7 @@ impl Files<'_> {
         Ok(file_response)
     }
 
-    pub async fn delete(&self, id: String) -> Result<DeletedFile, APIError> {
+    pub async fn delete(&self, id: &str) -> Result<DeletedFile, APIError> {
         let response = self.client.delete(format!("/files/{id}").as_str()).await?;
 
         let value: Value = serde_json::from_str(&response).unwrap();
@@ -50,7 +50,7 @@ impl Files<'_> {
         Ok(deleted_file_response)
     }
 
-    pub async fn retrieve(&self, id: String) -> Result<File, APIError> {
+    pub async fn retrieve(&self, id: &str) -> Result<File, APIError> {
         let response = self.client.get(format!("/files/{id}").as_str()).await?;
 
         let value: Value = serde_json::from_str(&response).unwrap();
@@ -59,7 +59,7 @@ impl Files<'_> {
         Ok(file_response)
     }
 
-    pub async fn retrieve_content(&self, id: String) -> Result<String, APIError> {
+    pub async fn retrieve_content(&self, id: &str) -> Result<String, APIError> {
         let response = self.client.get(format!("/files/{id}/content").as_str()).await?;
 
         Ok(response)
