@@ -1,3 +1,5 @@
+use std::fmt::Display;
+
 use serde::{Serialize, Deserialize};
 use super::shared::{Usage, FinishReason};
 
@@ -12,7 +14,7 @@ pub struct ChatCompletionParameters {
 
 #[derive(Serialize, Deserialize, Debug)]
 pub struct ChatMessage {
-    pub role: String,
+    pub role: Role,
     pub content: String,
 }
 
@@ -31,4 +33,25 @@ pub struct ChatCompletionChoice {
     pub index: u32,
     pub message: ChatMessage,
     pub finish_reason: FinishReason,
+}
+
+
+#[derive(Serialize, Deserialize, Debug, PartialEq)]
+#[serde(rename_all = "lowercase")]
+pub enum Role {
+    System,
+    User,
+    Assistant,
+}
+
+impl Display for Role {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        write!(f, "{}",
+            match self {
+                Role::System => "System",
+                Role::User => "User",
+                Role::Assistant => "Assistant",
+            }
+        )
+    }
 }

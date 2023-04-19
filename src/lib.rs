@@ -194,7 +194,7 @@
 //!
 //! ```rust
 //! use openai_dive::v1::api::Client;
-//! use openai_dive::v1::resources::chat_completion::{ChatCompletionParameters, ChatMessage};
+//! use openai_dive::v1::resources::chat_completion::{ChatCompletionParameters, ChatMessage, Role};
 //!
 //! #[tokio::main]
 //! async fn main() {
@@ -206,8 +206,12 @@
 //!         model: "gpt-3.5-turbo-0301".to_string(),
 //!         messages: vec![
 //!             ChatMessage {
-//!                 role: "user".to_string(),
+//!                 role: Role::User,
 //!                 content: "Hello!".to_string(),
+//!             },
+//!             ChatMessage {
+//!                 role: Role::User,
+//!                 content: "Where are you located?".to_string(),
 //!             },
 //!         ],
 //!         max_tokens: 12,
@@ -232,7 +236,7 @@
 //!
 //! ```rust
 //! use openai_dive::v1::api::Client;
-//! use openai_dive::v1::resources::chat_completion::{ChatCompletionParameters, ChatMessage};
+//! use openai_dive::v1::resources::chat_completion::{ChatCompletionParameters, ChatMessage, Role};
 //!
 //! #[tokio::main]
 //! async fn main() {
@@ -244,8 +248,12 @@
 //!         model: "gpt-3.5-turbo-0301".to_string(),
 //!         messages: vec![
 //!             ChatMessage {
-//!                 role: "user".to_string(),
+//!                 role: Role::User,
 //!                 content: "Hello!".to_string(),
+//!             },
+//!             ChatMessage {
+//!                 role: Role::User,
+//!                 content: "Where are you located?".to_string(),
 //!             },
 //!         ],
 //!         max_tokens: 12,
@@ -257,10 +265,8 @@
 //!     while let Some(response) = stream.next().await {
 //!         match response {
 //!             Ok(chat_response) => chat_response.choices.iter().for_each(|choice| {
-//!                 if choice.delta.role.is_some() {
-//!                     println!("role: {}", choice.delta.role.as_ref().unwrap());
-//!                 } else if choice.delta.content.is_some() {
-//!                     print!("{}", choice.delta.content.as_ref().unwrap());
+//!                 if let Some(content) = choice.delta.content.as_ref() {
+//!                     print!("{}", content);
 //!                 }
 //!             }),
 //!             Err(e) => eprintln!("{}", e),

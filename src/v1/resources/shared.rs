@@ -12,7 +12,7 @@ pub struct Usage {
     pub total_tokens: u32,
 }
 
-#[derive(Serialize, Deserialize, Debug)]
+#[derive(Serialize, Deserialize, Debug, PartialEq)]
 pub enum FinishReason {
     #[serde(rename(deserialize = "length"))]
     TokenLimitReached,

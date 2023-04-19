@@ -1,6 +1,6 @@
 use std::env;
 use openai_dive::v1::api::Client;
-use openai_dive::v1::resources::chat_completion::{ChatCompletionParameters, ChatMessage};
+use openai_dive::v1::resources::chat_completion::{ChatCompletionParameters, ChatMessage, Role};
 
 #[tokio::main]
 async fn main() {
@@ -12,8 +12,12 @@ async fn main() {
         model: "gpt-3.5-turbo-0301".to_string(),
         messages: vec![
             ChatMessage {
-                role: "user".to_string(),
+                role: Role::User,
                 content: "Hello!".to_string(),
+            },
+            ChatMessage {
+                role: Role::User,
+                content: "Where are you located?".to_string(),
             },
         ],
         max_tokens: 12,

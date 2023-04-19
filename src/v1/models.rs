@@ -1,7 +1,7 @@
 use std::fmt::Display;
 use serde::{Serialize, Deserialize};
 
-#[derive(Serialize, Deserialize, Debug)]
+#[derive(Serialize, Deserialize, Debug, PartialEq)]
 pub enum OpenAIModel {
     #[serde(rename = "gpt-3.5-turbo")]
     Chat3X5Turbo,

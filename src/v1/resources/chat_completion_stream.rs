@@ -1,5 +1,7 @@
 use serde::{Serialize, Deserialize};
 
+use super::chat_completion::Role;
+
 #[derive(Serialize, Deserialize, Debug)]
 pub struct ChatCompletionStreamResponse {
     pub id: String,
@@ -18,7 +20,7 @@ pub struct DeltaField {
 #[derive(Serialize, Deserialize, Debug)]
 pub struct DeltaValue {
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub role: Option<String>,
+    pub role: Option<Role>,
     #[serde(skip_serializing_if = "Option::is_none")]
     pub content: Option<String>,
 }
