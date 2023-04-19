@@ -645,6 +645,8 @@ See the `examples` directory for examples and implementation details.
 - [ ] List fine-tune events (stream)
 - [X] Delete fine-tune model
 
+More information: [Fine-tunes](https://platform.openai.com/docs/api-reference/fine-tunes)
+
 ### Create moderation
 
 Classifies if text violates OpenAI's Content Policy.

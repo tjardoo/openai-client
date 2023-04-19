@@ -43,18 +43,18 @@
 //! - Moderations
 //!   - [Create moderation](#create-moderation)
 //!
-//! ## Model names
+//! ## Model names (optional)
 //!
-//! - OpenAIModel::Chat3X5Turbo0301 = `gpt-3.5-turbo-0301`
-//! - OpenAIModel::Chat3X5Turbo = `gpt-3.5-turbo`
-//! - OpenAIModel::TextDavinci003 = `text-davinci-003`
-//! - OpenAIModel::TextDavinciEdit001 = `text-davinci-edit-001`
-//! - OpenAIModel::TextCurie001 = `text-curie-001`
-//! - OpenAIModel::TextBabbage001 = `text-babbage-001`
-//! - OpenAIModel::TextAda001 = `text-ada-001`
-//! - OpenAIModel::TextEmbeddingAda002 = `text-embedding-ada-002`
-//! - OpenAIModel::Whisper1 = `whisper-1`
-//! - OpenAIModel::TextModerationLatest = `text-moderation-latest`
+//! - openai_dive::v1::models::OpenAIModel::Chat3X5Turbo0301 = `gpt-3.5-turbo-0301`
+//! - openai_dive::v1::models::OpenAIModel::Chat3X5Turbo = `gpt-3.5-turbo`
+//! - openai_dive::v1::models::OpenAIModel::TextDavinci003 = `text-davinci-003`
+//! - openai_dive::v1::models::OpenAIModel::TextDavinciEdit001 = `text-davinci-edit-001`
+//! - openai_dive::v1::models::OpenAIModel::TextCurie001 = `text-curie-001`
+//! - openai_dive::v1::models::OpenAIModel::TextBabbage001 = `text-babbage-001`
+//! - openai_dive::v1::models::OpenAIModel::TextAda001 = `text-ada-001`
+//! - openai_dive::v1::models::OpenAIModel::TextEmbeddingAda002 = `text-embedding-ada-002`
+//! - openai_dive::v1::models::OpenAIModel::Whisper1 = `whisper-1`
+//! - openai_dive::v1::models::OpenAIModel::TextModerationLatest = `text-moderation-latest`
 //!
 //! # Endpoints
 //!
@@ -649,6 +649,8 @@
 //! - [X] List fine-tune events
 //! - [ ] List fine-tune events (stream)
 //! - [X] Delete fine-tune model
+//!
+//! More information: [Fine-tunes](https://platform.openai.com/docs/api-reference/fine-tunes)
 //!
 //! ## Create moderation
 //!
