@@ -7,6 +7,9 @@ members = [
     "create_chat_completion",
     "create_chat_completion_stream",
     "create_edit",
+    "create_image",
+    "create_image_edit",
+    "create_image_variation",
     "create_embedding",
     "create_moderation",
 ]

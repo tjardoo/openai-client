@@ -29,8 +29,8 @@ More information: [set API key](#set-api-key), [add proxy](#add-proxy)
   - [Create edit](#create-edit)
 - Images
   - [Create image](#create-image)
-  - [Edit image](#edit-image)
-  - [Image variation](#image-variation)
+  - [Create image edit](#create-image-edit)
+  - [Create image variation](#create-image-variation)
 - Embeddings
   - [Create embedding](#create-embedding)
 - Audio
@@ -328,7 +328,7 @@ async fn main() {
 
 More information: [Create image](https://platform.openai.com/docs/api-reference/images/create)
 
-### Edit image
+### Create image edit
 
 Creates an edited or extended image given an original image and a prompt.
 
@@ -349,7 +349,7 @@ async fn main() {
     let parameters = EditImageParameters {
         image: "./images/image_edit_original.png".to_string(), // https://github.com/betalgo/openai/blob/master/OpenAI.Playground/SampleData/image_edit_original.png
         mask: Some("./images/image_edit_mask.png".to_string()), // https://github.com/betalgo/openai/blob/master/OpenAI.Playground/SampleData/image_edit_mask.png
-        prompt: "A cute baby sea otter weaing a beret".to_string(),
+        prompt: "A cute baby sea otter wearing a beret".to_string(),
         number_of_images: Some(1),
         image_size: Some(ImageSize::Size256X256),
         response_format: None,
@@ -363,7 +363,7 @@ async fn main() {
 
 More information: [Create image edit](https://platform.openai.com/docs/api-reference/images/create-edit)
 
-### Image variation
+### Create image variation
 
 Creates a variation of a given image.
 
