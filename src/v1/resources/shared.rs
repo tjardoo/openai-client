@@ -14,8 +14,10 @@ pub struct Usage {
 
 #[derive(Serialize, Deserialize, Debug, PartialEq)]
 pub enum FinishReason {
-    #[serde(rename(deserialize = "length"))]
-    TokenLimitReached,
     #[serde(rename(deserialize = "stop"))]
     StopSequenceReached,
+    #[serde(rename(deserialize = "length"))]
+    TokenLimitReached,
+    #[serde(rename(deserialize = "content_filter"))]
+    ContentFilterFlagged,
 }

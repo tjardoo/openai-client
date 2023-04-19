@@ -32,9 +32,9 @@ pub struct ChatCompletionResponse {
 pub struct ChatCompletionChoice {
     pub index: u32,
     pub message: ChatMessage,
-    pub finish_reason: FinishReason,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub finish_reason: Option<FinishReason>,
 }
-
 
 #[derive(Serialize, Deserialize, Debug, PartialEq)]
 #[serde(rename_all = "lowercase")]
