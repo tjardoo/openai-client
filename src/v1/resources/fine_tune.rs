@@ -44,3 +44,10 @@ pub struct Hyperparams {
     pub n_epochs: u32,
     pub prompt_loss_weight: f32,
 }
+
+#[derive(Serialize, Deserialize, Debug)]
+pub struct DeletedFineTuneModel {
+    pub id: String,
+    pub object: String,
+    pub deleted: bool,
+}

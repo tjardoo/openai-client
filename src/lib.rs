@@ -39,6 +39,7 @@
 //!   - [Delete file](#delete-file)
 //!   - [Retrieve file](#retrieve-file)
 //!   - [Retrieve file content](#retrieve-file-content)
+//! - [Fine-tunes](#fine-tunes)
 //! - Moderations
 //!   - [Create moderation](#create-moderation)
 //!
@@ -634,6 +635,20 @@
 //! ```
 //!
 //! More information: [Retrieve file content](https://platform.openai.com/docs/api-reference/files/retrieve-content)
+//!
+//! ### Fine-tunes
+//!
+//! Manage fine-tuning jobs to tailor a model to your specific training data.
+//!
+//! See the `examples` directory for examples and implementation details.
+//!
+//! - [X] Create fine-tune
+//! - [X] List fine-tunes
+//! - [X] Retrieve fine-tunes
+//! - [X] Cancel fine-tunes
+//! - [X] List fine-tune events
+//! - [ ] List fine-tune events (stream)
+//! - [X] Delete fine-tune model
 //!
 //! ## Create moderation
 //!

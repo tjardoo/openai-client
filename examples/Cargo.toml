@@ -16,5 +16,9 @@ members = [
     "list_files",
     "create_fine_tune",
     "list_fine_tunes",
+    "retrieve_fine_tune",
+    "cancel_fine_tune",
+    "list_fine_tune_events",
+    "delete_fine_tune_model",
     "create_moderation",
 ]

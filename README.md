@@ -639,10 +639,11 @@ See the `examples` directory for examples and implementation details.
 
 - [X] Create fine-tune
 - [X] List fine-tunes
-- [ ] Retrieve fine-tunes
-- [ ] Cancel fine-tunes
-- [ ] List fine-tune events
-- [ ] Delete fine-tune model
+- [X] Retrieve fine-tunes
+- [X] Cancel fine-tunes
+- [X] List fine-tune events
+- [ ] List fine-tune events (stream)
+- [X] Delete fine-tune model
 
 ### Create moderation
 
