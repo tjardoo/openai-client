@@ -13,5 +13,6 @@ members = [
     "create_embedding",
     "create_transcription",
     "create_translation",
+    "list_files",
     "create_moderation",
 ]
