@@ -1,11 +1,12 @@
 [workspace]
 members = [
-    "models",
-    "completions",
-    "completions_stream",
-    "chat",
-    "chat_stream",
-    "edits",
-    "embeddings",
-    "moderations",
+    "list_models",
+    "retrieve_model",
+    "create_completion",
+    "create_completion_stream",
+    "create_chat_completion",
+    "create_chat_completion_stream",
+    "create_edit",
+    "create_embedding",
+    "create_moderation",
 ]

@@ -21,5 +21,6 @@ async fn main() {
     };
 
     let result = client.chat().create(parameters).await.unwrap();
+
     println!("{:?}", result);
 }

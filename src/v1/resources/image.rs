@@ -39,14 +39,19 @@ pub struct CreateImageVariationParameters {
 
 #[derive(Serialize, Deserialize, Debug)]
 pub enum ImageSize {
+    #[serde(rename = "256x256")]
     Size256X256,
+    #[serde(rename = "512x512")]
     Size512X512,
+    #[serde(rename = "1024x1024")]
     Size1024X1024,
 }
 
 #[derive(Serialize, Deserialize, Debug)]
 pub enum ResponseFormat {
+    #[serde(rename = "url")]
     Url,
+    #[serde(rename = "b64_json")]
     B64Json,
 }
 

@@ -1,5 +1,5 @@
 [package]
-name = "edits"
+name = "create_chat_completion"
 version = "0.1.0"
 edition = "2021"
 publish = false

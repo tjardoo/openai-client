@@ -7,9 +7,7 @@ async fn main() {
 
     let client = Client::new(api_key);
 
-    let result = client.models().list().await.unwrap();
-    println!("{:?}", result);
-
     let result = client.models().get("text-davinci-003").await.unwrap();
+
     println!("{:?}", result);
 }

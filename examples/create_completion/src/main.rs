@@ -17,5 +17,6 @@ async fn main() {
     };
 
     let result = client.completions().create(parameters).await.unwrap();
+
     println!("{:?}", result);
 }
