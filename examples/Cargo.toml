@@ -14,5 +14,7 @@ members = [
     "create_transcription",
     "create_translation",
     "list_files",
+    "create_fine_tune",
+    "list_fine_tunes",
     "create_moderation",
 ]
