@@ -30,8 +30,8 @@ impl Models<'_> {
         let response = self.client.get(&path).await?;
 
         let value: Value = serde_json::from_str(&response).unwrap();
-        let model: Model = serde_json::from_value(value).map_err(|error| APIError::ParseError(error.to_string()))?;
+        let model_response: Model = serde_json::from_value(value).map_err(|error| APIError::ParseError(error.to_string()))?;
 
-        Ok(model)
+        Ok(model_response)
     }
 }
