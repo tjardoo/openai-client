@@ -11,5 +11,7 @@ members = [
     "create_image_edit",
     "create_image_variation",
     "create_embedding",
+    "create_transcription",
+    "create_translation",
     "create_moderation",
 ]
