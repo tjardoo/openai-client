@@ -8,7 +8,7 @@ async fn main() {
     let client = Client::new(api_key);
 
     let parameters = CreateFineTuneParameters {
-        training_file: "file-n8az0vSVYGmVBflxr0SwzFup".to_string(),
+        training_file: "file-XXX".to_string(),
         validation_file: None,
         model: "curie".to_string(),
         //

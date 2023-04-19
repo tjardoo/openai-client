@@ -7,7 +7,7 @@ async fn main() {
 
     let client = Client::new(api_key);
 
-    let result = client.fine_tunes().list_events("ft-eJ3GlifDi5MEgkLtg6zACNFl").await.unwrap();
+    let result = client.fine_tunes().list_events("ft-XXX").await.unwrap();
 
     println!("{:?}", result);
 }

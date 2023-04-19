@@ -7,7 +7,7 @@ async fn main() {
 
     let client = Client::new(api_key);
 
-    let result = client.fine_tunes().delete_fine_tune_model("curie:ft-personal-2023-04-19-13-35-32").await.unwrap();
+    let result = client.fine_tunes().delete_fine_tune_model("curie:ft-personal-XXX").await.unwrap();
 
     println!("{:?}", result);
 }
