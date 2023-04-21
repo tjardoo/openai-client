@@ -10,8 +10,15 @@ async fn main() {
     let parameters = CreateFineTuneParameters {
         training_file: "file-XXX".to_string(),
         validation_file: None,
-        model: "curie".to_string(),
-        //
+        model: Some("curie".to_string()),
+        n_epochs: None,
+        batch_size: None,
+        learning_rate_multiplier: None,
+        prompt_loss_weight: None,
+        compute_classification_metrics: None,
+        classification_n_classes: None,
+        classification_positive_class: None,
+        classification_betas: None,
         suffix: None,
     };
 

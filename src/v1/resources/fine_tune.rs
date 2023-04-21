@@ -6,8 +6,24 @@ pub struct CreateFineTuneParameters {
     pub training_file: String,
     #[serde(skip_serializing_if = "Option::is_none")]
     pub validation_file: Option<String>,
-    pub model: String,
-    // @todo implement missing parameters
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub model: Option<String>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub n_epochs: Option<u32>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub batch_size: Option<u32>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub learning_rate_multiplier: Option<f32>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub prompt_loss_weight: Option<f32>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub compute_classification_metrics: Option<bool>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub classification_n_classes: Option<u32>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub classification_positive_class: Option<String>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub classification_betas: Option<Vec<f32>>,
     #[serde(skip_serializing_if = "Option::is_none")]
     pub suffix: Option<String>,
 }
