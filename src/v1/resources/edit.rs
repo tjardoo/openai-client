@@ -4,10 +4,15 @@ use crate::v1::resources::shared::Usage;
 #[derive(Serialize, Debug)]
 pub struct EditParameters {
     pub model: String,
-    pub input: String,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub input: Option<String>,
     pub instruction: String,
     #[serde(skip_serializing_if = "Option::is_none")]
+    pub n: Option<u32>,
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub temperature: Option<f32>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub top_p: Option<f32>,
 }
 
 #[derive(Serialize, Deserialize, Debug)]

@@ -313,9 +313,11 @@
 //!
 //!     let parameters = EditParameters {
 //!         model: "text-davinci-edit-001".to_string(),
-//!         input: "What day of the wek is it?".to_string(),
+//!         input: Some("What day of the wek is it?".to_string()),
 //!         instruction: "Fix the spelling mistakes".to_string(),
+//!         n: None,
 //!         temperature: None,
+//!         top_p: None,
 //!     };
 //!
 //!     let result = client.edits().create(parameters).await.unwrap();
