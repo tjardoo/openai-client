@@ -2,7 +2,7 @@ use reqwest::multipart::{Form, Part};
 use serde::Serialize;
 use tokio::fs::File;
 use tokio_util::codec::{FramedRead, BytesCodec};
-use super::error::APIError;
+use crate::v1::error::APIError;
 
 #[cfg(feature = "stream")]
 use std::pin::Pin;

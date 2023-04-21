@@ -1,6 +1,5 @@
 use serde::{Serialize, Deserialize};
-
-use super::chat_completion::Role;
+use crate::v1::resources::chat_completion::Role;
 
 #[derive(Serialize, Deserialize, Debug)]
 pub struct ChatCompletionStreamResponse {

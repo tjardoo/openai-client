@@ -12,8 +12,17 @@ async fn main() {
         model: "text-davinci-003".to_string(),
         prompt: "Say this is a test".to_string(),
         suffix: None,
-        max_tokens: 10,
+        max_tokens: Some(10),
         temperature: None,
+        top_p: None,
+        n: None,
+        logprobs: None,
+        echo: None,
+        stop: None,
+        presence_penalty: None,
+        frequency_penalty: None,
+        best_of: None,
+        logit_bias: None,
     };
 
     let result = client.completions().create(parameters).await.unwrap();

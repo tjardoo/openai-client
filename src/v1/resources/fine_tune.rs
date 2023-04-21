@@ -1,5 +1,5 @@
 use serde::{Serialize, Deserialize};
-use super::file::File;
+use crate::v1::resources::file::File;
 
 #[derive(Serialize, Deserialize, Debug)]
 pub struct CreateFineTuneParameters {

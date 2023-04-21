@@ -15,14 +15,22 @@ async fn main() {
             ChatMessage {
                 role: Role::User,
                 content: "Hello!".to_string(),
+                name: None,
             },
             ChatMessage {
                 role: Role::User,
                 content: "Where are you located?".to_string(),
+                name: None,
             },
         ],
-        max_tokens: 12,
         temperature: None,
+        top_p: None,
+        n: None,
+        stop: None,
+        max_tokens: Some(12),
+        presence_penalty: None,
+        frequency_penalty: None,
+        logit_bias: None,
     };
 
     let mut stream = client.chat().create_stream(parameters).await.unwrap();

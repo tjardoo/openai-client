@@ -21,3 +21,9 @@ pub enum FinishReason {
     #[serde(rename(deserialize = "content_filter"))]
     ContentFilterFlagged,
 }
+
+#[derive(Serialize, Deserialize, Debug, PartialEq)]
+pub enum StopToken {
+    String(String),
+    Array(Vec<String>),
+}

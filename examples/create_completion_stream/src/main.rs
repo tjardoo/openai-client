@@ -13,8 +13,17 @@ async fn main() {
         model: "text-davinci-003".to_string(),
         prompt: "Create an outline for an essay about Nikola Tesla and his contributions to technology:".to_string(),
         suffix: None,
-        max_tokens: 100,
+        max_tokens: Some(50),
         temperature: None,
+        top_p: None,
+        n: None,
+        logprobs: None,
+        echo: None,
+        stop: None,
+        presence_penalty: None,
+        frequency_penalty: None,
+        best_of: None,
+        logit_bias: None,
     };
 
     let mut stream = client.completions().create_stream(parameters).await.unwrap();

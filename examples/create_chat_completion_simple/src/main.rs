@@ -1,6 +1,6 @@
 use std::env;
 use openai_dive::v1::api::Client;
-use openai_dive::v1::resources::chat_completion::{ChatCompletionParameters, ChatMessage, Role};
+use openai_dive::v1::resources::chat_completion::{SimpleChatCompletionParameters, ChatMessage, Role};
 
 #[tokio::main]
 async fn main() {
@@ -8,7 +8,7 @@ async fn main() {
 
     let client = Client::new(api_key);
 
-    let parameters = ChatCompletionParameters {
+    let parameters = SimpleChatCompletionParameters {
         model: "gpt-3.5-turbo-0301".to_string(),
         messages: vec![
             ChatMessage {
@@ -22,17 +22,10 @@ async fn main() {
                 name: None,
             },
         ],
-        temperature: None,
-        top_p: None,
-        n: None,
-        stop: None,
-        max_tokens: Some(12),
-        presence_penalty: None,
-        frequency_penalty: None,
-        logit_bias: None,
+        max_tokens: 12,
     };
 
-    let result = client.chat().create(parameters).await.unwrap();
+    let result = client.chat().create_simple(parameters).await.unwrap();
 
     println!("{:?}", result);
 }

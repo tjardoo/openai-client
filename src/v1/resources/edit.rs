@@ -1,5 +1,5 @@
 use serde::{Serialize, Deserialize};
-use super::shared::Usage;
+use crate::v1::resources::shared::Usage;
 
 #[derive(Serialize, Debug)]
 pub struct EditParameters {
