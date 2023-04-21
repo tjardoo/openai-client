@@ -23,9 +23,11 @@ More information: [set API key](#set-api-key), [add proxy](#add-proxy)
 - Completions
   - [Create completion](#create-completion)
   - [Create completion (stream)](#create-completion-stream)
+  - [Create completion (simple)](#create-completion-simple)
 - Chat
   - [Create chat completion](#create-chat-completion)
   - [Create chat completion (stream)](#create-chat-completion-stream)
+  - [Create chat completion (simple)](#create-chat-completion-simple)
 - Edits
   - [Create edit](#create-edit)
 - Images
@@ -119,8 +121,17 @@ async fn main() {
         model: "text-davinci-003".to_string(),
         prompt: "Say this is a test".to_string(),
         suffix: None,
-        max_tokens: 10,
+        max_tokens: Some(10),
         temperature: None,
+        top_p: None,
+        n: None,
+        logprobs: None,
+        echo: None,
+        stop: None,
+        presence_penalty: None,
+        frequency_penalty: None,
+        best_of: None,
+        logit_bias: None,
     };
 
     let result = client.completions().create(parameters).await.unwrap();
@@ -156,8 +167,17 @@ async fn main() {
         model: "text-davinci-003".to_string(),
         prompt: "Create an outline for an essay about Nikola Tesla and his contributions to technology:".to_string(),
         suffix: None,
-        max_tokens: 100,
+        max_tokens: Some(50),
         temperature: None,
+        top_p: None,
+        n: None,
+        logprobs: None,
+        echo: None,
+        stop: None,
+        presence_penalty: None,
+        frequency_penalty: None,
+        best_of: None,
+        logit_bias: None,
     };
 
     let mut stream = client.completions().create_stream(parameters).await.unwrap();
@@ -170,6 +190,42 @@ async fn main() {
             Err(e) => eprintln!("{}", e),
         }
     }
+}
+```
+
+More information: [Create completion](https://platform.openai.com/docs/api-reference/completions/create)
+
+### Create completion (simple)
+
+> Feature `simple` required
+
+Creates a completion for the provided prompt and parameters.
+
+**URL** `https://api.openai.com/v1/completions`
+
+**Method** `POST`
+
+```rust
+use futures::StreamExt;
+use openai_dive::v1::api::Client;
+use openai_dive::v1::resources::completion::SimpleCompletionParameters;
+
+#[tokio::main]
+async fn main() {
+    let api_key = env::var("OPENAI_API_KEY").expect("$OPENAI_API_KEY is not set");
+
+    let client = Client::new(api_key);
+
+    let parameters = SimpleCompletionParameters {
+        model: "text-davinci-003".to_string(),
+        prompt: "Say this is a test".to_string(),
+        suffix: None,
+        max_tokens: 10,
+    };
+
+    let result = client.completions().create_simple(parameters).await.unwrap();
+
+    println!("{:?}", result);
 }
 ```
 
@@ -281,6 +337,51 @@ async fn main() {
             Err(e) => eprintln!("{}", e),
         }
     }
+}
+```
+
+More information: [Create chat completion](https://platform.openai.com/docs/api-reference/chat/create)
+
+### Create chat completion (simple)
+
+> Feature `simple` required
+
+Creates a completion for the chat message.
+
+**URL** `https://api.openai.com/v1/chat/completions`
+
+**Method** `POST`
+
+```rust
+use openai_dive::v1::api::Client;
+use openai_dive::v1::resources::chat_completion::{SimpleChatCompletionParameters, ChatMessage, Role};
+
+#[tokio::main]
+async fn main() {
+    let api_key = env::var("OPENAI_API_KEY").expect("$OPENAI_API_KEY is not set");
+
+    let client = Client::new(api_key);
+
+    let parameters = SimpleChatCompletionParameters {
+        model: "gpt-3.5-turbo-0301".to_string(),
+        messages: vec![
+            ChatMessage {
+                role: Role::User,
+                content: "Hello!".to_string(),
+                name: None,
+            },
+            ChatMessage {
+                role: Role::User,
+                content: "Where are you located?".to_string(),
+                name: None,
+            },
+        ],
+        max_tokens: 12,
+    };
+
+    let result = client.chat().create_simple(parameters).await.unwrap();
+
+    println!("{:?}", result);
 }
 ```
 
