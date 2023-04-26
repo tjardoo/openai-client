@@ -1,7 +1,8 @@
 use std::fmt::Display;
 use serde::{Serialize, Deserialize};
-use crate::v1::error::APIError;
 
+#[cfg(feature = "download")]
+use crate::v1::error::APIError;
 #[cfg(feature = "download")]
 use futures::future;
 #[cfg(feature = "download")]
