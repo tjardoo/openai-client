@@ -1,4 +1,5 @@
-use std::{fmt::{Display, Formatter, Result}, error::Error};
+use std::fmt::{Display, Formatter, Result};
+use std::error::Error;
 use serde::Deserialize;
 
 #[derive(Debug, Deserialize)]

@@ -1,6 +1,7 @@
+use crate::v1::api::Client;
+use crate::v1::error::APIError;
 use crate::v1::api::file_from_disk_to_form_part;
 use crate::v1::resources::image::{CreateImageParameters, ImageResponse, EditImageParameters, CreateImageVariationParameters};
-use crate::v1::{api::Client, error::APIError};
 use serde_json::Value;
 
 pub struct Images<'a> {

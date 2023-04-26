@@ -1,6 +1,7 @@
-use crate::v1::{api::Client, error::APIError};
-use serde_json::Value;
+use crate::v1::api::Client;
+use crate::v1::error::APIError;
 use crate::v1::resources::model::Model;
+use serde_json::Value;
 
 pub struct Models<'a> {
     pub client: &'a Client,

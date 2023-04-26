@@ -1,4 +1,6 @@
-use crate::v1::{api::Client, error::APIError, resources::moderation::{ModerationResponse, ModerationParameters}};
+use crate::v1::api::Client;
+use crate::v1::error::APIError;
+use crate::v1::resources::moderation::{ModerationResponse, ModerationParameters};
 use serde_json::Value;
 
 pub struct Moderations<'a> {

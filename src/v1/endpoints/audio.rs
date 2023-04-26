@@ -1,6 +1,7 @@
+use crate::v1::api::Client;
+use crate::v1::error::APIError;
 use crate::v1::api::file_from_disk_to_form_part;
 use crate::v1::resources::audio::{AudioTranscriptionParameters, AudioTranslationParameters};
-use crate::v1::{api::Client, error::APIError};
 
 pub struct Audio<'a> {
     pub client: &'a Client,
