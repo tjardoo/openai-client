@@ -47,8 +47,9 @@
 //!
 //! ## Model names (optional)
 //!
-//! - openai_dive::v1::models::OpenAIModel::Chat3X5Turbo0301 = `gpt-3.5-turbo-0301`
-//! - openai_dive::v1::models::OpenAIModel::Chat3X5Turbo = `gpt-3.5-turbo`
+//! - openai_dive::v1::models::OpenAIModel::Gpt4 = `gpt-4`
+//! - openai_dive::v1::models::OpenAIModel::Gpt3X5Turbo0301 = `gpt-3.5-turbo-0301`
+//! - openai_dive::v1::models::OpenAIModel::Gpt3X5Turbo = `gpt-3.5-turbo`
 //! - openai_dive::v1::models::OpenAIModel::TextDavinci003 = `text-davinci-003`
 //! - openai_dive::v1::models::OpenAIModel::TextDavinciEdit001 = `text-davinci-edit-001`
 //! - openai_dive::v1::models::OpenAIModel::TextCurie001 = `text-curie-001`
