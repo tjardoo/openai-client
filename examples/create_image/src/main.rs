@@ -1,6 +1,6 @@
 use std::env;
 use openai_dive::v1::api::Client;
-use openai_dive::v1::resources::image::{CreateImageParameters, ImageSize};
+use openai_dive::v1::resources::image::{CreateImageParameters, ImageSize, ResponseFormat};
 
 #[tokio::main]
 async fn main() {
@@ -12,10 +12,15 @@ async fn main() {
         prompt: "A cute baby dog".to_string(),
         number_of_images: Some(1),
         image_size: Some(ImageSize::Size256X256),
-        response_format: None,
+        response_format: Some(ResponseFormat::Url),
+        // response_format: Some(ResponseFormat::B64Json),
     };
 
     let result = client.images().create(parameters).await.unwrap();
+
+    let paths = result.save("./images").await.unwrap();
+
+    println!("{:?}", paths);
 
     println!("{:?}", result);
 }

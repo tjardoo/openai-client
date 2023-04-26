@@ -1,5 +1,9 @@
 use std::fmt::Display;
 use serde::{Serialize, Deserialize};
+use crate::v1::error::APIError;
+
+#[cfg(feature = "download")]
+use futures::future;
 
 #[derive(Serialize, Debug)]
 pub struct CreateImageParameters {
@@ -58,12 +62,84 @@ pub enum ResponseFormat {
 #[derive(Serialize, Deserialize, Debug)]
 pub struct ImageResponse {
     pub created: u32,
-    pub data: Vec<ImageUrl>,
+    pub data: Vec<ImageData>,
 }
 
-#[derive(Serialize, Deserialize, Debug)]
-pub struct ImageUrl {
-    pub url: String,
+#[derive(Serialize, Deserialize, Debug, Clone)]
+pub enum ImageData {
+    #[serde(rename = "url")]
+    Url(String),
+    #[serde(rename = "b64_json")]
+    B64Json(String),
+}
+
+impl ImageResponse {
+    #[cfg(feature = "download")]
+    pub async fn save(&self, path: &str) -> Result<Vec<String>, APIError> {
+        let mut files = vec![];
+        let mut handles = vec![];
+
+        for item in self.data.clone() {
+            let path = path.to_owned();
+
+            handles.push(tokio::spawn(async move {
+                item.save_to_disk(&path).await
+            }));
+        }
+
+        let results = future::join_all(handles).await;
+
+        for result in results {
+            match result {
+                Ok(path) => match path {
+                    Ok(item) => files.push(item),
+                    Err(_error) => (),
+                }
+                Err(_error) => (),
+            }
+        }
+
+        Ok(files)
+    }
+}
+
+impl ImageData {
+    #[cfg(feature = "download")]
+    pub async fn save_to_disk(&self, path: &str) -> Result<String, APIError> {
+        match self {
+            ImageData::Url(url) => self.download_image_from_url(url, path).await,
+            ImageData::B64Json(b64_json) => self.download_b64_json_image(b64_json, path).await,
+        }
+    }
+
+    #[cfg(feature = "download")]
+    async fn download_image_from_url(&self, url: &str, path: &str) -> Result<String, APIError> {
+        use super::shared::generate_file_name;
+
+        let response = reqwest::get(url)
+            .await
+            .map_err(|error| APIError::FileError(error.to_string()))?;
+
+        let full_path = generate_file_name(path, 12, ".png");
+
+        tokio::fs::write(
+            &full_path,
+            response
+                .bytes()
+                .await
+                .map_err(|error| APIError::FileError(error.to_string()))?,
+        ).await
+        .map_err(|error| APIError::FileError(error.to_string()))?;
+
+        Ok(full_path)
+    }
+
+    #[cfg(feature = "download")]
+    async fn download_b64_json_image(&self, b64_json: &str, _path: &str) -> Result<String, APIError> {
+        let _response = b64_json;
+
+        Ok("todo path".to_string())
+    }
 }
 
 impl Display for ImageSize {
