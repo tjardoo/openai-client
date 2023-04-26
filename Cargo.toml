@@ -18,9 +18,10 @@ tokio-stream = { version = "0.1", optional = true }
 serde = { version = "1", features = ["derive"] }
 serde_json = "1.0"
 rand = { version = "0.8", optional = true }
+base64 = { version = "0.21", optional = true }
 
 [features]
 default = []
-download = ["dep:futures", "dep:rand"]
+download = ["dep:futures", "dep:rand", "dep:base64"]
 stream = ["dep:reqwest-eventsource", "dep:futures", "dep:tokio-stream"]
 simple = []

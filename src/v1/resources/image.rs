@@ -4,6 +4,10 @@ use crate::v1::error::APIError;
 
 #[cfg(feature = "download")]
 use futures::future;
+#[cfg(feature = "download")]
+use crate::v1::resources::shared::generate_file_name;
+#[cfg(feature = "download")]
+use base64::{Engine as _, engine::general_purpose};
 
 #[derive(Serialize, Debug)]
 pub struct CreateImageParameters {
@@ -114,8 +118,6 @@ impl ImageData {
 
     #[cfg(feature = "download")]
     async fn download_image_from_url(&self, url: &str, path: &str) -> Result<String, APIError> {
-        use super::shared::generate_file_name;
-
         let response = reqwest::get(url)
             .await
             .map_err(|error| APIError::FileError(error.to_string()))?;
@@ -135,10 +137,18 @@ impl ImageData {
     }
 
     #[cfg(feature = "download")]
-    async fn download_b64_json_image(&self, b64_json: &str, _path: &str) -> Result<String, APIError> {
-        let _response = b64_json;
+    async fn download_b64_json_image(&self, b64_json: &str, path: &str) -> Result<String, APIError> {
+        let full_path = generate_file_name(path, 12, "png");
 
-        Ok("todo path".to_string())
+        let bytes = general_purpose::STANDARD.decode(b64_json).unwrap();
+
+        tokio::fs::write(
+            &full_path,
+            bytes,
+        ).await
+        .map_err(|error| APIError::FileError(error.to_string()))?;
+
+        Ok(full_path)
     }
 }
 
