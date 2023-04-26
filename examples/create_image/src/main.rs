@@ -10,7 +10,7 @@ async fn main() {
 
     let parameters = CreateImageParameters {
         prompt: "A cute baby dog".to_string(),
-        number_of_images: Some(1),
+        number_of_images: Some(2),
         image_size: Some(ImageSize::Size256X256),
         response_format: Some(ResponseFormat::Url),
         // response_format: Some(ResponseFormat::B64Json),

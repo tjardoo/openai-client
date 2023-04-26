@@ -431,6 +431,8 @@
 //!
 //! ## Create image
 //!
+//! > To download and save an image the feature `download` is required
+//!
 //! Creates an image given a prompt.
 //!
 //! **URL** `https://api.openai.com/v1/images/generations`
@@ -456,6 +458,9 @@
 //!
 //!     let result = client.images().create(parameters).await.unwrap();
 //!
+//!     // (optional) downloads and saves the image(s) to the folder called `images`
+//!     let _paths = result.save("./images").await.unwrap();
+//!
 //!     println!("{:?}", result);
 //! }
 //! ```
@@ -463,6 +468,8 @@
 //! More information: [Create image](https://platform.openai.com/docs/api-reference/images/create)
 //!
 //! ## Create image edit
+//!
+//! > To download and save an image the feature `download` is required
 //!
 //! Creates an edited or extended image given an original image and a prompt.
 //!
@@ -491,6 +498,9 @@
 //!
 //!     let result = client.images().edit(parameters).await.unwrap();
 //!
+//!     // (optional) downloads and saves the image(s) to the folder called `images`
+//!     let _paths = result.save("./images").await.unwrap();
+//!
 //!     println!("{:?}", result);
 //! }
 //! ```
@@ -498,6 +508,8 @@
 //! More information: [Create image edit](https://platform.openai.com/docs/api-reference/images/create-edit)
 //!
 //! ## Create image variation
+//!
+//! > To download and save an image the feature `download` is required
 //!
 //! Creates a variation of a given image.
 //!
@@ -523,6 +535,9 @@
 //!     };
 //!
 //!     let result = client.images().variation(parameters).await.unwrap();
+//!
+//!     // (optional) downloads and saves the image(s) to the folder called `images`
+//!     let _paths = result.save("./images").await.unwrap();
 //!
 //!     println!("{:?}", result);
 //! }

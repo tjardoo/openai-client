@@ -424,6 +424,8 @@ More information: [Create edit](https://platform.openai.com/docs/api-reference/e
 
 ### Create image
 
+> To download and save an image the feature `download` is required
+
 Creates an image given a prompt.
 
 **URL** `https://api.openai.com/v1/images/generations`
@@ -449,6 +451,9 @@ async fn main() {
 
     let result = client.images().create(parameters).await.unwrap();
 
+    // (optional) downloads and saves the image to the folder called `images`
+    let _paths = result.save("./images").await.unwrap();
+
     println!("{:?}", result);
 }
 ```
@@ -456,6 +461,8 @@ async fn main() {
 More information: [Create image](https://platform.openai.com/docs/api-reference/images/create)
 
 ### Create image edit
+
+> To download and save an image the feature `download` is required
 
 Creates an edited or extended image given an original image and a prompt.
 
@@ -484,6 +491,9 @@ async fn main() {
 
     let result = client.images().edit(parameters).await.unwrap();
 
+    // (optional) downloads and saves the image to the folder called `images`
+    let _paths = result.save("./images").await.unwrap();
+
     println!("{:?}", result);
 }
 ```
@@ -491,6 +501,8 @@ async fn main() {
 More information: [Create image edit](https://platform.openai.com/docs/api-reference/images/create-edit)
 
 ### Create image variation
+
+> To download and save an image the feature `download` is required
 
 Creates a variation of a given image.
 
@@ -516,6 +528,9 @@ async fn main() {
     };
 
     let result = client.images().variation(parameters).await.unwrap();
+
+    // (optional) downloads and saves the image to the folder called `images`
+    let _paths = result.save("./images").await.unwrap();
 
     println!("{:?}", result);
 }
