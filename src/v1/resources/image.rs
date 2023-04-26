@@ -120,7 +120,7 @@ impl ImageData {
             .await
             .map_err(|error| APIError::FileError(error.to_string()))?;
 
-        let full_path = generate_file_name(path, 12, ".png");
+        let full_path = generate_file_name(path, 12, "png");
 
         tokio::fs::write(
             &full_path,
