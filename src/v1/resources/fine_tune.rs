@@ -1,7 +1,7 @@
 use serde::{Serialize, Deserialize};
 use crate::v1::resources::file::File;
 
-#[derive(Serialize, Deserialize, Debug)]
+#[derive(Serialize, Deserialize, Debug, Clone)]
 pub struct CreateFineTuneParameters {
     pub training_file: String,
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -28,7 +28,7 @@ pub struct CreateFineTuneParameters {
     pub suffix: Option<String>,
 }
 
-#[derive(Serialize, Deserialize, Debug)]
+#[derive(Serialize, Deserialize, Debug, Clone)]
 pub struct FineTune {
     pub id: String,
     pub model: String,
@@ -45,7 +45,7 @@ pub struct FineTune {
     pub updated_at: u32,
 }
 
-#[derive(Serialize, Deserialize, Debug)]
+#[derive(Serialize, Deserialize, Debug, Clone)]
 pub struct FineTuneEvent {
     pub object: String,
     pub created_at: u32,
@@ -53,7 +53,7 @@ pub struct FineTuneEvent {
     pub message: String,
 }
 
-#[derive(Serialize, Deserialize, Debug)]
+#[derive(Serialize, Deserialize, Debug, Clone)]
 pub struct Hyperparams {
     pub batch_size: Option<u32>,
     pub learning_rate_multiplier: Option<f32>,
@@ -61,7 +61,7 @@ pub struct Hyperparams {
     pub prompt_loss_weight: f32,
 }
 
-#[derive(Serialize, Deserialize, Debug)]
+#[derive(Serialize, Deserialize, Debug, Clone)]
 pub struct DeletedFineTuneModel {
     pub id: String,
     pub object: String,

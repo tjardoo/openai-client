@@ -1,6 +1,6 @@
 use serde::{Serialize, Deserialize};
 
-#[derive(Serialize, Deserialize, Debug)]
+#[derive(Serialize, Deserialize, Debug, Clone)]
 pub struct CompletionStreamResponse {
     pub id: String,
     pub object: String,
@@ -9,7 +9,7 @@ pub struct CompletionStreamResponse {
     pub choices: Vec<CompletionStreamChoice>,
 }
 
-#[derive(Serialize, Deserialize, Debug)]
+#[derive(Serialize, Deserialize, Debug, Clone)]
 pub struct CompletionStreamChoice {
     pub text: String,
     pub index: u32,

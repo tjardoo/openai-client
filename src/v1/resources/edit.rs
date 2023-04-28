@@ -1,7 +1,7 @@
 use serde::{Serialize, Deserialize};
 use crate::v1::resources::shared::Usage;
 
-#[derive(Serialize, Debug)]
+#[derive(Serialize, Debug, Clone)]
 pub struct EditParameters {
     pub model: String,
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -15,7 +15,7 @@ pub struct EditParameters {
     pub top_p: Option<f32>,
 }
 
-#[derive(Serialize, Deserialize, Debug)]
+#[derive(Serialize, Deserialize, Debug, Clone)]
 pub struct EditResponse {
     pub object: String,
     pub created: u32,
@@ -23,7 +23,7 @@ pub struct EditResponse {
     pub usage: Usage,
 }
 
-#[derive(Serialize, Deserialize, Debug)]
+#[derive(Serialize, Deserialize, Debug, Clone)]
 pub struct EditChoice {
     pub index: u32,
     pub text: String,

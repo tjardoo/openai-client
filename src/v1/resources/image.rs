@@ -10,7 +10,7 @@ use crate::v1::resources::shared::generate_file_name;
 #[cfg(feature = "download")]
 use base64::{Engine as _, engine::general_purpose};
 
-#[derive(Serialize, Debug)]
+#[derive(Serialize, Debug, Clone)]
 pub struct CreateImageParameters {
     pub prompt: String,
     #[serde(rename = "n", skip_serializing_if = "Option::is_none")]
@@ -21,7 +21,7 @@ pub struct CreateImageParameters {
     pub response_format: Option<ResponseFormat>,
 }
 
-#[derive(Serialize, Debug)]
+#[derive(Serialize, Debug, Clone)]
 pub struct EditImageParameters {
     pub image: String,
     pub prompt: String,
@@ -35,7 +35,7 @@ pub struct EditImageParameters {
     pub response_format: Option<ResponseFormat>,
 }
 
-#[derive(Serialize, Debug)]
+#[derive(Serialize, Debug, Clone)]
 pub struct CreateImageVariationParameters {
     pub image: String,
     #[serde(rename = "n", skip_serializing_if = "Option::is_none")]
@@ -46,7 +46,7 @@ pub struct CreateImageVariationParameters {
     pub response_format: Option<ResponseFormat>,
 }
 
-#[derive(Serialize, Deserialize, Debug)]
+#[derive(Serialize, Deserialize, Debug, Clone)]
 pub enum ImageSize {
     #[serde(rename = "256x256")]
     Size256X256,
@@ -56,7 +56,7 @@ pub enum ImageSize {
     Size1024X1024,
 }
 
-#[derive(Serialize, Deserialize, Debug)]
+#[derive(Serialize, Deserialize, Debug, Clone)]
 pub enum ResponseFormat {
     #[serde(rename = "url")]
     Url,
@@ -64,7 +64,7 @@ pub enum ResponseFormat {
     B64Json,
 }
 
-#[derive(Serialize, Deserialize, Debug)]
+#[derive(Serialize, Deserialize, Debug, Clone)]
 pub struct ImageResponse {
     pub created: u32,
     pub data: Vec<ImageData>,
