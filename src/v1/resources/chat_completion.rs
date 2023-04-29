@@ -5,14 +5,14 @@ use crate::v1::resources::shared::{Usage, FinishReason};
 use crate::v1::resources::shared::StopToken;
 
 #[cfg(feature = "simple")]
-#[derive(Serialize, Debug)]
+#[derive(Serialize, Debug, Clone)]
 pub struct SimpleChatCompletionParameters {
     pub model: String,
     pub messages: Vec<ChatMessage>,
     pub max_tokens: u32,
 }
 
-#[derive(Serialize, Debug)]
+#[derive(Serialize, Debug, Clone)]
 pub struct ChatCompletionParameters {
     pub model: String,
     pub messages: Vec<ChatMessage>,
@@ -34,7 +34,7 @@ pub struct ChatCompletionParameters {
     pub logit_bias: Option<HashMap<String, serde_json::Value>>,
 }
 
-#[derive(Serialize, Deserialize, Debug)]
+#[derive(Serialize, Deserialize, Debug, Clone)]
 pub struct ChatMessage {
     pub role: Role,
     pub content: String,
@@ -60,7 +60,7 @@ pub struct ChatCompletionChoice {
     pub finish_reason: Option<FinishReason>,
 }
 
-#[derive(Serialize, Deserialize, Debug, PartialEq)]
+#[derive(Serialize, Deserialize, Debug, PartialEq, Clone)]
 #[serde(rename_all = "lowercase")]
 pub enum Role {
     System,

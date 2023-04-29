@@ -3,19 +3,19 @@ use serde::{Deserialize, Serialize};
 #[cfg(feature = "download")]
 use rand::{distributions::Alphanumeric, Rng};
 
-#[derive(Serialize, Deserialize, Debug)]
+#[derive(Serialize, Deserialize, Debug, Clone)]
 pub struct BaseModel {
     name: String,
 }
 
-#[derive(Serialize, Deserialize, Debug)]
+#[derive(Serialize, Deserialize, Debug, Clone)]
 pub struct Usage {
     pub prompt_tokens: u32,
     pub completion_tokens: u32,
     pub total_tokens: u32,
 }
 
-#[derive(Serialize, Deserialize, Debug, PartialEq)]
+#[derive(Serialize, Deserialize, Debug, PartialEq, Clone)]
 pub enum FinishReason {
     #[serde(rename(deserialize = "stop"))]
     StopSequenceReached,
@@ -25,7 +25,7 @@ pub enum FinishReason {
     ContentFilterFlagged,
 }
 
-#[derive(Serialize, Deserialize, Debug, PartialEq)]
+#[derive(Serialize, Deserialize, Debug, PartialEq, Clone)]
 pub enum StopToken {
     String(String),
     Array(Vec<String>),

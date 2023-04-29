@@ -1,26 +1,26 @@
 use serde::{Serialize, Deserialize};
 
-#[derive(Serialize, Debug)]
+#[derive(Serialize, Debug, Clone)]
 pub struct ModerationParameters {
     pub input: String,
     pub model: String,
 }
 
-#[derive(Serialize, Deserialize, Debug)]
+#[derive(Serialize, Deserialize, Debug, Clone)]
 pub struct ModerationResponse {
     pub id: String,
     pub model: String,
     pub results: Vec<Results>,
 }
 
-#[derive(Serialize, Deserialize, Debug)]
+#[derive(Serialize, Deserialize, Debug, Clone)]
 pub struct Results {
     pub categories: Categories,
     pub category_scores: CategoryScores,
     pub flagged: bool,
 }
 
-#[derive(Serialize, Deserialize, Debug)]
+#[derive(Serialize, Deserialize, Debug, Clone)]
 pub struct Categories {
     pub hate: bool,
     #[serde(rename = "hate/threatening")]
@@ -35,7 +35,7 @@ pub struct Categories {
     pub violence_graphic: bool,
 }
 
-#[derive(Serialize, Deserialize, Debug)]
+#[derive(Serialize, Deserialize, Debug, Clone)]
 pub struct CategoryScores {
     pub hate: f64,
     #[serde(rename = "hate/threatening")]

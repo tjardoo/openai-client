@@ -2,7 +2,7 @@ use std::collections::HashMap;
 use serde::{Serialize, Deserialize};
 use crate::v1::resources::shared::{Usage, FinishReason, StopToken};
 
-#[derive(Serialize, Debug)]
+#[derive(Serialize, Debug, Clone)]
 pub struct SimpleCompletionParameters {
     pub model: String,
     pub prompt: String,
@@ -11,7 +11,7 @@ pub struct SimpleCompletionParameters {
     pub max_tokens: u32,
 }
 
-#[derive(Serialize, Debug)]
+#[derive(Serialize, Debug, Clone)]
 pub struct CompletionParameters {
     pub model: String,
     pub prompt: String,
@@ -41,7 +41,7 @@ pub struct CompletionParameters {
     pub logit_bias: Option<HashMap<String, serde_json::Value>>,
 }
 
-#[derive(Serialize, Deserialize, Debug)]
+#[derive(Serialize, Deserialize, Debug, Clone)]
 pub struct CompletionResponse {
     pub id: String,
     pub object: String,
@@ -51,7 +51,7 @@ pub struct CompletionResponse {
     pub usage: Usage,
 }
 
-#[derive(Serialize, Deserialize, Debug)]
+#[derive(Serialize, Deserialize, Debug, Clone)]
 pub struct CompletionChoice {
     pub text: String,
     pub index: u32,

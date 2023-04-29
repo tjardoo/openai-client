@@ -1,7 +1,7 @@
 use serde::{Serialize, Deserialize};
 use crate::v1::resources::chat_completion::Role;
 
-#[derive(Serialize, Deserialize, Debug)]
+#[derive(Serialize, Deserialize, Debug, Clone)]
 pub struct ChatCompletionStreamResponse {
     pub id: String,
     pub object: String,
@@ -10,13 +10,13 @@ pub struct ChatCompletionStreamResponse {
     pub choices: Vec<DeltaField>,
 }
 
-#[derive(Serialize, Deserialize, Debug)]
+#[derive(Serialize, Deserialize, Debug, Clone)]
 pub struct DeltaField {
     pub delta: DeltaValue,
     pub index: u32,
 }
 
-#[derive(Serialize, Deserialize, Debug)]
+#[derive(Serialize, Deserialize, Debug, Clone)]
 pub struct DeltaValue {
     #[serde(skip_serializing_if = "Option::is_none")]
     pub role: Option<Role>,

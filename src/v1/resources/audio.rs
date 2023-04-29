@@ -1,7 +1,7 @@
 use std::fmt::Display;
 use serde::{Serialize, Deserialize};
 
-#[derive(Serialize, Debug)]
+#[derive(Serialize, Debug, Clone)]
 pub struct AudioTranscriptionParameters {
     pub file: String,
     pub model: String,
@@ -15,7 +15,7 @@ pub struct AudioTranscriptionParameters {
     pub language: Option<String>,
 }
 
-#[derive(Serialize, Debug)]
+#[derive(Serialize, Debug, Clone)]
 pub struct AudioTranslationParameters {
     pub file: String,
     pub model: String,
@@ -27,7 +27,7 @@ pub struct AudioTranslationParameters {
     pub temperature: Option<f32>,
 }
 
-#[derive(Serialize, Deserialize, Debug)]
+#[derive(Serialize, Deserialize, Debug, Clone)]
 pub enum AudioTranscriptOutputFormat {
     Json,
     Text,
