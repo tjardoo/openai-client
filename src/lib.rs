@@ -6,7 +6,7 @@
 //!
 //! ```ini
 //! [dependencies]
-//! openai_dive = "0.1"
+//! openai_dive = "0.2"
 //! ```
 //!
 //! More information: [set API key](#set-api-key), [add proxy](#add-proxy)
@@ -839,7 +839,7 @@
 //! export OPENAI_API_KEY='sk-...'
 //! ```
 //!
-//! ## Proxy support
+//! ## Add proxy
 //!
 //! This crate uses `reqwest` as HTTP Client. Reqwest has proxies enabled by default. You can set the proxy via the system environment variable or by overriding the default client.
 //!
