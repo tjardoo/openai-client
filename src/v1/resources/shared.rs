@@ -15,7 +15,7 @@ pub struct Usage {
     pub total_tokens: u32,
 }
 
-#[derive(Serialize, Deserialize, Debug, PartialEq, Clone)]
+#[derive(Serialize, Deserialize, Debug, Clone, PartialEq)]
 pub enum FinishReason {
     #[serde(rename(deserialize = "stop"))]
     StopSequenceReached,
@@ -25,7 +25,7 @@ pub enum FinishReason {
     ContentFilterFlagged,
 }
 
-#[derive(Serialize, Deserialize, Debug, PartialEq, Clone)]
+#[derive(Serialize, Deserialize, Debug, Clone, PartialEq)]
 pub enum StopToken {
     String(String),
     Array(Vec<String>),
