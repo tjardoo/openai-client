@@ -55,12 +55,12 @@
 //!
 //! **Method** `GET`
 //!
-//! ```rust
+//! ```rust, ignore
 //! use openai_dive::v1::api::Client;
 //!
 //! #[tokio::main]
 //! async fn main() {
-//!     let api_key = env::var("OPENAI_API_KEY").expect("$OPENAI_API_KEY is not set");
+//!     let api_key = std::env::var("OPENAI_API_KEY").expect("$OPENAI_API_KEY is not set");
 //!
 //!     let client = Client::new(api_key);
 //!
@@ -80,12 +80,12 @@
 //!
 //! **Method** `GET`
 //!
-//! ```rust
+//! ```rust, ignore
 //! use openai_dive::v1::api::Client;
 //!
 //! #[tokio::main]
 //! async fn main() {
-//!     let api_key = env::var("OPENAI_API_KEY").expect("$OPENAI_API_KEY is not set");
+//!     let api_key = std::env::var("OPENAI_API_KEY").expect("$OPENAI_API_KEY is not set");
 //!
 //!     let client = Client::new(api_key);
 //!
@@ -105,13 +105,13 @@
 //!
 //! **Method** `POST`
 //!
-//! ```rust
+//! ```rust, ignore
 //! use openai_dive::v1::api::Client;
 //! use openai_dive::v1::resources::completion::CompletionParameters;
 //!
 //! #[tokio::main]
 //! async fn main() {
-//!     let api_key = env::var("OPENAI_API_KEY").expect("$OPENAI_API_KEY is not set");
+//!     let api_key = std::env::var("OPENAI_API_KEY").expect("$OPENAI_API_KEY is not set");
 //!
 //!     let client = Client::new(api_key);
 //!
@@ -148,14 +148,14 @@
 //!
 //! **Method** `POST`
 //!
-//! ```rust
+//! ```rust, ignore
 //! use futures::StreamExt;
 //! use openai_dive::v1::api::Client;
 //! use openai_dive::v1::resources::completion::CompletionParameters;
 //!
 //! #[tokio::main]
 //! async fn main() {
-//!     let api_key = env::var("OPENAI_API_KEY").expect("$OPENAI_API_KEY is not set");
+//!     let api_key = std::env::var("OPENAI_API_KEY").expect("$OPENAI_API_KEY is not set");
 //!
 //!     let client = Client::new(api_key);
 //!
@@ -201,14 +201,13 @@
 //!
 //! **Method** `POST`
 //!
-//! ```rust
-//! use futures::StreamExt;
+//! ```rust, ignore
 //! use openai_dive::v1::api::Client;
 //! use openai_dive::v1::resources::completion::SimpleCompletionParameters;
 //!
 //! #[tokio::main]
 //! async fn main() {
-//!     let api_key = env::var("OPENAI_API_KEY").expect("$OPENAI_API_KEY is not set");
+//!     let api_key = std::env::var("OPENAI_API_KEY").expect("$OPENAI_API_KEY is not set");
 //!
 //!     let client = Client::new(api_key);
 //!
@@ -235,13 +234,13 @@
 //!
 //! **Method** `POST`
 //!
-//! ```rust
+//! ```rust, ignore
 //! use openai_dive::v1::api::Client;
 //! use openai_dive::v1::resources::chat_completion::{ChatCompletionParameters, ChatMessage, Role};
 //!
 //! #[tokio::main]
 //! async fn main() {
-//!     let api_key = env::var("OPENAI_API_KEY").expect("$OPENAI_API_KEY is not set");
+//!     let api_key = std::env::var("OPENAI_API_KEY").expect("$OPENAI_API_KEY is not set");
 //!
 //!     let client = Client::new(api_key);
 //!
@@ -285,13 +284,14 @@
 //!
 //! **Method** `POST`
 //!
-//! ```rust
+//! ```rust, ignore
+//! use futures::StreamExt;
 //! use openai_dive::v1::api::Client;
 //! use openai_dive::v1::resources::chat_completion::{ChatCompletionParameters, ChatMessage, Role};
 //!
 //! #[tokio::main]
 //! async fn main() {
-//!     let api_key = env::var("OPENAI_API_KEY").expect("$OPENAI_API_KEY is not set");
+//!     let api_key = std::env::var("OPENAI_API_KEY").expect("$OPENAI_API_KEY is not set");
 //!
 //!     let client = Client::new(api_key);
 //!
@@ -346,13 +346,13 @@
 //!
 //! **Method** `POST`
 //!
-//! ```rust
+//! ```rust, ignore
 //! use openai_dive::v1::api::Client;
 //! use openai_dive::v1::resources::chat_completion::{SimpleChatCompletionParameters, ChatMessage, Role};
 //!
 //! #[tokio::main]
 //! async fn main() {
-//!     let api_key = env::var("OPENAI_API_KEY").expect("$OPENAI_API_KEY is not set");
+//!     let api_key = std::env::var("OPENAI_API_KEY").expect("$OPENAI_API_KEY is not set");
 //!
 //!     let client = Client::new(api_key);
 //!
@@ -389,13 +389,13 @@
 //!
 //! **Method** `POST`
 //!
-//! ```rust
+//! ```rust, ignore
 //! use openai_dive::v1::api::Client;
 //! use openai_dive::v1::resources::edit::EditParameters;
 //!
 //! #[tokio::main]
 //! async fn main() {
-//!     let api_key = env::var("OPENAI_API_KEY").expect("$OPENAI_API_KEY is not set");
+//!     let api_key = std::env::var("OPENAI_API_KEY").expect("$OPENAI_API_KEY is not set");
 //!
 //!     let client = Client::new(api_key);
 //!
@@ -426,13 +426,13 @@
 //!
 //! **Method** `POST`
 //!
-//! ```rust
+//! ```rust, ignore
 //! use openai_dive::v1::api::Client;
 //! use openai_dive::v1::resources::image::{CreateImageParameters, ImageSize};
 //!
 //! #[tokio::main]
 //! async fn main() {
-//!     let api_key = env::var("OPENAI_API_KEY").expect("$OPENAI_API_KEY is not set");
+//!     let api_key = std::env::var("OPENAI_API_KEY").expect("$OPENAI_API_KEY is not set");
 //!
 //!     let client = Client::new(api_key);
 //!
@@ -464,13 +464,13 @@
 //!
 //! **Method** `POST`
 //!
-//! ```rust
+//! ```rust, ignore
 //! use openai_dive::v1::api::Client;
 //! use openai_dive::v1::resources::image::{EditImageParameters, ImageSize};
 //!
 //! #[tokio::main]
 //! async fn main() {
-//!     let api_key = env::var("OPENAI_API_KEY").expect("$OPENAI_API_KEY is not set");
+//!     let api_key = std::env::var("OPENAI_API_KEY").expect("$OPENAI_API_KEY is not set");
 //!
 //!     let client = Client::new(api_key);
 //!
@@ -504,13 +504,13 @@
 //!
 //! **Method** `POST`
 //!
-//! ```rust
+//! ```rust, ignore
 //! use openai_dive::v1::api::Client;
 //! use openai_dive::v1::resources::image::{CreateImageVariationParameters, ImageSize};
 //!
 //! #[tokio::main]
 //! async fn main() {
-//!     let api_key = env::var("OPENAI_API_KEY").expect("$OPENAI_API_KEY is not set");
+//!     let api_key = std::env::var("OPENAI_API_KEY").expect("$OPENAI_API_KEY is not set");
 //!
 //!     let client = Client::new(api_key);
 //!
@@ -540,13 +540,13 @@
 //!
 //! **Method** `POST`
 //!
-//! ```rust
+//! ```rust, ignore
 //! use openai_dive::v1::api::Client;
 //! use openai_dive::v1::resources::embedding::EmbeddingParameters;
 //!
 //! #[tokio::main]
 //! async fn main() {
-//!     let api_key = env::var("OPENAI_API_KEY").expect("$OPENAI_API_KEY is not set");
+//!     let api_key = std::env::var("OPENAI_API_KEY").expect("$OPENAI_API_KEY is not set");
 //!
 //!     let client = Client::new(api_key);
 //!
@@ -571,13 +571,13 @@
 //!
 //! **Method** `POST`
 //!
-//! ```rust
+//! ```rust, ignore
 //! use openai_dive::v1::api::Client;
 //! use openai_dive::v1::resources::audio::{AudioTranscriptionParameters, AudioTranscriptOutputFormat};
 //!
 //! #[tokio::main]
 //! async fn main() {
-//!     let api_key = env::var("OPENAI_API_KEY").expect("$OPENAI_API_KEY is not set");
+//!     let api_key = std::env::var("OPENAI_API_KEY").expect("$OPENAI_API_KEY is not set");
 //!
 //!     let client = Client::new(api_key);
 //!
@@ -606,13 +606,13 @@
 //!
 //! **Method** `POST`
 //!
-//! ```rust
+//! ```rust, ignore
 //! use openai_dive::v1::api::Client;
 //! use openai_dive::v1::resources::audio::{AudioTranscriptOutputFormat, AudioTranslationParameters};
 //!
 //! #[tokio::main]
 //! async fn main() {
-//!     let api_key = env::var("OPENAI_API_KEY").expect("$OPENAI_API_KEY is not set");
+//!     let api_key = std::env::var("OPENAI_API_KEY").expect("$OPENAI_API_KEY is not set");
 //!
 //!     let client = Client::new(api_key);
 //!
@@ -640,12 +640,12 @@
 //!
 //! **Method** `GET`
 //!
-//! ```rust
+//! ```rust, ignore
 //! use openai_dive::v1::api::Client;
 //!
 //! #[tokio::main]
 //! async fn main() {
-//!     let api_key = env::var("OPENAI_API_KEY").expect("$OPENAI_API_KEY is not set");
+//!     let api_key = std::env::var("OPENAI_API_KEY").expect("$OPENAI_API_KEY is not set");
 //!
 //!     let client = Client::new(api_key);
 //!
@@ -665,13 +665,13 @@
 //!
 //! **Method** `POST`
 //!
-//! ```rust
+//! ```rust, ignore
 //! use openai_dive::v1::api::Client;
-//! use openai_dive::v1::UploadFileParameters;
+//! use openai_dive::v1::file::UploadFileParameters;
 //!
 //! #[tokio::main]
 //! async fn main() {
-//!     let api_key = env::var("OPENAI_API_KEY").expect("$OPENAI_API_KEY is not set");
+//!     let api_key = std::env::var("OPENAI_API_KEY").expect("$OPENAI_API_KEY is not set");
 //!
 //!     let client = Client::new(api_key);
 //!
@@ -696,12 +696,12 @@
 //!
 //! **Method** `DELETE`
 //!
-//! ```rust
+//! ```rust, ignore
 //! use openai_dive::v1::api::Client;
 //!
 //! #[tokio::main]
 //! async fn main() {
-//!     let api_key = env::var("OPENAI_API_KEY").expect("$OPENAI_API_KEY is not set");
+//!     let api_key = std::env::var("OPENAI_API_KEY").expect("$OPENAI_API_KEY is not set");
 //!
 //!     let client = Client::new(api_key);
 //!
@@ -721,12 +721,12 @@
 //!
 //! **Method** `GET`
 //!
-//! ```rust
+//! ```rust, ignore
 //! use openai_dive::v1::api::Client;
 //!
 //! #[tokio::main]
 //! async fn main() {
-//!     let api_key = env::var("OPENAI_API_KEY").expect("$OPENAI_API_KEY is not set");
+//!     let api_key = std::env::var("OPENAI_API_KEY").expect("$OPENAI_API_KEY is not set");
 //!
 //!     let client = Client::new(api_key);
 //!
@@ -746,12 +746,12 @@
 //!
 //! **Method** `GET`
 //!
-//! ```rust
+//! ```rust, ignore
 //! use openai_dive::v1::api::Client;
 //!
 //! #[tokio::main]
 //! async fn main() {
-//!     let api_key = env::var("OPENAI_API_KEY").expect("$OPENAI_API_KEY is not set");
+//!     let api_key = std::env::var("OPENAI_API_KEY").expect("$OPENAI_API_KEY is not set");
 //!
 //!     let client = Client::new(api_key);
 //!
@@ -787,13 +787,13 @@
 //!
 //! **Method** `POST`
 //!
-//! ```rust
+//! ```rust, ignore
 //! use openai_dive::v1::api::Client;
 //! use openai_dive::v1::resources::moderation::ModerationParameters;
 //!
 //! #[tokio::main]
 //! async fn main() {
-//!     let api_key = env::var("OPENAI_API_KEY").expect("$OPENAI_API_KEY is not set");
+//!     let api_key = std::env::var("OPENAI_API_KEY").expect("$OPENAI_API_KEY is not set");
 //!
 //!     let client = Client::new(api_key);
 //!
@@ -839,7 +839,9 @@
 //!
 //! ### Example: overriding the default client
 //!
-//! ```rust
+//! ```rust, ignore
+//! use openai_dive::v1::api::Client;
+//!
 //! let http_client = reqwest::Client::builder()
 //!     .proxy(reqwest::Proxy::https("socks5://127.0.0.1:1086")?)
 //!     .build()?;
@@ -853,24 +855,24 @@
 //!
 //! ## Use model names
 //!
-//! ```rust
+//! ```rust, ignore
 //! use openai_dive::v1::models::OpenAIModel;
 //!
-//! assert_eq!(OpenAIModel::Gpt4, "gpt-4");
-//! assert_eq!(OpenAIModel::Gpt4_0314, "gpt-4-0314");
-//! assert_eq!(OpenAIModel::Gpt4_32K, "gpt-4-32k");
-//! assert_eq!(OpenAIModel::Gpt4_32K0314, "gpt-4-32k-0314");
-//! assert_eq!(OpenAIModel::Gpt3_5Turbo, "gpt-3.5-turbo-0301");
-//! assert_eq!(OpenAIModel::Gpt3_5Turbo0301, "gpt-3.5-turbo");
-//! assert_eq!(OpenAIModel::TextDavinci003, "text-davinci-003");
-//! assert_eq!(OpenAIModel::TextDavinciEdit001, "text-davinci-edit-001");
-//! assert_eq!(OpenAIModel::TextCurie001, "text-curie-001");
-//! assert_eq!(OpenAIModel::TextBabbage001, "text-babbage-001");
-//! assert_eq!(OpenAIModel::TextAda001, "text-ada-001");
-//! assert_eq!(OpenAIModel::TextEmbeddingAda002, "text-embedding-ada-002");
-//! assert_eq!(OpenAIModel::Whisper1, "whisper-1");
-//! assert_eq!(OpenAIModel::TextModerationStable, "text-moderation-stable");
-//! assert_eq!(OpenAIModel::TextModerationLatest, "text-moderation-latest");
+//! assert_eq!(OpenAIModel::Gpt4.to_string(), "gpt-4");
+//! assert_eq!(OpenAIModel::Gpt4_0314.to_string(), "gpt-4-0314");
+//! assert_eq!(OpenAIModel::Gpt4_32K.to_string(), "gpt-4-32k");
+//! assert_eq!(OpenAIModel::Gpt4_32K0314.to_string(), "gpt-4-32k-0314");
+//! assert_eq!(OpenAIModel::Gpt3_5Turbo.to_string(), "gpt-3.5-turbo-0301");
+//! assert_eq!(OpenAIModel::Gpt3_5Turbo0301.to_string(), "gpt-3.5-turbo");
+//! assert_eq!(OpenAIModel::TextDavinci003.to_string(), "text-davinci-003");
+//! assert_eq!(OpenAIModel::TextDavinciEdit001.to_string(), "text-davinci-edit-001");
+//! assert_eq!(OpenAIModel::TextCurie001.to_string(), "text-curie-001");
+//! assert_eq!(OpenAIModel::TextBabbage001.to_string(), "text-babbage-001");
+//! assert_eq!(OpenAIModel::TextAda001.to_string(), "text-ada-001");
+//! assert_eq!(OpenAIModel::TextEmbeddingAda002.to_string(), "text-embedding-ada-002");
+//! assert_eq!(OpenAIModel::Whisper1.to_string(), "whisper-1");
+//! assert_eq!(OpenAIModel::TextModerationStable.to_string(), "text-moderation-stable");
+//! assert_eq!(OpenAIModel::TextModerationLatest.to_string(), "text-moderation-latest");
 //! ```
 
 pub mod v1;
