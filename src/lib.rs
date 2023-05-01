@@ -55,7 +55,7 @@
 //!
 //! **Method** `GET`
 //!
-//! ```rust, ignore
+//! ```rust
 //! use openai_dive::v1::api::Client;
 //!
 //! #[tokio::main]
@@ -80,7 +80,7 @@
 //!
 //! **Method** `GET`
 //!
-//! ```rust, ignore
+//! ```rust
 //! use openai_dive::v1::api::Client;
 //!
 //! #[tokio::main]
@@ -105,7 +105,7 @@
 //!
 //! **Method** `POST`
 //!
-//! ```rust, ignore
+//! ```rust
 //! use openai_dive::v1::api::Client;
 //! use openai_dive::v1::resources::completion::CompletionParameters;
 //!
@@ -148,7 +148,7 @@
 //!
 //! **Method** `POST`
 //!
-//! ```rust, ignore
+//! ```rust
 //! use futures::StreamExt;
 //! use openai_dive::v1::api::Client;
 //! use openai_dive::v1::resources::completion::CompletionParameters;
@@ -201,7 +201,7 @@
 //!
 //! **Method** `POST`
 //!
-//! ```rust, ignore
+//! ```rust
 //! use openai_dive::v1::api::Client;
 //! use openai_dive::v1::resources::completion::SimpleCompletionParameters;
 //!
@@ -234,7 +234,7 @@
 //!
 //! **Method** `POST`
 //!
-//! ```rust, ignore
+//! ```rust
 //! use openai_dive::v1::api::Client;
 //! use openai_dive::v1::resources::chat_completion::{ChatCompletionParameters, ChatMessage, Role};
 //!
@@ -284,7 +284,7 @@
 //!
 //! **Method** `POST`
 //!
-//! ```rust, ignore
+//! ```rust
 //! use futures::StreamExt;
 //! use openai_dive::v1::api::Client;
 //! use openai_dive::v1::resources::chat_completion::{ChatCompletionParameters, ChatMessage, Role};
@@ -346,7 +346,7 @@
 //!
 //! **Method** `POST`
 //!
-//! ```rust, ignore
+//! ```rust
 //! use openai_dive::v1::api::Client;
 //! use openai_dive::v1::resources::chat_completion::{SimpleChatCompletionParameters, ChatMessage, Role};
 //!
@@ -389,7 +389,7 @@
 //!
 //! **Method** `POST`
 //!
-//! ```rust, ignore
+//! ```rust
 //! use openai_dive::v1::api::Client;
 //! use openai_dive::v1::resources::edit::EditParameters;
 //!
@@ -426,7 +426,7 @@
 //!
 //! **Method** `POST`
 //!
-//! ```rust, ignore
+//! ```rust
 //! use openai_dive::v1::api::Client;
 //! use openai_dive::v1::resources::image::{CreateImageParameters, ImageSize};
 //!
@@ -464,7 +464,7 @@
 //!
 //! **Method** `POST`
 //!
-//! ```rust, ignore
+//! ```rust
 //! use openai_dive::v1::api::Client;
 //! use openai_dive::v1::resources::image::{EditImageParameters, ImageSize};
 //!
@@ -504,7 +504,7 @@
 //!
 //! **Method** `POST`
 //!
-//! ```rust, ignore
+//! ```rust
 //! use openai_dive::v1::api::Client;
 //! use openai_dive::v1::resources::image::{CreateImageVariationParameters, ImageSize};
 //!
@@ -540,7 +540,7 @@
 //!
 //! **Method** `POST`
 //!
-//! ```rust, ignore
+//! ```rust
 //! use openai_dive::v1::api::Client;
 //! use openai_dive::v1::resources::embedding::EmbeddingParameters;
 //!
@@ -571,7 +571,7 @@
 //!
 //! **Method** `POST`
 //!
-//! ```rust, ignore
+//! ```rust
 //! use openai_dive::v1::api::Client;
 //! use openai_dive::v1::resources::audio::{AudioTranscriptionParameters, AudioTranscriptOutputFormat};
 //!
@@ -606,7 +606,7 @@
 //!
 //! **Method** `POST`
 //!
-//! ```rust, ignore
+//! ```rust
 //! use openai_dive::v1::api::Client;
 //! use openai_dive::v1::resources::audio::{AudioTranscriptOutputFormat, AudioTranslationParameters};
 //!
@@ -640,7 +640,7 @@
 //!
 //! **Method** `GET`
 //!
-//! ```rust, ignore
+//! ```rust
 //! use openai_dive::v1::api::Client;
 //!
 //! #[tokio::main]
@@ -665,7 +665,7 @@
 //!
 //! **Method** `POST`
 //!
-//! ```rust, ignore
+//! ```rust
 //! use openai_dive::v1::api::Client;
 //! use openai_dive::v1::file::UploadFileParameters;
 //!
@@ -696,7 +696,7 @@
 //!
 //! **Method** `DELETE`
 //!
-//! ```rust, ignore
+//! ```rust
 //! use openai_dive::v1::api::Client;
 //!
 //! #[tokio::main]
@@ -721,7 +721,7 @@
 //!
 //! **Method** `GET`
 //!
-//! ```rust, ignore
+//! ```rust
 //! use openai_dive::v1::api::Client;
 //!
 //! #[tokio::main]
@@ -746,7 +746,7 @@
 //!
 //! **Method** `GET`
 //!
-//! ```rust, ignore
+//! ```rust
 //! use openai_dive::v1::api::Client;
 //!
 //! #[tokio::main]
@@ -787,7 +787,7 @@
 //!
 //! **Method** `POST`
 //!
-//! ```rust, ignore
+//! ```rust
 //! use openai_dive::v1::api::Client;
 //! use openai_dive::v1::resources::moderation::ModerationParameters;
 //!
@@ -839,7 +839,7 @@
 //!
 //! ### Example: overriding the default client
 //!
-//! ```rust, ignore
+//! ```rust
 //! use openai_dive::v1::api::Client;
 //!
 //! let http_client = reqwest::Client::builder()
@@ -855,7 +855,7 @@
 //!
 //! ## Use model names
 //!
-//! ```rust, ignore
+//! ```rust
 //! use openai_dive::v1::models::OpenAIModel;
 //!
 //! assert_eq!(OpenAIModel::Gpt4.to_string(), "gpt-4");
