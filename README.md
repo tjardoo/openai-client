@@ -868,19 +868,19 @@ let client = Client {
 ```rust
 use openai_dive::v1::models::OpenAIModel;
 
-OpenAIModel::Gpt4 => "gpt-4"
-OpenAIModel::Gpt4_0314 => "gpt-4-0314"
-OpenAIModel::Gpt4_32K => "gpt-4-32k"
-OpenAIModel::Gpt4_32K0314 => "gpt-4-32k-0314"
-OpenAIModel::Gpt3_5Turbo => "gpt-3.5-turbo-0301"
-OpenAIModel::Gpt3_5Turbo0301 => "gpt-3.5-turbo"
-OpenAIModel::TextDavinci003 => "text-davinci-003"
-OpenAIModel::TextDavinciEdit001 => "text-davinci-edit-001"
-OpenAIModel::TextCurie001 => "text-curie-001"
-OpenAIModel::TextBabbage001 => "text-babbage-001"
-OpenAIModel::TextAda001 => "text-ada-001"
-OpenAIModel::TextEmbeddingAda002 => "text-embedding-ada-002"
-OpenAIModel::Whisper1 => "whisper-1"
-OpenAIModel::TextModerationStable => "text-moderation-stable"
-OpenAIModel::TextModerationLatest => "text-moderation-latest"
+assert_eq!(OpenAIModel::Gpt4, "gpt-4");
+assert_eq!(OpenAIModel::Gpt4_0314, "gpt-4-0314");
+assert_eq!(OpenAIModel::Gpt4_32K, "gpt-4-32k");
+assert_eq!(OpenAIModel::Gpt4_32K0314, "gpt-4-32k-0314");
+assert_eq!(OpenAIModel::Gpt3_5Turbo, "gpt-3.5-turbo-0301");
+assert_eq!(OpenAIModel::Gpt3_5Turbo0301, "gpt-3.5-turbo");
+assert_eq!(OpenAIModel::TextDavinci003, "text-davinci-003");
+assert_eq!(OpenAIModel::TextDavinciEdit001, "text-davinci-edit-001");
+assert_eq!(OpenAIModel::TextCurie001, "text-curie-001");
+assert_eq!(OpenAIModel::TextBabbage001, "text-babbage-001");
+assert_eq!(OpenAIModel::TextAda001, "text-ada-001");
+assert_eq!(OpenAIModel::TextEmbeddingAda002, "text-embedding-ada-002");
+assert_eq!(OpenAIModel::Whisper1, "whisper-1");
+assert_eq!(OpenAIModel::TextModerationStable, "text-moderation-stable");
+assert_eq!(OpenAIModel::TextModerationLatest, "text-moderation-latest");
 ```
