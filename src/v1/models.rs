@@ -5,10 +5,16 @@ use serde::{Serialize, Deserialize};
 pub enum OpenAIModel {
     #[serde(rename = "gpt-4")]
     Gpt4,
+    #[serde(rename = "gpt-4-0314")]
+    Gpt4_0314,
+    #[serde(rename = "gpt-4-32k")]
+    Gpt4_32K,
+    #[serde(rename = "gpt-4-32k-0314")]
+    Gpt4_32K0314,
     #[serde(rename = "gpt-3.5-turbo")]
-    Gpt3X5Turbo,
+    Gpt3_5Turbo,
     #[serde(rename = "gpt-3.5-turbo-0301")]
-    Gpt3X5Turbo0301,
+    Gpt3_5Turbo0301,
     #[serde(rename = "text-davinci-003")]
     TextDavinci003,
     #[serde(rename = "text-davinci-edit-001")]
@@ -34,8 +40,11 @@ impl Display for OpenAIModel {
         write!(f, "{}",
             match self {
                 OpenAIModel::Gpt4 => "gpt-4",
-                OpenAIModel::Gpt3X5Turbo => "gpt-3.5-turbo-0301",
-                OpenAIModel::Gpt3X5Turbo0301 => "gpt-3.5-turbo",
+                OpenAIModel::Gpt4_0314 => "gpt-4-0314",
+                OpenAIModel::Gpt4_32K => "gpt-4-32k",
+                OpenAIModel::Gpt4_32K0314 => "gpt-4-32k-0314",
+                OpenAIModel::Gpt3_5Turbo => "gpt-3.5-turbo-0301",
+                OpenAIModel::Gpt3_5Turbo0301 => "gpt-3.5-turbo",
                 OpenAIModel::TextDavinci003 => "text-davinci-003",
                 OpenAIModel::TextDavinciEdit001 => "text-davinci-edit-001",
                 OpenAIModel::TextCurie001 => "text-curie-001",

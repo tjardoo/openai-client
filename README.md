@@ -14,7 +14,7 @@ Sign up for an account on [https://platform.openai.com/overview](https://platfor
 openai_dive = "0.2"
 ```
 
-More information: [set API key](#set-api-key), [add proxy](#add-proxy)
+More information: [set API key](#set-api-key), [add proxy](#add-proxy), [use model names](#use-model-names)
 
 ## Endpoints
 
@@ -861,4 +861,26 @@ let client = Client {
     base_url: "https://api.openai.com/v1".to_string(),
     api_key,
 };
+```
+
+## Use model names
+
+```rust
+use openai_dive::v1::models::OpenAIModel;
+
+OpenAIModel::Gpt4 => "gpt-4"
+OpenAIModel::Gpt4_0314 => "gpt-4-0314"
+OpenAIModel::Gpt4_32K => "gpt-4-32k"
+OpenAIModel::Gpt4_32K0314 => "gpt-4-32k-0314"
+OpenAIModel::Gpt3_5Turbo => "gpt-3.5-turbo-0301"
+OpenAIModel::Gpt3_5Turbo0301 => "gpt-3.5-turbo"
+OpenAIModel::TextDavinci003 => "text-davinci-003"
+OpenAIModel::TextDavinciEdit001 => "text-davinci-edit-001"
+OpenAIModel::TextCurie001 => "text-curie-001"
+OpenAIModel::TextBabbage001 => "text-babbage-001"
+OpenAIModel::TextAda001 => "text-ada-001"
+OpenAIModel::TextEmbeddingAda002 => "text-embedding-ada-002"
+OpenAIModel::Whisper1 => "whisper-1"
+OpenAIModel::TextModerationStable => "text-moderation-stable"
+OpenAIModel::TextModerationLatest => "text-moderation-latest"
 ```
