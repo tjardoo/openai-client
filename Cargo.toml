@@ -25,3 +25,6 @@ default = []
 download = ["dep:futures", "dep:rand", "dep:base64"]
 stream = ["dep:reqwest-eventsource", "dep:futures", "dep:tokio-stream"]
 simple = []
+
+[lib]
+doctest = false
