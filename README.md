@@ -885,4 +885,18 @@ assert_eq!(OpenAIModel::TextEmbeddingAda002.to_string(), "text-embedding-ada-002
 assert_eq!(OpenAIModel::Whisper1.to_string(), "whisper-1");
 assert_eq!(OpenAIModel::TextModerationStable.to_string(), "text-moderation-stable");
 assert_eq!(OpenAIModel::TextModerationLatest.to_string(), "text-moderation-latest");
+
+// so instead of this..
+let parameters = CompletionParameters {
+    model: "text-davinci-003".to_string(),
+    prompt: "Say this is a test".to_string(),
+    // ...
+}
+
+// you can do this (with auto-complete)
+let parameters = CompletionParameters {
+    model: OpenAIModel::TextDavinci003.to_string(),
+    prompt: "Say this is a test".to_string(),
+    // ...
+}
 ```
