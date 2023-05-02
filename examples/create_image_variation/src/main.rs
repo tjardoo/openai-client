@@ -10,8 +10,8 @@ async fn main() {
 
     let parameters = CreateImageVariationParameters {
         image: "./images/image_edit_original.png".to_string(), // https://github.com/betalgo/openai/tree/master/OpenAI.Playground/SampleData
-        number_of_images: Some(1),
-        image_size: Some(ImageSize::Size256X256),
+        n: Some(1),
+        size: Some(ImageSize::Size256X256),
         response_format: None,
     };
 

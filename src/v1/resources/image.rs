@@ -13,10 +13,10 @@ use base64::{Engine as _, engine::general_purpose};
 #[derive(Serialize, Debug, Clone)]
 pub struct CreateImageParameters {
     pub prompt: String,
-    #[serde(rename = "n", skip_serializing_if = "Option::is_none")]
-    pub number_of_images: Option<u32>,
-    #[serde(rename = "size", skip_serializing_if = "Option::is_none")]
-    pub image_size: Option<ImageSize>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub n: Option<u32>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub size: Option<ImageSize>,
     #[serde(skip_serializing_if = "Option::is_none")]
     pub response_format: Option<ResponseFormat>,
 }
@@ -27,10 +27,10 @@ pub struct EditImageParameters {
     pub prompt: String,
     #[serde(skip_serializing_if = "Option::is_none")]
     pub mask: Option<String>,
-    #[serde(rename = "n", skip_serializing_if = "Option::is_none")]
-    pub number_of_images: Option<u32>,
-    #[serde(rename = "size", skip_serializing_if = "Option::is_none")]
-    pub image_size: Option<ImageSize>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub n: Option<u32>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub size: Option<ImageSize>,
     #[serde(skip_serializing_if = "Option::is_none")]
     pub response_format: Option<ResponseFormat>,
 }
@@ -38,10 +38,10 @@ pub struct EditImageParameters {
 #[derive(Serialize, Debug, Clone)]
 pub struct CreateImageVariationParameters {
     pub image: String,
-    #[serde(rename = "n", skip_serializing_if = "Option::is_none")]
-    pub number_of_images: Option<u32>,
-    #[serde(rename = "size", skip_serializing_if = "Option::is_none")]
-    pub image_size: Option<ImageSize>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub n: Option<u32>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub size: Option<ImageSize>,
     #[serde(skip_serializing_if = "Option::is_none")]
     pub response_format: Option<ResponseFormat>,
 }

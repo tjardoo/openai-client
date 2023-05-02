@@ -39,12 +39,12 @@ impl Images<'_> {
             form = form.part("mask", image);
         }
 
-        if let Some(number_of_images) = parameters.number_of_images {
-            form = form.text("n", number_of_images.to_string());
+        if let Some(n) = parameters.n {
+            form = form.text("n", n.to_string());
         }
 
-        if let Some(image_size) = parameters.image_size {
-            form = form.text("size", image_size.to_string());
+        if let Some(size) = parameters.size {
+            form = form.text("size", size.to_string());
         }
 
         if let Some(response_format) = parameters.response_format {
@@ -65,12 +65,12 @@ impl Images<'_> {
         let image = file_from_disk_to_form_part(parameters.image).await?;
         form = form.part("image", image);
 
-        if let Some(number_of_images) = parameters.number_of_images {
-            form = form.text("n", number_of_images.to_string());
+        if let Some(n) = parameters.n {
+            form = form.text("n", n.to_string());
         }
 
-        if let Some(image_size) = parameters.image_size {
-            form = form.text("size", image_size.to_string());
+        if let Some(size) = parameters.size {
+            form = form.text("size", size.to_string());
         }
 
         if let Some(response_format) = parameters.response_format {

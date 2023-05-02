@@ -445,8 +445,8 @@ async fn main() {
 
     let parameters = CreateImageParameters {
         prompt: "A cute baby dog".to_string(),
-        number_of_images: Some(1),
-        image_size: Some(ImageSize::Size256X256),
+        n: Some(1),
+        size: Some(ImageSize::Size256X256),
         response_format: None,
     };
 
@@ -485,8 +485,8 @@ async fn main() {
         image: "./images/image_edit_original.png".to_string(), // https://github.com/betalgo/openai/blob/master/OpenAI.Playground/SampleData/image_edit_original.png
         mask: Some("./images/image_edit_mask.png".to_string()), // https://github.com/betalgo/openai/blob/master/OpenAI.Playground/SampleData/image_edit_mask.png
         prompt: "A cute baby sea otter wearing a beret".to_string(),
-        number_of_images: Some(1),
-        image_size: Some(ImageSize::Size256X256),
+        n: Some(1),
+        size: Some(ImageSize::Size256X256),
         response_format: None,
     };
 
@@ -523,8 +523,8 @@ async fn main() {
 
     let parameters = CreateImageVariationParameters {
         image: "./images/image_edit_original.png".to_string(), // https://github.com/betalgo/openai/blob/master/OpenAI.Playground/SampleData/image_edit_original.png
-        number_of_images: Some(1),
-        image_size: Some(ImageSize::Size256X256),
+        n: Some(1),
+        size: Some(ImageSize::Size256X256),
         response_format: None,
     };
 

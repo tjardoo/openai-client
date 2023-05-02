@@ -12,8 +12,8 @@ async fn main() {
         image: "./images/image_edit_original.png".to_string(), // https://github.com/betalgo/openai/tree/master/OpenAI.Playground/SampleData
         mask: Some("./images/image_edit_mask.png".to_string()), // https://github.com/betalgo/openai/tree/master/OpenAI.Playground/SampleData
         prompt: "A cute baby sea otter wearing a beret".to_string(),
-        number_of_images: Some(1),
-        image_size: Some(ImageSize::Size256X256),
+        n: Some(1),
+        size: Some(ImageSize::Size256X256),
         response_format: None,
     };
 
