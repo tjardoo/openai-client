@@ -128,6 +128,7 @@
 //!         frequency_penalty: None,
 //!         best_of: None,
 //!         logit_bias: None,
+//!         user: None,
 //!         // or use ..Default::default()
 //!     };
 //!
@@ -173,6 +174,7 @@
 //!         frequency_penalty: None,
 //!         best_of: None,
 //!         logit_bias: None,
+//!         user: None,
 //!     };
 //!
 //!     let mut stream = client.completions().create_stream(parameters).await.unwrap();
@@ -230,6 +232,7 @@
 //!         presence_penalty: None,
 //!         frequency_penalty: None,
 //!         logit_bias: None,
+//!         user: None,
 //!         // or use ..Default::default()
 //!     };
 //!
@@ -282,6 +285,7 @@
 //!         presence_penalty: None,
 //!         frequency_penalty: None,
 //!         logit_bias: None,
+//!         user: None,
 //!     };
 //!
 //!     let mut stream = client.chat().create_stream(parameters).await.unwrap();
@@ -362,6 +366,7 @@
 //!         n: Some(1),
 //!         size: Some(ImageSize::Size256X256),
 //!         response_format: None,
+//!         user: None,
 //!     };
 //!
 //!     let result = client.images().create(parameters).await.unwrap();
@@ -402,6 +407,7 @@
 //!         n: Some(1),
 //!         size: Some(ImageSize::Size256X256),
 //!         response_format: None,
+//!         user: None,
 //!     };
 //!
 //!     let result = client.images().edit(parameters).await.unwrap();
@@ -440,6 +446,7 @@
 //!         n: Some(1),
 //!         size: Some(ImageSize::Size256X256),
 //!         response_format: None,
+//!         user: None,
 //!     };
 //!
 //!     let result = client.images().variation(parameters).await.unwrap();
@@ -474,6 +481,7 @@
 //!     let parameters = EmbeddingParameters {
 //!         model: "text-embedding-ada-002".to_string(),
 //!         input: "The food was delicious and the waiter...".to_string(),
+//!         user: None,
 //!     };
 //!
 //!     let result = client.embeddings().create(parameters).await.unwrap();

@@ -19,6 +19,8 @@ pub struct CreateImageParameters {
     pub size: Option<ImageSize>,
     #[serde(skip_serializing_if = "Option::is_none")]
     pub response_format: Option<ResponseFormat>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub user: Option<String>,
 }
 
 #[derive(Serialize, Debug, Clone)]
@@ -33,6 +35,8 @@ pub struct EditImageParameters {
     pub size: Option<ImageSize>,
     #[serde(skip_serializing_if = "Option::is_none")]
     pub response_format: Option<ResponseFormat>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub user: Option<String>,
 }
 
 #[derive(Serialize, Debug, Clone)]
@@ -44,6 +48,8 @@ pub struct CreateImageVariationParameters {
     pub size: Option<ImageSize>,
     #[serde(skip_serializing_if = "Option::is_none")]
     pub response_format: Option<ResponseFormat>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub user: Option<String>,
 }
 
 #[derive(Serialize, Deserialize, Debug, Clone)]

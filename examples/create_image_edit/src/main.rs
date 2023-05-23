@@ -15,6 +15,7 @@ async fn main() {
         n: Some(1),
         size: Some(ImageSize::Size256X256),
         response_format: None,
+        user: None,
     };
 
     let result = client.images().edit(parameters).await.unwrap();

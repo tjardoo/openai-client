@@ -24,6 +24,7 @@ async fn main() {
         frequency_penalty: None,
         best_of: None,
         logit_bias: None,
+        user: None,
     };
 
     let mut stream = client.completions().create_stream(parameters).await.unwrap();
