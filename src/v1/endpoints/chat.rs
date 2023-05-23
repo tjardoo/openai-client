@@ -43,6 +43,7 @@ impl Chat<'_> {
         Ok(chat_completion_response)
     }
 
+    #[deprecated(since = "0.2.8")]
     #[cfg(feature = "simple")]
     pub async fn create_simple(&self, parameters: SimpleChatCompletionParameters) -> Result<ChatCompletionResponse, APIError> {
         let response = self.client.post("/chat/completions", &parameters).await?;

@@ -41,6 +41,7 @@ impl Completions<'_> {
         Ok(completion_response)
     }
 
+    #[deprecated(since = "0.2.8")]
     #[cfg(feature = "simple")]
     pub async fn create_simple(&self, parameters: SimpleCompletionParameters) -> Result<CompletionResponse, APIError> {
         let response = self.client.post("/completions", &parameters).await?;

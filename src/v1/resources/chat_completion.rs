@@ -1,9 +1,11 @@
 use std::fmt::Display;
 use std::collections::HashMap;
 use serde::{Serialize, Deserialize};
+use crate::v1::models::OpenAIModel;
 use crate::v1::resources::shared::{Usage, FinishReason};
 use crate::v1::resources::shared::StopToken;
 
+#[deprecated(since = "0.2.8")]
 #[cfg(feature = "simple")]
 #[derive(Serialize, Debug, Clone)]
 pub struct SimpleChatCompletionParameters {
@@ -32,6 +34,29 @@ pub struct ChatCompletionParameters {
     pub frequency_penalty: Option<f32>,
     #[serde(skip_serializing_if = "Option::is_none")]
     pub logit_bias: Option<HashMap<String, serde_json::Value>>,
+}
+
+impl Default for ChatCompletionParameters {
+    fn default() -> Self {
+        ChatCompletionParameters {
+            model: OpenAIModel::Gpt3_5Turbo.to_string(),
+            messages: vec![
+                ChatMessage {
+                    role: Role::User,
+                    content: "Hello!".to_string(),
+                    name: None,
+                },
+            ],
+            temperature: None,
+            top_p: None,
+            n: None,
+            stop: None,
+            max_tokens: None,
+            presence_penalty: None,
+            frequency_penalty: None,
+            logit_bias: None,
+        }
+    }
 }
 
 #[derive(Serialize, Deserialize, Debug, Clone)]

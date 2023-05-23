@@ -19,11 +19,9 @@
 //! - Completions
 //!   - [Create completion](#create-completion)
 //!   - [Create completion (stream)](#create-completion-stream)
-//!   - [Create completion (simple)](#create-completion-simple)
 //! - Chat
 //!   - [Create chat completion](#create-chat-completion)
 //!   - [Create chat completion (stream)](#create-chat-completion-stream)
-//!   - [Create chat completion (simple)](#create-chat-completion-simple)
 //! - Edits
 //!   - [Create edit](#create-edit)
 //! - Images
@@ -130,6 +128,7 @@
 //!         frequency_penalty: None,
 //!         best_of: None,
 //!         logit_bias: None,
+//!         // or use ..Default::default()
 //!     };
 //!
 //!     let result = client.completions().create(parameters).await.unwrap();
@@ -191,41 +190,6 @@
 //!
 //! More information: [Create completion](https://platform.openai.com/docs/api-reference/completions/create)
 //!
-//! ### Create completion (simple)
-//!
-//! > Feature `simple` required
-//!
-//! Creates a completion for the provided prompt and parameters.
-//!
-//! **URL** `https://api.openai.com/v1/completions`
-//!
-//! **Method** `POST`
-//!
-//! ```rust
-//! use openai_dive::v1::api::Client;
-//! use openai_dive::v1::resources::completion::SimpleCompletionParameters;
-//!
-//! #[tokio::main]
-//! async fn main() {
-//!     let api_key = std::env::var("OPENAI_API_KEY").expect("$OPENAI_API_KEY is not set");
-//!
-//!     let client = Client::new(api_key);
-//!
-//!     let parameters = SimpleCompletionParameters {
-//!         model: "text-davinci-003".to_string(),
-//!         prompt: "Say this is a test".to_string(),
-//!         suffix: None,
-//!         max_tokens: 10,
-//!     };
-//!
-//!     let result = client.completions().create_simple(parameters).await.unwrap();
-//!
-//!     println!("{:?}", result);
-//! }
-//! ```
-//!
-//! More information: [Create completion](https://platform.openai.com/docs/api-reference/completions/create)
-//!
 //! ## Create chat completion
 //!
 //! Creates a completion for the chat message.
@@ -266,6 +230,7 @@
 //!         presence_penalty: None,
 //!         frequency_penalty: None,
 //!         logit_bias: None,
+//!         // or use ..Default::default()
 //!     };
 //!
 //!     let result = client.chat().create(parameters).await.unwrap();
@@ -336,51 +301,6 @@
 //!
 //! More information: [Create chat completion](https://platform.openai.com/docs/api-reference/chat/create)
 //!
-//! ### Create chat completion (simple)
-//!
-//! > Feature `simple` required
-//!
-//! Creates a completion for the chat message.
-//!
-//! **URL** `https://api.openai.com/v1/chat/completions`
-//!
-//! **Method** `POST`
-//!
-//! ```rust
-//! use openai_dive::v1::api::Client;
-//! use openai_dive::v1::resources::chat_completion::{SimpleChatCompletionParameters, ChatMessage, Role};
-//!
-//! #[tokio::main]
-//! async fn main() {
-//!     let api_key = std::env::var("OPENAI_API_KEY").expect("$OPENAI_API_KEY is not set");
-//!
-//!     let client = Client::new(api_key);
-//!
-//!     let parameters = SimpleChatCompletionParameters {
-//!         model: "gpt-3.5-turbo-0301".to_string(),
-//!         messages: vec![
-//!             ChatMessage {
-//!                 role: Role::User,
-//!                 content: "Hello!".to_string(),
-//!                 name: None,
-//!             },
-//!             ChatMessage {
-//!                 role: Role::User,
-//!                 content: "Where are you located?".to_string(),
-//!                 name: None,
-//!             },
-//!         ],
-//!         max_tokens: 12,
-//!     };
-//!
-//!     let result = client.chat().create_simple(parameters).await.unwrap();
-//!
-//!     println!("{:?}", result);
-//! }
-//! ```
-//!
-//! More information: [Create chat completion](https://platform.openai.com/docs/api-reference/chat/create)
-//!
 //! ## Create edit
 //!
 //! Creates a new edit for the provided input, instruction, and parameters.
@@ -406,6 +326,7 @@
 //!         n: None,
 //!         temperature: None,
 //!         top_p: None,
+//!         // or use ..Default::default()
 //!     };
 //!
 //!     let result = client.edits().create(parameters).await.unwrap();

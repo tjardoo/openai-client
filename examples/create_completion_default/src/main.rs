@@ -1,6 +1,6 @@
 use std::env;
 use openai_dive::v1::api::Client;
-use openai_dive::v1::resources::completion::{SimpleCompletionParameters};
+use openai_dive::v1::resources::completion::CompletionParameters;
 
 #[tokio::main]
 async fn main() {
@@ -8,14 +8,14 @@ async fn main() {
 
     let client = Client::new(api_key);
 
-    let parameters = SimpleCompletionParameters {
+    let parameters = CompletionParameters {
         model: "text-davinci-003".to_string(),
         prompt: "Say this is a test".to_string(),
-        suffix: None,
-        max_tokens: 10,
+        max_tokens: Some(10),
+        ..Default::default()
     };
 
-    let result = client.completions().create_simple(parameters).await.unwrap();
+    let result = client.completions().create(parameters).await.unwrap();
 
     println!("{:?}", result);
 }

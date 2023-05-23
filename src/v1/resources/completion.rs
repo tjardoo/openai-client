@@ -1,7 +1,9 @@
 use std::collections::HashMap;
 use serde::{Serialize, Deserialize};
-use crate::v1::resources::shared::{Usage, FinishReason, StopToken};
+use crate::v1::{resources::shared::{Usage, FinishReason, StopToken}, models::OpenAIModel};
 
+#[deprecated(since = "0.2.8")]
+#[cfg(feature = "simple")]
 #[derive(Serialize, Debug, Clone)]
 pub struct SimpleCompletionParameters {
     pub model: String,
@@ -39,6 +41,27 @@ pub struct CompletionParameters {
     pub best_of: Option<u32>,
     #[serde(skip_serializing_if = "Option::is_none")]
     pub logit_bias: Option<HashMap<String, serde_json::Value>>,
+}
+
+impl Default for CompletionParameters {
+    fn default() -> Self {
+        CompletionParameters {
+            model: OpenAIModel::TextDavinci003.to_string(),
+            prompt: "Say this is a test".to_string(),
+            suffix: None,
+            max_tokens: None,
+            temperature: None,
+            top_p: None,
+            n: None,
+            logprobs: None,
+            echo: None,
+            stop: None,
+            presence_penalty: None,
+            frequency_penalty: None,
+            best_of: None,
+            logit_bias: None,
+        }
+    }
 }
 
 #[derive(Serialize, Deserialize, Debug, Clone)]
