@@ -26,6 +26,7 @@ pub enum FinishReason {
 }
 
 #[derive(Serialize, Deserialize, Debug, Clone, PartialEq)]
+#[serde(untagged)]
 pub enum StopToken {
     String(String),
     Array(Vec<String>),
