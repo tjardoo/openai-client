@@ -25,6 +25,7 @@ default = []
 download = ["dep:futures", "dep:rand", "dep:base64"]
 stream = ["dep:reqwest-eventsource", "dep:futures", "dep:tokio-stream"]
 simple = []
+rustls-tls = ["reqwest/rustls-tls"]
 
 [lib]
 doctest = false
