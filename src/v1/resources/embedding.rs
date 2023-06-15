@@ -4,6 +4,8 @@ use serde::{Serialize, Deserialize};
 pub struct EmbeddingParameters {
     pub model: String,
     pub input: String,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub user: Option<String>,
 }
 
 #[derive(Serialize, Deserialize, Debug, Clone)]

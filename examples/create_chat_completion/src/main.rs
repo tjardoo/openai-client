@@ -30,6 +30,7 @@ async fn main() {
         presence_penalty: None,
         frequency_penalty: None,
         logit_bias: None,
+        user: None,
     };
 
     let result = client.chat().create(parameters).await.unwrap();

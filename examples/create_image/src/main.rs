@@ -13,6 +13,7 @@ async fn main() {
         n: Some(2),
         size: Some(ImageSize::Size256X256),
         response_format: Some(ResponseFormat::Url),
+        user: None,
     };
 
     let result = client.images().create(parameters).await.unwrap();

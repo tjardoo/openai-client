@@ -41,6 +41,8 @@ pub struct CompletionParameters {
     pub best_of: Option<u32>,
     #[serde(skip_serializing_if = "Option::is_none")]
     pub logit_bias: Option<HashMap<String, serde_json::Value>>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub user: Option<String>,
 }
 
 impl Default for CompletionParameters {
@@ -60,6 +62,7 @@ impl Default for CompletionParameters {
             frequency_penalty: None,
             best_of: None,
             logit_bias: None,
+            user: None,
         }
     }
 }

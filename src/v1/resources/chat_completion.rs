@@ -34,6 +34,8 @@ pub struct ChatCompletionParameters {
     pub frequency_penalty: Option<f32>,
     #[serde(skip_serializing_if = "Option::is_none")]
     pub logit_bias: Option<HashMap<String, serde_json::Value>>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub user: Option<String>,
 }
 
 impl Default for ChatCompletionParameters {
@@ -55,6 +57,7 @@ impl Default for ChatCompletionParameters {
             presence_penalty: None,
             frequency_penalty: None,
             logit_bias: None,
+            user: None,
         }
     }
 }

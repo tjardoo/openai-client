@@ -11,6 +11,7 @@ async fn main() {
     let parameters = EmbeddingParameters {
         model: "text-embedding-ada-002".to_string(),
         input: "The food was delicious and the waiter...".to_string(),
+        user: None,
     };
 
     let result = client.embeddings().create(parameters).await.unwrap();

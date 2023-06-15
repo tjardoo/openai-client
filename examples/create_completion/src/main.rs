@@ -23,6 +23,7 @@ async fn main() {
         frequency_penalty: None,
         best_of: None,
         logit_bias: None,
+        user: None,
     };
 
     let result = client.completions().create(parameters).await.unwrap();
