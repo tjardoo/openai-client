@@ -77,7 +77,7 @@ pub struct ChatMessage {
     #[serde(skip_serializing_if = "Option::is_none")]
     pub name: Option<String>,
     #[serde(skip_serializing_if = "Option::is_none")]
-    function_call: Option<FunctionCall>,
+    pub function_call: Option<FunctionCall>,
 }
 
 #[derive(Serialize, Deserialize, Debug, Clone)]
