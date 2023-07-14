@@ -70,7 +70,7 @@ pub struct ChatMessage {
     pub name: Option<String>,
 }
 
-#[derive(Serialize, Deserialize, Debug)]
+#[derive(Serialize, Deserialize, Debug, Clone)]
 pub struct ChatCompletionResponse {
     pub id: String,
     pub object: String,
@@ -80,7 +80,7 @@ pub struct ChatCompletionResponse {
     pub usage: Usage,
 }
 
-#[derive(Serialize, Deserialize, Debug)]
+#[derive(Serialize, Deserialize, Debug, Clone)]
 pub struct ChatCompletionChoice {
     pub index: u32,
     pub message: ChatMessage,
