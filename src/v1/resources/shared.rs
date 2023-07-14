@@ -23,6 +23,8 @@ pub enum FinishReason {
     TokenLimitReached,
     #[serde(rename(deserialize = "content_filter"))]
     ContentFilterFlagged,
+    #[serde(rename(deserialize = "function_call"))]
+    FunctionCall,
 }
 
 #[derive(Serialize, Deserialize, Debug, Clone, PartialEq)]

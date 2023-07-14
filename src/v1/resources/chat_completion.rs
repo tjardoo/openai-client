@@ -36,6 +36,11 @@ pub struct ChatCompletionParameters {
     pub logit_bias: Option<HashMap<String, serde_json::Value>>,
     #[serde(skip_serializing_if = "Option::is_none")]
     pub user: Option<String>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub functions: Option<Vec<Function>>,
+
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub function_call: Option<FunctionCallConfig>,
 }
 
 impl Default for ChatCompletionParameters {
@@ -47,6 +52,7 @@ impl Default for ChatCompletionParameters {
                     role: Role::User,
                     content: "Hello!".to_string(),
                     name: None,
+                    function_call: None,
                 },
             ],
             temperature: None,
@@ -58,6 +64,8 @@ impl Default for ChatCompletionParameters {
             frequency_penalty: None,
             logit_bias: None,
             user: None,
+            functions: None,
+            function_call: None,
         }
     }
 }
@@ -68,6 +76,8 @@ pub struct ChatMessage {
     pub content: String,
     #[serde(skip_serializing_if = "Option::is_none")]
     pub name: Option<String>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    function_call: Option<FunctionCall>,
 }
 
 #[derive(Serialize, Deserialize, Debug, Clone)]
@@ -94,6 +104,7 @@ pub enum Role {
     System,
     User,
     Assistant,
+    Function,
 }
 
 impl Display for Role {
@@ -103,7 +114,56 @@ impl Display for Role {
                 Role::System => "System",
                 Role::User => "User",
                 Role::Assistant => "Assistant",
+                Role::Function => "Function",
             }
         )
     }
+}
+
+#[derive(Serialize, Deserialize, Debug, Clone)]
+pub struct Function {
+    /// Function name
+    pub name: String,
+
+    /// Description of the function. 
+    /// 
+    /// Providing a good description lets the model know what the function does.
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub description: Option<String>,
+
+    /// JSONSchema representation of function parameters as a JSON value
+    /// 
+    /// For simple functions, this can be constructed manually. For more complex use-cases, the [schemars](https://docs.rs/schemars) crate is recommended.
+    /// 
+    /// Resources:
+    ///   - https://platform.openai.com/docs/guides/gpt/function-calling 
+    ///   - JSONSchema: https://json-schema.org/ for more information.
+    pub parameters: serde_json::Value,
+}
+
+#[derive(Serialize, Debug, Clone)]
+#[serde(rename_all = "lowercase")]
+#[serde(untagged)]
+pub enum FunctionCallConfig {
+    /// Do not call any functions
+    None,
+    /// The model decides wether to call functions or not
+    Auto,
+    /// The model must call this function
+    Force(ForceFunctionCall)
+}
+
+#[derive(Serialize, Debug, Clone)]
+
+pub struct ForceFunctionCall {
+    pub name: String,
+}
+
+#[derive(Serialize, Deserialize, Debug, Clone)]
+pub struct FunctionCall {
+    /// Name of the function to call
+    pub name: String,
+
+    /// JSON encoded arguments
+    pub arguments: String,
 }
