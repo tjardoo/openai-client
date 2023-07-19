@@ -45,7 +45,12 @@ impl Client {
             return Err(APIError::EndpointError(response.text().await.unwrap()));
         }
 
-        Ok(response.text().await.unwrap())
+        let response_text= response.text().await.unwrap();
+
+        //#[cfg(feature = "log")]
+        //log::trace!("{}", response_text);
+
+        Ok(response_text)
     }
 
     pub async fn post<T: Serialize>(&self, path: &str, parameters: &T) -> Result<String, APIError> {
@@ -64,7 +69,12 @@ impl Client {
             return Err(APIError::EndpointError(response.text().await.unwrap()));
         }
 
-        Ok(response.text().await.unwrap())
+        let response_text= response.text().await.unwrap();
+
+        //#[cfg(feature = "log")]
+        //log::trace!("{}", response_text);
+
+        Ok(response_text)
     }
 
     pub async fn delete(&self, path: &str) -> Result<String, APIError> {

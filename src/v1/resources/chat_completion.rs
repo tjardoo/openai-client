@@ -1,6 +1,6 @@
 use std::fmt::Display;
 use std::collections::HashMap;
-use serde::{Serialize, Deserialize};
+use serde::{Serialize, Deserialize, Deserializer};
 use crate::v1::models::OpenAIModel;
 use crate::v1::resources::shared::{Usage, FinishReason};
 use crate::v1::resources::shared::StopToken;
@@ -73,6 +73,7 @@ impl Default for ChatCompletionParameters {
 #[derive(Serialize, Deserialize, Debug, Clone)]
 pub struct ChatMessage {
     pub role: Role,
+    #[serde(deserialize_with = "null_to_default")]
     pub content: String,
     #[serde(skip_serializing_if = "Option::is_none")]
     pub name: Option<String>,
@@ -166,4 +167,13 @@ pub struct FunctionCall {
 
     /// JSON encoded arguments
     pub arguments: String,
+}
+
+fn null_to_default<'de, D, T>(de: D) -> Result<T, D::Error>
+where
+    D: Deserializer<'de>,
+    T: Default + Deserialize<'de>,
+{
+    let key = Option::<T>::deserialize(de)?;
+    Ok(key.unwrap_or_default())
 }
