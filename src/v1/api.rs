@@ -47,8 +47,8 @@ impl Client {
 
         let response_text= response.text().await.unwrap();
 
-        //#[cfg(feature = "log")]
-        //log::trace!("{}", response_text);
+        #[cfg(feature = "log")]
+        log::trace!("{}", response_text);
 
         Ok(response_text)
     }
@@ -71,8 +71,8 @@ impl Client {
 
         let response_text= response.text().await.unwrap();
 
-        //#[cfg(feature = "log")]
-        //log::trace!("{}", response_text);
+        #[cfg(feature = "log")]
+        log::trace!("{}", response_text);
 
         Ok(response_text)
     }
