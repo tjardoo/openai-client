@@ -2,9 +2,6 @@
 members = [
     "list_models",
     "retrieve_model",
-    "create_completion",
-    "create_completion_stream",
-    "create_completion_default",
     "create_chat_completion",
     "create_chat_completion_stream",
     "create_chat_completion_default",

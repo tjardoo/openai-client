@@ -21,7 +21,7 @@ More information: [set API key](#set-api-key), [add proxy](#add-proxy), [use mod
 - Models
   - [List models](#list-models)
   - [Retrieve model](#retrieve-model)
-- Completions
+- Completions (legacy)
   - [Create completion](#create-completion)
   - [Create completion (stream)](#create-completion-stream)
 - Chat
