@@ -14,12 +14,26 @@ pub struct ChatCompletionStreamResponse {
 pub struct DeltaField {
     pub delta: DeltaValue,
     pub index: u32,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    #[serde(default)]
+    pub finish_reason: Option<FinishReason>,
 }
 
 #[derive(Serialize, Deserialize, Debug, Clone)]
 pub struct DeltaValue {
     #[serde(skip_serializing_if = "Option::is_none")]
+    #[serde(default)]
     pub role: Option<Role>,
+
     #[serde(skip_serializing_if = "Option::is_none")]
+    #[serde(default)]
     pub content: Option<String>,
+
+    #[serde(skip_serializing_if = "Option::is_none")]
+    #[serde(default)]
+    name: Option<String>,
+
+    #[serde(skip_serializing_if = "Option::is_none")]
+    #[serde(default)]
+    function_call: Option<FunctionCall>,
 }
