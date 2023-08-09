@@ -160,7 +160,7 @@ pub struct ForceFunctionCall {
     pub name: String,
 }
 
-#[derive(Serialize, Deserialize, Debug, Clone)]
+#[derive(Serialize, Deserialize, Debug, Clone, Default)]
 pub struct FunctionCall {
     /// Name of the function to call
     #[serde(default)]
@@ -185,6 +185,11 @@ impl FunctionCall {
             name: if self.name.is_empty() && !other.name.is_empty() { other.name } else { self.name },
             arguments: args
         }
+    }
+
+    /// Check if the function call is empty
+    pub fn is_empty(&self) -> bool {
+        self.name.is_empty() && self.arguments.is_empty()
     }
 }
 
