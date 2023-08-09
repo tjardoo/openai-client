@@ -38,7 +38,6 @@ pub struct ChatCompletionParameters {
     pub user: Option<String>,
     #[serde(skip_serializing_if = "Option::is_none")]
     pub functions: Option<Vec<Function>>,
-
     #[serde(skip_serializing_if = "Option::is_none")]
     pub function_call: Option<FunctionCallConfig>,
 }
