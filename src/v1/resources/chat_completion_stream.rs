@@ -33,9 +33,5 @@ pub struct DeltaValue {
 
     #[serde(skip_serializing_if = "Option::is_none")]
     #[serde(default)]
-    name: Option<String>,
-
-    #[serde(skip_serializing_if = "Option::is_none")]
-    #[serde(default)]
-    function_call: Option<FunctionCall>,
+    pub function_call: Option<FunctionCall>,
 }
