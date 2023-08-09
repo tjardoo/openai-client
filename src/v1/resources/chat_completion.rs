@@ -163,10 +163,29 @@ pub struct ForceFunctionCall {
 #[derive(Serialize, Deserialize, Debug, Clone)]
 pub struct FunctionCall {
     /// Name of the function to call
+    #[serde(default)]
     pub name: String,
 
     /// JSON encoded arguments
+    #[serde(default)]
     pub arguments: String,
+}
+
+impl FunctionCall {
+    /// Merge one function call into another
+    /// 
+    /// This is useful when streaming a chat-completion that might call a function. 
+    /// Like message content, function calls are also streamed. 
+    /// When you see a function call, you should merge it into the previous function call in the stream until you see a
+    /// `finish_reason` of `FunctionCall`. At that point the fully merged FunctionCall is ready to be serviced.
+    pub fn merge(self, other: Self) -> Self {
+        let mut args = self.arguments;
+        args.push_str(other.arguments.as_str());
+        FunctionCall {
+            name: if self.name.is_empty() && !other.name.is_empty() { other.name } else { self.name },
+            arguments: args
+        }
+    }
 }
 
 fn null_to_default<'de, D, T>(de: D) -> Result<T, D::Error>
