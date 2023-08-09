@@ -178,12 +178,12 @@ impl FunctionCall {
     /// Like message content, function calls are also streamed. 
     /// When you see a function call, you should merge it into the previous function call in the stream until you see a
     /// `finish_reason` of `FunctionCall`. At that point the fully merged FunctionCall is ready to be serviced.
-    pub fn merge(self, other: Self) -> Self {
-        let mut args = self.arguments;
-        args.push_str(other.arguments.as_str());
-        FunctionCall {
-            name: if self.name.is_empty() && !other.name.is_empty() { other.name } else { self.name },
-            arguments: args
+    pub fn merge(&mut self, other: &Self) {
+        if self.name.is_empty() && !other.name.is_empty() {
+            self.name = other.name.clone();
+        }
+        if !other.arguments.is_empty() {
+            self.arguments.push_str(&other.arguments);
         }
     }
 
