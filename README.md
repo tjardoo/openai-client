@@ -27,7 +27,7 @@ More information: [set API key](#set-api-key), [add proxy](#add-proxy), [use mod
 - Chat
   - [Create chat completion](#create-chat-completion)
   - [Create chat completion (stream)](#create-chat-completion-stream)
-- Edits
+- Edits (deprecated)
   - [Create edit](#create-edit)
 - Images
   - [Create image](#create-image)
@@ -44,7 +44,7 @@ More information: [set API key](#set-api-key), [add proxy](#add-proxy), [use mod
   - [Delete file](#delete-file)
   - [Retrieve file](#retrieve-file)
   - [Retrieve file content](#retrieve-file-content)
-- [Fine-tunes](#fine-tunes)
+- [Fine-tunes (deprecated)](#fine-tunes)
 - Moderations
   - [Create moderation](#create-moderation)
 

@@ -1,6 +1,7 @@
 use serde::{Serialize, Deserialize};
 use crate::v1::{resources::shared::Usage, models::OpenAIModel};
 
+#[deprecated(since = "0.2.11")]
 #[derive(Serialize, Debug, Clone)]
 pub struct EditParameters {
     pub model: String,
@@ -28,6 +29,7 @@ impl Default for EditParameters {
     }
 }
 
+#[deprecated(since = "0.2.11")]
 #[derive(Serialize, Deserialize, Debug, Clone)]
 pub struct EditResponse {
     pub object: String,
@@ -36,6 +38,7 @@ pub struct EditResponse {
     pub usage: Usage,
 }
 
+#[deprecated(since = "0.2.11")]
 #[derive(Serialize, Deserialize, Debug, Clone)]
 pub struct EditChoice {
     pub index: u32,
