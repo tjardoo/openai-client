@@ -1,6 +1,7 @@
 use serde::{Serialize, Deserialize};
 use crate::v1::resources::file::File;
 
+#[deprecated(since = "0.2.12")]
 #[derive(Serialize, Deserialize, Debug, Clone)]
 pub struct CreateFineTuneParameters {
     pub training_file: String,
@@ -28,6 +29,7 @@ pub struct CreateFineTuneParameters {
     pub suffix: Option<String>,
 }
 
+#[deprecated(since = "0.2.12")]
 #[derive(Serialize, Deserialize, Debug, Clone)]
 pub struct FineTune {
     pub id: String,
@@ -45,6 +47,7 @@ pub struct FineTune {
     pub updated_at: u32,
 }
 
+#[deprecated(since = "0.2.12")]
 #[derive(Serialize, Deserialize, Debug, Clone)]
 pub struct FineTuneEvent {
     pub object: String,
@@ -53,6 +56,7 @@ pub struct FineTuneEvent {
     pub message: String,
 }
 
+#[deprecated(since = "0.2.12")]
 #[derive(Serialize, Deserialize, Debug, Clone)]
 pub struct Hyperparams {
     pub batch_size: Option<u32>,
@@ -61,6 +65,7 @@ pub struct Hyperparams {
     pub prompt_loss_weight: f32,
 }
 
+#[deprecated(since = "0.2.12")]
 #[derive(Serialize, Deserialize, Debug, Clone)]
 pub struct DeletedFineTuneModel {
     pub id: String,

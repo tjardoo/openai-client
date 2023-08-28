@@ -3,11 +3,13 @@ use crate::v1::error::APIError;
 use crate::v1::resources::fine_tune::{CreateFineTuneParameters, FineTune, FineTuneEvent, DeletedFineTuneModel};
 use serde_json::Value;
 
+#[deprecated(since = "0.2.12")]
 pub struct FineTunes<'a> {
     pub client: &'a Client,
 }
 
 impl Client {
+    #[deprecated(since = "0.2.12")]
     pub fn fine_tunes(&self) -> FineTunes {
         FineTunes {
             client: self,
@@ -16,6 +18,7 @@ impl Client {
 }
 
 impl FineTunes<'_> {
+    #[deprecated(since = "0.2.12")]
     pub async fn create(&self, parameters: CreateFineTuneParameters) -> Result<FineTune, APIError> {
         let response = self.client.post("/fine-tunes", &parameters).await?;
 
@@ -25,6 +28,7 @@ impl FineTunes<'_> {
         Ok(fine_tune_response)
     }
 
+    #[deprecated(since = "0.2.12")]
     pub async fn list(&self) -> Result<Vec<FineTune>, APIError> {
         let response = self.client.get("/fine-tunes").await?;
 
@@ -34,6 +38,7 @@ impl FineTunes<'_> {
         Ok(fine_tunes)
     }
 
+    #[deprecated(since = "0.2.12")]
     pub async fn retrieve(&self, id: &str) -> Result<FineTune, APIError> {
         let response = self.client.get(format!("/fine-tunes/{id}").as_str()).await?;
 
@@ -43,6 +48,7 @@ impl FineTunes<'_> {
         Ok(fine_tune_response)
     }
 
+    #[deprecated(since = "0.2.12")]
     pub async fn cancel(&self, id: &str) -> Result<FineTune, APIError> {
         let parameters = {
             struct CancelFineTuneParameters {}
@@ -56,6 +62,7 @@ impl FineTunes<'_> {
         Ok(fine_tune_response)
     }
 
+    #[deprecated(since = "0.2.12")]
     pub async fn list_events(&self, id: &str) -> Result<Vec<FineTuneEvent>, APIError> {
         let response = self.client.get(format!("/fine-tunes/{id}/events").as_str()).await?;
 
@@ -65,6 +72,7 @@ impl FineTunes<'_> {
         Ok(fine_tune_response)
     }
 
+    #[deprecated(since = "0.2.12")]
     pub async fn delete_fine_tune_model(&self, id: &str) -> Result<DeletedFineTuneModel, APIError> {
         let response = self.client.delete(format!("/models/{id}").as_str()).await?;
 

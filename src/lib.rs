@@ -16,13 +16,13 @@
 //! - Models
 //!   - [List models](#list-models)
 //!   - [Retrieve model](#retrieve-model)
-//! - Completions
+//! - Completions (legacy)
 //!   - [Create completion](#create-completion)
 //!   - [Create completion (stream)](#create-completion-stream)
 //! - Chat
 //!   - [Create chat completion](#create-chat-completion)
 //!   - [Create chat completion (stream)](#create-chat-completion-stream)
-//! - Edits
+//! - Edits (deprecated)
 //!   - [Create edit](#create-edit)
 //! - Images
 //!   - [Create image](#create-image)
@@ -39,7 +39,7 @@
 //!   - [Delete file](#delete-file)
 //!   - [Retrieve file](#retrieve-file)
 //!   - [Retrieve file content](#retrieve-file-content)
-//! - [Fine-tunes](#fine-tunes)
+//! - [Fine-tunes (deprecated)](#fine-tunes)
 //! - Moderations
 //!   - [Create moderation](#create-moderation)
 //!
@@ -784,38 +784,20 @@
 //!
 //! ## Use model names
 //!
+//! [https://platform.openai.com/docs/models/overview](https://platform.openai.com/docs/models/overview)
+//!
 //! ```rust
 //! use openai_dive::v1::models::OpenAIModel;
 //!
 //! assert_eq!(OpenAIModel::Gpt4.to_string(), "gpt-4");
-//! assert_eq!(OpenAIModel::Gpt4_0314.to_string(), "gpt-4-0314");
+//! assert_eq!(OpenAIModel::Gpt4_0613.to_string(), "gpt-4-0613");
 //! assert_eq!(OpenAIModel::Gpt4_32K.to_string(), "gpt-4-32k");
-//! assert_eq!(OpenAIModel::Gpt4_32K0314.to_string(), "gpt-4-32k-0314");
-//! assert_eq!(OpenAIModel::Gpt3_5Turbo.to_string(), "gpt-3.5-turbo-0301");
-//! assert_eq!(OpenAIModel::Gpt3_5Turbo0301.to_string(), "gpt-3.5-turbo");
-//! assert_eq!(OpenAIModel::TextDavinci003.to_string(), "text-davinci-003");
-//! assert_eq!(OpenAIModel::TextDavinciEdit001.to_string(), "text-davinci-edit-001");
-//! assert_eq!(OpenAIModel::TextCurie001.to_string(), "text-curie-001");
-//! assert_eq!(OpenAIModel::TextBabbage001.to_string(), "text-babbage-001");
-//! assert_eq!(OpenAIModel::TextAda001.to_string(), "text-ada-001");
+//! assert_eq!(OpenAIModel::Gpt4_32K0613.to_string(), "gpt-4-32k-0613");
+//! assert_eq!(OpenAIModel::Gpt3_5Turbo.to_string(), "gpt-3.5-turbo");
 //! assert_eq!(OpenAIModel::TextEmbeddingAda002.to_string(), "text-embedding-ada-002");
 //! assert_eq!(OpenAIModel::Whisper1.to_string(), "whisper-1");
 //! assert_eq!(OpenAIModel::TextModerationStable.to_string(), "text-moderation-stable");
 //! assert_eq!(OpenAIModel::TextModerationLatest.to_string(), "text-moderation-latest");
 //!
-//! // so instead of this..
-//! let parameters = CompletionParameters {
-//!     model: "text-davinci-003".to_string(),
-//!     prompt: "Say this is a test".to_string(),
-//!     // ...
-//! }
-//!
-//! // you can do this (with auto-complete)
-//! let parameters = CompletionParameters {
-//!     model: OpenAIModel::TextDavinci003.to_string(),
-//!     prompt: "Say this is a test".to_string(),
-//!     // ...
-//! }
-//! ```
 
 pub mod v1;
