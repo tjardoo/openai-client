@@ -22,28 +22,28 @@ pub enum OpenAIModel {
     TextModerationStable,
     #[serde(rename = "text-moderation-latest")]
     TextModerationLatest,
-    #[deprecated(since = "0.2.11")]
+    #[deprecated(since = "0.2.12")]
     #[serde(rename = "gpt-4-0314")]
     Gpt4_0314,
-    #[deprecated(since = "0.2.11")]
+    #[deprecated(since = "0.2.12")]
     #[serde(rename = "gpt-4-32k-0314")]
     Gpt4_32K0314,
-    #[deprecated(since = "0.2.11")]
+    #[deprecated(since = "0.2.12")]
     #[serde(rename = "gpt-3.5-turbo-0301")]
     Gpt3_5Turbo0301,
-    #[deprecated(since = "0.2.11")]
+    #[deprecated(since = "0.2.12")]
     #[serde(rename = "text-davinci-003")]
     TextDavinci003,
-    #[deprecated(since = "0.2.11")]
+    #[deprecated(since = "0.2.12")]
     #[serde(rename = "text-davinci-edit-001")]
     TextDavinciEdit001,
-    #[deprecated(since = "0.2.11")]
+    #[deprecated(since = "0.2.12")]
     #[serde(rename = "text-curie-001")]
     TextCurie001,
-    #[deprecated(since = "0.2.11")]
+    #[deprecated(since = "0.2.12")]
     #[serde(rename = "text-babbage-001")]
     TextBabbage001,
-    #[deprecated(since = "0.2.11")]
+    #[deprecated(since = "0.2.12")]
     #[serde(rename = "text-ada-001")]
     TextAda001,
 }

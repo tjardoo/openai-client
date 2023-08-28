@@ -13,7 +13,7 @@ pub struct SimpleCompletionParameters {
     pub max_tokens: u32,
 }
 
-#[deprecated(since = "0.2.11")]
+#[deprecated(since = "0.2.12")]
 #[derive(Serialize, Debug, Clone)]
 pub struct CompletionParameters {
     pub model: String,
@@ -68,7 +68,7 @@ impl Default for CompletionParameters {
     }
 }
 
-#[deprecated(since = "0.2.11")]
+#[deprecated(since = "0.2.12")]
 #[derive(Serialize, Deserialize, Debug, Clone)]
 pub struct CompletionResponse {
     pub id: String,
@@ -79,7 +79,7 @@ pub struct CompletionResponse {
     pub usage: Usage,
 }
 
-#[deprecated(since = "0.2.11")]
+#[deprecated(since = "0.2.12")]
 #[derive(Serialize, Deserialize, Debug, Clone)]
 pub struct CompletionChoice {
     pub text: String,
