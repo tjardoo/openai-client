@@ -18,7 +18,6 @@ pub struct EditParameters {
 impl Default for EditParameters {
     fn default() -> Self {
         EditParameters {
-            #[allow(deprecated)]
             model: "text-davinci-edit-001".to_string(),
             input: Some("What day of the wek is it?".to_string()),
             instruction: "Fix the spelling mistakes".to_string(),
