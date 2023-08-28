@@ -41,7 +41,7 @@ pub struct ChatCompletionParameters {
 impl Default for ChatCompletionParameters {
     fn default() -> Self {
         ChatCompletionParameters {
-            model: OpenAIModel::Gpt3_5Turbo.to_string(),
+            model: OpenAIModel::Gpt3_5Turbo0613.to_string(),
             messages: vec![
                 ChatMessage {
                     role: Role::User,

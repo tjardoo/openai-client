@@ -25,6 +25,7 @@ pub struct Completions<'a> {
 }
 
 impl Client {
+    #[allow(deprecated)]
     #[deprecated(since = "0.2.12")]
     pub fn completions(&self) -> Completions {
         Completions {
@@ -33,6 +34,7 @@ impl Client {
     }
 }
 
+#[allow(deprecated)]
 impl Completions<'_> {
     #[deprecated(since = "0.2.12")]
     pub async fn create(&self, parameters: CompletionParameters) -> Result<CompletionResponse, APIError> {
@@ -80,7 +82,6 @@ impl Completions<'_> {
     }
 }
 
-#[deprecated(since = "0.2.12")]
 #[cfg(feature = "stream")]
 #[derive(Serialize, Debug)]
 struct CompletionStreamParameters {

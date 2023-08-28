@@ -1,7 +1,6 @@
 use serde::{Serialize, Deserialize};
-use crate::v1::{resources::shared::Usage, models::OpenAIModel};
+use crate::v1::resources::shared::Usage;
 
-#[deprecated(since = "0.2.12")]
 #[derive(Serialize, Debug, Clone)]
 pub struct EditParameters {
     pub model: String,
@@ -19,7 +18,8 @@ pub struct EditParameters {
 impl Default for EditParameters {
     fn default() -> Self {
         EditParameters {
-            model: OpenAIModel::TextDavinciEdit001.to_string(),
+            #[allow(deprecated)]
+            model: "text-davinci-edit-001".to_string(),
             input: Some("What day of the wek is it?".to_string()),
             instruction: "Fix the spelling mistakes".to_string(),
             n: None,
@@ -29,7 +29,6 @@ impl Default for EditParameters {
     }
 }
 
-#[deprecated(since = "0.2.12")]
 #[derive(Serialize, Deserialize, Debug, Clone)]
 pub struct EditResponse {
     pub object: String,
@@ -38,7 +37,6 @@ pub struct EditResponse {
     pub usage: Usage,
 }
 
-#[deprecated(since = "0.2.12")]
 #[derive(Serialize, Deserialize, Debug, Clone)]
 pub struct EditChoice {
     pub index: u32,

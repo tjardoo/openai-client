@@ -14,6 +14,8 @@ pub enum OpenAIModel {
     Gpt4_32K0613,
     #[serde(rename = "gpt-3.5-turbo")]
     Gpt3_5Turbo,
+    #[serde(rename = "gpt-3.5-turbo-0613")]
+    Gpt3_5Turbo0613,
     #[serde(rename = "text-embedding-ada-002")]
     TextEmbeddingAda002,
     #[serde(rename = "whisper-1")]
@@ -22,30 +24,6 @@ pub enum OpenAIModel {
     TextModerationStable,
     #[serde(rename = "text-moderation-latest")]
     TextModerationLatest,
-    #[deprecated(since = "0.2.12")]
-    #[serde(rename = "gpt-4-0314")]
-    Gpt4_0314,
-    #[deprecated(since = "0.2.12")]
-    #[serde(rename = "gpt-4-32k-0314")]
-    Gpt4_32K0314,
-    #[deprecated(since = "0.2.12")]
-    #[serde(rename = "gpt-3.5-turbo-0301")]
-    Gpt3_5Turbo0301,
-    #[deprecated(since = "0.2.12")]
-    #[serde(rename = "text-davinci-003")]
-    TextDavinci003,
-    #[deprecated(since = "0.2.12")]
-    #[serde(rename = "text-davinci-edit-001")]
-    TextDavinciEdit001,
-    #[deprecated(since = "0.2.12")]
-    #[serde(rename = "text-curie-001")]
-    TextCurie001,
-    #[deprecated(since = "0.2.12")]
-    #[serde(rename = "text-babbage-001")]
-    TextBabbage001,
-    #[deprecated(since = "0.2.12")]
-    #[serde(rename = "text-ada-001")]
-    TextAda001,
 }
 
 impl Display for OpenAIModel {
@@ -57,18 +35,11 @@ impl Display for OpenAIModel {
                 OpenAIModel::Gpt4_32K => "gpt-4-32k",
                 OpenAIModel::Gpt4_32K0613 => "gpt-4-32k-0613",
                 OpenAIModel::Gpt3_5Turbo => "gpt-3.5-turbo-0301",
+                OpenAIModel::Gpt3_5Turbo0613 => "gpt-3.5-turbo-0613",
                 OpenAIModel::TextEmbeddingAda002 => "text-embedding-ada-002",
                 OpenAIModel::Whisper1 => "whisper-1",
                 OpenAIModel::TextModerationStable => "text-moderation-stable",
                 OpenAIModel::TextModerationLatest => "text-moderation-latest",
-                OpenAIModel::Gpt4_0314 => "gpt-4-0314",
-                OpenAIModel::Gpt4_32K0314 => "gpt-4-32k-0314",
-                OpenAIModel::Gpt3_5Turbo0301 => "gpt-3.5-turbo",
-                OpenAIModel::TextDavinci003 => "text-davinci-003",
-                OpenAIModel::TextDavinciEdit001 => "text-davinci-edit-001",
-                OpenAIModel::TextCurie001 => "text-curie-001",
-                OpenAIModel::TextBabbage001 => "text-babbage-001",
-                OpenAIModel::TextAda001 => "text-ada-001",
             }
         )
     }

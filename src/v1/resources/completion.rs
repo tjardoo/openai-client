@@ -1,6 +1,6 @@
 use std::collections::HashMap;
 use serde::{Serialize, Deserialize};
-use crate::v1::{resources::shared::{Usage, FinishReason, StopToken}, models::OpenAIModel};
+use crate::v1::resources::shared::{Usage, FinishReason, StopToken};
 
 #[deprecated(since = "0.2.8")]
 #[cfg(feature = "simple")]
@@ -13,7 +13,6 @@ pub struct SimpleCompletionParameters {
     pub max_tokens: u32,
 }
 
-#[deprecated(since = "0.2.12")]
 #[derive(Serialize, Debug, Clone)]
 pub struct CompletionParameters {
     pub model: String,
@@ -49,7 +48,7 @@ pub struct CompletionParameters {
 impl Default for CompletionParameters {
     fn default() -> Self {
         CompletionParameters {
-            model: OpenAIModel::TextDavinci003.to_string(),
+            model: "text-davinci-003".to_string(),
             prompt: "Say this is a test".to_string(),
             suffix: None,
             max_tokens: None,
@@ -68,7 +67,6 @@ impl Default for CompletionParameters {
     }
 }
 
-#[deprecated(since = "0.2.12")]
 #[derive(Serialize, Deserialize, Debug, Clone)]
 pub struct CompletionResponse {
     pub id: String,
@@ -79,7 +77,6 @@ pub struct CompletionResponse {
     pub usage: Usage,
 }
 
-#[deprecated(since = "0.2.12")]
 #[derive(Serialize, Deserialize, Debug, Clone)]
 pub struct CompletionChoice {
     pub text: String,

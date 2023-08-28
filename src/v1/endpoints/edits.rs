@@ -9,6 +9,7 @@ pub struct Edits<'a> {
 }
 
 impl Client {
+    #[allow(deprecated)]
     #[deprecated(since = "0.2.12")]
     pub fn edits(&self) -> Edits {
         Edits {
@@ -17,6 +18,7 @@ impl Client {
     }
 }
 
+#[allow(deprecated)]
 impl Edits<'_> {
     #[deprecated(since = "0.2.12")]
     pub async fn create(&self, parameters: EditParameters) -> Result<EditResponse, APIError> {

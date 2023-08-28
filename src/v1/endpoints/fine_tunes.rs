@@ -9,6 +9,7 @@ pub struct FineTunes<'a> {
 }
 
 impl Client {
+    #[allow(deprecated)]
     #[deprecated(since = "0.2.12")]
     pub fn fine_tunes(&self) -> FineTunes {
         FineTunes {
@@ -17,6 +18,7 @@ impl Client {
     }
 }
 
+#[allow(deprecated)]
 impl FineTunes<'_> {
     #[deprecated(since = "0.2.12")]
     pub async fn create(&self, parameters: CreateFineTuneParameters) -> Result<FineTune, APIError> {

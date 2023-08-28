@@ -1,6 +1,5 @@
 use serde::{Serialize, Deserialize};
 
-#[deprecated(since = "0.2.12")]
 #[derive(Serialize, Deserialize, Debug, Clone)]
 pub struct CompletionStreamResponse {
     pub id: String,
@@ -10,7 +9,6 @@ pub struct CompletionStreamResponse {
     pub choices: Vec<CompletionStreamChoice>,
 }
 
-#[deprecated(since = "0.2.12")]
 #[derive(Serialize, Deserialize, Debug, Clone)]
 pub struct CompletionStreamChoice {
     pub text: String,
