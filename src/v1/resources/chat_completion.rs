@@ -144,14 +144,15 @@ pub struct Function {
 
 #[derive(Serialize, Debug, Clone)]
 #[serde(rename_all = "lowercase")]
-#[serde(untagged)]
 pub enum FunctionCallConfig {
     /// Do not call any functions
     None,
     /// The model decides wether to call functions or not
     Auto,
-    /// The model must call this function
-    Force(ForceFunctionCall)
+    
+    // TODO: The model must call this function
+    //       Unsure how to get this to serialize properly
+    // Force(ForceFunctionCall)
 }
 
 #[derive(Serialize, Debug, Clone)]
