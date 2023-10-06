@@ -1,4 +1,5 @@
 use std::fmt::Display;
+use std::str::FromStr;
 use std::collections::HashMap;
 use serde::{Serialize, Deserialize, Deserializer};
 use crate::v1::models::OpenAIModel;
