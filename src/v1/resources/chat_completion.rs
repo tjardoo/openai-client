@@ -112,12 +112,26 @@ impl Display for Role {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
         write!(f, "{}",
             match self {
-                Role::System => "System",
-                Role::User => "User",
-                Role::Assistant => "Assistant",
-                Role::Function => "Function",
+                Role::System => "system",
+                Role::User => "user",
+                Role::Assistant => "assistant",
+                Role::Function => "function",
             }
         )
+    }
+}
+
+impl FromStr for Role {
+    type Err = String;
+
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "system" => Ok(Role::System),
+            "user" => Ok(Role::User),
+            "assistant" => Ok(Role::Assistant),
+            "function" => Ok(Role::Function),
+            _ => Err(format!("{} is not a valid Role", s)),
+        }
     }
 }
 
