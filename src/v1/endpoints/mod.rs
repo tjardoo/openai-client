@@ -7,4 +7,5 @@ pub mod embeddings;
 pub mod audio;
 pub mod files;
 pub mod fine_tunes;
+pub mod fine_tuning;
 pub mod moderations;

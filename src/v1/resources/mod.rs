@@ -12,4 +12,5 @@ pub mod embedding;
 pub mod audio;
 pub mod file;
 pub mod fine_tune;
+pub mod fine_tuning;
 pub mod moderation;

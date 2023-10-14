@@ -40,6 +40,7 @@
 //!   - [Retrieve file](#retrieve-file)
 //!   - [Retrieve file content](#retrieve-file-content)
 //! - [Fine-tunes (deprecated)](#fine-tunes)
+//! - [Fine-tuning](#fine-tuning)
 //! - Moderations
 //!   - [Create moderation](#create-moderation)
 //!
@@ -707,6 +708,20 @@
 //! - [X] Delete fine-tune model
 //!
 //! More information: [Fine-tunes](https://platform.openai.com/docs/api-reference/fine-tunes)
+//!
+//! ### Fine-tuning
+//!
+//! Manage fine-tuning jobs to tailor a model to your specific training data.
+//!
+//! See the `examples` directory for examples and implementation details.
+//!
+//! - [X] Create fine-tuning job
+//! - [X] List fine-tuning jobs
+//! - [X] Retrieve fine-tuning job
+//! - [X] Cancel fine-tuning job
+//! - [X] List fine-tune events
+//!
+//! More information: [Fine-tuning](https://platform.openai.com/docs/api-reference/fine-tuning)
 //!
 //! ## Create moderation
 //!
