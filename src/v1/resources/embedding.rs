@@ -1,8 +1,8 @@
-use serde::{Serialize, Deserialize};
+use serde::{Deserialize, Serialize};
 
 #[derive(Serialize, Debug, Clone)]
 pub struct EmbeddingParameters {
-    pub model: String,
+    pub model: EmbeddingsModel,
     pub input: String,
     #[serde(skip_serializing_if = "Option::is_none")]
     pub user: Option<String>,
