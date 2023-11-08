@@ -407,6 +407,29 @@
 //!
 //! More information: [Function calling](https://platform.openai.com/docs/guides/function-calling)
 //! 
+//! ### Function tips:
+//! 
+//! 1. Use the [schemars](https://crates.io/crates/schemars) crate for automatically generating JSON schemas from structs. 
+//! 
+//!    ```rust
+//!    let random_number_schema = schemars::schema_for!(RandomNumber);
+//!    ...
+//!    Function {
+//!       name: "get_random_number".to_string(),
+//!       parameters: serde_json::to_value(random_number_schema).unwrap(),
+//!       ...
+//!    }
+//!    ```
+//! 
+//! 2. After a function is called, stop the agent from calling more functions (sometimes it can get stuck in a function calling loop).
+//! 
+//!    ```rust
+//!    let parameters = ChatCompletionParameters {
+//!        ...
+//!        function_call: Some(FunctionCallConfig::None)
+//!    }
+//!    ```
+//! 
 //! ## Create edit
 //!
 //! Creates a new edit for the provided input, instruction, and parameters.
