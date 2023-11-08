@@ -339,6 +339,14 @@
 //!        let random = 4;
 //!        4.into()
 //!     }
+//! 
+//!     let params_schema = r#"{
+//!         "type": "object",
+//!         "properties": {
+//!             "min": {"type": "integer", "description": "Minimum value of the random number (inclusive)"},
+//!             "max": {"type": "integer", "description": "Maximum value of the random number (inclusive)"},
+//!          }
+//!       }"#;
 //!
 //!     let api_key = std::env::var("OPENAI_API_KEY").expect("$OPENAI_API_KEY is not set");
 //!
@@ -357,22 +365,10 @@
 //!         messages: messages.clone(),
 //!         functions: Some([
 //!             Function {
-//!               name: "get_random_number".to_string(),
-//!               description: "Get a random number between two values".to_string(),
-//!               parameters: r#"{
-//!                    "type": "object",
-//!                    "properties": {
-//!                        "min": {
-//!                            "type": "integer",
-//!                            "description": "Minimum value of the random number (inclusive)",
-//!                        },
-//!                        "max": {
-//!                            "type": "integer",
-//!                            "description": "Maximum value of the random number (inclusive)",
-//!                        },
-//!                    }
-//!                }"#.into()
-//!              }
+//!                 name: "get_random_number".to_string(),
+//!                 description: "Get a random number between two values".to_string(),
+//!                 parameters: serde_json::from_str(params_schema).unwrap(),
+//!             }
 //!          ]),
 //!          ..Default::default()
 //!     };
