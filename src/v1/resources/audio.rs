@@ -1,5 +1,5 @@
+use serde::{Deserialize, Serialize};
 use std::fmt::Display;
-use serde::{Serialize, Deserialize};
 
 #[derive(Serialize, Debug, Clone)]
 pub struct AudioTranscriptionParameters {
@@ -28,6 +28,7 @@ pub struct AudioTranslationParameters {
 }
 
 #[derive(Serialize, Deserialize, Debug, Clone)]
+#[serde(rename_all = "snake_case")]
 pub enum AudioTranscriptOutputFormat {
     Json,
     Text,
@@ -38,14 +39,10 @@ pub enum AudioTranscriptOutputFormat {
 
 impl Display for AudioTranscriptOutputFormat {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
-        write!(f, "{}",
-            match self {
-                AudioTranscriptOutputFormat::Json => "json",
-                AudioTranscriptOutputFormat::Text => "text",
-                AudioTranscriptOutputFormat::Srt => "srt",
-                AudioTranscriptOutputFormat::VerboseJson => "verbose_json",
-                AudioTranscriptOutputFormat::Vtt => "vtt",
-            }
+        write!(
+            f,
+            "{}",
+            serde_json::to_string(self).map_err(|_| std::fmt::Error)?
         )
     }
 }
