@@ -1,7 +1,7 @@
 use crate::v1::models::OpenAIModel;
 use crate::v1::resources::shared::StopToken;
 use crate::v1::resources::shared::{FinishReason, Usage};
-use serde::{Deserialize, Serialize};
+use serde::{Deserialize, Serialize, Deserializer};
 use std::collections::HashMap;
 use std::fmt::Display;
 
@@ -116,7 +116,7 @@ impl Display for Role {
     }
 }
 
-impl FromStr for Role {
+impl std::str::FromStr for Role {
     type Err = String;
 
     fn from_str(s: &str) -> Result<Self, Self::Err> {
