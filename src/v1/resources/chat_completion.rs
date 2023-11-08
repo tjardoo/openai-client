@@ -146,8 +146,8 @@ pub struct Function {
     /// For simple functions, this can be constructed manually. For more complex use-cases, the [schemars](https://docs.rs/schemars) crate is recommended.
     /// 
     /// Resources:
-    ///   - https://platform.openai.com/docs/guides/gpt/function-calling 
-    ///   - JSONSchema: https://json-schema.org/ for more information.
+    ///   - <https://platform.openai.com/docs/guides/gpt/function-calling>
+    ///   - JSONSchema: <https://json-schema.org/> for more information.
     pub parameters: serde_json::Value,
 }
 
