@@ -522,7 +522,6 @@ version = "0.2.13"
 dependencies = [
  "base64",
  "futures",
- "log",
  "rand",
  "reqwest",
  "reqwest-eventsource",
