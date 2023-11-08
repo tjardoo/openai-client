@@ -1,5 +1,5 @@
 use serde::{Deserialize, Serialize};
-use std::fmt::Display;
+use std::fmt::{Display, Error, Formatter, Result};
 
 // https://platform.openai.com/docs/models/overview
 #[derive(Serialize, Deserialize, Debug, PartialEq)]
@@ -33,25 +33,11 @@ pub enum OpenAIModel {
 }
 
 impl Display for OpenAIModel {
-    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+    fn fmt(&self, f: &mut Formatter<'_>) -> Result {
         write!(
-            f,
+            f, 
             "{}",
-            match self {
-                OpenAIModel::Gpt4 => "gpt-4",
-                OpenAIModel::Gpt4_0613 => "gpt-4-0613",
-                OpenAIModel::Gpt4_32K => "gpt-4-32k",
-                OpenAIModel::Gpt4_32K0613 => "gpt-4-32k-0613",
-                OpenAIModel::Gpt4_1106Preview => "gpt-4-1106-preview",
-                OpenAIModel::Gpt4VisionPreview => "gpt-4-vision-preview",
-                OpenAIModel::Gpt3_5Turbo => "gpt-3.5-turbo-0301",
-                OpenAIModel::Gpt3_5Turbo0613 => "gpt-3.5-turbo-0613",
-                OpenAIModel::Gpt3_5Turbo1106 => "gpt-3.5-turbo-1106",
-                OpenAIModel::TextEmbeddingAda002 => "text-embedding-ada-002",
-                OpenAIModel::Whisper1 => "whisper-1",
-                OpenAIModel::TextModerationStable => "text-moderation-stable",
-                OpenAIModel::TextModerationLatest => "text-moderation-latest",
-            }
+            serde_json::to_string(self).map_err(|_| Error)?
         )
     }
 }

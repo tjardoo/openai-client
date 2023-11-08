@@ -1,9 +1,9 @@
-use std::fmt::Display;
-use std::collections::HashMap;
-use serde::{Serialize, Deserialize};
 use crate::v1::models::OpenAIModel;
-use crate::v1::resources::shared::{Usage, FinishReason};
 use crate::v1::resources::shared::StopToken;
+use crate::v1::resources::shared::{FinishReason, Usage};
+use serde::{Deserialize, Serialize};
+use std::collections::HashMap;
+use std::fmt::Display;
 
 #[deprecated(since = "0.2.8")]
 #[cfg(feature = "simple")]
@@ -42,13 +42,11 @@ impl Default for ChatCompletionParameters {
     fn default() -> Self {
         ChatCompletionParameters {
             model: OpenAIModel::Gpt3_5Turbo0613.to_string(),
-            messages: vec![
-                ChatMessage {
-                    role: Role::User,
-                    content: "Hello!".to_string(),
-                    name: None,
-                },
-            ],
+            messages: vec![ChatMessage {
+                role: Role::User,
+                content: "Hello!".to_string(),
+                name: None,
+            }],
             temperature: None,
             top_p: None,
             n: None,
@@ -98,12 +96,10 @@ pub enum Role {
 
 impl Display for Role {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
-        write!(f, "{}",
-            match self {
-                Role::System => "System",
-                Role::User => "User",
-                Role::Assistant => "Assistant",
-            }
+        write!(
+            f,
+            "{}",
+            serde_json::to_string(self).map_err(|_| std::fmt::Error)?
         )
     }
 }
