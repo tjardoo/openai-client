@@ -1,24 +1,20 @@
-use crate::v1::resources::chat_completion::{ChatCompletionParameters, ChatCompletionResponse};
 use crate::v1::api::Client;
 use crate::v1::error::APIError;
+use crate::v1::resources::chat_completion::{ChatCompletionParameters, ChatCompletionResponse};
 use serde_json::Value;
 
 #[cfg(feature = "stream")]
-use std::collections::HashMap;
+use crate::v1::resources::chat_completion::ChatMessage;
 #[cfg(feature = "stream")]
-use std::pin::Pin;
+use crate::v1::resources::chat_completion::{Function, FunctionCallConfig};
 #[cfg(feature = "stream")]
 use crate::v1::resources::chat_completion_stream::ChatCompletionStreamResponse;
-#[cfg(feature = "stream")]
-use crate::v1::resources::chat_completion::ChatMessage;
 #[cfg(feature = "stream")]
 use crate::v1::resources::shared::StopToken;
 #[cfg(feature = "stream")]
 use futures::Stream;
 #[cfg(feature = "stream")]
 use serde::Serialize;
-#[cfg(feature = "stream")]
-use crate::v1::resources::chat_completion::{Function, FunctionCallConfig};
 
 #[cfg(feature = "simple")]
 use crate::v1::resources::chat_completion::SimpleChatCompletionParameters;
@@ -29,35 +25,47 @@ pub struct Chat<'a> {
 
 impl Client {
     pub fn chat(&self) -> Chat {
-        Chat {
-            client: self,
-        }
+        Chat { client: self }
     }
 }
 
 impl Chat<'_> {
-    pub async fn create(&self, parameters: ChatCompletionParameters) -> Result<ChatCompletionResponse, APIError> {
+    pub async fn create(
+        &self,
+        parameters: ChatCompletionParameters,
+    ) -> Result<ChatCompletionResponse, APIError> {
         let response = self.client.post("/chat/completions", &parameters).await?;
 
         let value: Value = serde_json::from_str(&response).unwrap();
-        let chat_completion_response: ChatCompletionResponse = serde_json::from_value(value).map_err(|error| APIError::ParseError(error.to_string()))?;
+        let chat_completion_response: ChatCompletionResponse = serde_json::from_value(value)
+            .map_err(|error| APIError::ParseError(error.to_string()))?;
 
         Ok(chat_completion_response)
     }
 
     #[deprecated(since = "0.2.8")]
     #[cfg(feature = "simple")]
-    pub async fn create_simple(&self, parameters: SimpleChatCompletionParameters) -> Result<ChatCompletionResponse, APIError> {
+    pub async fn create_simple(
+        &self,
+        parameters: SimpleChatCompletionParameters,
+    ) -> Result<ChatCompletionResponse, APIError> {
         let response = self.client.post("/chat/completions", &parameters).await?;
 
         let value: Value = serde_json::from_str(&response).unwrap();
-        let chat_completion_response: ChatCompletionResponse = serde_json::from_value(value).map_err(|error| APIError::ParseError(error.to_string()))?;
+        let chat_completion_response: ChatCompletionResponse = serde_json::from_value(value)
+            .map_err(|error| APIError::ParseError(error.to_string()))?;
 
         Ok(chat_completion_response)
     }
 
     #[cfg(feature = "stream")]
-    pub async fn create_stream(&self, parameters: ChatCompletionParameters) -> Result<Pin<Box<dyn Stream<Item = Result<ChatCompletionStreamResponse, APIError>> + Send>>, APIError> {
+    pub async fn create_stream(
+        &self,
+        parameters: ChatCompletionParameters,
+    ) -> Result<
+        Pin<Box<dyn Stream<Item = Result<ChatCompletionStreamResponse, APIError>> + Send>>,
+        APIError,
+    > {
         let stream_parameters = ChatCompletionStreamParameters {
             model: parameters.model,
             messages: parameters.messages,
@@ -74,7 +82,10 @@ impl Chat<'_> {
             function_call: parameters.function_call,
         };
 
-        Ok(self.client.post_stream("/chat/completions", &stream_parameters).await)
+        Ok(self
+            .client
+            .post_stream("/chat/completions", &stream_parameters)
+            .await)
     }
 }
 

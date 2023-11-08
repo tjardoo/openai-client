@@ -1,7 +1,7 @@
 use crate::v1::models::OpenAIModel;
 use crate::v1::resources::shared::StopToken;
 use crate::v1::resources::shared::{FinishReason, Usage};
-use serde::{Deserialize, Serialize, Deserializer};
+use serde::{Deserialize, Deserializer, Serialize};
 use std::collections::HashMap;
 use std::fmt::Display;
 
@@ -16,7 +16,7 @@ pub struct SimpleChatCompletionParameters {
 
 #[derive(Serialize, Debug, Clone)]
 pub struct ChatCompletionParameters {
-    pub model: String,
+    pub model: ChatModel,
     pub messages: Vec<ChatMessage>,
     #[serde(skip_serializing_if = "Option::is_none")]
     pub temperature: Option<f32>,
@@ -45,7 +45,7 @@ pub struct ChatCompletionParameters {
 impl Default for ChatCompletionParameters {
     fn default() -> Self {
         ChatCompletionParameters {
-            model: OpenAIModel::Gpt3_5Turbo0613.to_string(),
+            model: ChatModel::Gpt3_5Turbo0613.to_string(),
             messages: vec![ChatMessage {
                 role: Role::User,
                 content: "Hello!".to_string(),
@@ -122,7 +122,15 @@ impl Display for Role {
         write!(
             f,
             "{}",
+<<<<<<< HEAD
             serde_json::to_string(self).map_err(|_| std::fmt::Error)?
+=======
+            match self {
+                Role::System => "System",
+                Role::User => "User",
+                Role::Assistant => "Assistant",
+            }
+>>>>>>> 20e23e5 (refactor: specific models)
         )
     }
 }
@@ -146,16 +154,16 @@ pub struct Function {
     /// Function name
     pub name: String,
 
-    /// Description of the function. 
-    /// 
+    /// Description of the function.
+    ///
     /// Providing a good description lets the model know what the function does.
     #[serde(skip_serializing_if = "Option::is_none")]
     pub description: Option<String>,
 
     /// JSONSchema representation of function parameters as a JSON value
-    /// 
+    ///
     /// For simple functions, this can be constructed manually. For more complex use-cases, the [schemars](https://docs.rs/schemars) crate is recommended.
-    /// 
+    ///
     /// Resources:
     ///   - <https://platform.openai.com/docs/guides/gpt/function-calling>
     ///   - JSONSchema: <https://json-schema.org/> for more information.
@@ -169,7 +177,6 @@ pub enum FunctionCallConfig {
     None,
     /// The model decides wether to call functions or not
     Auto,
-    
     // TODO: The model must call this function
     //       Unsure how to get this to serialize properly
     // Force(ForceFunctionCall)
@@ -194,9 +201,9 @@ pub struct FunctionCall {
 
 impl FunctionCall {
     /// Merge one function call into another
-    /// 
-    /// This is useful when streaming a chat-completion that might call a function. 
-    /// Like message content, function calls are also streamed. 
+    ///
+    /// This is useful when streaming a chat-completion that might call a function.
+    /// Like message content, function calls are also streamed.
     /// When you see a function call, you should merge it into the previous function call in the stream until you see a
     /// `finish_reason` of `FunctionCall`. At that point the fully merged FunctionCall is ready to be serviced.
     pub fn merge(&mut self, other: &Self) {
