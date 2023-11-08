@@ -1,5 +1,5 @@
 use serde::{Serialize, Deserialize};
-use crate::v1::{resources::shared::Usage, models::OpenAIModel};
+use crate::v1::resources::shared::Usage;
 
 #[derive(Serialize, Debug, Clone)]
 pub struct EditParameters {
@@ -18,7 +18,7 @@ pub struct EditParameters {
 impl Default for EditParameters {
     fn default() -> Self {
         EditParameters {
-            model: OpenAIModel::TextDavinciEdit001.to_string(),
+            model: "text-davinci-edit-001".to_string(),
             input: Some("What day of the wek is it?".to_string()),
             instruction: "Fix the spelling mistakes".to_string(),
             n: None,

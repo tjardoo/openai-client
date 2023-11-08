@@ -19,11 +19,14 @@ use serde::Serialize;
 #[cfg(feature = "simple")]
 use crate::v1::resources::completion::SimpleCompletionParameters;
 
+#[deprecated(since = "0.2.12")]
 pub struct Completions<'a> {
     pub client: &'a Client,
 }
 
 impl Client {
+    #[allow(deprecated)]
+    #[deprecated(since = "0.2.12")]
     pub fn completions(&self) -> Completions {
         Completions {
             client: self,
@@ -31,7 +34,9 @@ impl Client {
     }
 }
 
+#[allow(deprecated)]
 impl Completions<'_> {
+    #[deprecated(since = "0.2.12")]
     pub async fn create(&self, parameters: CompletionParameters) -> Result<CompletionResponse, APIError> {
         let response = self.client.post("/completions", &parameters).await?;
 
@@ -52,6 +57,7 @@ impl Completions<'_> {
         Ok(completion_response)
     }
 
+    #[deprecated(since = "0.2.12")]
     #[cfg(feature = "stream")]
     pub async fn create_stream(&self, parameters: CompletionParameters) -> Result<Pin<Box<dyn Stream<Item = Result<CompletionStreamResponse, APIError>> + Send>>, APIError> {
         let stream_parameters = CompletionStreamParameters {
