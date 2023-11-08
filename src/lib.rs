@@ -23,6 +23,7 @@
 //!   - [Create chat completion](#create-chat-completion)
 //!   - [Create chat completion (stream)](#create-chat-completion-stream)
 //!   - [Calling Functions](#calling-functions)
+//!   - [Calling Functions (stream)](#calling-functions-stream)
 //! - Edits (deprecated)
 //!   - [Create edit](#create-edit)
 //! - Images
@@ -308,8 +309,6 @@
 //! More information: [Create chat completion](https://platform.openai.com/docs/api-reference/chat/create)
 //!
 
-
-
 //! ## Calling Functions
 //!
 //! Providing functions for the agent to call and interpret results.
@@ -337,7 +336,7 @@
 //!     fn get_random_number(params: RandomNumber) -> Value {
 //!        // chosen by fair dice role, guaranteed to be random
 //!        let random = 4;
-//!        4.into()
+//!        random.into()
 //!     }
 //! 
 //!     let params_schema = r#"{
@@ -390,7 +389,7 @@
 //!                    let parameters = ChatCompletionParameters {
 //!                         model: "gpt-3.5-turbo-0613".to_string(),
 //!                         messages: messages.clone(),
-//!                         .Default::default()
+//!                         ..Default::default()
 //!                     };
 //!
 //!                     let result = client.chat().create(parameters).await.unwrap();
@@ -427,6 +426,124 @@
 //!        function_call: Some(FunctionCallConfig::None)
 //!    }
 //!    ```
+//! 
+//! ## Calling Functions (stream)
+//!
+//! Providing functions for the agent to call and interpret results 
+//!
+//! **URL** `https://api.openai.com/v1/chat/completions`
+//!
+//! **Method** `POST`
+//!
+//! ```rust
+//! use futures::StreamExt;
+//! use openai_dive::v1::api::Client;
+//! use openai_dive::v1::resources::chat_completion::{ChatCompletionParameters, ChatMessage, Role, Function, FunctionCallConfig, FunctionCall};
+//! use serde::{Deserialize, Serialize};
+//!
+//! #[tokio::main]
+//! async fn main() {
+//!     #[derive(Serialize, Deserialize)]
+//!     pub struct RandomNumber {
+//!         /// Minimum value of the random number (inclusive)
+//!         min: u32,
+//! 
+//!         /// Maximum value of the random number (inclusive)
+//!         max: u32,
+//!     }
+//! 
+//!     fn get_random_number(params: RandomNumber) -> Value {
+//!        // chosen by fair dice role, guaranteed to be random
+//!        let random = 4;
+//!        random.into()
+//!     }
+//! 
+//!     let params_schema = r#"{
+//!         "type": "object",
+//!         "properties": {
+//!             "min": {"type": "integer", "description": "Minimum value of the random number (inclusive)"},
+//!             "max": {"type": "integer", "description": "Maximum value of the random number (inclusive)"},
+//!          }
+//!       }"#;
+//!
+//!     let api_key = std::env::var("OPENAI_API_KEY").expect("$OPENAI_API_KEY is not set");
+//!
+//!     let client = Client::new(api_key);
+//! 
+//!     let mut messages = vec![
+//!             ChatMessage {
+//!                 role: Role::User,
+//!                 content: "Can you get a random number between 1 and 6 please?".to_string(),
+//!                 name: None,
+//!             },
+//!         ];
+//!
+//!     let parameters = ChatCompletionParameters {
+//!         model: "gpt-3.5-turbo-0613".to_string(),
+//!         messages: messages.clone(),
+//!         functions: Some([
+//!             Function {
+//!                 name: "get_random_number".to_string(),
+//!                 description: "Get a random number between two values".to_string(),
+//!                 parameters: serde_json::from_str(params_schema).unwrap(),
+//!             }
+//!          ]),
+//!          ..Default::default()
+//!     };
+//!
+//! 
+//!     let mut stream = client.chat().create_stream(parameters).await.unwrap();
+//! 
+//!     let mut function_call = FunctionCall::default();
+//!     while let Some(response) = stream.next().await {
+//!         match response {
+//!             Ok(chat_response) => chat_response.choices.iter().for_each(|choice| {
+//!                if let Some(delta_function_call) = &choice.delta.function_call {
+//!                     function_call.merge(delta_function_call);
+//!                 }
+//!                 else if let Some(content) = choice.delta.content.as_ref() {
+//!                     print!("{}", content);
+//!                 }
+//! 
+//!                 if choice.finish_reason == Some(FinishReason::FunctionCall) && !function_call.is_empty() {
+//!                    if function_call.name == "get_random_number" {
+//!                        let random_number_params = serde_json::from_str(&function_call.arguments).unwrap();
+//!                        let random_number_result = get_random_number(random_number_params);
+//!                        messages.push(ChatMessage {
+//!                            role: Role::Function,
+//!                            content: Some(serde_json::to_string(&random_number_result).unwrap()),
+//!                            name: Some("get_random_number".to_string()),
+//!                        });
+//!                    
+//!                        let parameters = ChatCompletionParameters {
+//!                            model: "gpt-3.5-turbo-0613".to_string(),
+//!                            messages: messages.clone(),
+//!                            function_call: Some(FunctionCallConfig::None),
+//!                            ..Default::default()
+//!                         };
+//!
+//!                         let mut stream = client.chat().create_stream(parameters).await.unwrap();
+//! 
+//!                         while let Some(response) = stream.next().await {
+//!                             match response {
+//!                                 Ok(chat_response) => chat_response.choices.iter().for_each(|choice| {
+//!                                     if let Some(content) = choice.delta.content.as_ref() {
+//!                                         print!("{}", content);
+//!                                     }
+//!                                 }),
+//!                                 Err(e) => eprintln!("{}", e),
+//!                             }
+//!                         }
+//!                     }
+//!                 }
+//!             }),
+//!             Err(e) => eprintln!("{}", e),
+//!         }
+//!     }
+//! }
+//! ```
+//!
+//! More information: [Function calling](https://platform.openai.com/docs/guides/function-calling)
 //! 
 //! ## Create edit
 //!
