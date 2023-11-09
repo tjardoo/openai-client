@@ -14,12 +14,12 @@ async fn main() {
             ChatMessage {
                 role: Role::User,
                 content: "Hello!".to_string(),
-                name: None,
+                ..Default::default()
             },
             ChatMessage {
                 role: Role::User,
                 content: "Where are you located?".to_string(),
-                name: None,
+                ..Default::default()
             },
         ],
         ..Default::default()

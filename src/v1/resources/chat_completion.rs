@@ -78,6 +78,17 @@ pub struct ChatMessage {
     pub function_call: Option<FunctionCall>,
 }
 
+impl Default for ChatMessage {
+    fn default() -> Self {
+        ChatMessage {
+            role: Role::User,
+            content: "".to_string(),
+            name: None,
+            function_call: None,
+        }
+    }
+}
+
 #[derive(Serialize, Deserialize, Debug, Clone)]
 pub struct ChatCompletionResponse {
     pub id: String,
