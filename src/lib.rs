@@ -321,6 +321,7 @@
 //! use openai_dive::v1::api::Client;
 //! use openai_dive::v1::resources::chat_completion::{ChatCompletionParameters, ChatMessage, Role, Function, FunctionCallConfig, FunctionCall};
 //! use serde::{Deserialize, Serialize};
+//! use serde_json::{json, Value};
 //!
 //! #[tokio::main]
 //! async fn main() {
@@ -338,26 +339,18 @@
 //!        let random = 4;
 //!        random.into()
 //!     }
-//! 
-//!     let params_schema = r#"{
-//!         "type": "object",
-//!         "properties": {
-//!             "min": {"type": "integer", "description": "Minimum value of the random number (inclusive)"},
-//!             "max": {"type": "integer", "description": "Maximum value of the random number (inclusive)"},
-//!          }
-//!       }"#;
 //!
 //!     let api_key = std::env::var("OPENAI_API_KEY").expect("$OPENAI_API_KEY is not set");
 //!
 //!     let client = Client::new(api_key);
 //! 
 //!     let mut messages = vec![
-//!             ChatMessage {
-//!                 role: Role::User,
-//!                 content: "Can you get a random number between 1 and 6 please?".to_string(),
-//!                 name: None,
-//!             },
-//!         ];
+//!         ChatMessage {
+//!             role: Role::User,
+//!             content: "Can you get a random number between 1 and 6 please?".to_string(),
+//!             name: None,
+//!         },
+//!     ];
 //!
 //!     let parameters = ChatCompletionParameters {
 //!         model: "gpt-3.5-turbo-0613".to_string(),
@@ -366,7 +359,13 @@
 //!             Function {
 //!                 name: "get_random_number".to_string(),
 //!                 description: "Get a random number between two values".to_string(),
-//!                 parameters: serde_json::from_str(params_schema).unwrap(),
+//!                 parameters: json!({
+//!                     "type": "object",
+//!                     "properties": {
+//!                         "min": {"type": "integer", "description": "Minimum value of the random number (inclusive)"},
+//!                         "max": {"type": "integer", "description": "Maximum value of the random number (inclusive)"},
+//!                     }
+//!                 })
 //!             }
 //!          ]),
 //!          ..Default::default()
@@ -406,7 +405,9 @@
 //! 
 //! ### Function tips:
 //! 
-//! 1. Use the [schemars](https://crates.io/crates/schemars) crate for automatically generating JSON schemas from structs. 
+//! 1. Use the [async-recursion](https://crates.io/crates/async-recursion) crate to recursively call into a wrapping function after processing a function call.
+//!
+//! 2. Use the [schemars](https://crates.io/crates/schemars) crate for automatically generating JSON schemas from structs. 
 //! 
 //!    ```rust
 //!    let random_number_schema = schemars::schema_for!(RandomNumber);
@@ -418,7 +419,7 @@
 //!    }
 //!    ```
 //! 
-//! 2. After a function is called, stop the agent from calling more functions (sometimes it can get stuck in a function calling loop).
+//! 3. After a function is called, stop the agent from calling more functions (sometimes it can get stuck in a function calling loop).
 //! 
 //!    ```rust
 //!    let parameters = ChatCompletionParameters {
@@ -440,7 +441,8 @@
 //! use openai_dive::v1::api::Client;
 //! use openai_dive::v1::resources::chat_completion::{ChatCompletionParameters, ChatMessage, Role, Function, FunctionCallConfig, FunctionCall};
 //! use serde::{Deserialize, Serialize};
-//!
+//! use serde_json::{json, Value};
+//! 
 //! #[tokio::main]
 //! async fn main() {
 //!     #[derive(Serialize, Deserialize)]
@@ -457,26 +459,18 @@
 //!        let random = 4;
 //!        random.into()
 //!     }
-//! 
-//!     let params_schema = r#"{
-//!         "type": "object",
-//!         "properties": {
-//!             "min": {"type": "integer", "description": "Minimum value of the random number (inclusive)"},
-//!             "max": {"type": "integer", "description": "Maximum value of the random number (inclusive)"},
-//!          }
-//!       }"#;
 //!
 //!     let api_key = std::env::var("OPENAI_API_KEY").expect("$OPENAI_API_KEY is not set");
 //!
 //!     let client = Client::new(api_key);
 //! 
 //!     let mut messages = vec![
-//!             ChatMessage {
-//!                 role: Role::User,
-//!                 content: "Can you get a random number between 1 and 6 please?".to_string(),
-//!                 name: None,
-//!             },
-//!         ];
+//!         ChatMessage {
+//!             role: Role::User,
+//!             content: "Can you get a random number between 1 and 6 please?".to_string(),
+//!             name: None,
+//!         },
+//!     ];
 //!
 //!     let parameters = ChatCompletionParameters {
 //!         model: "gpt-3.5-turbo-0613".to_string(),
@@ -485,13 +479,18 @@
 //!             Function {
 //!                 name: "get_random_number".to_string(),
 //!                 description: "Get a random number between two values".to_string(),
-//!                 parameters: serde_json::from_str(params_schema).unwrap(),
+//!                 parameters: json!({
+//!                     "type": "object",
+//!                     "properties": {
+//!                         "min": {"type": "integer", "description": "Minimum value of the random number (inclusive)"},
+//!                         "max": {"type": "integer", "description": "Maximum value of the random number (inclusive)"},
+//!                     }
+//!                 })
 //!             }
 //!          ]),
 //!          ..Default::default()
 //!     };
 //!
-//! 
 //!     let mut stream = client.chat().create_stream(parameters).await.unwrap();
 //! 
 //!     let mut function_call = FunctionCall::default();
