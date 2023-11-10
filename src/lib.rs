@@ -16,9 +16,6 @@
 //! - Models
 //!   - [List models](#list-models)
 //!   - [Retrieve model](#retrieve-model)
-//! - Completions (legacy)
-//!   - [Create completion](#create-completion)
-//!   - [Create completion (stream)](#create-completion-stream)
 //! - Chat
 //!   - [Create chat completion](#create-chat-completion)
 //!   - [Create chat completion (stream)](#create-chat-completion-stream)
@@ -96,103 +93,6 @@
 //! ```
 //!
 //! More information: [Retrieve models](https://platform.openai.com/docs/api-reference/models/retrieve)
-//!
-//! ## Create completion
-//!
-//! Creates a completion for the provided prompt and parameters.
-//!
-//! **URL** `https://api.openai.com/v1/completions`
-//!
-//! **Method** `POST`
-//!
-//! ```rust
-//! use openai_dive::v1::api::Client;
-//! use openai_dive::v1::resources::completion::CompletionParameters;
-//!
-//! #[tokio::main]
-//! async fn main() {
-//!     let api_key = std::env::var("OPENAI_API_KEY").expect("$OPENAI_API_KEY is not set");
-//!
-//!     let client = Client::new(api_key);
-//!
-//!     let parameters = CompletionParameters {
-//!         model: "text-davinci-003".to_string(),
-//!         prompt: "Say this is a test".to_string(),
-//!         suffix: None,
-//!         max_tokens: Some(10),
-//!         temperature: None,
-//!         top_p: None,
-//!         n: None,
-//!         logprobs: None,
-//!         echo: None,
-//!         stop: None,
-//!         presence_penalty: None,
-//!         frequency_penalty: None,
-//!         best_of: None,
-//!         logit_bias: None,
-//!         user: None,
-//!         // or use ..Default::default()
-//!     };
-//!
-//!     let result = client.completions().create(parameters).await.unwrap();
-//!
-//!     println!("{:?}", result);
-//! }
-//! ```
-//!
-//! More information: [Create completion](https://platform.openai.com/docs/api-reference/completions/create)
-//!
-//! ## Create completion (stream)
-//!
-//! Creates a completion for the provided prompt and parameters.
-//!
-//! **URL** `https://api.openai.com/v1/completions`
-//!
-//! **Method** `POST`
-//!
-//! ```rust
-//! use futures::StreamExt;
-//! use openai_dive::v1::api::Client;
-//! use openai_dive::v1::resources::completion::CompletionParameters;
-//!
-//! #[tokio::main]
-//! async fn main() {
-//!     let api_key = std::env::var("OPENAI_API_KEY").expect("$OPENAI_API_KEY is not set");
-//!
-//!     let client = Client::new(api_key);
-//!
-//!     let parameters = CompletionParameters {
-//!         model: "text-davinci-003".to_string(),
-//!         prompt: "Say this is a test".to_string(),
-//!         suffix: None,
-//!         max_tokens: Some(10),
-//!         temperature: None,
-//!         top_p: None,
-//!         n: None,
-//!         logprobs: None,
-//!         echo: None,
-//!         stop: None,
-//!         presence_penalty: None,
-//!         frequency_penalty: None,
-//!         best_of: None,
-//!         logit_bias: None,
-//!         user: None,
-//!     };
-//!
-//!     let mut stream = client.completions().create_stream(parameters).await.unwrap();
-//!
-//!     while let Some(response) = stream.next().await {
-//!         match response {
-//!             Ok(completion_response) => completion_response.choices.iter().for_each(|choice| {
-//!                 print!("{}", choice.text);
-//!             }),
-//!             Err(e) => eprintln!("{}", e),
-//!         }
-//!     }
-//! }
-//! ```
-//!
-//! More information: [Create completion](https://platform.openai.com/docs/api-reference/completions/create)
 //!
 //! ## Create chat completion
 //!
