@@ -1,5 +1,5 @@
 [package]
-name = "calling_function_stream"
+name = "function_calling_stream"
 version = "0.1.0"
 edition = "2021"
 publish = false
