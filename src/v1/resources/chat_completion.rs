@@ -1,9 +1,9 @@
-use std::fmt::Display;
-use std::collections::HashMap;
-use serde::{Serialize, Deserialize};
 use crate::v1::models::OpenAIModel;
-use crate::v1::resources::shared::{Usage, FinishReason};
 use crate::v1::resources::shared::StopToken;
+use crate::v1::resources::shared::{FinishReason, Usage};
+use serde::{Deserialize, Serialize, Deserializer};
+use std::collections::HashMap;
+use std::fmt::Display;
 
 #[deprecated(since = "0.2.8")]
 #[cfg(feature = "simple")]
@@ -36,19 +36,22 @@ pub struct ChatCompletionParameters {
     pub logit_bias: Option<HashMap<String, serde_json::Value>>,
     #[serde(skip_serializing_if = "Option::is_none")]
     pub user: Option<String>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub functions: Option<Vec<Function>>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub function_call: Option<FunctionCallConfig>,
 }
 
 impl Default for ChatCompletionParameters {
     fn default() -> Self {
         ChatCompletionParameters {
             model: OpenAIModel::Gpt3_5Turbo0613.to_string(),
-            messages: vec![
-                ChatMessage {
-                    role: Role::User,
-                    content: "Hello!".to_string(),
-                    name: None,
-                },
-            ],
+            messages: vec![ChatMessage {
+                role: Role::User,
+                content: "Hello!".to_string(),
+                name: None,
+                function_call: None,
+            }],
             temperature: None,
             top_p: None,
             n: None,
@@ -58,6 +61,8 @@ impl Default for ChatCompletionParameters {
             frequency_penalty: None,
             logit_bias: None,
             user: None,
+            functions: None,
+            function_call: None,
         }
     }
 }
@@ -65,9 +70,23 @@ impl Default for ChatCompletionParameters {
 #[derive(Serialize, Deserialize, Debug, Clone)]
 pub struct ChatMessage {
     pub role: Role,
+    #[serde(deserialize_with = "null_to_default")]
     pub content: String,
     #[serde(skip_serializing_if = "Option::is_none")]
     pub name: Option<String>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub function_call: Option<FunctionCall>,
+}
+
+impl Default for ChatMessage {
+    fn default() -> Self {
+        ChatMessage {
+            role: Role::User,
+            content: "".to_string(),
+            name: None,
+            function_call: None,
+        }
+    }
 }
 
 #[derive(Serialize, Deserialize, Debug, Clone)]
@@ -85,6 +104,7 @@ pub struct ChatCompletionChoice {
     pub index: u32,
     pub message: ChatMessage,
     #[serde(skip_serializing_if = "Option::is_none")]
+    #[serde(default)]
     pub finish_reason: Option<FinishReason>,
 }
 
@@ -94,16 +114,111 @@ pub enum Role {
     System,
     User,
     Assistant,
+    Function,
 }
 
 impl Display for Role {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
-        write!(f, "{}",
-            match self {
-                Role::System => "System",
-                Role::User => "User",
-                Role::Assistant => "Assistant",
-            }
+        write!(
+            f,
+            "{}",
+            serde_json::to_string(self).map_err(|_| std::fmt::Error)?
         )
     }
+}
+
+impl std::str::FromStr for Role {
+    type Err = String;
+
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "system" => Ok(Role::System),
+            "user" => Ok(Role::User),
+            "assistant" => Ok(Role::Assistant),
+            "function" => Ok(Role::Function),
+            _ => Err(format!("{} is not a valid Role", s)),
+        }
+    }
+}
+
+#[derive(Serialize, Deserialize, Debug, Clone)]
+pub struct Function {
+    /// Function name
+    pub name: String,
+
+    /// Description of the function. 
+    /// 
+    /// Providing a good description lets the model know what the function does.
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub description: Option<String>,
+
+    /// JSONSchema representation of function parameters as a JSON value
+    /// 
+    /// For simple functions, this can be constructed manually. For more complex use-cases, the [schemars](https://docs.rs/schemars) crate is recommended.
+    /// 
+    /// Resources:
+    ///   - <https://platform.openai.com/docs/guides/gpt/function-calling>
+    ///   - JSONSchema: <https://json-schema.org/> for more information.
+    pub parameters: serde_json::Value,
+}
+
+#[derive(Serialize, Debug, Clone)]
+#[serde(rename_all = "lowercase")]
+pub enum FunctionCallConfig {
+    /// Do not call any functions
+    None,
+    /// The model decides wether to call functions or not
+    Auto,
+    
+    // TODO: The model must call this function
+    //       Unsure how to get this to serialize properly
+    // Force(ForceFunctionCall)
+}
+
+#[derive(Serialize, Debug, Clone)]
+
+pub struct ForceFunctionCall {
+    pub name: String,
+}
+
+#[derive(Serialize, Deserialize, Debug, Clone, Default)]
+pub struct FunctionCall {
+    /// Name of the function to call
+    #[serde(default)]
+    pub name: String,
+
+    /// JSON encoded arguments
+    #[serde(default)]
+    pub arguments: String,
+}
+
+impl FunctionCall {
+    /// Merge one function call into another
+    /// 
+    /// This is useful when streaming a chat-completion that might call a function. 
+    /// Like message content, function calls are also streamed. 
+    /// When you see a function call, you should merge it into the previous function call in the stream until you see a
+    /// `finish_reason` of `FunctionCall`. At that point the fully merged FunctionCall is ready to be serviced.
+    pub fn merge(&mut self, other: &Self) {
+        if self.name.is_empty() && !other.name.is_empty() {
+            self.name = other.name.clone();
+        }
+        if !other.arguments.is_empty() {
+            self.arguments.push_str(&other.arguments);
+        }
+    }
+
+    /// Check if the function call is empty
+    pub fn is_empty(&self) -> bool {
+        self.name.is_empty() && self.arguments.is_empty()
+    }
+}
+
+fn null_to_default<'de, D, T>(de: D) -> Result<T, D::Error>
+where
+    D: Deserializer<'de>,
+    T: Default + Deserialize<'de>,
+{
+    let key = Option::<T>::deserialize(de)?;
+    Ok(key.unwrap_or_default())
 }

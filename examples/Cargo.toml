@@ -22,4 +22,6 @@ members = [
     "cancel_fine_tuning",
     "list_fine_tuning_events",
     "create_moderation",
+    "function_calling",
+    "function_calling_stream",
 ]

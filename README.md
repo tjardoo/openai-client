@@ -21,14 +21,11 @@ More information: [set API key](#set-api-key), [add proxy](#add-proxy), [use mod
 - Models
   - [List models](#list-models)
   - [Retrieve model](#retrieve-model)
-- Completions (legacy)
-  - [Create completion](#create-completion)
-  - [Create completion (stream)](#create-completion-stream)
 - Chat
   - [Create chat completion](#create-chat-completion)
   - [Create chat completion (stream)](#create-chat-completion-stream)
-- Edits (deprecated)
-  - [Create edit](#create-edit)
+  - [Calling Functions](#calling-functions)
+  - [Calling Functions (stream)](#calling-functions-stream)
 - Images
   - [Create image](#create-image)
   - [Create image edit](#create-image-edit)
@@ -99,105 +96,6 @@ async fn main() {
 
 More information: [Retrieve models](https://platform.openai.com/docs/api-reference/models/retrieve)
 
-### Create completion
-
-Creates a completion for the provided prompt and parameters.
-
-**URL** `https://api.openai.com/v1/completions`
-
-**Method** `POST`
-
-```rust
-use openai_dive::v1::api::Client;
-use openai_dive::v1::resources::completion::CompletionParameters;
-
-#[tokio::main]
-async fn main() {
-    let api_key = std::env::var("OPENAI_API_KEY").expect("$OPENAI_API_KEY is not set");
-
-    let client = Client::new(api_key);
-
-    let parameters = CompletionParameters {
-        model: "text-davinci-003".to_string(),
-        prompt: "Say this is a test".to_string(),
-        suffix: None,
-        max_tokens: Some(10),
-        temperature: None,
-        top_p: None,
-        n: None,
-        logprobs: None,
-        echo: None,
-        stop: None,
-        presence_penalty: None,
-        frequency_penalty: None,
-        best_of: None,
-        logit_bias: None,
-        user: None,
-        // or use ..Default::default()
-    };
-
-    let result = client.completions().create(parameters).await.unwrap();
-
-    println!("{:?}", result);
-}
-```
-
-More information: [Create completion](https://platform.openai.com/docs/api-reference/completions/create)
-
-### Create completion (stream)
-
-> Feature `stream` required
-
-Creates a completion for the provided prompt and parameters.
-
-**URL** `https://api.openai.com/v1/completions`
-
-**Method** `POST`
-
-```rust
-use futures::StreamExt;
-use openai_dive::v1::api::Client;
-use openai_dive::v1::resources::completion::CompletionParameters;
-
-#[tokio::main]
-async fn main() {
-    let api_key = std::env::var("OPENAI_API_KEY").expect("$OPENAI_API_KEY is not set");
-
-    let client = Client::new(api_key);
-
-    let parameters = CompletionParameters {
-        model: "text-davinci-003".to_string(),
-        prompt: "Create an outline for an essay about Nikola Tesla and his contributions to technology:".to_string(),
-        suffix: None,
-        max_tokens: Some(50),
-        temperature: None,
-        top_p: None,
-        n: None,
-        logprobs: None,
-        echo: None,
-        stop: None,
-        presence_penalty: None,
-        frequency_penalty: None,
-        best_of: None,
-        logit_bias: None,
-        user: None,
-    };
-
-    let mut stream = client.completions().create_stream(parameters).await.unwrap();
-
-    while let Some(response) = stream.next().await {
-        match response {
-            Ok(completion_response) => completion_response.choices.iter().for_each(|choice| {
-                print!("{}", choice.text);
-            }),
-            Err(e) => eprintln!("{}", e),
-        }
-    }
-}
-```
-
-More information: [Create completion](https://platform.openai.com/docs/api-reference/completions/create)
-
 ### Create chat completion
 
 Creates a completion for the chat message.
@@ -222,12 +120,12 @@ async fn main() {
             ChatMessage {
                 role: Role::User,
                 content: "Hello!".to_string(),
-                name: None,
+                ..Default::default(),
             },
             ChatMessage {
                 role: Role::User,
                 content: "Where are you located?".to_string(),
-                name: None,
+                ..Default::default(),
             },
         ],
         temperature: None,
@@ -277,12 +175,12 @@ async fn main() {
             ChatMessage {
                 role: Role::User,
                 content: "Hello!".to_string(),
-                name: None,
+                ..Default::default(),
             },
             ChatMessage {
                 role: Role::User,
                 content: "Where are you located?".to_string(),
-                name: None,
+                ..Default::default(),
             },
         ],
         temperature: None,
@@ -313,41 +211,218 @@ async fn main() {
 
 More information: [Create chat completion](https://platform.openai.com/docs/api-reference/chat/create)
 
-### Create edit
+## Calling Functions
 
-Creates a new edit for the provided input, instruction, and parameters.
+In an API call, you can describe functions and have the model intelligently choose to output a JSON object containing arguments to call one or many functions. The Chat Completions API does not call the function; instead, the model generates JSON that you can use to call the function in your code.
 
-**URL** `https://api.openai.com/v1/edits`
+**URL** `https://api.openai.com/v1/chat/completions`
 
 **Method** `POST`
 
 ```rust
 use openai_dive::v1::api::Client;
-use openai_dive::v1::resources::edit::EditParameters;
+use openai_dive::v1::resources::chat_completion::{
+    ChatCompletionParameters, ChatMessage, Function, Role,
+};
+use openai_dive::v1::resources::shared::FinishReason;
+use serde::{Deserialize, Serialize};
+use serde_json::{json, Value};
 
 #[tokio::main]
 async fn main() {
+    #[derive(Serialize, Deserialize)]
+    pub struct RandomNumber {
+        min: u32, // minimum value of the random number
+        max: u32, // maximum value of the random number
+    }
+
+    fn get_random_number(params: RandomNumber) -> Value {
+        let random = 4;
+
+        random.into()
+    }
+
     let api_key = std::env::var("OPENAI_API_KEY").expect("$OPENAI_API_KEY is not set");
 
     let client = Client::new(api_key);
 
-    let parameters = EditParameters {
-        model: "text-davinci-edit-001".to_string(),
-        input: Some("What day of the wek is it?".to_string()),
-        instruction: "Fix the spelling mistakes".to_string(),
-        n: None,
-        temperature: None,
-        top_p: None,
-        // or use ..Default::default()
+    let mut messages = vec![ChatMessage {
+        role: Role::User,
+        content: "Can you get a random number between 1 and 6?".to_string(),
+        ..Default::default()
+    }];
+
+    let parameters = ChatCompletionParameters {
+        model: "gpt-3.5-turbo-0613".to_string(),
+        messages: messages.clone(),
+        functions: Some(vec![Function {
+            name: "get_random_number".to_string(),
+            description: Some("Get a random number between two values".to_string()),
+            parameters: json!({
+                "type": "object",
+                "properties": {
+                    "min": {"type": "integer", "description": "Minimum value of the random number"},
+                    "max": {"type": "integer", "description": "Maximum value of the random number"},
+                }
+            }),
+        }]),
+        ..Default::default()
     };
 
-    let result = client.edits().create(parameters).await.unwrap();
+    let result = client.chat().create(parameters).await.unwrap();
 
-    println!("{:?}", result);
+    if let Some(choice) = result.choices.first() {
+        if choice.finish_reason == Some(FinishReason::FunctionCall) {
+            if let Some(function_call) = &choice.message.function_call {
+                if function_call.name == "get_random_number" {
+                    let random_number_params =
+                        serde_json::from_str(&function_call.arguments).unwrap();
+                    let random_number_result = get_random_number(random_number_params);
+                    messages.push(ChatMessage {
+                        role: Role::Function,
+                        content: serde_json::to_string(&random_number_result).unwrap(),
+                        name: Some("get_random_number".to_string()),
+                        ..Default::default()
+                    });
+
+                    let parameters = ChatCompletionParameters {
+                        model: "gpt-3.5-turbo-0613".to_string(),
+                        messages: messages.clone(),
+                        ..Default::default()
+                    };
+
+                    let result = client.chat().create(parameters).await.unwrap();
+
+                    println!("{:?}", result);
+                }
+            }
+        }
+    }
 }
 ```
 
-More information: [Create edit](https://platform.openai.com/docs/api-reference/edits/create)
+More information: [Function calling](https://platform.openai.com/docs/guides/function-calling)
+
+## Calling Functions (stream)
+
+In an API call, you can describe functions and have the model intelligently choose to output a JSON object containing arguments to call one or many functions. The Chat Completions API does not call the function; instead, the model generates JSON that you can use to call the function in your code.
+
+**URL** `https://api.openai.com/v1/chat/completions`
+
+**Method** `POST`
+
+```rust
+use futures::StreamExt;
+use openai_dive::v1::api::Client;
+use openai_dive::v1::resources::chat_completion::{
+    ChatCompletionParameters, ChatMessage, Function, FunctionCall, Role,
+};
+use openai_dive::v1::resources::shared::FinishReason;
+use serde::{Deserialize, Serialize};
+use serde_json::{json, Value};
+
+#[tokio::main]
+async fn main() {
+    #[derive(Serialize, Deserialize)]
+    pub struct RandomNumber {
+        min: u32, // minimum value of the random number
+        max: u32, // maximum value of the random number
+    }
+
+    fn get_random_number(params: RandomNumber) -> Value {
+        let random = 4;
+
+        random.into()
+    }
+
+    let api_key = std::env::var("OPENAI_API_KEY").expect("$OPENAI_API_KEY is not set");
+
+    let client = Client::new(api_key);
+
+    let messages = vec![ChatMessage {
+        role: Role::User,
+        content: "Can you get a random number between 1 and 6 please?".to_string(),
+        ..Default::default()
+    }];
+
+    let mut parameters = ChatCompletionParameters {
+        model: "gpt-3.5-turbo-0613".to_string(),
+        messages: messages.clone(),
+        functions: Some(vec![Function {
+            name: "get_random_number".to_string(),
+            description: Some("Get a random number between two values".to_string()),
+            parameters: json!({
+                "type": "object",
+                "properties": {
+                    "min": {"type": "integer", "description": "Minimum value of the random number (inclusive)"},
+                    "max": {"type": "integer", "description": "Maximum value of the random number (inclusive)"},
+                }
+            }),
+        }]),
+        ..Default::default()
+    };
+
+    let mut stream = client
+        .chat()
+        .create_stream(parameters.clone())
+        .await
+        .unwrap();
+
+    let mut function_call = FunctionCall::default();
+    while let Some(response) = stream.next().await {
+        match response {
+            Ok(chat_response) => {
+                for choice in chat_response.choices {
+                    if let Some(delta_function_call) = &choice.delta.function_call {
+                        function_call.merge(delta_function_call);
+                    } else if let Some(content) = choice.delta.content.as_ref() {
+                        print!("{}", content);
+                    }
+
+                    if choice.finish_reason == Some(FinishReason::FunctionCall)
+                        && !function_call.is_empty()
+                    {
+                        if function_call.name == "get_random_number" {
+                            let random_number_params =
+                                serde_json::from_str(&function_call.arguments).unwrap();
+                            let random_number_result = get_random_number(random_number_params);
+
+                            parameters.messages.push(ChatMessage {
+                                role: Role::Function,
+                                content: serde_json::to_string(&random_number_result).unwrap(),
+                                name: Some("get_random_number".to_string()),
+                                ..Default::default()
+                            });
+
+                            let mut stream = client
+                                .chat()
+                                .create_stream(parameters.clone())
+                                .await
+                                .unwrap();
+
+                            while let Some(response) = stream.next().await {
+                                match response {
+                                    Ok(chat_response) => {
+                                        chat_response.choices.iter().for_each(|choice| {
+                                            if let Some(content) = choice.delta.content.as_ref() {
+                                                print!("{}", content);
+                                            }
+                                        })
+                                    }
+                                    Err(e) => eprintln!("{}", e),
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            Err(e) => eprintln!("{}", e),
+        }
+    }
+}
+```
+
+More information: [Function calling](https://platform.openai.com/docs/guides/function-calling)
 
 ### Create image
 
@@ -704,6 +779,8 @@ async fn main() {
 More information: [Retrieve file content](https://platform.openai.com/docs/api-reference/files/retrieve-content)
 
 ### Fine-tunes
+
+We recommend transitioning to the updating [fine-tuning API](https://platform.openai.com/docs/guides/fine-tuning).
 
 Manage fine-tuning jobs to tailor a model to your specific training data.
 

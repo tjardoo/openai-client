@@ -1,14 +1,14 @@
+use serde::{Deserialize, Serialize};
 use std::fmt::Display;
-use serde::{Serialize, Deserialize};
 
 #[cfg(feature = "download")]
 use crate::v1::error::APIError;
 #[cfg(feature = "download")]
-use futures::future;
-#[cfg(feature = "download")]
 use crate::v1::resources::shared::generate_file_name;
 #[cfg(feature = "download")]
-use base64::{Engine as _, engine::general_purpose};
+use base64::{engine::general_purpose, Engine as _};
+#[cfg(feature = "download")]
+use futures::future;
 
 #[derive(Serialize, Debug, Clone)]
 pub struct CreateImageParameters {
@@ -93,9 +93,7 @@ impl ImageResponse {
         for item in self.data.clone() {
             let path = path.to_owned();
 
-            handles.push(tokio::spawn(async move {
-                item.save_to_disk(&path).await
-            }));
+            handles.push(tokio::spawn(async move { item.save_to_disk(&path).await }));
         }
 
         let results = future::join_all(handles).await;
@@ -105,7 +103,7 @@ impl ImageResponse {
                 Ok(path) => match path {
                     Ok(item) => files.push(item),
                     Err(_error) => (),
-                }
+                },
                 Err(_error) => (),
             }
         }
@@ -137,23 +135,26 @@ impl ImageData {
                 .bytes()
                 .await
                 .map_err(|error| APIError::FileError(error.to_string()))?,
-        ).await
+        )
+        .await
         .map_err(|error| APIError::FileError(error.to_string()))?;
 
         Ok(full_path)
     }
 
     #[cfg(feature = "download")]
-    async fn download_b64_json_image(&self, b64_json: &str, path: &str) -> Result<String, APIError> {
+    async fn download_b64_json_image(
+        &self,
+        b64_json: &str,
+        path: &str,
+    ) -> Result<String, APIError> {
         let full_path = generate_file_name(path, 12, "png");
 
         let bytes = general_purpose::STANDARD.decode(b64_json).unwrap();
 
-        tokio::fs::write(
-            &full_path,
-            bytes,
-        ).await
-        .map_err(|error| APIError::FileError(error.to_string()))?;
+        tokio::fs::write(&full_path, bytes)
+            .await
+            .map_err(|error| APIError::FileError(error.to_string()))?;
 
         Ok(full_path)
     }
@@ -161,23 +162,20 @@ impl ImageData {
 
 impl Display for ImageSize {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
-        write!(f, "{}",
-            match self {
-                ImageSize::Size256X256 => "256x256",
-                ImageSize::Size512X512 => "512x512",
-                ImageSize::Size1024X1024 => "1024x1024",
-            }
+        write!(
+            f,
+            "{}",
+            serde_json::to_string(self).map_err(|_| std::fmt::Error)?
         )
     }
 }
 
 impl Display for ResponseFormat {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
-        write!(f, "{}",
-            match self {
-                ResponseFormat::Url => "url",
-                ResponseFormat::B64Json => "b64_json",
-            }
+        write!(
+            f,
+            "{}",
+            serde_json::to_string(self).map_err(|_| std::fmt::Error)?
         )
     }
 }

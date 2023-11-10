@@ -17,6 +17,8 @@ use crate::v1::resources::shared::StopToken;
 use futures::Stream;
 #[cfg(feature = "stream")]
 use serde::Serialize;
+#[cfg(feature = "stream")]
+use crate::v1::resources::chat_completion::{Function, FunctionCallConfig};
 
 #[cfg(feature = "simple")]
 use crate::v1::resources::chat_completion::SimpleChatCompletionParameters;
@@ -68,6 +70,8 @@ impl Chat<'_> {
             presence_penalty: parameters.presence_penalty,
             frequency_penalty: parameters.frequency_penalty,
             logit_bias: parameters.logit_bias,
+            functions: parameters.functions,
+            function_call: parameters.function_call,
         };
 
         Ok(self.client.post_stream("/chat/completions", &stream_parameters).await)
@@ -96,4 +100,8 @@ struct ChatCompletionStreamParameters {
     pub frequency_penalty: Option<f32>,
     #[serde(skip_serializing_if = "Option::is_none")]
     pub logit_bias: Option<HashMap<String, serde_json::Value>>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub functions: Option<Vec<Function>>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub function_call: Option<FunctionCallConfig>,
 }
