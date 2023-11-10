@@ -1,5 +1,5 @@
 [package]
-name = "calling_function"
+name = "function_calling"
 version = "0.1.0"
 edition = "2021"
 publish = false
