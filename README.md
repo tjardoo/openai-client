@@ -26,8 +26,6 @@ More information: [set API key](#set-api-key), [add proxy](#add-proxy), [use mod
   - [Create chat completion (stream)](#create-chat-completion-stream)
   - [Calling Functions](#calling-functions)
   - [Calling Functions (stream)](#calling-functions-stream)
-- Edits (deprecated)
-  - [Create edit](#create-edit)
 - Images
   - [Create image](#create-image)
   - [Create image edit](#create-image-edit)
@@ -425,42 +423,6 @@ async fn main() {
 
 More information: [Function calling](https://platform.openai.com/docs/guides/function-calling)
 
-### Create edit
-
-Creates a new edit for the provided input, instruction, and parameters.
-
-**URL** `https://api.openai.com/v1/edits`
-
-**Method** `POST`
-
-```rust
-use openai_dive::v1::api::Client;
-use openai_dive::v1::resources::edit::EditParameters;
-
-#[tokio::main]
-async fn main() {
-    let api_key = std::env::var("OPENAI_API_KEY").expect("$OPENAI_API_KEY is not set");
-
-    let client = Client::new(api_key);
-
-    let parameters = EditParameters {
-        model: "text-davinci-edit-001".to_string(),
-        input: Some("What day of the wek is it?".to_string()),
-        instruction: "Fix the spelling mistakes".to_string(),
-        n: None,
-        temperature: None,
-        top_p: None,
-        // or use ..Default::default()
-    };
-
-    let result = client.edits().create(parameters).await.unwrap();
-
-    println!("{:?}", result);
-}
-```
-
-More information: [Create edit](https://platform.openai.com/docs/api-reference/edits/create)
-
 ### Create image
 
 > To download and save an image the feature `download` is required
@@ -816,6 +778,8 @@ async fn main() {
 More information: [Retrieve file content](https://platform.openai.com/docs/api-reference/files/retrieve-content)
 
 ### Fine-tunes
+
+We recommend transitioning to the updating [fine-tuning API](https://platform.openai.com/docs/guides/fine-tuning).
 
 Manage fine-tuning jobs to tailor a model to your specific training data.
 
