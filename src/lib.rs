@@ -310,7 +310,8 @@
 //!
 //! ## Calling Functions
 //!
-//! Providing functions for the agent to call and interpret results.
+//! In an API call, you can describe functions and have the model intelligently choose to output a JSON object containing arguments to call one or many functions.
+//! The Chat Completions API does not call the function; instead, the model generates JSON that you can use to call the function in your code.
 //!
 //! **URL** `https://api.openai.com/v1/chat/completions`
 //!
@@ -324,34 +325,30 @@
 //! use openai_dive::v1::resources::shared::FinishReason;
 //! use serde::{Deserialize, Serialize};
 //! use serde_json::{json, Value};
-//! 
+//!
 //! #[tokio::main]
 //! async fn main() {
 //!     #[derive(Serialize, Deserialize)]
 //!     pub struct RandomNumber {
-//!         /// Minimum value of the random number (inclusive)
-//!         min: u32,
-//! 
-//!         /// Maximum value of the random number (inclusive)
-//!         max: u32,
+//!         min: u32, // minimum value of the random number
+//!         max: u32, // maximum value of the random number
 //!     }
-//! 
+//!
 //!     fn get_random_number(params: RandomNumber) -> Value {
-//!         // chosen by fair dice role, guaranteed to be random
 //!         let random = 4;
 //!         random.into()
 //!     }
-//! 
+//!
 //!     let api_key = std::env::var("OPENAI_API_KEY").expect("$OPENAI_API_KEY is not set");
-//! 
+//!
 //!     let client = Client::new(api_key);
-//! 
+//!
 //!     let mut messages = vec![ChatMessage {
 //!         role: Role::User,
 //!         content: "Can you get a random number between 1 and 6 please?".to_string(),
 //!         ..Default::default()
 //!     }];
-//! 
+//!
 //!     let parameters = ChatCompletionParameters {
 //!         model: "gpt-3.5-turbo-0613".to_string(),
 //!         messages: messages.clone(),
@@ -368,9 +365,9 @@
 //!         }]),
 //!         ..Default::default()
 //!     };
-//! 
+//!
 //!     let result = client.chat().create(parameters).await.unwrap();
-//! 
+//!
 //!     if let Some(choice) = result.choices.first() {
 //!         if choice.finish_reason == Some(FinishReason::FunctionCall) {
 //!             if let Some(function_call) = &choice.message.function_call {
@@ -384,15 +381,15 @@
 //!                         name: Some("get_random_number".to_string()),
 //!                         ..Default::default()
 //!                     });
-//! 
+//!
 //!                     let parameters = ChatCompletionParameters {
 //!                         model: "gpt-3.5-turbo-0613".to_string(),
 //!                         messages: messages.clone(),
 //!                         ..Default::default()
 //!                     };
-//! 
+//!
 //!                     let result = client.chat().create(parameters).await.unwrap();
-//! 
+//!
 //!                     println!("{:?}", result);
 //!                 }
 //!             }
@@ -402,35 +399,35 @@
 //! ```
 //!
 //! More information: [Function calling](https://platform.openai.com/docs/guides/function-calling)
-//! 
-//! ### Function tips:
-//! 
-//! 1. Use the [async-recursion](https://crates.io/crates/async-recursion) crate to recursively call into a wrapping function after processing a function call.
 //!
-//! 2. Use the [schemars](https://crates.io/crates/schemars) crate for automatically generating JSON schemas from structs. 
-//! 
+//! ### Function tips
+//!
+//! 1. Use the [async-recursion](https://crates.io/crates/async-recursion) crate to recursively call into a wrapping function after processing a function call.
+//! 2. Use the [schemars](https://crates.io/crates/schemars) crate for automatically generating JSON schemas from structs.
+//!
 //!    ```rust
 //!    let random_number_schema = schemars::schema_for!(RandomNumber);
-//!    ...
+//!    // ...
+//!
 //!    Function {
 //!       name: "get_random_number".to_string(),
 //!       parameters: serde_json::to_value(random_number_schema).unwrap(),
-//!       ...
+//!       // ...
 //!    }
 //!    ```
-//! 
+//!
 //! 3. After a function is called, stop the agent from calling more functions (sometimes it can get stuck in a function calling loop).
-//! 
+//!
 //!    ```rust
 //!    let parameters = ChatCompletionParameters {
-//!        ...
+//!        // ...
 //!        function_call: Some(FunctionCallConfig::None)
 //!    }
 //!    ```
-//! 
+//!
 //! ## Calling Functions (stream)
 //!
-//! Providing functions for the agent to call and interpret results 
+//! Providing functions for the agent to call and interpret results
 //!
 //! **URL** `https://api.openai.com/v1/chat/completions`
 //!
@@ -445,34 +442,30 @@
 //! use openai_dive::v1::resources::shared::FinishReason;
 //! use serde::{Deserialize, Serialize};
 //! use serde_json::{json, Value};
-//! 
+//!
 //! #[tokio::main]
 //! async fn main() {
 //!     #[derive(Serialize, Deserialize)]
 //!     pub struct RandomNumber {
-//!         /// Minimum value of the random number (inclusive)
-//!         min: u32,
-//! 
-//!         /// Maximum value of the random number (inclusive)
-//!         max: u32,
+//!         min: u32, // minimum value of the random number
+//!         max: u32, // maximum value of the random number
 //!     }
-//! 
+//!
 //!     fn get_random_number(params: RandomNumber) -> Value {
-//!         // chosen by fair dice role, guaranteed to be random
 //!         let random = 4;
 //!         random.into()
 //!     }
-//! 
+//!
 //!     let api_key = std::env::var("OPENAI_API_KEY").expect("$OPENAI_API_KEY is not set");
-//! 
+//!
 //!     let client = Client::new(api_key);
-//! 
+//!
 //!     let messages = vec![ChatMessage {
 //!         role: Role::User,
 //!         content: "Can you get a random number between 1 and 6 please?".to_string(),
 //!         ..Default::default()
 //!     }];
-//! 
+//!
 //!     let mut parameters = ChatCompletionParameters {
 //!         model: "gpt-3.5-turbo-0613".to_string(),
 //!         messages: messages.clone(),
@@ -489,13 +482,13 @@
 //!         }]),
 //!         ..Default::default()
 //!     };
-//! 
+//!
 //!     let mut stream = client
 //!         .chat()
 //!         .create_stream(parameters.clone())
 //!         .await
 //!         .unwrap();
-//! 
+//!
 //!     let mut function_call = FunctionCall::default();
 //!     while let Some(response) = stream.next().await {
 //!         match response {
@@ -506,7 +499,7 @@
 //!                     } else if let Some(content) = choice.delta.content.as_ref() {
 //!                         print!("{}", content);
 //!                     }
-//! 
+//!
 //!                     if choice.finish_reason == Some(FinishReason::FunctionCall)
 //!                         && !function_call.is_empty()
 //!                     {
@@ -514,20 +507,20 @@
 //!                             let random_number_params =
 //!                                 serde_json::from_str(&function_call.arguments).unwrap();
 //!                             let random_number_result = get_random_number(random_number_params);
-//! 
+//!
 //!                             parameters.messages.push(ChatMessage {
 //!                                 role: Role::Function,
 //!                                 content: serde_json::to_string(&random_number_result).unwrap(),
 //!                                 name: Some("get_random_number".to_string()),
 //!                                 ..Default::default()
 //!                             });
-//! 
+//!
 //!                             let mut stream = client
 //!                                 .chat()
 //!                                 .create_stream(parameters.clone())
 //!                                 .await
 //!                                 .unwrap();
-//! 
+//!
 //!                             while let Some(response) = stream.next().await {
 //!                                 match response {
 //!                                     Ok(chat_response) => {
@@ -551,7 +544,7 @@
 //! ```
 //!
 //! More information: [Function calling](https://platform.openai.com/docs/guides/function-calling)
-//! 
+//!
 //! ## Create edit
 //!
 //! Creates a new edit for the provided input, instruction, and parameters.
