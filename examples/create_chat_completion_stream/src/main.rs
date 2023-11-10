@@ -1,7 +1,7 @@
-use std::env;
 use futures::StreamExt;
 use openai_dive::v1::api::Client;
 use openai_dive::v1::resources::chat_completion::{ChatCompletionParameters, ChatMessage, Role};
+use std::env;
 
 #[tokio::main]
 async fn main() {
@@ -15,12 +15,12 @@ async fn main() {
             ChatMessage {
                 role: Role::User,
                 content: "Hello!".to_string(),
-                name: None,
+                ..Default::default()
             },
             ChatMessage {
                 role: Role::User,
                 content: "Where are you located?".to_string(),
-                name: None,
+                ..Default::default()
             },
         ],
         temperature: None,
@@ -32,6 +32,8 @@ async fn main() {
         frequency_penalty: None,
         logit_bias: None,
         user: None,
+        functions: None,
+        function_call: None,
     };
 
     let mut stream = client.chat().create_stream(parameters).await.unwrap();

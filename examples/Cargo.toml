@@ -17,4 +17,6 @@ members = [
     "retrieve_file",
     "retrieve_file_content",
     "create_moderation",
+    "calling_function",
+    "calling_function_stream"
 ]

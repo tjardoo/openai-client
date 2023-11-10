@@ -45,7 +45,12 @@ impl Client {
             return Err(APIError::EndpointError(response.text().await.unwrap()));
         }
 
-        Ok(response.text().await.unwrap())
+        let response_text= response.text().await.unwrap();
+
+        #[cfg(feature = "log")]
+        log::trace!("{}", response_text);
+
+        Ok(response_text)
     }
 
     pub async fn post<T: Serialize>(&self, path: &str, parameters: &T) -> Result<String, APIError> {
@@ -64,7 +69,12 @@ impl Client {
             return Err(APIError::EndpointError(response.text().await.unwrap()));
         }
 
-        Ok(response.text().await.unwrap())
+        let response_text= response.text().await.unwrap();
+
+        #[cfg(feature = "log")]
+        log::trace!("{}", response_text);
+
+        Ok(response_text)
     }
 
     pub async fn delete(&self, path: &str) -> Result<String, APIError> {
@@ -136,6 +146,20 @@ impl Client {
     {
         let (tx, rx) = tokio::sync::mpsc::unbounded_channel();
 
+        #[derive(serde::Deserialize)]
+        struct StreamErrorWrapper {
+            error: StreamError,
+        }
+
+        #[derive(serde::Deserialize)]
+        struct StreamError {
+            message: String,
+            #[serde(rename = "type")]
+            error_type: String,
+            param: Option<serde_json::Value>,
+            code: Option<u8>,
+        }
+
         tokio::spawn(async move {
             while let Some(event_result) = event_soure.next().await {
                 match event_result {
@@ -149,7 +173,11 @@ impl Client {
                             let response = match serde_json::from_str::<O>(&message.data) {
                                 Ok(result) => Ok(result),
                                 Err(error) => {
-                                    Err(APIError::StreamError(error.to_string()))
+                                    // Try to parse an error message from the stream
+                                    match serde_json::from_str::<StreamErrorWrapper>(&message.data) {
+                                        Ok(error_wrapper) => Err(APIError::StreamError(format!("OpenAI {}: {}",  error_wrapper.error.error_type, error_wrapper.error.message))),
+                                        Err(_) => Err(APIError::StreamError(format!("OpenAI error parsing event stream: {}\nstream data: {}", error.to_string(), message.data))),
+                                    }
                                 }
                             };
 
