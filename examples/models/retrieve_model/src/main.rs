@@ -1,5 +1,5 @@
-use std::env;
 use openai_dive::v1::api::Client;
+use std::env;
 
 #[tokio::main]
 async fn main() {
@@ -7,7 +7,7 @@ async fn main() {
 
     let client = Client::new(api_key);
 
-    let result = client.models().list().await.unwrap();
+    let result = client.models().get("gpt-3.5-turbo-16k-0613").await.unwrap();
 
     println!("{:?}", result);
 }
