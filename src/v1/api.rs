@@ -1,17 +1,17 @@
+use crate::v1::error::APIError;
 use reqwest::multipart::{Form, Part};
 use serde::Serialize;
 use tokio::fs::File;
-use tokio_util::codec::{FramedRead, BytesCodec};
-use crate::v1::error::APIError;
+use tokio_util::codec::{BytesCodec, FramedRead};
 
-#[cfg(feature = "stream")]
-use std::pin::Pin;
-#[cfg(feature = "stream")]
-use reqwest_eventsource::{RequestBuilderExt, EventSource, Event};
 #[cfg(feature = "stream")]
 use futures::{stream::StreamExt, Stream};
 #[cfg(feature = "stream")]
+use reqwest_eventsource::{Event, EventSource, RequestBuilderExt};
+#[cfg(feature = "stream")]
 use serde::de::DeserializeOwned;
+#[cfg(feature = "stream")]
+use std::pin::Pin;
 
 const OPENAI_API_V1_ENDPOINT: &str = "https://api.openai.com/v1";
 
@@ -33,7 +33,8 @@ impl Client {
     pub async fn get(&self, path: &str) -> Result<String, APIError> {
         let url = format!("{}{}", &self.base_url, path);
 
-        let response = self.http_client
+        let response = self
+            .http_client
             .get(url)
             .header(reqwest::header::CONTENT_TYPE, "application/json")
             .bearer_auth(&self.api_key)
@@ -45,7 +46,7 @@ impl Client {
             return Err(APIError::EndpointError(response.text().await.unwrap()));
         }
 
-        let response_text= response.text().await.unwrap();
+        let response_text = response.text().await.unwrap();
 
         #[cfg(feature = "log")]
         log::trace!("{}", response_text);
@@ -56,7 +57,8 @@ impl Client {
     pub async fn post<T: Serialize>(&self, path: &str, parameters: &T) -> Result<String, APIError> {
         let url = format!("{}{}", &self.base_url, path);
 
-        let response = self.http_client
+        let response = self
+            .http_client
             .post(url)
             .header(reqwest::header::CONTENT_TYPE, "application/json")
             .bearer_auth(&self.api_key)
@@ -69,7 +71,7 @@ impl Client {
             return Err(APIError::EndpointError(response.text().await.unwrap()));
         }
 
-        let response_text= response.text().await.unwrap();
+        let response_text = response.text().await.unwrap();
 
         #[cfg(feature = "log")]
         log::trace!("{}", response_text);
@@ -80,7 +82,8 @@ impl Client {
     pub async fn delete(&self, path: &str) -> Result<String, APIError> {
         let url = format!("{}{}", &self.base_url, path);
 
-        let response = self.http_client
+        let response = self
+            .http_client
             .delete(url)
             .header(reqwest::header::CONTENT_TYPE, "application/json")
             .bearer_auth(&self.api_key)
@@ -98,7 +101,8 @@ impl Client {
     pub async fn post_with_form(&self, path: &str, form: Form) -> Result<String, APIError> {
         let url = format!("{}{}", &self.base_url, path);
 
-        let response = self.http_client
+        let response = self
+            .http_client
             .post(url)
             // .header(reqwest::header::CONTENT_TYPE, "multipart/form-data")
             .bearer_auth(&self.api_key)
@@ -118,7 +122,7 @@ impl Client {
     pub async fn post_stream<I, O>(
         &self,
         path: &str,
-        parameters: &I
+        parameters: &I,
     ) -> Pin<Box<dyn Stream<Item = Result<O, APIError>> + Send>>
     where
         I: Serialize,
@@ -126,7 +130,8 @@ impl Client {
     {
         let url = format!("{}{}", &self.base_url, path);
 
-        let event_source = self.http_client
+        let event_source = self
+            .http_client
             .post(url)
             .header(reqwest::header::CONTENT_TYPE, "application/json")
             .bearer_auth(&self.api_key)
@@ -139,7 +144,7 @@ impl Client {
 
     #[cfg(feature = "stream")]
     pub async fn process_stream<O>(
-        mut event_soure: EventSource
+        mut event_soure: EventSource,
     ) -> Pin<Box<dyn Stream<Item = Result<O, APIError>> + Send>>
     where
         O: DeserializeOwned + Send + 'static,
@@ -187,10 +192,11 @@ impl Client {
                         }
                     },
                     Err(error) => {
-                        if let Err(_error) = tx.send(Err(APIError::StreamError(error.to_string()))) {
+                        if let Err(_error) = tx.send(Err(APIError::StreamError(error.to_string())))
+                        {
                             break;
                         }
-                    },
+                    }
                 }
             }
 
@@ -202,7 +208,9 @@ impl Client {
 }
 
 pub async fn file_from_disk_to_form_part(path: String) -> Result<Part, APIError> {
-    let file = File::open(&path).await.map_err(|error| APIError::FileError(error.to_string()))?;
+    let file = File::open(&path)
+        .await
+        .map_err(|error| APIError::FileError(error.to_string()))?;
 
     let stream = FramedRead::new(file, BytesCodec::new());
     let file_body = reqwest::Body::wrap_stream(stream);

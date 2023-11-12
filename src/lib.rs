@@ -16,6 +16,7 @@
 //! - Models
 //!   - [List models](#list-models)
 //!   - [Retrieve model](#retrieve-model)
+//!   - [Delete fine-tune model](#delete-fine-tune-model)
 //! - Chat
 //!   - [Create chat completion](#create-chat-completion)
 //!   - [Create chat completion (stream)](#create-chat-completion-stream)
@@ -84,13 +85,39 @@
 //!
 //!     let client = Client::new(api_key);
 //!
-//!     let result = client.models().get("text-davinci-003").await.unwrap();
+//!     let result = client.models().get("gpt-3.5-turbo-16k-0613").await.unwrap();
 //!
 //!     println!("{:?}", result);
 //! }
 //! ```
 //!
 //! More information: [Retrieve models](https://platform.openai.com/docs/api-reference/models/retrieve)
+//!
+//! ### Delete fine-tune model
+//!
+//! Delete a fine-tuned model. You must have the Owner role in your organization to delete a model.
+//!
+//! **URL** `https://api.openai.com/v1/models/{model}`
+//!
+//! **Method** `DELETE`
+//!
+//! ```rust
+//! use openai_dive::v1::api::Client;
+//!
+//! #[tokio::main]
+//! async fn main() {
+//!     let api_key = std::env::var("OPENAI_API_KEY").expect("$OPENAI_API_KEY is not set");
+//!
+//!     let client = Client::new(api_key);
+//!
+//!     let result = client.models().delete("my-custom-model").await.unwrap();
+//!
+//!     println!("{:?}", result);
+//! }
+//! ```
+//!
+//! More information: [Delete fine-tune models](https://platform.openai.com/docs/api-reference/models/delete)
+//!
 //!
 //! ## Create chat completion
 //!
