@@ -2,7 +2,6 @@ pub mod audio;
 pub mod chat_completion;
 #[cfg(feature = "stream")]
 pub mod chat_completion_stream;
-pub mod edit;
 pub mod embedding;
 pub mod file;
 pub mod fine_tune;
