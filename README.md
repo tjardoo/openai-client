@@ -42,7 +42,7 @@ More information: [set API key](#set-api-key), [add proxy](#add-proxy), [use mod
   - [Delete file](#delete-file)
   - [Retrieve file](#retrieve-file)
   - [Retrieve file content](#retrieve-file-content)
-- [Fine-tunes (deprecated)](#fine-tunes)
+- [Fine-tuning](#fine-tuning)
 - Moderations
   - [Create moderation](#create-moderation)
 
@@ -791,23 +791,9 @@ async fn main() {
 
 More information: [Retrieve file content](https://platform.openai.com/docs/api-reference/files/retrieve-content)
 
-### Fine-tunes
+### Fine-tuning
 
-We recommend transitioning to the updating [fine-tuning API](https://platform.openai.com/docs/guides/fine-tuning).
-
-Manage fine-tuning jobs to tailor a model to your specific training data.
-
-See the `examples` directory for examples and implementation details.
-
-- [X] Create fine-tune
-- [X] List fine-tunes
-- [X] Retrieve fine-tunes
-- [X] Cancel fine-tunes
-- [X] List fine-tune events
-- [ ] List fine-tune events (stream)
-- [X] Delete fine-tune model
-
-More information: [Fine-tunes](https://platform.openai.com/docs/api-reference/fine-tunes)
+TODO
 
 ### Create moderation
 
