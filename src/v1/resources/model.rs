@@ -1,6 +1,6 @@
 use serde::{Deserialize, Serialize};
 
-#[derive(Serialize, Deserialize, Debug, Clone)]
+#[derive(Serialize, Deserialize, Debug, Clone, PartialEq)]
 pub struct Model {
     /// The model identifier, which can be referenced in the API endpoints.
     pub id: String,
@@ -12,10 +12,8 @@ pub struct Model {
     pub owned_by: String,
 }
 
-#[derive(Serialize, Deserialize, Debug, Clone)]
+#[derive(Serialize, Deserialize, Debug, Clone, PartialEq)]
 pub struct ListModelResponse {
-    // The object type, which is always "list".
     pub object: String,
-    // Vector of the available models.
     pub data: Vec<Model>,
 }

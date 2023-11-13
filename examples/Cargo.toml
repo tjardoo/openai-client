@@ -1,9 +1,12 @@
 [workspace]
 members = [
-    "models/*",
+    "list_models",
+    "retrieve_model",
+    "delete_fine_tune_model",
     "create_chat_completion",
     "create_chat_completion_stream",
-    "create_chat_completion_default",
+    "function_calling",
+    "function_calling_stream",
     "create_image",
     "create_image_edit",
     "create_image_variation",
@@ -16,8 +19,4 @@ members = [
     "retrieve_file",
     "retrieve_file_content",
     "create_moderation",
-    "function_calling",
-    "function_calling_stream",
 ]
-
-default-members = ["openai_dive"]

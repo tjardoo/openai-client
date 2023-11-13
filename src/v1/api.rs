@@ -161,8 +161,8 @@ impl Client {
             message: String,
             #[serde(rename = "type")]
             error_type: String,
-            param: Option<serde_json::Value>,
-            code: Option<u8>,
+            // param: Option<serde_json::Value>,
+            // code: Option<u8>,
         }
 
         tokio::spawn(async move {
