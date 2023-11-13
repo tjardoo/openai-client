@@ -123,7 +123,7 @@ More information: [Delete fine-tune models](https://platform.openai.com/docs/api
 
 ### Create chat completion
 
-Creates a completion for the chat message.
+Given a list of messages comprising a conversation, the model will return a response.
 
 **URL** `https://api.openai.com/v1/chat/completions`
 
@@ -135,34 +135,26 @@ use openai_dive::v1::resources::chat_completion::{ChatCompletionParameters, Chat
 
 #[tokio::main]
 async fn main() {
-    let api_key = std::env::var("OPENAI_API_KEY").expect("$OPENAI_API_KEY is not set");
+    let api_key = env::var("OPENAI_API_KEY").expect("$OPENAI_API_KEY is not set");
 
     let client = Client::new(api_key);
 
     let parameters = ChatCompletionParameters {
-        model: "gpt-3.5-turbo-0613".to_string(),
+        model: "gpt-3.5-turbo-16k-0613".to_string(),
         messages: vec![
             ChatMessage {
                 role: Role::User,
-                content: "Hello!".to_string(),
-                ..Default::default(),
+                content: Some("Hello!".to_string()),
+                ..Default::default()
             },
             ChatMessage {
                 role: Role::User,
-                content: "Where are you located?".to_string(),
-                ..Default::default(),
+                content: Some("Where are you located?".to_string()),
+                ..Default::default()
             },
         ],
-        temperature: None,
-        top_p: None,
-        n: None,
-        stop: None,
         max_tokens: Some(12),
-        presence_penalty: None,
-        frequency_penalty: None,
-        logit_bias: None,
-        user: None,
-        // or use ..Default::default()
+        ..Default::default()
     };
 
     let result = client.chat().create(parameters).await.unwrap();
@@ -177,7 +169,7 @@ More information: [Create chat completion](https://platform.openai.com/docs/api-
 
 > Feature `stream` required
 
-Creates a completion for the chat message.
+Given a list of messages comprising a conversation, the model will return a response.
 
 **URL** `https://api.openai.com/v1/chat/completions`
 
@@ -190,33 +182,26 @@ use openai_dive::v1::resources::chat_completion::{ChatCompletionParameters, Chat
 
 #[tokio::main]
 async fn main() {
-    let api_key = std::env::var("OPENAI_API_KEY").expect("$OPENAI_API_KEY is not set");
+    let api_key = env::var("OPENAI_API_KEY").expect("$OPENAI_API_KEY is not set");
 
     let client = Client::new(api_key);
 
     let parameters = ChatCompletionParameters {
-        model: "gpt-3.5-turbo-0301".to_string(),
+        model: "gpt-3.5-turbo-16k-0613".to_string(),
         messages: vec![
             ChatMessage {
                 role: Role::User,
-                content: "Hello!".to_string(),
-                ..Default::default(),
+                content: Some("Hello!".to_string()),
+                ..Default::default()
             },
             ChatMessage {
                 role: Role::User,
-                content: "Where are you located?".to_string(),
-                ..Default::default(),
+                content: Some("Where are you located?".to_string()),
+                ..Default::default()
             },
         ],
-        temperature: None,
-        top_p: None,
-        n: None,
-        stop: None,
         max_tokens: Some(12),
-        presence_penalty: None,
-        frequency_penalty: None,
-        logit_bias: None,
-        user: None,
+        ..Default::default()
     };
 
     let mut stream = client.chat().create_stream(parameters).await.unwrap();
@@ -257,8 +242,8 @@ use serde_json::{json, Value};
 async fn main() {
     #[derive(Serialize, Deserialize)]
     pub struct RandomNumber {
-        min: u32, // minimum value of the random number
-        max: u32, // maximum value of the random number
+        min: u32,
+        max: u32,
     }
 
     fn get_random_number(params: RandomNumber) -> Value {
@@ -352,8 +337,8 @@ use serde_json::{json, Value};
 async fn main() {
     #[derive(Serialize, Deserialize)]
     pub struct RandomNumber {
-        min: u32, // minimum value of the random number
-        max: u32, // maximum value of the random number
+        min: u32,
+        max: u32,
     }
 
     fn get_random_number(params: RandomNumber) -> Value {
@@ -396,6 +381,7 @@ async fn main() {
         .unwrap();
 
     let mut function_call = FunctionCall::default();
+
     while let Some(response) = stream.next().await {
         match response {
             Ok(chat_response) => {
