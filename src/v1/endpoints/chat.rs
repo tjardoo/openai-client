@@ -33,10 +33,6 @@ impl Chat<'_> {
 
         let value: Value = serde_json::from_str(&response).unwrap();
 
-        if Value::is_object(&value["error"]) {
-            return Err(APIError::InvalidRequestError(value["error"].to_string()));
-        }
-
         let chat_completion_response: ChatCompletionResponse = serde_json::from_value(value)
             .map_err(|error| APIError::ParseError(error.to_string()))?;
 
