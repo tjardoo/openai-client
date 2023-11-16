@@ -128,7 +128,7 @@
 //!
 //! ```rust
 //! use openai_dive::v1::api::Client;
-//! use openai_dive::v1::resources::chat_completion::{ChatCompletionParameters, ChatMessage, Role};
+//! use openai_dive::v1::resources::chat::{ChatCompletionParameters, ChatMessage, Role};
 //!
 //! #[tokio::main]
 //! async fn main() {
@@ -173,7 +173,7 @@
 //! ```rust
 //! use futures::StreamExt;
 //! use openai_dive::v1::api::Client;
-//! use openai_dive::v1::resources::chat_completion::{ChatCompletionParameters, ChatMessage, Role};
+//! use openai_dive::v1::resources::chat::{ChatCompletionParameters, ChatMessage, Role};
 //!
 //! #[tokio::main]
 //! async fn main() {
@@ -227,7 +227,7 @@
 //!
 //! ```rust
 //! use openai_dive::v1::api::Client;
-//! use openai_dive::v1::resources::chat_completion::{
+//! use openai_dive::v1::resources::chat::{
 //!     ChatCompletionParameters, ChatMessage, Function, Role,
 //! };
 //! use openai_dive::v1::resources::shared::FinishReason;
@@ -344,7 +344,7 @@
 //! ```rust
 //! use futures::StreamExt;
 //! use openai_dive::v1::api::Client;
-//! use openai_dive::v1::resources::chat_completion::{
+//! use openai_dive::v1::resources::chat::{
 //!     ChatCompletionParameters, ChatMessage, Function, FunctionCall, Role,
 //! };
 //! use openai_dive::v1::resources::shared::FinishReason;

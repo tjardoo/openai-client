@@ -131,7 +131,7 @@ Given a list of messages comprising a conversation, the model will return a resp
 
 ```rust
 use openai_dive::v1::api::Client;
-use openai_dive::v1::resources::chat_completion::{ChatCompletionParameters, ChatMessage, Role};
+use openai_dive::v1::resources::chat::{ChatCompletionParameters, ChatMessage, Role};
 
 #[tokio::main]
 async fn main() {
@@ -178,7 +178,7 @@ Given a list of messages comprising a conversation, the model will return a resp
 ```rust
 use futures::StreamExt;
 use openai_dive::v1::api::Client;
-use openai_dive::v1::resources::chat_completion::{ChatCompletionParameters, ChatMessage, Role};
+use openai_dive::v1::resources::chat::{ChatCompletionParameters, ChatMessage, Role};
 
 #[tokio::main]
 async fn main() {
@@ -231,7 +231,7 @@ In an API call, you can describe functions and have the model intelligently choo
 
 ```rust
 use openai_dive::v1::api::Client;
-use openai_dive::v1::resources::chat_completion::{
+use openai_dive::v1::resources::chat::{
     ChatCompletionParameters, ChatMessage, Function, Role,
 };
 use openai_dive::v1::resources::shared::FinishReason;
@@ -326,7 +326,7 @@ In an API call, you can describe functions and have the model intelligently choo
 ```rust
 use futures::StreamExt;
 use openai_dive::v1::api::Client;
-use openai_dive::v1::resources::chat_completion::{
+use openai_dive::v1::resources::chat::{
     ChatCompletionParameters, ChatMessage, Function, FunctionCall, Role,
 };
 use openai_dive::v1::resources::shared::FinishReason;

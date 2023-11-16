@@ -1,4 +1,5 @@
 use crate::v1::error::APIError;
+use bytes::Bytes;
 use reqwest::multipart::{Form, Part};
 use serde::Serialize;
 use tokio::fs::File;
@@ -116,6 +117,26 @@ impl Client {
         }
 
         Ok(response.text().await.unwrap())
+    }
+
+    pub async fn post_raw<T: Serialize>(
+        &self,
+        path: &str,
+        parameters: &T,
+    ) -> Result<Bytes, APIError> {
+        let url = format!("{}{}", &self.base_url, path);
+
+        let response = self
+            .http_client
+            .post(url)
+            .header(reqwest::header::CONTENT_TYPE, "application/json")
+            .bearer_auth(&self.api_key)
+            .json(&parameters)
+            .send()
+            .await
+            .unwrap();
+
+        Ok(response.bytes().await.unwrap())
     }
 
     #[cfg(feature = "stream")]

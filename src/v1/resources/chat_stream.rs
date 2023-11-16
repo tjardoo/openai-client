@@ -1,14 +1,14 @@
 use std::collections::HashMap;
 
-use crate::v1::resources::chat_completion::Role;
+use crate::v1::resources::chat::Role;
 use crate::v1::resources::shared::FinishReason;
 use serde::{Deserialize, Serialize};
 
-use super::chat_completion::ChatCompletionFunction;
-use super::chat_completion::ChatCompletionResponseFormat;
-use super::chat_completion::ChatCompletionTool;
-use super::chat_completion::ChatCompletionToolChoice;
-use super::chat_completion::ChatMessage;
+use super::chat::ChatCompletionFunction;
+use super::chat::ChatCompletionResponseFormat;
+use super::chat::ChatCompletionTool;
+use super::chat::ChatCompletionToolChoice;
+use super::chat::ChatMessage;
 use super::shared::StopToken;
 
 #[cfg(feature = "stream")]

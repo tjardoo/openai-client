@@ -1,2 +1,2 @@
 [workspace]
-members = ["create_transcription", "create_translation"]
+members = ["create_transcription", "create_translation", "create_speech"]

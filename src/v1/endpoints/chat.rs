@@ -1,12 +1,12 @@
 use crate::v1::api::Client;
 use crate::v1::error::APIError;
-use crate::v1::resources::chat_completion::{ChatCompletionParameters, ChatCompletionResponse};
+use crate::v1::resources::chat::{ChatCompletionParameters, ChatCompletionResponse};
 use serde_json::Value;
 
 #[cfg(feature = "stream")]
-use crate::v1::resources::chat_completion_stream::StreamChatCompletionParameters;
+use crate::v1::resources::chat_stream::StreamChatCompletionParameters;
 #[cfg(feature = "stream")]
-use crate::v1::resources::chat_completion_stream::StreamChatCompletionResponse;
+use crate::v1::resources::chat_stream::StreamChatCompletionResponse;
 #[cfg(feature = "stream")]
 use futures::Stream;
 #[cfg(feature = "stream")]

@@ -1,5 +1,5 @@
 use openai_dive::v1::api::Client;
-use openai_dive::v1::resources::chat_completion::{ChatCompletionParameters, ChatMessage, Role};
+use openai_dive::v1::resources::chat::{ChatCompletionParameters, ChatMessage, Role};
 use std::env;
 
 #[tokio::main]

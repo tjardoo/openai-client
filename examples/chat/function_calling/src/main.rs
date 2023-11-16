@@ -1,5 +1,5 @@
 use openai_dive::v1::api::Client;
-use openai_dive::v1::resources::chat_completion::{
+use openai_dive::v1::resources::chat::{
     ChatCompletionFunctions, ChatCompletionParameters, ChatCompletionTool,
     ChatCompletionToolChoice, ChatCompletionToolChoiceFunction,
     ChatCompletionToolChoiceFunctionName, ChatCompletionToolType, ChatMessage, Role,
