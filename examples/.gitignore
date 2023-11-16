@@ -7,3 +7,10 @@
 /moderations/target
 /images/target
 /files/target
+/models/Cargo.lock
+/chat/Cargo.lock
+/audio/Cargo.lock
+/embeddings/Cargo.lock
+/moderations/Cargo.lock
+/images/Cargo.lock
+/files/Cargo.lock
