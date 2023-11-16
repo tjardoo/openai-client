@@ -1,0 +1,2 @@
+[workspace]
+members = ["create_transcription", "create_translation"]

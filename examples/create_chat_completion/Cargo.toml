@@ -1,9 +1,0 @@
-[package]
-name = "create_chat_completion"
-version = "0.1.0"
-edition = "2021"
-publish = false
-
-[dependencies]
-openai_dive = { path = "./../../../openai-client" }
-tokio = { version = "1.0", features = ["full"] }

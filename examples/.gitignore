@@ -1,2 +1,9 @@
 /target
 /Cargo.lock
+/models/target
+/chat/target
+/audio/target
+/embeddings/target
+/moderations/target
+/images/target
+/files/target
