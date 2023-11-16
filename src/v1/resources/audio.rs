@@ -33,7 +33,7 @@ pub struct AudioTranscriptionParameters {
     pub prompt: Option<String>,
     /// The format of the transcript output, in one of these options: json, text, srt, verbose_json, or vtt.
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub response_format: Option<AudioTranscriptOutputFormat>,
+    pub response_format: Option<AudioOutputFormat>,
     /// The sampling temperature, between 0 and 1. Higher values like 0.8 will make the output more random,
     /// while lower values like 0.2 will make it more focused and deterministic.
     /// If set to 0, the model will use log probability to automatically increase the temperature until certain thresholds are hit.
@@ -52,7 +52,7 @@ pub struct AudioTranslationParameters {
     pub prompt: Option<String>,
     /// The format of the transcript output, in one of these options: json, text, srt, verbose_json, or vtt.
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub response_format: Option<AudioTranscriptOutputFormat>,
+    pub response_format: Option<AudioOutputFormat>,
     /// The sampling temperature, between 0 and 1. Higher values like 0.8 will make the output more random,
     /// while lower values like 0.2 will make it more focused and deterministic.
     /// If set to 0, the model will use log probability to automatically increase the temperature until certain thresholds are hit.
@@ -66,11 +66,12 @@ pub struct AudioSpeechResponse {
 }
 
 #[derive(Serialize, Deserialize, Debug, Clone, PartialEq)]
-#[serde(rename_all = "snake_case")]
-pub enum AudioTranscriptOutputFormat {
+#[serde(rename_all = "lowercase")]
+pub enum AudioOutputFormat {
     Json,
     Text,
     Srt,
+    #[serde(rename = "verbose_json")]
     VerboseJson,
     Vtt,
 }
@@ -95,12 +96,18 @@ pub enum AudioVoice {
     Shimmer,
 }
 
-impl Display for AudioTranscriptOutputFormat {
+impl Display for AudioOutputFormat {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
         write!(
             f,
             "{}",
-            serde_json::to_string(self).map_err(|_| std::fmt::Error)?
+            match self {
+                AudioOutputFormat::Json => "json",
+                AudioOutputFormat::Text => "text",
+                AudioOutputFormat::Srt => "srt",
+                AudioOutputFormat::VerboseJson => "verbose_json",
+                AudioOutputFormat::Vtt => "vtt",
+            }
         )
     }
 }

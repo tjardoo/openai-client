@@ -1,6 +1,6 @@
-use std::env;
 use openai_dive::v1::api::Client;
-use openai_dive::v1::resources::audio::{AudioTranslationParameters, AudioTranscriptOutputFormat};
+use openai_dive::v1::resources::audio::{AudioOutputFormat, AudioTranslationParameters};
+use std::env;
 
 #[tokio::main]
 async fn main() {
@@ -12,7 +12,7 @@ async fn main() {
         file: "./audio/multilingual.mp3".to_string(), // https://github.com/betalgo/openai/tree/master/OpenAI.Playground/SampleData
         model: "whisper-1".to_string(),
         prompt: None,
-        response_format: Some(AudioTranscriptOutputFormat::Srt),
+        response_format: Some(AudioOutputFormat::Srt),
         temperature: None,
     };
 

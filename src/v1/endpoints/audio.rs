@@ -43,16 +43,16 @@ impl Audio<'_> {
             form = form.text("prompt", prompt);
         }
 
+        if let Some(language) = parameters.language {
+            form = form.text("language", language.to_string());
+        }
+
         if let Some(response_format) = parameters.response_format {
             form = form.text("response_format", response_format.to_string());
         }
 
         if let Some(temperature) = parameters.temperature {
             form = form.text("temperature", temperature.to_string());
-        }
-
-        if let Some(language) = parameters.language {
-            form = form.text("language", language.to_string());
         }
 
         let response = self
