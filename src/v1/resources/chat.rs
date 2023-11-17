@@ -1,4 +1,4 @@
-use crate::v1::models::OpenAIModel;
+use crate::v1::models::Gpt35Engine;
 use crate::v1::resources::shared::StopToken;
 use crate::v1::resources::shared::{FinishReason, Usage};
 use serde::{Deserialize, Serialize};
@@ -122,7 +122,7 @@ pub struct Function {
     pub arguments: String,
 }
 
-#[derive(Serialize, Deserialize, Debug, Clone)]
+#[derive(Serialize, Deserialize, Debug, Clone, PartialEq)]
 pub struct ChatCompletionResponse {
     pub id: Option<String>,
     pub object: String,
@@ -134,7 +134,7 @@ pub struct ChatCompletionResponse {
     pub usage: Usage,
 }
 
-#[derive(Serialize, Deserialize, Debug, Clone)]
+#[derive(Serialize, Deserialize, Debug, Clone, PartialEq)]
 pub struct ChatCompletionChoice {
     pub index: u32,
     pub message: ChatMessage,
@@ -184,7 +184,7 @@ impl Default for ChatCompletionParameters {
                 tool_calls: None,
                 name: None,
             }],
-            model: OpenAIModel::Gpt3_5Turbo0613.to_string(),
+            model: Gpt35Engine::Gpt35Turbo1106.to_string(),
             frequency_penalty: None,
             logit_bias: None,
             max_tokens: None,

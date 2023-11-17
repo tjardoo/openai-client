@@ -3,15 +3,16 @@ use serde::{Deserialize, Serialize};
 #[cfg(feature = "download")]
 use rand::{distributions::Alphanumeric, Rng};
 
-#[derive(Serialize, Deserialize, Debug, Clone)]
+#[derive(Serialize, Deserialize, Debug, Clone, PartialEq)]
 pub struct BaseModel {
     name: String,
 }
 
-#[derive(Serialize, Deserialize, Debug, Clone)]
+#[derive(Serialize, Deserialize, Debug, Clone, PartialEq)]
 pub struct Usage {
     pub prompt_tokens: u32,
-    pub completion_tokens: u32,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub completion_tokens: Option<u32>,
     pub total_tokens: u32,
 }
 

@@ -4,12 +4,12 @@ use crate::v1::resources::chat::Role;
 use crate::v1::resources::shared::FinishReason;
 use serde::{Deserialize, Serialize};
 
-use super::chat::ChatCompletionFunction;
-use super::chat::ChatCompletionResponseFormat;
-use super::chat::ChatCompletionTool;
-use super::chat::ChatCompletionToolChoice;
-use super::chat::ChatMessage;
-use super::shared::StopToken;
+use crate::v1::resources::chat::ChatCompletionFunction;
+use crate::v1::resources::chat::ChatCompletionResponseFormat;
+use crate::v1::resources::chat::ChatCompletionTool;
+use crate::v1::resources::chat::ChatCompletionToolChoice;
+use crate::v1::resources::chat::ChatMessage;
+use crate::v1::resources::shared::StopToken;
 
 #[cfg(feature = "stream")]
 #[derive(Serialize, Deserialize, Debug, Clone, PartialEq)]
@@ -68,7 +68,7 @@ pub struct StreamChatCompletionParameters {
     pub user: Option<String>,
 }
 
-#[derive(Serialize, Deserialize, Debug, Clone)]
+#[derive(Serialize, Deserialize, Debug, Clone, PartialEq)]
 pub struct StreamChatCompletionResponse {
     pub id: String,
     pub object: String,
@@ -77,7 +77,7 @@ pub struct StreamChatCompletionResponse {
     pub choices: Vec<DeltaField>,
 }
 
-#[derive(Serialize, Deserialize, Debug, Clone)]
+#[derive(Serialize, Deserialize, Debug, Clone, PartialEq)]
 pub struct DeltaField {
     pub delta: DeltaValue,
     pub index: u32,
@@ -86,7 +86,7 @@ pub struct DeltaField {
     pub finish_reason: Option<FinishReason>,
 }
 
-#[derive(Serialize, Deserialize, Debug, Clone)]
+#[derive(Serialize, Deserialize, Debug, Clone, PartialEq)]
 pub struct DeltaValue {
     #[serde(skip_serializing_if = "Option::is_none")]
     #[serde(default)]

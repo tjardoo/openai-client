@@ -42,7 +42,7 @@ pub struct CreateImageParameters {
     pub user: Option<String>,
 }
 
-#[derive(Serialize, Debug, Clone)]
+#[derive(Serialize, Deserialize, Debug, Clone, PartialEq)]
 pub struct EditImageParameters {
     /// The image to edit. Must be a valid PNG file, less than 4MB, and square. If mask is not provided, image must have transparency, which will be used as the mask.
     pub image: String,
@@ -69,7 +69,7 @@ pub struct EditImageParameters {
     pub user: Option<String>,
 }
 
-#[derive(Serialize, Debug, Clone)]
+#[derive(Serialize, Deserialize, Debug, Clone, PartialEq)]
 pub struct CreateImageVariationParameters {
     /// The image to use as the basis for the variation(s). Must be a valid PNG file, less than 4MB, and square.
     pub image: String,
@@ -90,7 +90,7 @@ pub struct CreateImageVariationParameters {
     pub user: Option<String>,
 }
 
-#[derive(Serialize, Deserialize, Debug, Clone)]
+#[derive(Serialize, Deserialize, Debug, Clone, PartialEq)]
 pub enum ImageSize {
     #[serde(rename = "256x256")]
     Size256X256,
@@ -104,14 +104,14 @@ pub enum ImageSize {
     Size1024X1792,
 }
 
-#[derive(Serialize, Deserialize, Debug, Clone)]
+#[derive(Serialize, Deserialize, Debug, Clone, PartialEq)]
 #[serde(rename_all = "lowercase")]
 pub enum ImageStyle {
     Vivid,
     Natural,
 }
 
-#[derive(Serialize, Deserialize, Debug, Clone)]
+#[derive(Serialize, Deserialize, Debug, Clone, PartialEq)]
 pub enum ResponseFormat {
     #[serde(rename = "url")]
     Url,
@@ -119,13 +119,13 @@ pub enum ResponseFormat {
     B64Json,
 }
 
-#[derive(Serialize, Deserialize, Debug, Clone)]
+#[derive(Serialize, Deserialize, Debug, Clone, PartialEq)]
 pub struct ImageResponse {
     pub created: u32,
     pub data: Vec<ImageData>,
 }
 
-#[derive(Serialize, Deserialize, Debug, Clone)]
+#[derive(Serialize, Deserialize, Debug, Clone, PartialEq)]
 pub enum ImageData {
     #[serde(rename = "url")]
     Url(String),

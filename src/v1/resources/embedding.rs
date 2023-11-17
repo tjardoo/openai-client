@@ -1,6 +1,8 @@
 use serde::{Deserialize, Serialize};
 
-#[derive(Serialize, Debug, Clone)]
+use crate::v1::resources::shared::Usage;
+
+#[derive(Serialize, Deserialize, Debug, Clone, PartialEq)]
 pub struct EmbeddingParameters {
     /// Input text to embed, encoded as a string or array of tokens. To embed multiple inputs in a single request, pass an array of strings or array of token arrays.
     pub input: String,
@@ -14,25 +16,19 @@ pub struct EmbeddingParameters {
     pub user: Option<String>,
 }
 
-#[derive(Serialize, Deserialize, Debug, Clone)]
+#[derive(Serialize, Deserialize, Debug, Clone, PartialEq)]
 pub struct EmbeddingResponse {
     pub object: String,
     pub data: Vec<Embedding>,
     pub model: String,
-    pub usage: EmbeddingUsage,
+    pub usage: Usage,
 }
 
-#[derive(Serialize, Deserialize, Debug, Clone)]
+#[derive(Serialize, Deserialize, Debug, Clone, PartialEq)]
 pub struct Embedding {
     pub object: String,
     pub embedding: Vec<f64>,
     pub index: u32,
-}
-
-#[derive(Serialize, Deserialize, Debug, Clone)]
-pub struct EmbeddingUsage {
-    pub prompt_tokens: u32,
-    pub total_tokens: u32,
 }
 
 #[derive(Serialize, Deserialize, Debug, Clone, PartialEq)]

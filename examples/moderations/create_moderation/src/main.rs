@@ -1,6 +1,6 @@
-use std::env;
 use openai_dive::v1::api::Client;
 use openai_dive::v1::resources::moderation::ModerationParameters;
+use std::env;
 
 #[tokio::main]
 async fn main() {
