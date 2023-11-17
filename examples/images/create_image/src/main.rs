@@ -1,6 +1,6 @@
-use std::env;
 use openai_dive::v1::api::Client;
 use openai_dive::v1::resources::image::{CreateImageParameters, ImageSize, ResponseFormat};
+use std::env;
 
 #[tokio::main]
 async fn main() {
@@ -10,9 +10,12 @@ async fn main() {
 
     let parameters = CreateImageParameters {
         prompt: "A cute baby dog".to_string(),
-        n: Some(2),
-        size: Some(ImageSize::Size256X256),
+        model: None,
+        n: Some(1),
+        quality: None,
         response_format: Some(ResponseFormat::Url),
+        size: Some(ImageSize::Size256X256),
+        style: None,
         user: None,
     };
 

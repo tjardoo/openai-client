@@ -10,8 +10,9 @@ async fn main() {
 
     let parameters = EditImageParameters {
         image: "./images/image_edit_original.png".to_string(),
+        prompt: "A cute baby sea otter".to_string(),
         mask: Some("./images/image_edit_mask.png".to_string()),
-        prompt: "A cute baby sea otter wearing a beret".to_string(),
+        model: None,
         n: Some(1),
         size: Some(ImageSize::Size256X256),
         response_format: None,

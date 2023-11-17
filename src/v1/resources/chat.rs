@@ -217,7 +217,12 @@ impl Display for Role {
         write!(
             f,
             "{}",
-            serde_json::to_string(self).map_err(|_| std::fmt::Error)?
+            match self {
+                Role::System => "system",
+                Role::User => "user",
+                Role::Assistant => "assistant",
+                Role::Function => "function",
+            }
         )
     }
 }

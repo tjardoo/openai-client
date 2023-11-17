@@ -10,9 +10,10 @@ async fn main() {
 
     let parameters = CreateImageVariationParameters {
         image: "./images/image_edit_original.png".to_string(),
+        model: None,
         n: Some(1),
-        size: Some(ImageSize::Size256X256),
         response_format: None,
+        size: Some(ImageSize::Size256X256),
         user: None,
     };
 
