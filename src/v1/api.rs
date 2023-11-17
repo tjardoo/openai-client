@@ -55,6 +55,34 @@ impl Client {
         Ok(response_text)
     }
 
+    pub async fn get_with_query<Q>(&self, path: &str, query: &Q) -> Result<String, APIError>
+    where
+        Q: Serialize,
+    {
+        let url = format!("{}{}", &self.base_url, path);
+
+        let response = self
+            .http_client
+            .get(url)
+            .header(reqwest::header::CONTENT_TYPE, "application/json")
+            .query(query)
+            .bearer_auth(&self.api_key)
+            .send()
+            .await
+            .unwrap();
+
+        if response.status().is_server_error() {
+            return Err(APIError::EndpointError(response.text().await.unwrap()));
+        }
+
+        let response_text = response.text().await.unwrap();
+
+        #[cfg(feature = "log")]
+        log::trace!("{}", response_text);
+
+        Ok(response_text)
+    }
+
     pub async fn post<T: Serialize>(&self, path: &str, parameters: &T) -> Result<String, APIError> {
         let url = format!("{}{}", &self.base_url, path);
 
@@ -68,7 +96,7 @@ impl Client {
             .await
             .unwrap();
 
-        if response.status().is_success() == false {
+        if response.status().is_server_error() {
             return Err(APIError::EndpointError(response.text().await.unwrap()));
         }
 
@@ -105,14 +133,13 @@ impl Client {
         let response = self
             .http_client
             .post(url)
-            // .header(reqwest::header::CONTENT_TYPE, "multipart/form-data")
             .bearer_auth(&self.api_key)
             .multipart(form)
             .send()
             .await
             .unwrap();
 
-        if response.status().is_success() == false {
+        if response.status().is_server_error() {
             return Err(APIError::EndpointError(response.text().await.unwrap()));
         }
 
@@ -135,6 +162,10 @@ impl Client {
             .send()
             .await
             .unwrap();
+
+        if response.status().is_server_error() {
+            return Err(APIError::EndpointError(response.text().await.unwrap()));
+        }
 
         Ok(response.bytes().await.unwrap())
     }

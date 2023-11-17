@@ -1,5 +1,8 @@
+use openai_dive::v1::{
+    api::Client,
+    resources::file::{FilePurpose, ListFilesParameters},
+};
 use std::env;
-use openai_dive::v1::api::Client;
 
 #[tokio::main]
 async fn main() {
@@ -7,7 +10,11 @@ async fn main() {
 
     let client = Client::new(api_key);
 
-    let result = client.files().list().await.unwrap();
+    let query = ListFilesParameters {
+        purpose: Some(FilePurpose::FineTune),
+    };
+
+    let result = client.files().list(Some(query)).await.unwrap();
 
     println!("{:?}", result);
 }

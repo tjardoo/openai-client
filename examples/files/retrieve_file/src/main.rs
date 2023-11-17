@@ -1,5 +1,5 @@
-use std::env;
 use openai_dive::v1::api::Client;
+use std::env;
 
 #[tokio::main]
 async fn main() {
@@ -7,7 +7,9 @@ async fn main() {
 
     let client = Client::new(api_key);
 
-    let result = client.files().retrieve("file-XXX").await.unwrap();
+    let file_name = "file-wPpau1iFHeToU3auLcCdwopz";
+
+    let result = client.files().retrieve(file_name).await.unwrap();
 
     println!("{:?}", result);
 }

@@ -1,6 +1,6 @@
-use std::env;
 use openai_dive::v1::api::Client;
 use openai_dive::v1::resources::image::{EditImageParameters, ImageSize};
+use std::env;
 
 #[tokio::main]
 async fn main() {
@@ -9,8 +9,8 @@ async fn main() {
     let client = Client::new(api_key);
 
     let parameters = EditImageParameters {
-        image: "./images/image_edit_original.png".to_string(), // https://github.com/betalgo/openai/tree/master/OpenAI.Playground/SampleData
-        mask: Some("./images/image_edit_mask.png".to_string()), // https://github.com/betalgo/openai/tree/master/OpenAI.Playground/SampleData
+        image: "./images/image_edit_original.png".to_string(),
+        mask: Some("./images/image_edit_mask.png".to_string()),
         prompt: "A cute baby sea otter wearing a beret".to_string(),
         n: Some(1),
         size: Some(ImageSize::Size256X256),

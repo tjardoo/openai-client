@@ -9,7 +9,7 @@ async fn main() {
     let client = Client::new(api_key);
 
     let parameters = AudioTranscriptionParameters {
-        file: "./audio/micro-machines.mp3".to_string(), // https://github.com/betalgo/openai/tree/master/OpenAI.Playground/SampleData
+        file: "./audio/micro-machines.mp3".to_string(),
         model: "whisper-1".to_string(),
         language: None,
         prompt: None,
