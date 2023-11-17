@@ -1,0 +1,2 @@
+[workspace]
+members = ["create_fine_tuning_job", "list_fine_tuning_jobs"]

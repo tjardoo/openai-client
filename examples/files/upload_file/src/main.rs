@@ -11,7 +11,7 @@ async fn main() {
     let client = Client::new(api_key);
 
     let parameters = UploadFileParameters {
-        file: "./files/SentimentAnalysisSample.jsonl".to_string(),
+        file: "./files/FineTuningJobSample2.jsonl".to_string(),
         purpose: FilePurpose::FineTune,
     };
 

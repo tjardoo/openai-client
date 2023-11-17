@@ -7,6 +7,7 @@
 /moderations/target
 /images/target
 /files/target
+/fine_tuning/target
 /models/Cargo.lock
 /chat/Cargo.lock
 /audio/Cargo.lock
@@ -14,3 +15,4 @@
 /moderations/Cargo.lock
 /images/Cargo.lock
 /files/Cargo.lock
+/fine_tuning/Cargo.lock
