@@ -1,7 +1,7 @@
 use crate::v1::models::OpenAIModel;
 use crate::v1::resources::shared::StopToken;
 use crate::v1::resources::shared::{FinishReason, Usage};
-use serde::{Deserialize, Serialize, Deserializer};
+use serde::{Deserialize, Deserializer, Serialize};
 use std::collections::HashMap;
 use std::fmt::Display;
 
@@ -12,6 +12,26 @@ pub struct SimpleChatCompletionParameters {
     pub model: String,
     pub messages: Vec<ChatMessage>,
     pub max_tokens: u32,
+}
+
+#[derive(Serialize, Debug, Clone)]
+pub struct ChatResponseFormat {
+    #[serde(rename = "type", deserialize_with = "validate_json_object")]
+    pub type_field: String,
+}
+
+fn validate_json_object<'de, D>(deserializer: D) -> Result<String, D::Error>
+where
+    D: Deserializer<'de>,
+{
+    let s = String::deserialize(deserializer)?;
+    if s == "json_object" {
+        Ok(s)
+    } else {
+        Err(serde::de::Error::custom(
+            "response format type can only be 'json_object'",
+        ))
+    }
 }
 
 #[derive(Serialize, Debug, Clone)]
@@ -30,6 +50,8 @@ pub struct ChatCompletionParameters {
     pub max_tokens: Option<u32>,
     #[serde(skip_serializing_if = "Option::is_none")]
     pub presence_penalty: Option<f32>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub response_format: Option<ChatResponseFormat>,
     #[serde(skip_serializing_if = "Option::is_none")]
     pub frequency_penalty: Option<f32>,
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -58,6 +80,7 @@ impl Default for ChatCompletionParameters {
             stop: None,
             max_tokens: None,
             presence_penalty: None,
+            response_format: None,
             frequency_penalty: None,
             logit_bias: None,
             user: None,
@@ -146,16 +169,16 @@ pub struct Function {
     /// Function name
     pub name: String,
 
-    /// Description of the function. 
-    /// 
+    /// Description of the function.
+    ///
     /// Providing a good description lets the model know what the function does.
     #[serde(skip_serializing_if = "Option::is_none")]
     pub description: Option<String>,
 
     /// JSONSchema representation of function parameters as a JSON value
-    /// 
+    ///
     /// For simple functions, this can be constructed manually. For more complex use-cases, the [schemars](https://docs.rs/schemars) crate is recommended.
-    /// 
+    ///
     /// Resources:
     ///   - <https://platform.openai.com/docs/guides/gpt/function-calling>
     ///   - JSONSchema: <https://json-schema.org/> for more information.
@@ -169,7 +192,6 @@ pub enum FunctionCallConfig {
     None,
     /// The model decides wether to call functions or not
     Auto,
-    
     // TODO: The model must call this function
     //       Unsure how to get this to serialize properly
     // Force(ForceFunctionCall)
@@ -194,9 +216,9 @@ pub struct FunctionCall {
 
 impl FunctionCall {
     /// Merge one function call into another
-    /// 
-    /// This is useful when streaming a chat-completion that might call a function. 
-    /// Like message content, function calls are also streamed. 
+    ///
+    /// This is useful when streaming a chat-completion that might call a function.
+    /// Like message content, function calls are also streamed.
     /// When you see a function call, you should merge it into the previous function call in the stream until you see a
     /// `finish_reason` of `FunctionCall`. At that point the fully merged FunctionCall is ready to be serviced.
     pub fn merge(&mut self, other: &Self) {
