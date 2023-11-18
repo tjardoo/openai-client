@@ -16,7 +16,7 @@ pub struct SimpleChatCompletionParameters {
 
 #[derive(Serialize, Debug, Clone)]
 pub struct ChatCompletionParameters {
-    pub model: ChatModel,
+    pub model: String,
     pub messages: Vec<ChatMessage>,
     #[serde(skip_serializing_if = "Option::is_none")]
     pub temperature: Option<f32>,
