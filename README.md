@@ -16,6 +16,8 @@ openai_dive = "0.2"
 
 More information: [set API key](#set-api-key), [add proxy](#add-proxy), [use model names](#use-model-names)
 
+For Developers and Contributors: [Contributions](#contributions)
+
 ## Endpoints
 
 - Models
@@ -785,13 +787,13 @@ Manage fine-tuning jobs to tailor a model to your specific training data.
 
 See the `examples` directory for examples and implementation details.
 
-- [X] Create fine-tune
-- [X] List fine-tunes
-- [X] Retrieve fine-tunes
-- [X] Cancel fine-tunes
-- [X] List fine-tune events
+- [x] Create fine-tune
+- [x] List fine-tunes
+- [x] Retrieve fine-tunes
+- [x] Cancel fine-tunes
+- [x] List fine-tune events
 - [ ] List fine-tune events (stream)
-- [X] Delete fine-tune model
+- [x] Delete fine-tune model
 
 More information: [Fine-tunes](https://platform.openai.com/docs/api-reference/fine-tunes)
 
@@ -887,3 +889,36 @@ assert_eq!(OpenAIModel::TextEmbeddingAda002.to_string(), "text-embedding-ada-002
 assert_eq!(OpenAIModel::Whisper1.to_string(), "whisper-1");
 assert_eq!(OpenAIModel::TextModerationStable.to_string(), "text-moderation-stable");
 assert_eq!(OpenAIModel::TextModerationLatest.to_string(), "text-moderation-latest");
+```
+
+## Contributions
+
+Contributions are welcome! Please open an issue or submit a pull request.
+
+### Developer Environment
+
+This is a stable rust 2021 project. You can install the latest stable rust toolchain with `rustup`:
+
+```sh
+curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
+```
+
+This project also uses `Nix Flakes` to manage the development environment. You can install `Nix` with:
+
+```sh
+curl --proto '=https' --tlsv1.2 -sSf -L https://install.determinate.systems/nix | sh -s -- install
+```
+
+After installing `Nix`, you can enter the development environment with:
+
+```sh
+nix develop
+```
+
+Then build the project and run tests using `just` commands:
+
+```bash
+just b # builds the project
+just c # runs checks (clippy, fmt, test)
+just t # runs tests
+```
