@@ -10,6 +10,7 @@ members = [
     "embeddings/create_embedding",
     "fine_tuning/list_fine_tuning_jobs",
     "fine_tuning/create_fine_tuning_job",
+    "fine_tuning/retrieve_fine_tuning_job",
     "files/delete_file",
     "files/list_files",
     "files/retrieve_file",

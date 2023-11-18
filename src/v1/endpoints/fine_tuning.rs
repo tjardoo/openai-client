@@ -52,4 +52,19 @@ impl FineTuning<'_> {
 
         Ok(fine_tuning_job_response)
     }
+
+    /// Get info about a fine-tuning job.
+    pub async fn retrieve(&self, id: &str) -> Result<FineTuningJob, APIError> {
+        let response = self
+            .client
+            .get(format!("/fine_tuning/jobs/{id}").as_str())
+            .await?;
+
+        let value: Value = serde_json::from_str(&response).unwrap();
+
+        let file_tuning_job_response: FineTuningJob = serde_json::from_value(value)
+            .map_err(|error| APIError::ParseError(error.to_string()))?;
+
+        Ok(file_tuning_job_response)
+    }
 }
