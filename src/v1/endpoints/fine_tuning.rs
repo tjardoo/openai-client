@@ -47,8 +47,6 @@ impl FineTuning<'_> {
 
         let value: Value = serde_json::from_str(&response).unwrap();
 
-        dbg!(&value);
-
         let fine_tuning_job_response: FineTuningJob = serde_json::from_value(value)
             .map_err(|error| APIError::ParseError(error.to_string()))?;
 

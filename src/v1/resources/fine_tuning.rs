@@ -63,7 +63,7 @@ pub struct CreateFineTuningJobParameters {
 
 #[derive(Serialize, Deserialize, Debug, Clone, PartialEq)]
 pub struct FineTuningJobError {
-    pub code: u8,
+    pub code: String,
     pub message: String,
     #[serde(skip_serializing_if = "Option::is_none")]
     pub param: Option<String>,
