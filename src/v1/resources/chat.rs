@@ -7,6 +7,44 @@ use std::fmt::Display;
 use std::str::FromStr;
 
 #[derive(Serialize, Deserialize, Debug, Clone, PartialEq)]
+pub struct ChatCompletionResponse {
+    /// A unique identifier for the chat completion.
+    pub id: String,
+    /// A list of chat completion choices. Can be more than one if n is greater than 1.
+    pub choices: Vec<ChatCompletionChoice>,
+    /// The Unix timestamp (in seconds) of when the chat completion was created.
+    pub created: u32,
+    /// The model used for the chat completion.
+    pub model: String,
+    /// This fingerprint represents the backend configuration that the model runs with.
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub system_fingerprint: Option<String>,
+    /// The object type, which is always chat.completion.
+    pub object: String,
+    /// Usage statistics for the completion request.
+    pub usage: Usage,
+}
+
+#[cfg(feature = "stream")]
+#[derive(Serialize, Deserialize, Debug, Clone, PartialEq)]
+pub struct ChatCompletionChunkResponse {
+    /// A unique identifier for the chat completion. Each chunk has the same ID.
+    pub id: String,
+    /// A list of chat completion choices. Can be more than one if n is greater than 1.
+    pub choices: Vec<ChatCompletionChunkChoice>,
+    /// The Unix timestamp (in seconds) of when the chat completion was created. Each chunk has the same timestamp.
+    pub created: u32,
+    /// The model to generate the completion.
+    pub model: String,
+    /// This fingerprint represents the backend configuration that the model runs with.
+    /// Can be used in conjunction with the seed request parameter to understand when backend changes have been made that might impact determinism.
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub system_fingerprint: Option<String>,
+    /// The object type, which is always chat.completion.chunk.
+    pub object: String,
+}
+
+#[derive(Serialize, Deserialize, Debug, Clone, PartialEq)]
 pub struct ChatCompletionParameters {
     /// A list of messages comprising the conversation so far.
     pub messages: Vec<ChatMessage>,
@@ -109,8 +147,23 @@ pub struct ChatMessage {
     pub name: Option<String>,
 }
 
+#[cfg(feature = "stream")]
+#[derive(Serialize, Deserialize, Debug, Clone, PartialEq)]
+pub struct DeltaChatMessage {
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub role: Option<Role>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub content: Option<String>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub tool_calls: Option<Vec<ToolCall>>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub name: Option<String>,
+}
+
 #[derive(Serialize, Deserialize, Debug, Clone, PartialEq)]
 pub struct ToolCall {
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub index: Option<u32>,
     pub id: String,
     pub r#type: String,
     pub function: Function,
@@ -123,23 +176,52 @@ pub struct Function {
 }
 
 #[derive(Serialize, Deserialize, Debug, Clone, PartialEq)]
-pub struct ChatCompletionResponse {
-    pub id: Option<String>,
-    pub object: String,
-    pub created: u32,
-    pub model: String,
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub system_fingerprint: Option<String>,
-    pub choices: Vec<ChatCompletionChoice>,
-    pub usage: Usage,
-}
-
-#[derive(Serialize, Deserialize, Debug, Clone, PartialEq)]
 pub struct ChatCompletionChoice {
     pub index: u32,
     pub message: ChatMessage,
     #[serde(skip_serializing_if = "Option::is_none")]
     pub finish_reason: Option<FinishReason>,
+}
+
+#[cfg(feature = "stream")]
+#[derive(Serialize, Deserialize, Debug, Clone, PartialEq)]
+pub struct ChatCompletionChunkChoice {
+    pub index: u32,
+    pub delta: DeltaChatMessage,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub finish_reason: Option<FinishReason>,
+}
+
+#[cfg(feature = "stream")]
+#[derive(Serialize, Deserialize, Debug, Clone, PartialEq)]
+pub struct StreamChatCompletionParameters {
+    pub messages: Vec<ChatMessage>,
+    pub model: String,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub frequency_penalty: Option<f32>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub logit_bias: Option<HashMap<String, serde_json::Value>>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub max_tokens: Option<u32>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub n: Option<u32>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub presence_penalty: Option<f32>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub respsonse_format: Option<ChatCompletionResponseFormat>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub stop: Option<StopToken>,
+    pub stream: bool,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub temperature: Option<f32>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub top_p: Option<f32>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub tools: Option<Vec<ChatCompletionTool>>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub tool_choice: Option<ChatCompletionToolChoice>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub user: Option<String>,
 }
 
 #[derive(Serialize, Deserialize, Debug, Clone, PartialEq)]

@@ -1,7 +1,5 @@
 pub mod audio;
 pub mod chat;
-#[cfg(feature = "stream")]
-pub mod chat_stream;
 pub mod embedding;
 pub mod file;
 pub mod fine_tuning;

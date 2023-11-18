@@ -1,12 +1,10 @@
 use crate::v1::api::Client;
 use crate::v1::error::APIError;
-use crate::v1::resources::chat::{ChatCompletionParameters, ChatCompletionResponse};
+use crate::v1::resources::chat::{
+    ChatCompletionChunkResponse, ChatCompletionParameters, ChatCompletionResponse,
+};
 use serde_json::Value;
 
-#[cfg(feature = "stream")]
-use crate::v1::resources::chat_stream::StreamChatCompletionParameters;
-#[cfg(feature = "stream")]
-use crate::v1::resources::chat_stream::StreamChatCompletionResponse;
 #[cfg(feature = "stream")]
 use futures::Stream;
 #[cfg(feature = "stream")]
@@ -45,9 +43,11 @@ impl Chat<'_> {
         &self,
         parameters: ChatCompletionParameters,
     ) -> Result<
-        Pin<Box<dyn Stream<Item = Result<StreamChatCompletionResponse, APIError>> + Send>>,
+        Pin<Box<dyn Stream<Item = Result<ChatCompletionChunkResponse, APIError>> + Send>>,
         APIError,
     > {
+        use crate::v1::resources::chat::StreamChatCompletionParameters;
+
         let stream_parameters = StreamChatCompletionParameters {
             messages: parameters.messages,
             model: parameters.model,
