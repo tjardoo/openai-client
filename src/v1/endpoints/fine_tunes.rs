@@ -1,7 +1,10 @@
+use serde_json::Value;
+
 use crate::v1::api::Client;
 use crate::v1::error::APIError;
-use crate::v1::resources::fine_tune::{CreateFineTuneParameters, FineTune, FineTuneEvent, DeletedFineTuneModel};
-use serde_json::Value;
+use crate::v1::resources::fine_tune::{
+    CreateFineTuneParameters, DeletedFineTuneModel, FineTune, FineTuneEvent,
+};
 
 #[deprecated(since = "0.2.12")]
 pub struct FineTunes<'a> {
@@ -12,9 +15,7 @@ impl Client {
     #[allow(deprecated)]
     #[deprecated(since = "0.2.12")]
     pub fn fine_tunes(&self) -> FineTunes {
-        FineTunes {
-            client: self,
-        }
+        FineTunes { client: self }
     }
 }
 
@@ -25,7 +26,8 @@ impl FineTunes<'_> {
         let response = self.client.post("/fine-tunes", &parameters).await?;
 
         let value: Value = serde_json::from_str(&response).unwrap();
-        let fine_tune_response: FineTune = serde_json::from_value(value).map_err(|error| APIError::ParseError(error.to_string()))?;
+        let fine_tune_response: FineTune = serde_json::from_value(value)
+            .map_err(|error| APIError::ParseError(error.to_string()))?;
 
         Ok(fine_tune_response)
     }
@@ -35,41 +37,50 @@ impl FineTunes<'_> {
         let response = self.client.get("/fine-tunes").await?;
 
         let value: Value = serde_json::from_str(&response).unwrap();
-        let fine_tunes: Vec<FineTune> = serde_json::from_value(value["data"].clone()).map_err(|error| APIError::ParseError(error.to_string()))?;
+        let fine_tunes: Vec<FineTune> = serde_json::from_value(value["data"].clone())
+            .map_err(|error| APIError::ParseError(error.to_string()))?;
 
         Ok(fine_tunes)
     }
 
     #[deprecated(since = "0.2.12")]
     pub async fn retrieve(&self, id: &str) -> Result<FineTune, APIError> {
-        let response = self.client.get(format!("/fine-tunes/{id}").as_str()).await?;
+        let response = self
+            .client
+            .get(format!("/fine-tunes/{id}").as_str())
+            .await?;
 
         let value: Value = serde_json::from_str(&response).unwrap();
-        let fine_tune_response: FineTune = serde_json::from_value(value).map_err(|error| APIError::ParseError(error.to_string()))?;
+        let fine_tune_response: FineTune = serde_json::from_value(value)
+            .map_err(|error| APIError::ParseError(error.to_string()))?;
 
         Ok(fine_tune_response)
     }
 
     #[deprecated(since = "0.2.12")]
     pub async fn cancel(&self, id: &str) -> Result<FineTune, APIError> {
-        let parameters = {
-            struct CancelFineTuneParameters {}
-        };
-
-        let response = self.client.post(format!("/fine-tunes/{id}/cancel").as_str(), &parameters).await?;
+        let response = self
+            .client
+            .post(format!("/fine-tunes/{id}/cancel").as_str(), &())
+            .await?;
 
         let value: Value = serde_json::from_str(&response).unwrap();
-        let fine_tune_response: FineTune = serde_json::from_value(value).map_err(|error| APIError::ParseError(error.to_string()))?;
+        let fine_tune_response: FineTune = serde_json::from_value(value)
+            .map_err(|error| APIError::ParseError(error.to_string()))?;
 
         Ok(fine_tune_response)
     }
 
     #[deprecated(since = "0.2.12")]
     pub async fn list_events(&self, id: &str) -> Result<Vec<FineTuneEvent>, APIError> {
-        let response = self.client.get(format!("/fine-tunes/{id}/events").as_str()).await?;
+        let response = self
+            .client
+            .get(format!("/fine-tunes/{id}/events").as_str())
+            .await?;
 
         let value: Value = serde_json::from_str(&response).unwrap();
-        let fine_tune_response: Vec<FineTuneEvent> = serde_json::from_value(value["data"].clone()).map_err(|error| APIError::ParseError(error.to_string()))?;
+        let fine_tune_response: Vec<FineTuneEvent> = serde_json::from_value(value["data"].clone())
+            .map_err(|error| APIError::ParseError(error.to_string()))?;
 
         Ok(fine_tune_response)
     }
@@ -79,7 +90,9 @@ impl FineTunes<'_> {
         let response = self.client.delete(format!("/models/{id}").as_str()).await?;
 
         let value: Value = serde_json::from_str(&response).unwrap();
-        let delete_model_response: DeletedFineTuneModel = serde_json::from_value(value["data"].clone()).map_err(|error| APIError::ParseError(error.to_string()))?;
+        let delete_model_response: DeletedFineTuneModel =
+            serde_json::from_value(value["data"].clone())
+                .map_err(|error| APIError::ParseError(error.to_string()))?;
 
         Ok(delete_model_response)
     }
