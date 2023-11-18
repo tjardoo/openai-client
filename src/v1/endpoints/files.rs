@@ -1,8 +1,8 @@
-use crate::v1::api::Client;
-use crate::v1::error::APIError;
-use crate::v1::resources::file::{File, UploadFileParameters, DeletedFile};
-use crate::v1::api::file_from_disk_to_form_part;
 use serde_json::Value;
+
+use crate::v1::api::{file_from_disk_to_form_part, Client};
+use crate::v1::error::APIError;
+use crate::v1::resources::file::{DeletedFile, File, UploadFileParameters};
 
 pub struct Files<'a> {
     pub client: &'a Client,
@@ -10,9 +10,7 @@ pub struct Files<'a> {
 
 impl Client {
     pub fn files(&self) -> Files {
-        Files {
-            client: self,
-        }
+        Files { client: self }
     }
 }
 
@@ -21,7 +19,8 @@ impl Files<'_> {
         let response = self.client.get("/files").await?;
 
         let value: Value = serde_json::from_str(&response).unwrap();
-        let files: Vec<File> = serde_json::from_value(value["data"].clone()).map_err(|error| APIError::ParseError(error.to_string()))?;
+        let files: Vec<File> = serde_json::from_value(value["data"].clone())
+            .map_err(|error| APIError::ParseError(error.to_string()))?;
 
         Ok(files)
     }
@@ -37,7 +36,8 @@ impl Files<'_> {
         let response = self.client.post_with_form("/files", form).await?;
 
         let value: Value = serde_json::from_str(&response).unwrap();
-        let file_response: File = serde_json::from_value(value).map_err(|error| APIError::ParseError(error.to_string()))?;
+        let file_response: File = serde_json::from_value(value)
+            .map_err(|error| APIError::ParseError(error.to_string()))?;
 
         Ok(file_response)
     }
@@ -46,7 +46,8 @@ impl Files<'_> {
         let response = self.client.delete(format!("/files/{id}").as_str()).await?;
 
         let value: Value = serde_json::from_str(&response).unwrap();
-        let deleted_file_response: DeletedFile = serde_json::from_value(value).map_err(|error| APIError::ParseError(error.to_string()))?;
+        let deleted_file_response: DeletedFile = serde_json::from_value(value)
+            .map_err(|error| APIError::ParseError(error.to_string()))?;
 
         Ok(deleted_file_response)
     }
@@ -55,13 +56,17 @@ impl Files<'_> {
         let response = self.client.get(format!("/files/{id}").as_str()).await?;
 
         let value: Value = serde_json::from_str(&response).unwrap();
-        let file_response: File = serde_json::from_value(value).map_err(|error| APIError::ParseError(error.to_string()))?;
+        let file_response: File = serde_json::from_value(value)
+            .map_err(|error| APIError::ParseError(error.to_string()))?;
 
         Ok(file_response)
     }
 
     pub async fn retrieve_content(&self, id: &str) -> Result<String, APIError> {
-        let response = self.client.get(format!("/files/{id}/content").as_str()).await?;
+        let response = self
+            .client
+            .get(format!("/files/{id}/content").as_str())
+            .await?;
 
         Ok(response)
     }

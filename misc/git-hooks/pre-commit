@@ -20,10 +20,11 @@ if [ -z "${NO_STASH:-}" ] && [ $is_unclean -ne 0 ]; then
   trap revert_git_stash EXIT
 fi
 
-export FLAKEBOX_GIT_LS
-FLAKEBOX_GIT_LS="$(git ls-files)"
-export FLAKEBOX_GIT_LS_TEXT
+
+FLAKEBOX_GIT_LS="$(git ls-files -z | xargs -0 -I {} file --mime-type {} | grep -v 'binary' | cut -d: -f1)"
 FLAKEBOX_GIT_LS_TEXT="$(echo "$FLAKEBOX_GIT_LS" | grep -v -E "\.(png|ods|jpg|jpeg|woff2|keystore|wasm|ttf|jar|ico|gif)\$")"
+export FLAKEBOX_GIT_LS
+export FLAKEBOX_GIT_LS_TEXT
 
 
 function check_nothing() {
@@ -87,7 +88,7 @@ function check_semgrep() {
     fi
 
     env SEMGREP_ENABLE_VERSION_CHECK=0 \
-      semgrep -q --error --no-rewrite-rule-ids --config .config/semgrep.yaml
+      semgrep -q --error --no-rewrite-rule-ids --config .config/semgrep.yaml --exclude examples
 
 }
 export -f check_semgrep

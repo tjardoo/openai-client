@@ -1,6 +1,7 @@
-use serde::Deserialize;
 use std::error::Error;
 use std::fmt::{Display, Formatter, Result};
+
+use serde::Deserialize;
 
 #[derive(Debug, Deserialize)]
 pub enum APIError {

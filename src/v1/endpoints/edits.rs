@@ -1,7 +1,8 @@
+use serde_json::Value;
+
 use crate::v1::api::Client;
 use crate::v1::error::APIError;
 use crate::v1::resources::edit::{EditParameters, EditResponse};
-use serde_json::Value;
 
 #[deprecated(since = "0.2.12")]
 pub struct Edits<'a> {
@@ -12,9 +13,7 @@ impl Client {
     #[allow(deprecated)]
     #[deprecated(since = "0.2.12")]
     pub fn edits(&self) -> Edits {
-        Edits {
-            client: self,
-        }
+        Edits { client: self }
     }
 }
 
@@ -25,7 +24,8 @@ impl Edits<'_> {
         let response = self.client.post("/edits", &parameters).await?;
 
         let value: Value = serde_json::from_str(&response).unwrap();
-        let edit_response: EditResponse = serde_json::from_value(value).map_err(|error| APIError::ParseError(error.to_string()))?;
+        let edit_response: EditResponse = serde_json::from_value(value)
+            .map_err(|error| APIError::ParseError(error.to_string()))?;
 
         Ok(edit_response)
     }

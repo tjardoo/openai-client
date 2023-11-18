@@ -1,5 +1,6 @@
-use serde::{Deserialize, Serialize};
 use std::fmt::{Display, Error, Formatter, Result};
+
+use serde::{Deserialize, Serialize};
 
 // https://platform.openai.com/docs/models/overview
 #[derive(Serialize, Deserialize, Debug, PartialEq)]
@@ -34,10 +35,6 @@ pub enum OpenAIModel {
 
 impl Display for OpenAIModel {
     fn fmt(&self, f: &mut Formatter<'_>) -> Result {
-        write!(
-            f, 
-            "{}",
-            serde_json::to_string(self).map_err(|_| Error)?
-        )
+        write!(f, "{}", serde_json::to_string(self).map_err(|_| Error)?)
     }
 }

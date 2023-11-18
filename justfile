@@ -91,7 +91,7 @@ clippy-fix *ARGS="--locked --offline --workspace --all-targets":
 # run `semgrep`
 semgrep:
   env SEMGREP_ENABLE_VERSION_CHECK=0 \
-    semgrep --error --no-rewrite-rule-ids --config .config/semgrep.yaml
+    semgrep --error --no-rewrite-rule-ids --config .config/semgrep.yaml --exclude examples
 
 
 # check typos

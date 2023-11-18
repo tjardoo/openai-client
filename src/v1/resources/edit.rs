@@ -1,4 +1,5 @@
-use serde::{Serialize, Deserialize};
+use serde::{Deserialize, Serialize};
+
 use crate::v1::resources::shared::Usage;
 
 #[derive(Serialize, Debug, Clone)]

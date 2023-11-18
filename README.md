@@ -918,7 +918,20 @@ nix develop
 Then build the project and run tests using `just` commands:
 
 ```bash
-just b # builds the project
-just c # runs checks (clippy, fmt, test)
-just t # runs tests
+# Available just recipes:
+    build *ARGS="--workspace --all-targets" # run `cargo build` on everything
+    b *ARGS="--workspace --all-targets" # alias for `build`
+    check *ARGS="--workspace --all-targets" # run `cargo check` on everything
+    c *ARGS="--workspace --all-targets" # alias for `check`
+    clippy *ARGS="--locked --offline --workspace --all-targets" # run `cargo clippy` on everything
+    clippy-fix *ARGS="--locked --offline --workspace --all-targets" # run `cargo clippy --fix` on everything
+    final-check          # run all checks recommended before opening a PR
+    format               # run code formatters
+    lint                 # run lints (git pre-commit hook)
+    semgrep              # run `semgrep`
+    test                 # run tests
+    t                    # alias for `test`
+    typos *PARAMS        # check typos
+    typos-fix-all        # fix all typos
+    watch *ARGS="-x run" # run and restart on changes
 ```

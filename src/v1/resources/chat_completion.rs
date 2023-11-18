@@ -1,9 +1,10 @@
-use crate::v1::models::OpenAIModel;
-use crate::v1::resources::shared::StopToken;
-use crate::v1::resources::shared::{FinishReason, Usage};
-use serde::{Deserialize, Serialize, Deserializer};
 use std::collections::HashMap;
 use std::fmt::Display;
+
+use serde::{Deserialize, Deserializer, Serialize};
+
+use crate::v1::models::OpenAIModel;
+use crate::v1::resources::shared::{FinishReason, StopToken, Usage};
 
 #[deprecated(since = "0.2.8")]
 #[cfg(feature = "simple")]
@@ -146,16 +147,16 @@ pub struct Function {
     /// Function name
     pub name: String,
 
-    /// Description of the function. 
-    /// 
+    /// Description of the function.
+    ///
     /// Providing a good description lets the model know what the function does.
     #[serde(skip_serializing_if = "Option::is_none")]
     pub description: Option<String>,
 
     /// JSONSchema representation of function parameters as a JSON value
-    /// 
+    ///
     /// For simple functions, this can be constructed manually. For more complex use-cases, the [schemars](https://docs.rs/schemars) crate is recommended.
-    /// 
+    ///
     /// Resources:
     ///   - <https://platform.openai.com/docs/guides/gpt/function-calling>
     ///   - JSONSchema: <https://json-schema.org/> for more information.
@@ -167,9 +168,8 @@ pub struct Function {
 pub enum FunctionCallConfig {
     /// Do not call any functions
     None,
-    /// The model decides wether to call functions or not
+    /// The model decides whether to call functions or not
     Auto,
-    
     // TODO: The model must call this function
     //       Unsure how to get this to serialize properly
     // Force(ForceFunctionCall)
@@ -194,11 +194,13 @@ pub struct FunctionCall {
 
 impl FunctionCall {
     /// Merge one function call into another
-    /// 
-    /// This is useful when streaming a chat-completion that might call a function. 
-    /// Like message content, function calls are also streamed. 
-    /// When you see a function call, you should merge it into the previous function call in the stream until you see a
-    /// `finish_reason` of `FunctionCall`. At that point the fully merged FunctionCall is ready to be serviced.
+    ///
+    /// This is useful when streaming a chat-completion that might call a
+    /// function. Like message content, function calls are also streamed.
+    /// When you see a function call, you should merge it into the previous
+    /// function call in the stream until you see a `finish_reason` of
+    /// `FunctionCall`. At that point the fully merged FunctionCall is ready to
+    /// be serviced.
     pub fn merge(&mut self, other: &Self) {
         if self.name.is_empty() && !other.name.is_empty() {
             self.name = other.name.clone();

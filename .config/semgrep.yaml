@@ -1,0 +1,24 @@
+rules:
+  - id: rust-unsafe-block
+    languages: [rust]
+    message: Unsafe block used
+    severity: WARNING
+    pattern: unsafe {...}
+
+  # - id: rust-unwrap
+  #   languages: [rust]
+  #   message: Unwrap used, consider using unwrap_or or unwrap_or_else
+  #   severity: WARNING
+  #   pattern: $X.unwrap()
+
+  - id: rust-debug-print
+    languages: [rust]
+    message: Debug print statement detected
+    severity: WARNING
+    pattern: println!(...)
+
+  - id: rust-panic
+    languages: [rust]
+    message: Panic call detected
+    severity: WARNING
+    pattern: panic!(...)

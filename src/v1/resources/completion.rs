@@ -1,6 +1,8 @@
 use std::collections::HashMap;
-use serde::{Serialize, Deserialize};
-use crate::v1::resources::shared::{Usage, FinishReason, StopToken};
+
+use serde::{Deserialize, Serialize};
+
+use crate::v1::resources::shared::{FinishReason, StopToken, Usage};
 
 #[deprecated(since = "0.2.8")]
 #[cfg(feature = "simple")]

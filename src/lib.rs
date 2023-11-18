@@ -1,6 +1,7 @@
 //! # Getting started
 //!
-//! OpenAI Dive is an unofficial async Rust library that allows you to interact with the OpenAI API.
+//! OpenAI Dive is an unofficial async Rust library that allows you to interact
+//! with the OpenAI API.
 //!
 //! Sign up for an account on [https://platform.openai.com/overview](https://platform.openai.com/overview) to get your API key.
 //!
@@ -9,7 +10,8 @@
 //! openai_dive = "0.2"
 //! ```
 //!
-//! More information: [set API key](#set-api-key), [add proxy](#add-proxy), [use model names](#use-model-names)
+//! More information: [set API key](#set-api-key), [add proxy](#add-proxy), [use
+//! model names](#use-model-names)
 //!
 //! ## Endpoints
 //!
@@ -44,7 +46,8 @@
 //!
 //! ## List models
 //!
-//! Lists the currently available models, and provides basic information about each one such as the owner and availability.
+//! Lists the currently available models, and provides basic information about
+//! each one such as the owner and availability.
 //!
 //! **URL** `https://api.openai.com/v1/models`
 //!
@@ -69,7 +72,8 @@
 //!
 //! ## Retrieve model
 //!
-//! Retrieves a model instance, providing basic information about the model such as the owner and permissioning.
+//! Retrieves a model instance, providing basic information about the model such
+//! as the owner and permissioning.
 //!
 //! **URL** `https://api.openai.com/v1/models/{model}`
 //!
@@ -102,7 +106,9 @@
 //!
 //! ```rust
 //! use openai_dive::v1::api::Client;
-//! use openai_dive::v1::resources::chat_completion::{ChatCompletionParameters, ChatMessage, Role};
+//! use openai_dive::v1::resources::chat_completion::{
+//!     ChatCompletionParameters, ChatMessage, Role,
+//! };
 //!
 //! #[tokio::main]
 //! async fn main() {
@@ -155,7 +161,9 @@
 //! ```rust
 //! use futures::StreamExt;
 //! use openai_dive::v1::api::Client;
-//! use openai_dive::v1::resources::chat_completion::{ChatCompletionParameters, ChatMessage, Role};
+//! use openai_dive::v1::resources::chat_completion::{
+//!     ChatCompletionParameters, ChatMessage, Role,
+//! };
 //!
 //! #[tokio::main]
 //! async fn main() {
@@ -208,8 +216,10 @@
 //!
 //! ## Calling Functions
 //!
-//! In an API call, you can describe functions and have the model intelligently choose to output a JSON object containing arguments to call one or many functions.
-//! The Chat Completions API does not call the function; instead, the model generates JSON that you can use to call the function in your code.
+//! In an API call, you can describe functions and have the model intelligently
+//! choose to output a JSON object containing arguments to call one or many
+//! functions. The Chat Completions API does not call the function; instead, the
+//! model generates JSON that you can use to call the function in your code.
 //!
 //! **URL** `https://api.openai.com/v1/chat/completions`
 //!
@@ -300,8 +310,11 @@
 //!
 //! ### Function tips
 //!
-//! 1. Use the [async-recursion](https://crates.io/crates/async-recursion) crate to recursively call into a wrapping function after processing a function call.
-//! 2. Use the [schemars](https://crates.io/crates/schemars) crate for automatically generating JSON schemas from structs.
+//! 1. Use the [async-recursion](https://crates.io/crates/async-recursion) crate
+//!    to recursively call into a wrapping function after processing a function
+//!    call.
+//! 2. Use the [schemars](https://crates.io/crates/schemars) crate for
+//!    automatically generating JSON schemas from structs.
 //!
 //!    ```rust
 //!    let random_number_schema = schemars::schema_for!(RandomNumber);
@@ -314,7 +327,8 @@
 //!    }
 //!    ```
 //!
-//! 3. After a function is called, stop the agent from calling more functions (sometimes it can get stuck in a function calling loop).
+//! 3. After a function is called, stop the agent from calling more functions
+//!    (sometimes it can get stuck in a function calling loop).
 //!
 //!    ```rust
 //!    let parameters = ChatCompletionParameters {
@@ -690,7 +704,8 @@
 //!
 //! ## Upload file
 //!
-//! Upload a file that contains document(s) to be used across various endpoints/features.
+//! Upload a file that contains document(s) to be used across various
+//! endpoints/features.
 //!
 //! **URL** `https://api.openai.com/v1/files`
 //!
@@ -858,7 +873,9 @@
 //!
 //! ## Add proxy
 //!
-//! This crate uses `reqwest` as HTTP Client. Reqwest has proxies enabled by default. You can set the proxy via the system environment variable or by overriding the default client.
+//! This crate uses `reqwest` as HTTP Client. Reqwest has proxies enabled by
+//! default. You can set the proxy via the system environment variable or by
+//! overriding the default client.
 //!
 //! ### Example: set system environment variable
 //!
@@ -900,6 +917,5 @@
 //! assert_eq!(OpenAIModel::Whisper1.to_string(), "whisper-1");
 //! assert_eq!(OpenAIModel::TextModerationStable.to_string(), "text-moderation-stable");
 //! assert_eq!(OpenAIModel::TextModerationLatest.to_string(), "text-moderation-latest");
-//!
 
 pub mod v1;

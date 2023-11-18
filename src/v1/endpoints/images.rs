@@ -1,8 +1,10 @@
-use crate::v1::api::Client;
-use crate::v1::error::APIError;
-use crate::v1::api::file_from_disk_to_form_part;
-use crate::v1::resources::image::{CreateImageParameters, ImageResponse, EditImageParameters, CreateImageVariationParameters};
 use serde_json::Value;
+
+use crate::v1::api::{file_from_disk_to_form_part, Client};
+use crate::v1::error::APIError;
+use crate::v1::resources::image::{
+    CreateImageParameters, CreateImageVariationParameters, EditImageParameters, ImageResponse,
+};
 
 pub struct Images<'a> {
     pub client: &'a Client,
@@ -10,18 +12,20 @@ pub struct Images<'a> {
 
 impl Client {
     pub fn images(&self) -> Images {
-        Images {
-            client: self,
-        }
+        Images { client: self }
     }
 }
 
 impl Images<'_> {
-    pub async fn create(&self, parameters: CreateImageParameters) -> Result<ImageResponse, APIError> {
+    pub async fn create(
+        &self,
+        parameters: CreateImageParameters,
+    ) -> Result<ImageResponse, APIError> {
         let response = self.client.post("/images/generations", &parameters).await?;
 
         let value: Value = serde_json::from_str(&response).unwrap();
-        let create_image_response: ImageResponse = serde_json::from_value(value).map_err(|error| APIError::ParseError(error.to_string()))?;
+        let create_image_response: ImageResponse = serde_json::from_value(value)
+            .map_err(|error| APIError::ParseError(error.to_string()))?;
 
         Ok(create_image_response)
     }
@@ -54,12 +58,16 @@ impl Images<'_> {
         let response = self.client.post_with_form("/images/edits", form).await?;
 
         let value: Value = serde_json::from_str(&response).unwrap();
-        let create_image_response: ImageResponse = serde_json::from_value(value).map_err(|error| APIError::ParseError(error.to_string()))?;
+        let create_image_response: ImageResponse = serde_json::from_value(value)
+            .map_err(|error| APIError::ParseError(error.to_string()))?;
 
         Ok(create_image_response)
     }
 
-    pub async fn variation(&self, parameters: CreateImageVariationParameters) -> Result<ImageResponse, APIError> {
+    pub async fn variation(
+        &self,
+        parameters: CreateImageVariationParameters,
+    ) -> Result<ImageResponse, APIError> {
         let mut form = reqwest::multipart::Form::new();
 
         let image = file_from_disk_to_form_part(parameters.image).await?;
@@ -77,10 +85,14 @@ impl Images<'_> {
             form = form.text("response_format", response_format.to_string());
         }
 
-        let response = self.client.post_with_form("/images/variations", form).await?;
+        let response = self
+            .client
+            .post_with_form("/images/variations", form)
+            .await?;
 
         let value: Value = serde_json::from_str(&response).unwrap();
-        let create_image_response: ImageResponse = serde_json::from_value(value).map_err(|error| APIError::ParseError(error.to_string()))?;
+        let create_image_response: ImageResponse = serde_json::from_value(value)
+            .map_err(|error| APIError::ParseError(error.to_string()))?;
 
         Ok(create_image_response)
     }

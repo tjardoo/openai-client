@@ -1,7 +1,8 @@
+use serde_json::Value;
+
 use crate::v1::api::Client;
 use crate::v1::error::APIError;
 use crate::v1::resources::model::Model;
-use serde_json::Value;
 
 pub struct Models<'a> {
     pub client: &'a Client,
@@ -9,9 +10,7 @@ pub struct Models<'a> {
 
 impl Client {
     pub fn models(&self) -> Models {
-        Models {
-            client: self,
-        }
+        Models { client: self }
     }
 }
 
@@ -20,7 +19,8 @@ impl Models<'_> {
         let response = self.client.get("/models").await?;
 
         let value: Value = serde_json::from_str(&response).unwrap();
-        let models: Vec<Model> = serde_json::from_value(value["data"].clone()).map_err(|error| APIError::ParseError(error.to_string()))?;
+        let models: Vec<Model> = serde_json::from_value(value["data"].clone())
+            .map_err(|error| APIError::ParseError(error.to_string()))?;
 
         Ok(models)
     }
@@ -31,7 +31,8 @@ impl Models<'_> {
         let response = self.client.get(&path).await?;
 
         let value: Value = serde_json::from_str(&response).unwrap();
-        let model_response: Model = serde_json::from_value(value).map_err(|error| APIError::ParseError(error.to_string()))?;
+        let model_response: Model = serde_json::from_value(value)
+            .map_err(|error| APIError::ParseError(error.to_string()))?;
 
         Ok(model_response)
     }

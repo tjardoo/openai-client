@@ -1,7 +1,6 @@
-use serde::{Deserialize, Serialize};
-
 #[cfg(feature = "download")]
 use rand::{distributions::Alphanumeric, Rng};
+use serde::{Deserialize, Serialize};
 
 #[derive(Serialize, Deserialize, Debug, Clone)]
 pub struct BaseModel {
