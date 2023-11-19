@@ -38,9 +38,25 @@ pub struct FineTuningJob {
 }
 
 #[derive(Serialize, Deserialize, Debug, Clone, PartialEq)]
+pub struct FineTuningJobEvent {
+    pub id: String,
+    pub created_at: u32,
+    pub level: String,
+    pub message: String,
+    pub object: String,
+}
+
+#[derive(Serialize, Deserialize, Debug, Clone, PartialEq)]
 pub struct ListFineTuningJobsResponse {
     pub object: String,
     pub data: Vec<FineTuningJob>,
+    pub has_more: bool,
+}
+
+#[derive(Serialize, Deserialize, Debug, Clone, PartialEq)]
+pub struct ListFineTuningJobEventsResponse {
+    pub object: String,
+    pub data: Vec<FineTuningJobEvent>,
     pub has_more: bool,
 }
 
@@ -86,6 +102,14 @@ pub struct ListFineTuningJobsParameters {
     /// Identifier for the last job from the previous pagination request.
     pub after: Option<String>,
     /// Number of fine-tuning jobs to retrieve.
+    pub limit: Option<u32>,
+}
+
+#[derive(Serialize, Deserialize, Debug, Clone, PartialEq)]
+pub struct ListFineTuningJobEventsParameters {
+    /// Identifier for the last event from the previous pagination request.
+    pub after: Option<String>,
+    /// Number of events to retrieve.
     pub limit: Option<u32>,
 }
 

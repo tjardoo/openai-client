@@ -4,6 +4,8 @@ use crate::v1::api::Client;
 use crate::v1::error::APIError;
 use crate::v1::resources::fine_tuning::CreateFineTuningJobParameters;
 use crate::v1::resources::fine_tuning::FineTuningJob;
+use crate::v1::resources::fine_tuning::ListFineTuningJobEventsParameters;
+use crate::v1::resources::fine_tuning::ListFineTuningJobEventsResponse;
 use crate::v1::resources::fine_tuning::ListFineTuningJobsParameters;
 use crate::v1::resources::fine_tuning::ListFineTuningJobsResponse;
 
@@ -66,5 +68,24 @@ impl FineTuning<'_> {
             .map_err(|error| APIError::ParseError(error.to_string()))?;
 
         Ok(file_tuning_job_response)
+    }
+
+    pub async fn list_job_events(
+        &self,
+        id: &str,
+        query: Option<ListFineTuningJobEventsParameters>,
+    ) -> Result<ListFineTuningJobEventsResponse, APIError> {
+        let response = self
+            .client
+            .get_with_query(format!("/fine_tuning/jobs/{id}/events").as_str(), &query)
+            .await?;
+
+        let value: Value = serde_json::from_str(&response).unwrap();
+
+        let list_fine_tuning_job_events_response: ListFineTuningJobEventsResponse =
+            serde_json::from_value(value.clone())
+                .map_err(|error| APIError::ParseError(error.to_string()))?;
+
+        Ok(list_fine_tuning_job_events_response)
     }
 }
