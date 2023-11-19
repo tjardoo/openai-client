@@ -70,6 +70,25 @@ impl FineTuning<'_> {
         Ok(file_tuning_job_response)
     }
 
+    /// Immediately cancel a fine-tune job.
+    pub async fn cancel(&self, id: &str) -> Result<FineTuningJob, APIError> {
+        let response = self
+            .client
+            .post(
+                format!("/fine_tuning/jobs/{id}/cancel").as_str(),
+                &Value::Null,
+            )
+            .await?;
+
+        let value: Value = serde_json::from_str(&response).unwrap();
+
+        let file_tuning_job_response: FineTuningJob = serde_json::from_value(value)
+            .map_err(|error| APIError::ParseError(error.to_string()))?;
+
+        Ok(file_tuning_job_response)
+    }
+
+    /// Get status updates for a fine-tuning job.
     pub async fn list_job_events(
         &self,
         id: &str,
