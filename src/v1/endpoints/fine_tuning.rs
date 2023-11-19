@@ -21,6 +21,21 @@ impl Client {
 }
 
 impl FineTuning<'_> {
+    /// Creates a job that fine-tunes a specified model from a given dataset.
+    pub async fn create(
+        &self,
+        parameters: CreateFineTuningJobParameters,
+    ) -> Result<FineTuningJob, APIError> {
+        let response = self.client.post("/fine_tuning/jobs", &parameters).await?;
+
+        let value: Value = serde_json::from_str(&response).unwrap();
+
+        let fine_tuning_job_response: FineTuningJob = serde_json::from_value(value)
+            .map_err(|error| APIError::ParseError(error.to_string()))?;
+
+        Ok(fine_tuning_job_response)
+    }
+
     /// List your organization's fine-tuning jobs.
     pub async fn list(
         &self,
@@ -38,21 +53,6 @@ impl FineTuning<'_> {
                 .map_err(|error| APIError::ParseError(error.to_string()))?;
 
         Ok(list_fine_tuning_jobs_response)
-    }
-
-    /// Creates a job that fine-tunes a specified model from a given dataset.
-    pub async fn create(
-        &self,
-        parameters: CreateFineTuningJobParameters,
-    ) -> Result<FineTuningJob, APIError> {
-        let response = self.client.post("/fine_tuning/jobs", &parameters).await?;
-
-        let value: Value = serde_json::from_str(&response).unwrap();
-
-        let fine_tuning_job_response: FineTuningJob = serde_json::from_value(value)
-            .map_err(|error| APIError::ParseError(error.to_string()))?;
-
-        Ok(fine_tuning_job_response)
     }
 
     /// Get info about a fine-tuning job.
