@@ -155,7 +155,7 @@ pub struct DeltaChatMessage {
     #[serde(skip_serializing_if = "Option::is_none")]
     pub content: Option<String>,
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub tool_calls: Option<Vec<ToolCall>>,
+    pub tool_calls: Option<Vec<DeltaToolCall>>,
     #[serde(skip_serializing_if = "Option::is_none")]
     pub name: Option<String>,
 }
@@ -164,9 +164,22 @@ pub struct DeltaChatMessage {
 pub struct ToolCall {
     #[serde(skip_serializing_if = "Option::is_none")]
     pub index: Option<u32>,
-    pub id: String,
-    pub r#type: String,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub id: Option<String>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub r#type: Option<String>,
     pub function: Function,
+}
+
+#[derive(Serialize, Deserialize, Debug, Clone, PartialEq)]
+pub struct DeltaToolCall {
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub index: Option<u32>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub id: Option<String>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub r#type: Option<String>,
+    pub function: DeltaFunction,
 }
 
 #[derive(Serialize, Deserialize, Debug, Clone, PartialEq)]
@@ -176,11 +189,16 @@ pub struct Function {
 }
 
 #[derive(Serialize, Deserialize, Debug, Clone, PartialEq)]
+pub struct DeltaFunction {
+    pub name: Option<String>,
+    pub arguments: Option<String>,
+}
+
+#[derive(Serialize, Deserialize, Debug, Clone, PartialEq)]
 pub struct ChatCompletionChoice {
     pub index: u32,
     pub message: ChatMessage,
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub finish_reason: Option<FinishReason>,
+    pub finish_reason: FinishReason,
 }
 
 #[cfg(feature = "stream")]
@@ -320,5 +338,25 @@ impl FromStr for Role {
             "function" => Ok(Role::Function),
             _ => Err(format!("{} is not a valid Role", s)),
         }
+    }
+}
+
+impl DeltaFunction {
+    pub fn merge(&mut self, other: &Self) {
+        if self.name.is_none() && other.name.is_none() == false {
+            self.name = other.name.clone();
+        }
+
+        if let Some(arguments) = &other.arguments {
+            if let Some(self_arguments) = &mut self.arguments {
+                self_arguments.push_str(arguments);
+            } else {
+                self.arguments = Some(arguments.clone());
+            }
+        }
+    }
+
+    pub fn is_empty(&self) -> bool {
+        self.name.is_none() && self.arguments.is_none()
     }
 }

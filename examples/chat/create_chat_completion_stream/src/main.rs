@@ -32,7 +32,7 @@ async fn main() {
     while let Some(response) = stream.next().await {
         match response {
             Ok(chat_response) => chat_response.choices.iter().for_each(|choice| {
-                if let Some(content) = choice.delta.content.as_ref() {
+                if let Some(content) = &choice.delta.content {
                     print!("{}", content);
                 }
             }),

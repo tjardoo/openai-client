@@ -50,32 +50,33 @@ async fn main() {
 
     let result = client.chat().create(parameters).await.unwrap();
 
-    if let Some(choice) = result.choices.first() {
-        if choice.finish_reason == Some(FinishReason::StopSequenceReached) {
+    for choice in result.choices.iter() {
+        if choice.finish_reason == FinishReason::StopSequenceReached {
             if let Some(tool_calls) = &choice.message.tool_calls {
-                let tool_call = tool_calls.first().unwrap();
+                for tool_call in tool_calls.iter() {
+                    let random_numbers =
+                        serde_json::from_str(&tool_call.function.arguments).unwrap();
 
-                let random_numbers = serde_json::from_str(&tool_call.function.arguments).unwrap();
+                    if tool_call.function.name == "get_random_number" {
+                        let random_number_result = get_random_number(random_numbers);
 
-                if tool_call.function.name == "get_random_number" {
-                    let random_number_result = get_random_number(random_numbers);
+                        messages.push(ChatMessage {
+                            role: Role::Function,
+                            content: Some(serde_json::to_string(&random_number_result).unwrap()),
+                            name: Some("get_random_number".to_string()),
+                            ..Default::default()
+                        });
 
-                    messages.push(ChatMessage {
-                        role: Role::Function,
-                        content: Some(serde_json::to_string(&random_number_result).unwrap()),
-                        name: Some("get_random_number".to_string()),
-                        ..Default::default()
-                    });
+                        let parameters = ChatCompletionParameters {
+                            model: "gpt-3.5-turbo-0613".to_string(),
+                            messages: messages.clone(),
+                            ..Default::default()
+                        };
 
-                    let parameters = ChatCompletionParameters {
-                        model: "gpt-3.5-turbo-0613".to_string(),
-                        messages: messages.clone(),
-                        ..Default::default()
-                    };
+                        let result = client.chat().create(parameters).await.unwrap();
 
-                    let result = client.chat().create(parameters).await.unwrap();
-
-                    println!("{:?}", result);
+                        println!("{:?}", result);
+                    }
                 }
             }
         }

@@ -18,12 +18,16 @@ pub struct Usage {
 
 #[derive(Serialize, Deserialize, Debug, Clone, PartialEq)]
 pub enum FinishReason {
+    /// API returned complete message, or a message terminated by one of the stop sequences provided via the stop parameter.
     #[serde(rename(deserialize = "stop"))]
     StopSequenceReached,
+    /// Incomplete model output due to max_tokens parameter or token limit.
     #[serde(rename(deserialize = "length"))]
     TokenLimitReached,
+    /// Omitted content due to a flag from our content filters.
     #[serde(rename(deserialize = "content_filter"))]
     ContentFilterFlagged,
+    /// The model decided to call a function.
     #[serde(rename(deserialize = "function_call"))]
     FunctionCall,
 }
