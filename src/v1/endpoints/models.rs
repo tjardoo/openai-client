@@ -1,7 +1,7 @@
 use crate::v1::api::Client;
 use crate::v1::error::APIError;
+use crate::v1::helpers::validate_request;
 use crate::v1::resources::model::{ListModelResponse, Model};
-use serde_json::Value;
 
 pub struct Models<'a> {
     pub client: &'a Client,
@@ -19,7 +19,7 @@ impl Models<'_> {
     pub async fn list(&self) -> Result<ListModelResponse, APIError> {
         let response = self.client.get("/models").await?;
 
-        let value: Value = serde_json::from_str(&response).unwrap();
+        let value = validate_request(response).await?;
 
         let list_model_response: ListModelResponse = serde_json::from_value(value.clone())
             .map_err(|error| APIError::ParseError(error.to_string()))?;
@@ -33,7 +33,7 @@ impl Models<'_> {
 
         let response = self.client.get(&path).await?;
 
-        let value: Value = serde_json::from_str(&response).unwrap();
+        let value = validate_request(response).await?;
 
         let model_response: Model = serde_json::from_value(value)
             .map_err(|error| APIError::ParseError(error.to_string()))?;
@@ -47,7 +47,7 @@ impl Models<'_> {
 
         let response = self.client.delete(&path).await?;
 
-        let value: Value = serde_json::from_str(&response).unwrap();
+        let value = validate_request(response).await?;
 
         let model_response: Model = serde_json::from_value(value)
             .map_err(|error| APIError::ParseError(error.to_string()))?;

@@ -1,9 +1,9 @@
 use crate::v1::api::Client;
 use crate::v1::error::APIError;
+use crate::v1::helpers::validate_request;
 use crate::v1::resources::chat::{
     ChatCompletionChunkResponse, ChatCompletionParameters, ChatCompletionResponse,
 };
-use serde_json::Value;
 
 #[cfg(feature = "stream")]
 use futures::Stream;
@@ -29,7 +29,7 @@ impl Chat<'_> {
     ) -> Result<ChatCompletionResponse, APIError> {
         let response = self.client.post("/chat/completions", &parameters).await?;
 
-        let value: Value = serde_json::from_str(&response).unwrap();
+        let value = validate_request(response).await?;
 
         let chat_completion_response: ChatCompletionResponse = serde_json::from_value(value)
             .map_err(|error| APIError::ParseError(error.to_string()))?;

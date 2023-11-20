@@ -1,7 +1,7 @@
 use crate::v1::api::Client;
 use crate::v1::error::APIError;
+use crate::v1::helpers::validate_request;
 use crate::v1::resources::moderation::{ModerationParameters, ModerationResponse};
-use serde_json::Value;
 
 pub struct Moderations<'a> {
     pub client: &'a Client,
@@ -22,7 +22,7 @@ impl Moderations<'_> {
     ) -> Result<ModerationResponse, APIError> {
         let response = self.client.post("/moderations", &parameters).await?;
 
-        let value: Value = serde_json::from_str(&response).unwrap();
+        let value = validate_request(response).await?;
 
         let moderation_response: ModerationResponse = serde_json::from_value(value)
             .map_err(|error| APIError::ParseError(error.to_string()))?;

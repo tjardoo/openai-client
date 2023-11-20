@@ -2,6 +2,7 @@ use serde_json::Value;
 
 use crate::v1::api::Client;
 use crate::v1::error::APIError;
+use crate::v1::helpers::validate_request;
 use crate::v1::resources::fine_tuning::CreateFineTuningJobParameters;
 use crate::v1::resources::fine_tuning::FineTuningJob;
 use crate::v1::resources::fine_tuning::ListFineTuningJobEventsParameters;
@@ -28,7 +29,7 @@ impl FineTuning<'_> {
     ) -> Result<FineTuningJob, APIError> {
         let response = self.client.post("/fine_tuning/jobs", &parameters).await?;
 
-        let value: Value = serde_json::from_str(&response).unwrap();
+        let value = validate_request(response).await?;
 
         let fine_tuning_job_response: FineTuningJob = serde_json::from_value(value)
             .map_err(|error| APIError::ParseError(error.to_string()))?;
@@ -46,7 +47,7 @@ impl FineTuning<'_> {
             .get_with_query("/fine_tuning/jobs", &query)
             .await?;
 
-        let value: Value = serde_json::from_str(&response).unwrap();
+        let value = validate_request(response).await?;
 
         let list_fine_tuning_jobs_response: ListFineTuningJobsResponse =
             serde_json::from_value(value.clone())
@@ -62,7 +63,7 @@ impl FineTuning<'_> {
             .get(format!("/fine_tuning/jobs/{id}").as_str())
             .await?;
 
-        let value: Value = serde_json::from_str(&response).unwrap();
+        let value = validate_request(response).await?;
 
         let file_tuning_job_response: FineTuningJob = serde_json::from_value(value)
             .map_err(|error| APIError::ParseError(error.to_string()))?;
@@ -80,7 +81,7 @@ impl FineTuning<'_> {
             )
             .await?;
 
-        let value: Value = serde_json::from_str(&response).unwrap();
+        let value = validate_request(response).await?;
 
         let file_tuning_job_response: FineTuningJob = serde_json::from_value(value)
             .map_err(|error| APIError::ParseError(error.to_string()))?;
@@ -99,7 +100,7 @@ impl FineTuning<'_> {
             .get_with_query(format!("/fine_tuning/jobs/{id}/events").as_str(), &query)
             .await?;
 
-        let value: Value = serde_json::from_str(&response).unwrap();
+        let value = validate_request(response).await?;
 
         let list_fine_tuning_job_events_response: ListFineTuningJobEventsResponse =
             serde_json::from_value(value.clone())

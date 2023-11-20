@@ -1,10 +1,9 @@
-use crate::v1::api::file_from_disk_to_form_part;
 use crate::v1::api::Client;
 use crate::v1::error::APIError;
+use crate::v1::helpers::{file_from_disk_to_form_part, validate_request};
 use crate::v1::resources::image::{
     CreateImageParameters, CreateImageVariationParameters, EditImageParameters, ImageResponse,
 };
-use serde_json::Value;
 
 pub struct Images<'a> {
     pub client: &'a Client,
@@ -25,7 +24,7 @@ impl Images<'_> {
     ) -> Result<ImageResponse, APIError> {
         let response = self.client.post("/images/generations", &parameters).await?;
 
-        let value: Value = serde_json::from_str(&response).unwrap();
+        let value = validate_request(response).await?;
 
         let create_image_response: ImageResponse = serde_json::from_value(value)
             .map_err(|error| APIError::ParseError(error.to_string()))?;
@@ -69,7 +68,7 @@ impl Images<'_> {
 
         let response = self.client.post_with_form("/images/edits", form).await?;
 
-        let value: Value = serde_json::from_str(&response).unwrap();
+        let value = validate_request(response).await?;
 
         let create_image_response: ImageResponse = serde_json::from_value(value)
             .map_err(|error| APIError::ParseError(error.to_string()))?;
@@ -112,7 +111,7 @@ impl Images<'_> {
             .post_with_form("/images/variations", form)
             .await?;
 
-        let value: Value = serde_json::from_str(&response).unwrap();
+        let value = validate_request(response).await?;
 
         let create_image_response: ImageResponse = serde_json::from_value(value)
             .map_err(|error| APIError::ParseError(error.to_string()))?;

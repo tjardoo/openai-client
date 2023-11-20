@@ -1,5 +1,4 @@
-use serde::Deserialize;
-use std::error::Error;
+use serde::{Deserialize, Serialize};
 use std::fmt::{Display, Formatter, Result};
 
 #[derive(Debug, Deserialize)]
@@ -23,10 +22,22 @@ impl APIError {
     }
 }
 
-impl Error for APIError {}
+#[derive(Serialize, Deserialize, Debug, Clone, PartialEq)]
+pub struct InvalidRequestError {
+    pub code: String,
+    pub message: String,
+    pub param: Option<String>,
+    pub r#type: String,
+}
 
 impl Display for APIError {
     fn fmt(&self, f: &mut Formatter) -> Result {
         write!(f, "{}", self.message())
+    }
+}
+
+impl Display for InvalidRequestError {
+    fn fmt(&self, f: &mut Formatter) -> Result {
+        write!(f, "{} {}", self.code, self.message)
     }
 }

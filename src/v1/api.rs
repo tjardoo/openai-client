@@ -1,9 +1,7 @@
 use crate::v1::error::APIError;
 use bytes::Bytes;
-use reqwest::multipart::{Form, Part};
+use reqwest::multipart::Form;
 use serde::Serialize;
-use tokio::fs::File;
-use tokio_util::codec::{BytesCodec, FramedRead};
 
 #[cfg(feature = "stream")]
 use futures::{stream::StreamExt, Stream};
@@ -201,21 +199,9 @@ impl Client {
     where
         O: DeserializeOwned + Send + 'static,
     {
+        use super::error::InvalidRequestError;
+
         let (tx, rx) = tokio::sync::mpsc::unbounded_channel();
-
-        #[derive(serde::Deserialize)]
-        struct StreamErrorWrapper {
-            error: StreamError,
-        }
-
-        #[derive(serde::Deserialize)]
-        struct StreamError {
-            message: String,
-            #[serde(rename = "type")]
-            error_type: String,
-            // param: Option<serde_json::Value>,
-            // code: Option<u8>,
-        }
 
         tokio::spawn(async move {
             while let Some(event_result) = event_soure.next().await {
@@ -230,10 +216,16 @@ impl Client {
                             let response = match serde_json::from_str::<O>(&message.data) {
                                 Ok(result) => Ok(result),
                                 Err(error) => {
-                                    // Try to parse an error message from the stream
-                                    match serde_json::from_str::<StreamErrorWrapper>(&message.data) {
-                                        Ok(error_wrapper) => Err(APIError::StreamError(format!("OpenAI {}: {}",  error_wrapper.error.error_type, error_wrapper.error.message))),
-                                        Err(_) => Err(APIError::StreamError(format!("OpenAI error parsing event stream: {}\nstream data: {}", error.to_string(), message.data))),
+                                    match serde_json::from_str::<InvalidRequestError>(&message.data)
+                                    {
+                                        Ok(invalid_request_error) => Err(APIError::StreamError(
+                                            invalid_request_error.to_string(),
+                                        )),
+                                        Err(_) => Err(APIError::StreamError(format!(
+                                            "{} {}",
+                                            error.to_string(),
+                                            message.data
+                                        ))),
                                     }
                                 }
                             };
@@ -257,20 +249,4 @@ impl Client {
 
         Box::pin(tokio_stream::wrappers::UnboundedReceiverStream::new(rx))
     }
-}
-
-pub async fn file_from_disk_to_form_part(path: String) -> Result<Part, APIError> {
-    let file = File::open(&path)
-        .await
-        .map_err(|error| APIError::FileError(error.to_string()))?;
-
-    let stream = FramedRead::new(file, BytesCodec::new());
-    let file_body = reqwest::Body::wrap_stream(stream);
-
-    let file_part = reqwest::multipart::Part::stream(file_body)
-        .file_name(path)
-        .mime_str("application/octet-stream")
-        .unwrap();
-
-    Ok(file_part)
 }

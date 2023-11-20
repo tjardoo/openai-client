@@ -1,6 +1,6 @@
-use crate::v1::api::file_from_disk_to_form_part;
 use crate::v1::api::Client;
 use crate::v1::error::APIError;
+use crate::v1::helpers::file_from_disk_to_form_part;
 use crate::v1::resources::audio::AudioSpeechParameters;
 use crate::v1::resources::audio::AudioSpeechResponse;
 use crate::v1::resources::audio::{AudioTranscriptionParameters, AudioTranslationParameters};
