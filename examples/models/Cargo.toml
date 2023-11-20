@@ -1,0 +1,2 @@
+[workspace]
+members = ["list_models", "retrieve_model", "delete_fine_tune_model"]

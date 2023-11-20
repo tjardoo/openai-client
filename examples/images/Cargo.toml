@@ -1,0 +1,2 @@
+[workspace]
+members = ["create_image", "create_image_edit", "create_image_variation"]

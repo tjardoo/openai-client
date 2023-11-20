@@ -1,58 +1,101 @@
-use serde::{Deserialize, Serialize};
-use std::fmt::Display;
-
 #[cfg(feature = "download")]
 use crate::v1::error::APIError;
 #[cfg(feature = "download")]
-use crate::v1::resources::shared::generate_file_name;
+use crate::v1::helpers::generate_file_name;
 #[cfg(feature = "download")]
 use base64::{engine::general_purpose, Engine as _};
 #[cfg(feature = "download")]
 use futures::future;
+use serde::{Deserialize, Serialize};
+use std::fmt::Display;
 
 #[derive(Serialize, Debug, Clone)]
 pub struct CreateImageParameters {
+    /// A text description of the desired image(s). The maximum length is 1000 characters for dall-e-2 and 4000 characters for dall-e-3.
     pub prompt: String,
+    /// The model to use for image generation.
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub model: Option<String>,
+    /// The number of images to generate. Must be between 1 and 10. For dall-e-3, only n=1 is supported.
     #[serde(skip_serializing_if = "Option::is_none")]
     pub n: Option<u32>,
+    /// The quality of the image that will be generated. hd creates images with finer details and greater consistency across the image.
+    /// This param is only supported for dall-e-3.
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub size: Option<ImageSize>,
+    pub quality: Option<String>,
+    /// The format in which the generated images are returned. Must be one of url or b64_json.
     #[serde(skip_serializing_if = "Option::is_none")]
     pub response_format: Option<ResponseFormat>,
+    /// The size of the generated images. Must be one of 256x256, 512x512, or 1024x1024 for dall-e-2.
+    /// Must be one of 1024x1024, 1792x1024, or 1024x1792 for dall-e-3 models.
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub size: Option<ImageSize>,
+    /// The style of the generated images. Must be one of vivid or natural.
+    /// Vivid causes the model to lean towards generating hyper-real and dramatic images.
+    /// Natural causes the model to produce more natural, less hyper-real looking images.
+    /// This param is only supported for dall-e-3.
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub style: Option<ImageStyle>,
+    /// A unique identifier representing your end-user, which can help OpenAI to monitor and detect abuse.
     #[serde(skip_serializing_if = "Option::is_none")]
     pub user: Option<String>,
 }
 
-#[derive(Serialize, Debug, Clone)]
+#[derive(Serialize, Deserialize, Debug, Clone, PartialEq)]
 pub struct EditImageParameters {
+    /// The image to edit. Must be a valid PNG file, less than 4MB, and square. If mask is not provided, image must have transparency, which will be used as the mask.
     pub image: String,
+    /// A text description of the desired image(s). The maximum length is 1000 characters.
     pub prompt: String,
+    /// An additional image whose fully transparent areas (e.g. where alpha is zero) indicate where image should be edited.
+    /// Must be a valid PNG file, less than 4MB, and have the same dimensions as image.
     #[serde(skip_serializing_if = "Option::is_none")]
     pub mask: Option<String>,
+    /// The model to use for image generation. Only dall-e-2 is supported at this time.
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub model: Option<String>,
+    /// The model to use for image generation. Only dall-e-2 is supported at this time.
     #[serde(skip_serializing_if = "Option::is_none")]
     pub n: Option<u32>,
+    /// The size of the generated images. Must be one of 256x256, 512x512, or 1024x1024.
     #[serde(skip_serializing_if = "Option::is_none")]
     pub size: Option<ImageSize>,
+    /// The format in which the generated images are returned. Must be one of url or b64_json.
     #[serde(skip_serializing_if = "Option::is_none")]
     pub response_format: Option<ResponseFormat>,
+    /// A unique identifier representing your end-user, which can help OpenAI to monitor and detect abuse.
     #[serde(skip_serializing_if = "Option::is_none")]
     pub user: Option<String>,
 }
 
-#[derive(Serialize, Debug, Clone)]
+#[derive(Serialize, Deserialize, Debug, Clone, PartialEq)]
 pub struct CreateImageVariationParameters {
+    /// The image to use as the basis for the variation(s). Must be a valid PNG file, less than 4MB, and square.
     pub image: String,
+    /// The model to use for image generation. Only dall-e-2 is supported at this time.
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub model: Option<String>,
+    /// The number of images to generate. Must be between 1 and 10. For dall-e-3, only n=1 is supported.
     #[serde(skip_serializing_if = "Option::is_none")]
     pub n: Option<u32>,
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub size: Option<ImageSize>,
+    /// The format in which the generated images are returned. Must be one of url or b64_json.
     #[serde(skip_serializing_if = "Option::is_none")]
     pub response_format: Option<ResponseFormat>,
+    /// The size of the generated images. Must be one of 256x256, 512x512, or 1024x1024.
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub size: Option<ImageSize>,
+    /// A unique identifier representing your end-user, which can help OpenAI to monitor and detect abuse.
     #[serde(skip_serializing_if = "Option::is_none")]
     pub user: Option<String>,
 }
 
-#[derive(Serialize, Deserialize, Debug, Clone)]
+#[derive(Serialize, Deserialize, Debug, Clone, PartialEq)]
+pub struct ImageResponse {
+    pub created: u32,
+    pub data: Vec<ImageData>,
+}
+
+#[derive(Serialize, Deserialize, Debug, Clone, PartialEq)]
 pub enum ImageSize {
     #[serde(rename = "256x256")]
     Size256X256,
@@ -60,9 +103,20 @@ pub enum ImageSize {
     Size512X512,
     #[serde(rename = "1024x1024")]
     Size1024X1024,
+    #[serde(rename = "1792x1024")]
+    Size1792X1024,
+    #[serde(rename = "1024x1792")]
+    Size1024X1792,
 }
 
-#[derive(Serialize, Deserialize, Debug, Clone)]
+#[derive(Serialize, Deserialize, Debug, Clone, PartialEq)]
+#[serde(rename_all = "lowercase")]
+pub enum ImageStyle {
+    Vivid,
+    Natural,
+}
+
+#[derive(Serialize, Deserialize, Debug, Clone, PartialEq)]
 pub enum ResponseFormat {
     #[serde(rename = "url")]
     Url,
@@ -70,13 +124,7 @@ pub enum ResponseFormat {
     B64Json,
 }
 
-#[derive(Serialize, Deserialize, Debug, Clone)]
-pub struct ImageResponse {
-    pub created: u32,
-    pub data: Vec<ImageData>,
-}
-
-#[derive(Serialize, Deserialize, Debug, Clone)]
+#[derive(Serialize, Deserialize, Debug, Clone, PartialEq)]
 pub enum ImageData {
     #[serde(rename = "url")]
     Url(String),
@@ -165,7 +213,13 @@ impl Display for ImageSize {
         write!(
             f,
             "{}",
-            serde_json::to_string(self).map_err(|_| std::fmt::Error)?
+            match self {
+                ImageSize::Size256X256 => "256x256",
+                ImageSize::Size512X512 => "512x512",
+                ImageSize::Size1024X1024 => "1024x1024",
+                ImageSize::Size1792X1024 => "1792x1024",
+                ImageSize::Size1024X1792 => "1024x1792",
+            }
         )
     }
 }
@@ -175,7 +229,10 @@ impl Display for ResponseFormat {
         write!(
             f,
             "{}",
-            serde_json::to_string(self).map_err(|_| std::fmt::Error)?
+            match self {
+                ResponseFormat::Url => "url",
+                ResponseFormat::B64Json => "b64_json",
+            }
         )
     }
 }

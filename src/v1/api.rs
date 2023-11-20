@@ -1,17 +1,15 @@
-use reqwest::multipart::{Form, Part};
-use serde::Serialize;
-use tokio::fs::File;
-use tokio_util::codec::{FramedRead, BytesCodec};
 use crate::v1::error::APIError;
-
-#[cfg(feature = "stream")]
-use std::pin::Pin;
-#[cfg(feature = "stream")]
-use reqwest_eventsource::{RequestBuilderExt, EventSource, Event};
+use bytes::Bytes;
 #[cfg(feature = "stream")]
 use futures::{stream::StreamExt, Stream};
+use reqwest::multipart::Form;
+#[cfg(feature = "stream")]
+use reqwest_eventsource::{Event, EventSource, RequestBuilderExt};
 #[cfg(feature = "stream")]
 use serde::de::DeserializeOwned;
+use serde::Serialize;
+#[cfg(feature = "stream")]
+use std::pin::Pin;
 
 const OPENAI_API_V1_ENDPOINT: &str = "https://api.openai.com/v1";
 
@@ -33,7 +31,8 @@ impl Client {
     pub async fn get(&self, path: &str) -> Result<String, APIError> {
         let url = format!("{}{}", &self.base_url, path);
 
-        let response = self.http_client
+        let response = self
+            .http_client
             .get(url)
             .header(reqwest::header::CONTENT_TYPE, "application/json")
             .bearer_auth(&self.api_key)
@@ -45,7 +44,35 @@ impl Client {
             return Err(APIError::EndpointError(response.text().await.unwrap()));
         }
 
-        let response_text= response.text().await.unwrap();
+        let response_text = response.text().await.unwrap();
+
+        #[cfg(feature = "log")]
+        log::trace!("{}", response_text);
+
+        Ok(response_text)
+    }
+
+    pub async fn get_with_query<Q>(&self, path: &str, query: &Q) -> Result<String, APIError>
+    where
+        Q: Serialize,
+    {
+        let url = format!("{}{}", &self.base_url, path);
+
+        let response = self
+            .http_client
+            .get(url)
+            .header(reqwest::header::CONTENT_TYPE, "application/json")
+            .query(query)
+            .bearer_auth(&self.api_key)
+            .send()
+            .await
+            .unwrap();
+
+        if response.status().is_server_error() {
+            return Err(APIError::EndpointError(response.text().await.unwrap()));
+        }
+
+        let response_text = response.text().await.unwrap();
 
         #[cfg(feature = "log")]
         log::trace!("{}", response_text);
@@ -56,7 +83,8 @@ impl Client {
     pub async fn post<T: Serialize>(&self, path: &str, parameters: &T) -> Result<String, APIError> {
         let url = format!("{}{}", &self.base_url, path);
 
-        let response = self.http_client
+        let response = self
+            .http_client
             .post(url)
             .header(reqwest::header::CONTENT_TYPE, "application/json")
             .bearer_auth(&self.api_key)
@@ -65,11 +93,11 @@ impl Client {
             .await
             .unwrap();
 
-        if response.status().is_success() == false {
+        if response.status().is_server_error() {
             return Err(APIError::EndpointError(response.text().await.unwrap()));
         }
 
-        let response_text= response.text().await.unwrap();
+        let response_text = response.text().await.unwrap();
 
         #[cfg(feature = "log")]
         log::trace!("{}", response_text);
@@ -80,7 +108,8 @@ impl Client {
     pub async fn delete(&self, path: &str) -> Result<String, APIError> {
         let url = format!("{}{}", &self.base_url, path);
 
-        let response = self.http_client
+        let response = self
+            .http_client
             .delete(url)
             .header(reqwest::header::CONTENT_TYPE, "application/json")
             .bearer_auth(&self.api_key)
@@ -98,27 +127,51 @@ impl Client {
     pub async fn post_with_form(&self, path: &str, form: Form) -> Result<String, APIError> {
         let url = format!("{}{}", &self.base_url, path);
 
-        let response = self.http_client
+        let response = self
+            .http_client
             .post(url)
-            // .header(reqwest::header::CONTENT_TYPE, "multipart/form-data")
             .bearer_auth(&self.api_key)
             .multipart(form)
             .send()
             .await
             .unwrap();
 
-        if response.status().is_success() == false {
+        if response.status().is_server_error() {
             return Err(APIError::EndpointError(response.text().await.unwrap()));
         }
 
         Ok(response.text().await.unwrap())
     }
 
+    pub async fn post_raw<T: Serialize>(
+        &self,
+        path: &str,
+        parameters: &T,
+    ) -> Result<Bytes, APIError> {
+        let url = format!("{}{}", &self.base_url, path);
+
+        let response = self
+            .http_client
+            .post(url)
+            .header(reqwest::header::CONTENT_TYPE, "application/json")
+            .bearer_auth(&self.api_key)
+            .json(&parameters)
+            .send()
+            .await
+            .unwrap();
+
+        if response.status().is_server_error() {
+            return Err(APIError::EndpointError(response.text().await.unwrap()));
+        }
+
+        Ok(response.bytes().await.unwrap())
+    }
+
     #[cfg(feature = "stream")]
     pub async fn post_stream<I, O>(
         &self,
         path: &str,
-        parameters: &I
+        parameters: &I,
     ) -> Pin<Box<dyn Stream<Item = Result<O, APIError>> + Send>>
     where
         I: Serialize,
@@ -126,7 +179,8 @@ impl Client {
     {
         let url = format!("{}{}", &self.base_url, path);
 
-        let event_source = self.http_client
+        let event_source = self
+            .http_client
             .post(url)
             .header(reqwest::header::CONTENT_TYPE, "application/json")
             .bearer_auth(&self.api_key)
@@ -139,26 +193,14 @@ impl Client {
 
     #[cfg(feature = "stream")]
     pub async fn process_stream<O>(
-        mut event_soure: EventSource
+        mut event_soure: EventSource,
     ) -> Pin<Box<dyn Stream<Item = Result<O, APIError>> + Send>>
     where
         O: DeserializeOwned + Send + 'static,
     {
+        use super::error::InvalidRequestError;
+
         let (tx, rx) = tokio::sync::mpsc::unbounded_channel();
-
-        #[derive(serde::Deserialize)]
-        struct StreamErrorWrapper {
-            error: StreamError,
-        }
-
-        #[derive(serde::Deserialize)]
-        struct StreamError {
-            message: String,
-            #[serde(rename = "type")]
-            error_type: String,
-            param: Option<serde_json::Value>,
-            code: Option<u8>,
-        }
 
         tokio::spawn(async move {
             while let Some(event_result) = event_soure.next().await {
@@ -173,10 +215,16 @@ impl Client {
                             let response = match serde_json::from_str::<O>(&message.data) {
                                 Ok(result) => Ok(result),
                                 Err(error) => {
-                                    // Try to parse an error message from the stream
-                                    match serde_json::from_str::<StreamErrorWrapper>(&message.data) {
-                                        Ok(error_wrapper) => Err(APIError::StreamError(format!("OpenAI {}: {}",  error_wrapper.error.error_type, error_wrapper.error.message))),
-                                        Err(_) => Err(APIError::StreamError(format!("OpenAI error parsing event stream: {}\nstream data: {}", error.to_string(), message.data))),
+                                    match serde_json::from_str::<InvalidRequestError>(&message.data)
+                                    {
+                                        Ok(invalid_request_error) => Err(APIError::StreamError(
+                                            invalid_request_error.to_string(),
+                                        )),
+                                        Err(_) => Err(APIError::StreamError(format!(
+                                            "{} {}",
+                                            error.to_string(),
+                                            message.data
+                                        ))),
                                     }
                                 }
                             };
@@ -187,10 +235,11 @@ impl Client {
                         }
                     },
                     Err(error) => {
-                        if let Err(_error) = tx.send(Err(APIError::StreamError(error.to_string()))) {
+                        if let Err(_error) = tx.send(Err(APIError::StreamError(error.to_string())))
+                        {
                             break;
                         }
-                    },
+                    }
                 }
             }
 
@@ -199,18 +248,4 @@ impl Client {
 
         Box::pin(tokio_stream::wrappers::UnboundedReceiverStream::new(rx))
     }
-}
-
-pub async fn file_from_disk_to_form_part(path: String) -> Result<Part, APIError> {
-    let file = File::open(&path).await.map_err(|error| APIError::FileError(error.to_string()))?;
-
-    let stream = FramedRead::new(file, BytesCodec::new());
-    let file_body = reqwest::Body::wrap_stream(stream);
-
-    let file_part = reqwest::multipart::Part::stream(file_body)
-        .file_name(path)
-        .mime_str("application/octet-stream")
-        .unwrap();
-
-    Ok(file_part)
 }
