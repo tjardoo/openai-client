@@ -1,15 +1,13 @@
 use serde::{Deserialize, Serialize};
 
 #[derive(Serialize, Deserialize, Debug, Clone, PartialEq)]
-pub struct BaseModel {
-    name: String,
-}
-
-#[derive(Serialize, Deserialize, Debug, Clone, PartialEq)]
 pub struct Usage {
+    /// Number of tokens in the prompt.
     pub prompt_tokens: u32,
+    /// Number of tokens in the completion.
     #[serde(skip_serializing_if = "Option::is_none")]
     pub completion_tokens: Option<u32>,
+    /// Number of tokens in the entire response.
     pub total_tokens: u32,
 }
 

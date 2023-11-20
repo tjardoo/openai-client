@@ -91,7 +91,10 @@ pub struct CreateImageVariationParameters {
 
 #[derive(Serialize, Deserialize, Debug, Clone, PartialEq)]
 pub struct ImageResponse {
+    /// The Unix timestamp (in seconds) for when the image was created.
     pub created: u32,
+    /// The base64-encoded JSON of the generated image, if response_format is b64_json.
+    /// The URL of the generated image, if response_format is url (default).
     pub data: Vec<ImageData>,
 }
 

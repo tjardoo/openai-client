@@ -171,9 +171,9 @@
 //! ```rust
 //! use openai_dive::v1::api::Client;
 //! use openai_dive::v1::resources::chat::{
-//!     ChatCompletionFunctions, ChatCompletionParameters, ChatCompletionTool,
-//!     ChatCompletionToolChoice, ChatCompletionToolChoiceFunction,
-//!     ChatCompletionToolChoiceFunctionName, ChatCompletionToolType, ChatMessage, Role,
+//!     ChatCompletionFunction, ChatCompletionParameters, ChatCompletionTool, ChatCompletionToolChoice,
+//!     ChatCompletionToolChoiceFunction, ChatCompletionToolChoiceFunctionName, ChatCompletionToolType,
+//!     ChatMessage, Role,
 //! };
 //! use openai_dive::v1::resources::shared::FinishReason;
 //! use rand::Rng;
@@ -204,7 +204,7 @@
 //!         )),
 //!         tools: Some(vec![ChatCompletionTool {
 //!             r#type: ChatCompletionToolType::Function,
-//!             function: ChatCompletionFunctions {
+//!             function: ChatCompletionFunction {
 //!                 name: "get_random_number".to_string(),
 //!                 description: Some("Get a random number between two values".to_string()),
 //!                 parameters: json!({

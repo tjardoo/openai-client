@@ -57,30 +57,43 @@ pub struct CreateFineTuningJobParameters {
 #[derive(Serialize, Deserialize, Debug, Clone, PartialEq)]
 pub struct FineTuningJobEvent {
     pub id: String,
+    /// The Unix timestamp (in seconds) when the fine tuning job event was created.
     pub created_at: u32,
+    /// The fine-tuning job event level, which can be either info or error.
     pub level: String,
+    /// The fine-tuning job event message.
     pub message: String,
+    /// The object type, which is always "fine_tuning.job.event".
     pub object: String,
 }
 
 #[derive(Serialize, Deserialize, Debug, Clone, PartialEq)]
 pub struct ListFineTuningJobsResponse {
+    /// The object type, which is always "fine_tuning.job.event".
     pub object: String,
+    /// The list of fine-tuning jobs.
     pub data: Vec<FineTuningJob>,
+    /// Indicates whether there are more fine-tuning jobs to retrieve.
     pub has_more: bool,
 }
 
 #[derive(Serialize, Deserialize, Debug, Clone, PartialEq)]
 pub struct ListFineTuningJobEventsResponse {
+    /// The object type, which is always "fine_tuning.job.event".
     pub object: String,
+    /// The list of fine-tuning job events.
     pub data: Vec<FineTuningJobEvent>,
+    /// Indicates whether there are more fine-tuning job events to retrieve.
     pub has_more: bool,
 }
 
 #[derive(Serialize, Deserialize, Debug, Clone, PartialEq)]
 pub struct FineTuningJobError {
+    /// The error code.
     pub code: String,
+    /// The error message.
     pub message: String,
+    /// The parameter that caused the error.
     #[serde(skip_serializing_if = "Option::is_none")]
     pub param: Option<String>,
 }

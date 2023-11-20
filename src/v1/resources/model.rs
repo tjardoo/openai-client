@@ -14,6 +14,8 @@ pub struct Model {
 
 #[derive(Serialize, Deserialize, Debug, Clone, PartialEq)]
 pub struct ListModelResponse {
+    /// The object type, which is always "list".
     pub object: String,
+    /// A list of model objects.
     pub data: Vec<Model>,
 }

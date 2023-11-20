@@ -17,9 +17,13 @@ pub struct EmbeddingParameters {
 
 #[derive(Serialize, Deserialize, Debug, Clone, PartialEq)]
 pub struct EmbeddingResponse {
+    /// The object type, which is always "embedding".
     pub object: String,
+    /// A list of embedding objects.
     pub data: Vec<Embedding>,
+    /// The model used to generate the embeddings.
     pub model: String,
+    /// Object containing usage information for the request.
     pub usage: Usage,
 }
 

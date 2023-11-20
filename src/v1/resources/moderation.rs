@@ -2,22 +2,30 @@ use serde::{Deserialize, Serialize};
 
 #[derive(Serialize, Deserialize, Debug, Clone, PartialEq)]
 pub struct ModerationParameters {
+    /// Input text to moderate, encoded as a string.
     pub input: String,
+    /// The model used for the moderation.
     pub model: String,
 }
 
 #[derive(Serialize, Deserialize, Debug, Clone, PartialEq)]
 pub struct ModerationResponse {
+    /// The unique identifier for the moderation request.
     pub id: String,
+    /// The model used to generate the moderation results.
     pub model: String,
+    /// A list of moderation objects.
     pub results: Vec<Results>,
 }
 
 #[derive(Serialize, Deserialize, Debug, Clone, PartialEq)]
 pub struct Results {
-    pub categories: Categories,
-    pub category_scores: CategoryScores,
+    /// Whether the content violates OpenAI's usage policies.
     pub flagged: bool,
+    /// A list of the categories, and whether they are flagged or not.
+    pub categories: Categories,
+    /// A list of the categories along with their scores as predicted by model.
+    pub category_scores: CategoryScores,
 }
 
 #[derive(Serialize, Deserialize, Debug, Clone, PartialEq)]

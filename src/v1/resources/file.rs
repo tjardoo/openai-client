@@ -25,20 +25,29 @@ pub struct ListFilesParameters {
 
 #[derive(Serialize, Deserialize, Debug, Clone, PartialEq)]
 pub struct ListFilesResponse {
+    /// A list of file objects.
     pub data: Vec<File>,
+    /// The object type, which is always list.
     pub object: String,
 }
 
 #[derive(Serialize, Deserialize, Debug, Clone, PartialEq)]
 pub struct UploadFileParameters {
+    /// The File object (not file name) to be uploaded.
     pub file: String,
+    /// The intended purpose of the uploaded file.
+    /// Use "fine-tune" for Fine-tuning and "assistants" for Assistants and Messages.
+    /// This allows us to validate the format of the uploaded file is correct for fine-tuning.
     pub purpose: FilePurpose,
 }
 
 #[derive(Serialize, Deserialize, Debug, Clone, PartialEq)]
 pub struct DeletedFile {
+    /// ID of the deleted file.
     pub id: String,
+    /// The object type, which is always "file".
     pub object: String,
+    /// Indicates whether the file was successfully deleted.
     pub deleted: bool,
 }
 
