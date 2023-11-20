@@ -1,5 +1,3 @@
-use serde_json::Value;
-
 use crate::v1::api::Client;
 use crate::v1::error::APIError;
 use crate::v1::helpers::validate_request;
@@ -9,6 +7,7 @@ use crate::v1::resources::fine_tuning::ListFineTuningJobEventsParameters;
 use crate::v1::resources::fine_tuning::ListFineTuningJobEventsResponse;
 use crate::v1::resources::fine_tuning::ListFineTuningJobsParameters;
 use crate::v1::resources::fine_tuning::ListFineTuningJobsResponse;
+use serde_json::Value;
 
 pub struct FineTuning<'a> {
     pub client: &'a Client,

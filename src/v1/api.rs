@@ -1,14 +1,13 @@
 use crate::v1::error::APIError;
 use bytes::Bytes;
-use reqwest::multipart::Form;
-use serde::Serialize;
-
 #[cfg(feature = "stream")]
 use futures::{stream::StreamExt, Stream};
+use reqwest::multipart::Form;
 #[cfg(feature = "stream")]
 use reqwest_eventsource::{Event, EventSource, RequestBuilderExt};
 #[cfg(feature = "stream")]
 use serde::de::DeserializeOwned;
+use serde::Serialize;
 #[cfg(feature = "stream")]
 use std::pin::Pin;
 

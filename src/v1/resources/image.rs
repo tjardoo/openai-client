@@ -1,14 +1,13 @@
-use serde::{Deserialize, Serialize};
-use std::fmt::Display;
-
 #[cfg(feature = "download")]
 use crate::v1::error::APIError;
 #[cfg(feature = "download")]
-use crate::v1::resources::shared::generate_file_name;
+use crate::v1::helpers::generate_file_name;
 #[cfg(feature = "download")]
 use base64::{engine::general_purpose, Engine as _};
 #[cfg(feature = "download")]
 use futures::future;
+use serde::{Deserialize, Serialize};
+use std::fmt::Display;
 
 #[derive(Serialize, Debug, Clone)]
 pub struct CreateImageParameters {
@@ -91,6 +90,12 @@ pub struct CreateImageVariationParameters {
 }
 
 #[derive(Serialize, Deserialize, Debug, Clone, PartialEq)]
+pub struct ImageResponse {
+    pub created: u32,
+    pub data: Vec<ImageData>,
+}
+
+#[derive(Serialize, Deserialize, Debug, Clone, PartialEq)]
 pub enum ImageSize {
     #[serde(rename = "256x256")]
     Size256X256,
@@ -117,12 +122,6 @@ pub enum ResponseFormat {
     Url,
     #[serde(rename = "b64_json")]
     B64Json,
-}
-
-#[derive(Serialize, Deserialize, Debug, Clone, PartialEq)]
-pub struct ImageResponse {
-    pub created: u32,
-    pub data: Vec<ImageData>,
 }
 
 #[derive(Serialize, Deserialize, Debug, Clone, PartialEq)]

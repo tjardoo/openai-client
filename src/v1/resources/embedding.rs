@@ -1,6 +1,5 @@
-use serde::{Deserialize, Serialize};
-
 use crate::v1::resources::shared::Usage;
+use serde::{Deserialize, Serialize};
 
 #[derive(Serialize, Deserialize, Debug, Clone, PartialEq)]
 pub struct EmbeddingParameters {
@@ -26,9 +25,12 @@ pub struct EmbeddingResponse {
 
 #[derive(Serialize, Deserialize, Debug, Clone, PartialEq)]
 pub struct Embedding {
-    pub object: String,
-    pub embedding: Vec<f64>,
+    /// The index of the embedding in the list of embeddings.
     pub index: u32,
+    /// The embedding vector, which is a list of floats.
+    pub embedding: Vec<f64>,
+    /// The object type, which is always "embedding".
+    pub object: String,
 }
 
 #[derive(Serialize, Deserialize, Debug, Clone, PartialEq)]

@@ -38,6 +38,23 @@ pub struct FineTuningJob {
 }
 
 #[derive(Serialize, Deserialize, Debug, Clone, PartialEq)]
+pub struct CreateFineTuningJobParameters {
+    /// The name of the model to fine-tune.
+    pub model: String,
+    /// The ID of an uploaded file that contains training data.
+    pub training_file: String,
+    /// The hyperparameters used for the fine-tuning job.
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub hyperparameters: Option<FineTuningJobHyperparameters>,
+    /// A string of up to 18 characters that will be added to your fine-tuned model name.
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub suffix: Option<String>,
+    /// The ID of an uploaded file that contains validation data.
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub validation_file: Option<String>,
+}
+
+#[derive(Serialize, Deserialize, Debug, Clone, PartialEq)]
 pub struct FineTuningJobEvent {
     pub id: String,
     pub created_at: u32,
@@ -58,23 +75,6 @@ pub struct ListFineTuningJobEventsResponse {
     pub object: String,
     pub data: Vec<FineTuningJobEvent>,
     pub has_more: bool,
-}
-
-#[derive(Serialize, Deserialize, Debug, Clone, PartialEq)]
-pub struct CreateFineTuningJobParameters {
-    /// The name of the model to fine-tune.
-    pub model: String,
-    /// The ID of an uploaded file that contains training data.
-    pub training_file: String,
-    /// The hyperparameters used for the fine-tuning job.
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub hyperparameters: Option<FineTuningJobHyperparameters>,
-    /// A string of up to 18 characters that will be added to your fine-tuned model name.
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub suffix: Option<String>,
-    /// The ID of an uploaded file that contains validation data.
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub validation_file: Option<String>,
 }
 
 #[derive(Serialize, Deserialize, Debug, Clone, PartialEq)]
