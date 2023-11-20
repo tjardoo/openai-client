@@ -1,10 +1,9 @@
 use crate::v1::api::Client;
 use crate::v1::error::APIError;
 use crate::v1::helpers::validate_request;
-use crate::v1::resources::chat::{
-    ChatCompletionChunkResponse, ChatCompletionParameters, ChatCompletionResponse,
-};
-
+#[cfg(feature = "stream")]
+use crate::v1::resources::chat::ChatCompletionChunkResponse;
+use crate::v1::resources::chat::{ChatCompletionParameters, ChatCompletionResponse};
 #[cfg(feature = "stream")]
 use futures::Stream;
 #[cfg(feature = "stream")]

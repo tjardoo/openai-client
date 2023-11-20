@@ -27,7 +27,7 @@ log = { version = "0.4", optional = true }
 bytes = "1.5.0"
 
 [features]
-default = ["reqwest/default-tls", "stream"]
+default = ["reqwest/default-tls"]
 download = ["dep:futures", "dep:rand", "dep:base64"]
 stream = ["dep:reqwest-eventsource", "dep:futures", "dep:tokio-stream"]
 rustls-tls = ["reqwest/rustls-tls"]
