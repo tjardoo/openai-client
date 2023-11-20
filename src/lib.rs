@@ -123,7 +123,7 @@
 //!
 //! Creates a model response for the given chat conversation.
 //!
-//! > This endpoint also has `stream` support. See the `examples/chat/create_chat_stream` example.
+//! > This endpoint also has `stream` support. See the `examples/chat/create_chat_completion_stream` example.
 //!
 //! ```rust
 //! use openai_dive::v1::api::Client;

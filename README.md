@@ -129,7 +129,7 @@ Given a list of messages comprising a conversation, the model will return a resp
 Creates a model response for the given chat conversation.
 
 > [!NOTE]
-> This endpoint also has `stream` support. See the `examples/chat/create_chat_stream` example.
+> This endpoint also has `stream` support. See the [examples/chat/create_chat_completion_stream](https://github.com/tjardoo/openai-client/tree/master/examples/chat/create_chat_completion_stream) example.
 
 ```rust
 use openai_dive::v1::api::Client;
@@ -173,7 +173,7 @@ More information: [Create chat completion](https://platform.openai.com/docs/api-
 In an API call, you can describe functions and have the model intelligently choose to output a JSON object containing arguments to call one or many functions. The Chat Completions API does not call the function; instead, the model generates JSON that you can use to call the function in your code.
 
 > [!NOTE]
-> This endpoint also has `stream` support. See the `examples/chat/function_calling_stream` example.
+> This endpoint also has `stream` support. See the [examples/chat/function_calling_stream](https://github.com/tjardoo/openai-client/tree/master/examples/chat/function_calling_stream) example.
 
 ```rust
 use openai_dive::v1::api::Client;
