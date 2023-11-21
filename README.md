@@ -49,6 +49,8 @@ More information: [set API key](#set-api-key), [add proxy](#add-proxy), [use mod
   - [List fine tuning events](#list-fine-tuning-events)
 - Moderation
   - [Create moderation](#create-moderation)
+- Assistants
+  - [Assistants (beta)](#assistants-beta)
 
 ## Models
 
@@ -864,6 +866,24 @@ async fn main() {
 ```
 
 More information [Create moderation](https://platform.openai.com/docs/api-reference/moderations/create)
+
+## Assistants (beta)
+
+Build assistants that can call models and use tools to perform tasks.
+
+For more information see the examples in the [examples/assistants](https://github.com/tjardoo/openai-client/tree/master/examples/assistants) directory.
+
+- Create assistant
+- Retrieve assistant
+- Modify assistant
+- Delete assistant
+- List assistants
+- Create assistant file
+- Retrieve assistant file
+- Delete assistant file
+- List assistant files
+
+More information [Assistants](https://platform.openai.com/docs/api-reference/assistants)
 
 ## General
 

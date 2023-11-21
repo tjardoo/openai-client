@@ -16,7 +16,7 @@ pub struct Assistants<'a> {
 }
 
 impl Client {
-    /// Returns a list of assistants.
+    /// Build assistants that can call models and use tools to perform tasks.
     pub fn assistants(&self) -> Assistants {
         Assistants { client: self }
     }
@@ -100,7 +100,7 @@ impl Assistants<'_> {
         Ok(list_assistants_response)
     }
 
-    /// Create an assistant file by attaching a File to an assistant.
+    /// Create an assistant file by attaching a file to an assistant.
     pub async fn create_file(
         &self,
         id: &str,
