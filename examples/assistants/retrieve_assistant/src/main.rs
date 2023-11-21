@@ -10,9 +10,9 @@ async fn main() {
 
     let client = Client::new(api_key);
 
-    let file_id = env::var("FILE_ID").expect("FILE_ID is not set in the .env file.");
+    let assistant_id = env::var("ASSISTANT_ID").expect("ASSISTANT_ID is not set in the .env file.");
 
-    let result = client.files().retrieve_content(&file_id).await.unwrap();
+    let result = client.assistants().retrieve(&assistant_id).await.unwrap();
 
     println!("{:?}", result);
 }

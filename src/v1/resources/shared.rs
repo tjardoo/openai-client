@@ -12,6 +12,16 @@ pub struct Usage {
 }
 
 #[derive(Serialize, Deserialize, Debug, Clone, PartialEq)]
+pub struct DeletedObject {
+    /// ID of the deleted object.
+    pub id: String,
+    /// The object type.
+    pub object: String,
+    /// Indicates whether the file was successfully deleted.
+    pub deleted: bool,
+}
+
+#[derive(Serialize, Deserialize, Debug, Clone, PartialEq)]
 pub enum FinishReason {
     /// API returned complete message, or a message terminated by one of the stop sequences provided via the stop parameter.
     #[serde(rename(deserialize = "stop"))]

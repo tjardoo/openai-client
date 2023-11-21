@@ -1,0 +1,10 @@
+[package]
+name = "retrieve_assistant"
+version = "0.1.0"
+edition = "2021"
+publish = false
+
+[dependencies]
+openai_dive = { path = "./../../../../openai-client" }
+tokio = { version = "1.0", features = ["full"] }
+dotenv = "0.15.0"
