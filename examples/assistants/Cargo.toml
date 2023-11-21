@@ -1,0 +1,2 @@
+[workspace]
+members = ["list_assistants"]

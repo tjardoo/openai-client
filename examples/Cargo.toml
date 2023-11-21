@@ -25,4 +25,5 @@ members = [
     "models/list_models",
     "models/retrieve_model",
     "moderations/create_moderation",
+    "assistants/list_assistants",
 ]

@@ -1,3 +1,4 @@
+pub mod assistant;
 pub mod audio;
 pub mod chat;
 pub mod embedding;
