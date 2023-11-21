@@ -34,7 +34,7 @@ pub struct Assistant {
 
 #[derive(Serialize, Deserialize, Debug, Clone, PartialEq)]
 
-pub struct CreateAssistantParameters {
+pub struct AssistantParameters {
     /// ID of the model to use.
     pub model: String,
     /// The name of the assistant. The maximum length is 256 characters.

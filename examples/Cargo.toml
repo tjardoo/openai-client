@@ -27,5 +27,6 @@ members = [
     "moderations/create_moderation",
     "assistants/create_assistant",
     "assistants/retrieve_assistant",
+    "assistants/modify_assistant",
     "assistants/list_assistants",
 ]

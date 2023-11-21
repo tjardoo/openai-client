@@ -2,7 +2,7 @@ use crate::v1::api::Client;
 use crate::v1::error::APIError;
 use crate::v1::helpers::validate_request;
 use crate::v1::resources::assistant::Assistant;
-use crate::v1::resources::assistant::CreateAssistantParameters;
+use crate::v1::resources::assistant::AssistantParameters;
 use crate::v1::resources::assistant::ListAssistantsParameters;
 use crate::v1::resources::assistant::ListAssistantsResponse;
 
@@ -19,10 +19,7 @@ impl Client {
 
 impl Assistants<'_> {
     /// Create an assistant with a model and instructions.
-    pub async fn create(
-        &self,
-        parameters: CreateAssistantParameters,
-    ) -> Result<Assistant, APIError> {
+    pub async fn create(&self, parameters: AssistantParameters) -> Result<Assistant, APIError> {
         let response = self.client.post("/assistants", &parameters).await?;
 
         let value = validate_request(response).await?;
@@ -38,6 +35,25 @@ impl Assistants<'_> {
         let response = self
             .client
             .get(format!("/assistants/{id}").as_str())
+            .await?;
+
+        let value = validate_request(response).await?;
+
+        let assistant_response: Assistant = serde_json::from_value(value)
+            .map_err(|error| APIError::ParseError(error.to_string()))?;
+
+        Ok(assistant_response)
+    }
+
+    /// Modifies an assistant.
+    pub async fn modify(
+        &self,
+        id: &str,
+        parameters: AssistantParameters,
+    ) -> Result<Assistant, APIError> {
+        let response = self
+            .client
+            .post(format!("/assistants/{id}").as_str(), &parameters)
             .await?;
 
         let value = validate_request(response).await?;

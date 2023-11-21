@@ -1,23 +1,27 @@
-use openai_dive::v1::api::Client;
-use openai_dive::v1::models::Gpt4Engine;
-use openai_dive::v1::resources::assistant::AssistantCodeInterpreterTool;
-use openai_dive::v1::resources::assistant::AssistantParameters;
-use openai_dive::v1::resources::assistant::AssistantTools;
+use dotenv::dotenv;
+use openai_dive::v1::{
+    api::Client,
+    models::Gpt4Engine,
+    resources::assistant::{AssistantCodeInterpreterTool, AssistantParameters, AssistantTools},
+};
 use std::env;
-use std::vec;
 
 #[tokio::main]
 async fn main() {
+    dotenv().ok();
+
     let api_key = env::var("OPENAI_API_KEY").expect("$OPENAI_API_KEY is not set");
 
     let client = Client::new(api_key);
+
+    let assistant_id = env::var("ASSISTANT_ID").expect("ASSISTANT_ID is not set in the .env file.");
 
     let parameters = AssistantParameters {
         model: Gpt4Engine::Gpt41106Preview.to_string(),
         name: Some("Mathematician".to_string()),
         description: None,
         instructions: Some(
-            "You are a personal math tutor. When asked a question, write and run PHP code to answer the question."
+            "You are a personal math tutor. When asked a question, write and run Python code to answer the question."
                 .to_string(),
         ),
         tools: Some(vec![AssistantTools::CodeInterpreter(
@@ -29,7 +33,11 @@ async fn main() {
         metadata: None,
     };
 
-    let result = client.assistants().create(parameters).await.unwrap();
+    let result = client
+        .assistants()
+        .modify(&assistant_id, parameters)
+        .await
+        .unwrap();
 
     println!("{:?}", result);
 }

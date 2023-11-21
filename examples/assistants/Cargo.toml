@@ -1,2 +1,7 @@
 [workspace]
-members = ["create_assistant", "retrieve_assistant", "list_assistants"]
+members = [
+    "create_assistant",
+    "retrieve_assistant",
+    "modify_assistant",
+    "list_assistants",
+]
