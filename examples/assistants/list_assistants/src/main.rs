@@ -10,7 +10,7 @@ async fn main() {
 
     let parameters = ListAssistantsParameters {
         limit: None,
-        order_by: None,
+        order: None,
         after: None,
         before: None,
     };

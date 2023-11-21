@@ -30,4 +30,5 @@ members = [
     "assistants/modify_assistant",
     "assistants/delete_assistant",
     "assistants/list_assistants",
+    "assistants/assistant_files",
 ]

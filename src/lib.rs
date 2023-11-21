@@ -595,9 +595,9 @@
 //!
 //!     let client = Client::new(api_key);
 //!
-//!     let file_name = env::var("FILE_NAME").expect("FILE_NAME is not set in the .env file.");
+//!     let file_id = env::var("FILE_ID").expect("FILE_ID is not set in the .env file.");
 //!
-//!     let result = client.files().delete(&file_name).await.unwrap();
+//!     let result = client.files().delete(&file_id).await.unwrap();
 //!
 //!     println!("{:?}", result);
 //! }
@@ -622,9 +622,9 @@
 //!
 //!     let client = Client::new(api_key);
 //!
-//!     let file_name = env::var("FILE_NAME").expect("FILE_NAME is not set in the .env file.");
+//!     let file_id = env::var("FILE_ID").expect("FILE_ID is not set in the .env file.");
 //!
-//!     let result = client.files().retrieve(&file_name).await.unwrap();
+//!     let result = client.files().retrieve(&file_id).await.unwrap();
 //!
 //!     println!("{:?}", result);
 //! }
@@ -649,9 +649,9 @@
 //!
 //!     let client = Client::new(api_key);
 //!
-//!     let file_name = env::var("FILE_NAME").expect("FILE_NAME is not set in the .env file.");
+//!     let file_id = env::var("FILE_ID").expect("FILE_ID is not set in the .env file.");
 //!
-//!     let result = client.files().retrieve_content(&file_name).await.unwrap();
+//!     let result = client.files().retrieve_content(&file_id).await.unwrap();
 //!
 //!     println!("{:?}", result);
 //! }
@@ -680,11 +680,11 @@
 //!
 //!     let client = Client::new(api_key);
 //!
-//!     let file_name = env::var("FILE_NAME").expect("FILE_NAME is not set in the .env file.");
+//!     let file_id = env::var("FILE_ID").expect("FILE_ID is not set in the .env file.");
 //!
 //!     let parameters = CreateFineTuningJobParameters {
 //!         model: "gpt-3.5-turbo-1106".to_string(),
-//!         training_file: file_name,
+//!         training_file: file_id,
 //!         hyperparameters: None,
 //!         suffix: None,
 //!         validation_file: None,

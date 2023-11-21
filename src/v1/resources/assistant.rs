@@ -108,7 +108,7 @@ pub struct ListAssistantsParameters {
     /// A limit on the number of objects to be returned. Limit can range between 1 and 100, and the default is 20.
     pub limit: Option<u32>,
     /// Sort order by the created_at timestamp of the objects. asc for ascending order and desc for descending order.
-    pub order_by: Option<String>,
+    pub order: Option<String>,
     /// A cursor for use in pagination. after is an object ID that defines your place in the list.
     /// For instance, if you make a list request and receive 100 objects, ending with obj_foo,
     /// your subsequent call can include after=obj_foo in order to fetch the next page of the list.
@@ -120,13 +120,52 @@ pub struct ListAssistantsParameters {
 }
 
 #[derive(Serialize, Deserialize, Debug, Clone, PartialEq)]
-pub struct DeletedAssistant {
-    /// ID of the deleted assistant.
+pub struct AssistantFile {
+    /// The identifier, which can be referenced in API endpoints.
     pub id: String,
-    /// The object type, which is always 'assistant.deleted'.
+    /// The object type, which is always 'assistant.file'.
     pub object: String,
-    /// Indicates whether the assistant was successfully deleted.
-    pub deleted: bool,
+    /// The Unix timestamp (in seconds) for when the assistant file was created.
+    pub created_at: u32,
+    /// The assistant ID that the file is attached to.
+    pub assistant_id: String,
+}
+
+#[derive(Serialize, Deserialize, Debug, Clone, PartialEq)]
+pub struct CreateAssistantFileParameters {
+    /// A File ID (with purpose="assistants") that the assistant should use.
+    /// Useful for tools like 'retrieval' and 'code_interpreter' that can access files.
+    pub file_id: String,
+}
+
+#[derive(Serialize, Deserialize, Debug, Clone, PartialEq)]
+pub struct ListAssistantFilesResponse {
+    /// The object type, which is always 'list'.
+    pub object: String,
+    /// The list of assistant files.
+    pub data: Vec<AssistantFile>,
+    /// ID of the first object in the list.
+    pub first_id: String,
+    /// ID of the last object in the list.
+    pub last_id: String,
+    /// Indicates whether there are more assistant files to retrieve.
+    pub has_more: bool,
+}
+
+#[derive(Serialize, Deserialize, Debug, Clone, PartialEq)]
+pub struct ListAssistantFilesParameters {
+    /// A limit on the number of objects to be returned. Limit can range between 1 and 100, and the default is 20.
+    pub limit: Option<u32>,
+    /// Sort order by the created_at timestamp of the objects. asc for ascending order and desc for descending order.
+    pub order: Option<String>,
+    /// A cursor for use in pagination. after is an object ID that defines your place in the list.
+    /// For instance, if you make a list request and receive 100 objects, ending with obj_foo,
+    /// your subsequent call can include after=obj_foo in order to fetch the next page of the list.
+    pub after: Option<String>,
+    /// A cursor for use in pagination. before is an object ID that defines your place in the list.
+    /// For instance, if you make a list request and receive 100 objects, ending with obj_foo,
+    /// your subsequent call can include before=obj_foo in order to fetch the previous page of the list.
+    pub before: Option<String>,
 }
 
 #[derive(Serialize, Deserialize, Debug, Clone, PartialEq)]

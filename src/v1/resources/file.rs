@@ -42,16 +42,6 @@ pub struct UploadFileParameters {
 }
 
 #[derive(Serialize, Deserialize, Debug, Clone, PartialEq)]
-pub struct DeletedFile {
-    /// ID of the deleted file.
-    pub id: String,
-    /// The object type, which is always "file".
-    pub object: String,
-    /// Indicates whether the file was successfully deleted.
-    pub deleted: bool,
-}
-
-#[derive(Serialize, Deserialize, Debug, Clone, PartialEq)]
 pub enum FilePurpose {
     #[serde(rename = "fine-tune")]
     FineTune,

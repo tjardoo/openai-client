@@ -4,7 +4,8 @@ use crate::v1::helpers::file_from_disk_to_form_part;
 use crate::v1::helpers::validate_request;
 use crate::v1::resources::file::ListFilesParameters;
 use crate::v1::resources::file::ListFilesResponse;
-use crate::v1::resources::file::{DeletedFile, File, UploadFileParameters};
+use crate::v1::resources::file::{File, UploadFileParameters};
+use crate::v1::resources::shared::DeletedObject;
 
 pub struct Files<'a> {
     pub client: &'a Client,
@@ -53,15 +54,15 @@ impl Files<'_> {
     }
 
     /// Delete a file.
-    pub async fn delete(&self, id: &str) -> Result<DeletedFile, APIError> {
+    pub async fn delete(&self, id: &str) -> Result<DeletedObject, APIError> {
         let response = self.client.delete(format!("/files/{id}").as_str()).await?;
 
         let value = validate_request(response).await?;
 
-        let deleted_file_response: DeletedFile = serde_json::from_value(value)
+        let deleted_object: DeletedObject = serde_json::from_value(value)
             .map_err(|error| APIError::ParseError(error.to_string()))?;
 
-        Ok(deleted_file_response)
+        Ok(deleted_object)
     }
 
     /// Returns information about a specific file.
