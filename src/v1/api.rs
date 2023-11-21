@@ -1,8 +1,9 @@
 use crate::v1::error::APIError;
+use crate::v1::helpers::is_beta_feature;
 use bytes::Bytes;
 #[cfg(feature = "stream")]
 use futures::{stream::StreamExt, Stream};
-use reqwest::multipart::Form;
+use reqwest::{multipart::Form, Method, RequestBuilder};
 #[cfg(feature = "stream")]
 use reqwest_eventsource::{Event, EventSource, RequestBuilderExt};
 #[cfg(feature = "stream")]
@@ -28,17 +29,24 @@ impl Client {
         }
     }
 
-    pub async fn get(&self, path: &str) -> Result<String, APIError> {
+    pub fn build_request(&self, method: reqwest::Method, path: &str) -> RequestBuilder {
         let url = format!("{}{}", &self.base_url, path);
 
-        let response = self
+        let mut request = self
             .http_client
-            .get(url)
+            .request(method, &url)
             .header(reqwest::header::CONTENT_TYPE, "application/json")
-            .bearer_auth(&self.api_key)
-            .send()
-            .await
-            .unwrap();
+            .bearer_auth(&self.api_key);
+
+        if is_beta_feature(path) {
+            request = request.header("OpenAI-Beta", "assistants=v1");
+        }
+
+        request
+    }
+
+    pub async fn get(&self, path: &str) -> Result<String, APIError> {
+        let response = self.build_request(Method::GET, path).send().await.unwrap();
 
         if response.status().is_server_error() {
             return Err(APIError::EndpointError(response.text().await.unwrap()));
@@ -56,14 +64,9 @@ impl Client {
     where
         Q: Serialize,
     {
-        let url = format!("{}{}", &self.base_url, path);
-
         let response = self
-            .http_client
-            .get(url)
-            .header(reqwest::header::CONTENT_TYPE, "application/json")
+            .build_request(Method::GET, path)
             .query(query)
-            .bearer_auth(&self.api_key)
             .send()
             .await
             .unwrap();
@@ -81,13 +84,8 @@ impl Client {
     }
 
     pub async fn post<T: Serialize>(&self, path: &str, parameters: &T) -> Result<String, APIError> {
-        let url = format!("{}{}", &self.base_url, path);
-
         let response = self
-            .http_client
-            .post(url)
-            .header(reqwest::header::CONTENT_TYPE, "application/json")
-            .bearer_auth(&self.api_key)
+            .build_request(Method::POST, path)
             .json(&parameters)
             .send()
             .await
@@ -106,13 +104,8 @@ impl Client {
     }
 
     pub async fn delete(&self, path: &str) -> Result<String, APIError> {
-        let url = format!("{}{}", &self.base_url, path);
-
         let response = self
-            .http_client
-            .delete(url)
-            .header(reqwest::header::CONTENT_TYPE, "application/json")
-            .bearer_auth(&self.api_key)
+            .build_request(Method::DELETE, path)
             .send()
             .await
             .unwrap();
@@ -125,12 +118,8 @@ impl Client {
     }
 
     pub async fn post_with_form(&self, path: &str, form: Form) -> Result<String, APIError> {
-        let url = format!("{}{}", &self.base_url, path);
-
         let response = self
-            .http_client
-            .post(url)
-            .bearer_auth(&self.api_key)
+            .build_request(Method::POST, path)
             .multipart(form)
             .send()
             .await
@@ -148,13 +137,8 @@ impl Client {
         path: &str,
         parameters: &T,
     ) -> Result<Bytes, APIError> {
-        let url = format!("{}{}", &self.base_url, path);
-
         let response = self
-            .http_client
-            .post(url)
-            .header(reqwest::header::CONTENT_TYPE, "application/json")
-            .bearer_auth(&self.api_key)
+            .build_request(Method::POST, path)
             .json(&parameters)
             .send()
             .await
@@ -177,13 +161,8 @@ impl Client {
         I: Serialize,
         O: DeserializeOwned + std::marker::Send + 'static,
     {
-        let url = format!("{}{}", &self.base_url, path);
-
         let event_source = self
-            .http_client
-            .post(url)
-            .header(reqwest::header::CONTENT_TYPE, "application/json")
-            .bearer_auth(&self.api_key)
+            .build_request(Method::POST, path)
             .json(&parameters)
             .eventsource()
             .unwrap();
