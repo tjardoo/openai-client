@@ -3,6 +3,7 @@ use crate::v1::error::APIError;
 use crate::v1::helpers::validate_request;
 use crate::v1::resources::assistant::Assistant;
 use crate::v1::resources::assistant::AssistantParameters;
+use crate::v1::resources::assistant::DeletedAssistant;
 use crate::v1::resources::assistant::ListAssistantsParameters;
 use crate::v1::resources::assistant::ListAssistantsResponse;
 
@@ -62,6 +63,21 @@ impl Assistants<'_> {
             .map_err(|error| APIError::ParseError(error.to_string()))?;
 
         Ok(assistant_response)
+    }
+
+    /// Delete an assistant.
+    pub async fn delete(&self, id: &str) -> Result<DeletedAssistant, APIError> {
+        let response = self
+            .client
+            .delete(format!("/assistants/{id}").as_str())
+            .await?;
+
+        let value = validate_request(response).await?;
+
+        let deleted_assistant_response: DeletedAssistant = serde_json::from_value(value)
+            .map_err(|error| APIError::ParseError(error.to_string()))?;
+
+        Ok(deleted_assistant_response)
     }
 
     /// Returns a list of assistants.

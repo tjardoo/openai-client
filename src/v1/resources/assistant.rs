@@ -120,6 +120,16 @@ pub struct ListAssistantsParameters {
 }
 
 #[derive(Serialize, Deserialize, Debug, Clone, PartialEq)]
+pub struct DeletedAssistant {
+    /// ID of the deleted assistant.
+    pub id: String,
+    /// The object type, which is always 'assistant.deleted'.
+    pub object: String,
+    /// Indicates whether the assistant was successfully deleted.
+    pub deleted: bool,
+}
+
+#[derive(Serialize, Deserialize, Debug, Clone, PartialEq)]
 #[serde(untagged)]
 pub enum AssistantTools {
     CodeInterpreter(AssistantCodeInterpreterTool),
