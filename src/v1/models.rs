@@ -1,5 +1,5 @@
 use serde::{Deserialize, Serialize};
-use std::fmt::{Display, Error, Formatter, Result};
+use std::fmt::{Display, Formatter, Result};
 
 #[derive(Serialize, Deserialize, Debug, Clone, PartialEq)]
 pub enum Gpt4Engine {
@@ -67,42 +67,67 @@ pub enum ModerationsEngine {
 
 impl Display for Gpt4Engine {
     fn fmt(&self, f: &mut Formatter<'_>) -> Result {
-        write!(f, "{}", serde_json::to_string(self).map_err(|_| Error)?)
+        match self {
+            Gpt4Engine::Gpt4 => write!(f, "gpt-4"),
+            Gpt4Engine::Gpt40613 => write!(f, "gpt-4-0613"),
+            Gpt4Engine::Gpt41106Preview => write!(f, "gpt-4-1106-preview"),
+            Gpt4Engine::Gpt432K => write!(f, "gpt-4-32k"),
+            Gpt4Engine::Gpt432K0613 => write!(f, "gpt-4-32k-0613"),
+            Gpt4Engine::Gpt4VisionPreview => write!(f, "gpt-4-vision-preview"),
+        }
     }
 }
 
 impl Display for Gpt35Engine {
     fn fmt(&self, f: &mut Formatter<'_>) -> Result {
-        write!(f, "{}", serde_json::to_string(self).map_err(|_| Error)?)
+        match self {
+            Gpt35Engine::Gpt35Turbo => write!(f, "gpt-3.5-turbo"),
+            Gpt35Engine::Gpt35Turbo1106 => write!(f, "gpt-3.5-turbo-1106"),
+            Gpt35Engine::Gpt35Turbo16K => write!(f, "gpt-3.5-turbo-16k"),
+            Gpt35Engine::Gpt35TurboInstruct => write!(f, "gpt-3.5-turbo-instruct"),
+        }
     }
 }
 
 impl Display for DallEEngine {
     fn fmt(&self, f: &mut Formatter<'_>) -> Result {
-        write!(f, "{}", serde_json::to_string(self).map_err(|_| Error)?)
+        match self {
+            DallEEngine::DallE2 => write!(f, "dall-e-2"),
+            DallEEngine::DallE3 => write!(f, "dall-e-3"),
+        }
     }
 }
 
 impl Display for TTSEngine {
     fn fmt(&self, f: &mut Formatter<'_>) -> Result {
-        write!(f, "{}", serde_json::to_string(self).map_err(|_| Error)?)
+        match self {
+            TTSEngine::Tts1 => write!(f, "tts-1"),
+            TTSEngine::Tts1HD => write!(f, "tts-1-hd"),
+        }
     }
 }
 
 impl Display for WhisperEngine {
     fn fmt(&self, f: &mut Formatter<'_>) -> Result {
-        write!(f, "{}", serde_json::to_string(self).map_err(|_| Error)?)
+        match self {
+            WhisperEngine::Whisper1 => write!(f, "whisper-1"),
+        }
     }
 }
 
 impl Display for EmbeddingsEngine {
     fn fmt(&self, f: &mut Formatter<'_>) -> Result {
-        write!(f, "{}", serde_json::to_string(self).map_err(|_| Error)?)
+        match self {
+            EmbeddingsEngine::TextEmbeddingAda002 => write!(f, "text-embedding-ada-002"),
+        }
     }
 }
 
 impl Display for ModerationsEngine {
     fn fmt(&self, f: &mut Formatter<'_>) -> Result {
-        write!(f, "{}", serde_json::to_string(self).map_err(|_| Error)?)
+        match self {
+            ModerationsEngine::TextModerationLatest => write!(f, "text-moderation-latest"),
+            ModerationsEngine::TextModerationStable => write!(f, "text-moderation-stable"),
+        }
     }
 }

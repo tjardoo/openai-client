@@ -33,6 +33,33 @@ pub struct Assistant {
 }
 
 #[derive(Serialize, Deserialize, Debug, Clone, PartialEq)]
+
+pub struct CreateAssistantParameters {
+    /// ID of the model to use.
+    pub model: String,
+    /// The name of the assistant. The maximum length is 256 characters.
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub name: Option<String>,
+    /// The description of the assistant. The maximum length is 512 characters.
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub description: Option<String>,
+    /// The system instructions that the assistant uses. The maximum length is 32768 characters.
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub instructions: Option<String>,
+    /// A list of tool enabled on the assistant. There can be a maximum of 128 tools per assistant.
+    /// Tools can be of types 'code_interpreter', 'retrieval', or 'function'.
+    pub tools: Option<Vec<AssistantTools>>,
+    /// A list of file IDs attached to this assistant. There can be a maximum of 20 files attached to the assistant.
+    /// Files are ordered by their creation date in ascending order.
+    pub file_ids: Vec<String>,
+    /// Set of 16 key-value pairs that can be attached to an object.
+    /// This can be useful for storing additional information about the object in a structured format.
+    /// Keys can be a maximum of 64 characters long and values can be a maxium of 512 characters long.
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub metadata: Option<HashMap<String, serde_json::Value>>,
+}
+
+#[derive(Serialize, Deserialize, Debug, Clone, PartialEq)]
 pub struct AssistantCodeInterpreterTool {
     /// The type of tool being defined: 'code_interpreter'.
     pub r#type: String,
