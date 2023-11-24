@@ -867,7 +867,7 @@ For more information see the examples in the [examples/assistants](https://githu
 - Files
 - Threads
 - Messages
-- Runs (WIP)
+- Runs
 
 More information [Assistants](https://platform.openai.com/docs/api-reference/assistants)
 

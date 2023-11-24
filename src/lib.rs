@@ -860,7 +860,7 @@
 //! - Files
 //! - Threads
 //! - Messages
-//! - Runs (WIP)
+//! - Runs
 //!
 //! More information [Assistants](https://platform.openai.com/docs/api-reference/assistants)
 //!
