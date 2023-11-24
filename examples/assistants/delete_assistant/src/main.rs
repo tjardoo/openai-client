@@ -14,5 +14,5 @@ async fn main() {
 
     let result = client.assistants().delete(&assistant_id).await.unwrap();
 
-    println!("{:?}", result);
+    println!("{:#?}", result);
 }

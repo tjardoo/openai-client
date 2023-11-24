@@ -22,5 +22,5 @@ async fn main() {
 
     let result = client.fine_tuning().create(parameters).await.unwrap();
 
-    println!("{:?}", result);
+    println!("{:#?}", result);
 }

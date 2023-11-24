@@ -3,9 +3,9 @@ use crate::v1::error::APIError;
 use crate::v1::helpers::validate_request;
 use crate::v1::resources::assistant::assistant::AssistantFile;
 use crate::v1::resources::assistant::assistant::CreateAssistantFileParameters;
-use crate::v1::resources::assistant::assistant::ListAssistantFilesParameters;
 use crate::v1::resources::assistant::assistant::ListAssistantFilesResponse;
 use crate::v1::resources::shared::DeletedObject;
+use crate::v1::resources::shared::ListParameters;
 
 pub struct Files<'a> {
     pub assistant: &'a Assistants<'a>,
@@ -75,7 +75,7 @@ impl Files<'_> {
     pub async fn list(
         &self,
         id: &str,
-        query: Option<ListAssistantFilesParameters>,
+        query: Option<ListParameters>,
     ) -> Result<ListAssistantFilesResponse, APIError> {
         let response = self
             .assistant

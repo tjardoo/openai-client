@@ -7,4 +7,5 @@ members = [
     "list_assistants",
     "files",
     "threads",
+    "messages",
 ]

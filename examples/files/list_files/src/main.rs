@@ -16,5 +16,5 @@ async fn main() {
 
     let result = client.files().list(Some(query)).await.unwrap();
 
-    println!("{:?}", result);
+    println!("{:#?}", result);
 }

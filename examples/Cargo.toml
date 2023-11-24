@@ -32,4 +32,5 @@ members = [
     "assistants/list_assistants",
     "assistants/files",
     "assistants/threads",
+    "assistants/messages",
 ]

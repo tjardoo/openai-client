@@ -102,26 +102,6 @@ pub struct ListAssistantsResponse {
 }
 
 #[derive(Serialize, Deserialize, Debug, Clone, PartialEq)]
-pub struct ListAssistantsParameters {
-    /// A limit on the number of objects to be returned. Limit can range between 1 and 100, and the default is 20.
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub limit: Option<u32>,
-    /// Sort order by the created_at timestamp of the objects. asc for ascending order and desc for descending order.
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub order: Option<String>,
-    /// A cursor for use in pagination. after is an object ID that defines your place in the list.
-    /// For instance, if you make a list request and receive 100 objects, ending with obj_foo,
-    /// your subsequent call can include after=obj_foo in order to fetch the next page of the list.
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub after: Option<String>,
-    /// A cursor for use in pagination. before is an object ID that defines your place in the list.
-    /// For instance, if you make a list request and receive 100 objects, ending with obj_foo,
-    /// your subsequent call can include before=obj_foo in order to fetch the previous page of the list.
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub before: Option<String>,
-}
-
-#[derive(Serialize, Deserialize, Debug, Clone, PartialEq)]
 pub struct AssistantFile {
     /// The identifier, which can be referenced in API endpoints.
     pub id: String,
@@ -152,26 +132,6 @@ pub struct ListAssistantFilesResponse {
     pub last_id: String,
     /// Indicates whether there are more assistant files to retrieve.
     pub has_more: bool,
-}
-
-#[derive(Serialize, Deserialize, Debug, Clone, PartialEq)]
-pub struct ListAssistantFilesParameters {
-    /// A limit on the number of objects to be returned. Limit can range between 1 and 100, and the default is 20.
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub limit: Option<u32>,
-    /// Sort order by the created_at timestamp of the objects. asc for ascending order and desc for descending order.
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub order: Option<String>,
-    /// A cursor for use in pagination. after is an object ID that defines your place in the list.
-    /// For instance, if you make a list request and receive 100 objects, ending with obj_foo,
-    /// your subsequent call can include after=obj_foo in order to fetch the next page of the list.
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub after: Option<String>,
-    /// A cursor for use in pagination. before is an object ID that defines your place in the list.
-    /// For instance, if you make a list request and receive 100 objects, ending with obj_foo,
-    /// your subsequent call can include before=obj_foo in order to fetch the previous page of the list.
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub before: Option<String>,
 }
 
 #[derive(Serialize, Deserialize, Debug, Clone, PartialEq)]

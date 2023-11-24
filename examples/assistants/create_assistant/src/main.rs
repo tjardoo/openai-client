@@ -31,5 +31,5 @@ async fn main() {
 
     let result = client.assistants().create(parameters).await.unwrap();
 
-    println!("{:?}", result);
+    println!("{:#?}", result);
 }

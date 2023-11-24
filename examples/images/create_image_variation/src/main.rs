@@ -19,5 +19,5 @@ async fn main() {
 
     let result = client.images().variation(parameters).await.unwrap();
 
-    println!("{:?}", result);
+    println!("{:#?}", result);
 }

@@ -16,13 +16,16 @@ pub struct Message {
     /// The content of the message in array of text and/or images.
     pub content: Vec<MessageContent>,
     /// If applicable, the ID of the assistant that authored this message.
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub assistant_id: Option<String>,
     /// If applicable, the ID of the run associated with the authoring of this message.
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub run_id: Option<String>,
     /// A list of file IDs that the assistant should use. Useful for tools like 'retrieval' and 'code_interpreter'
     /// that can access files. A maximum of 10 files can be attached to a message.
     pub file_ids: Vec<String>,
     /// Set of 16 key-value pairs that can be attached to an object.
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub metadata: Option<HashMap<String, String>>,
 }
 
@@ -53,7 +56,7 @@ pub struct Text {
     /// The data that makes up the text.
     pub value: String,
     /// Object containing the text.
-    pub annotations: TextAnnotation,
+    pub annotations: Vec<TextAnnotation>,
 }
 
 #[derive(Serialize, Deserialize, Debug, Clone, PartialEq)]
@@ -96,6 +99,43 @@ pub struct FileCitation {
 pub struct FilePath {
     /// The ID of the file that was generated.
     pub file_id: String,
+}
+
+#[derive(Serialize, Deserialize, Debug, Clone, PartialEq)]
+pub struct CreateMessageParameters {
+    /// The role of the entity that is creating the message. Currently 'only' user is supported.
+    pub role: MessageRole,
+    /// The content of the message.
+    pub content: String,
+    /// A list of File IDs that the message should use.
+    /// There can be a maximum of 10 files attached to a message.
+    /// Useful for tools like retrieval and code_interpreter that can access and use files.
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub file_ids: Option<Vec<String>>,
+    /// Set of 16 key-value pairs that can be attached to an object.
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub metadata: Option<HashMap<String, String>>,
+}
+
+#[derive(Serialize, Deserialize, Debug, Clone, PartialEq)]
+pub struct ModifyMessageParameters {
+    /// Set of 16 key-value pairs that can be attached to an object.
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub metadata: Option<HashMap<String, String>>,
+}
+
+#[derive(Serialize, Deserialize, Debug, Clone, PartialEq)]
+pub struct ListMessagesResponse {
+    /// The object type, which is always 'list'.
+    pub object: String,
+    /// The list of assistant files.
+    pub data: Vec<Message>,
+    /// ID of the first object in the list.
+    pub first_id: String,
+    /// ID of the last object in the list.
+    pub last_id: String,
+    /// Indicates whether there are more assistant files to retrieve.
+    pub has_more: bool,
 }
 
 #[derive(Serialize, Deserialize, Debug, Clone, PartialEq)]

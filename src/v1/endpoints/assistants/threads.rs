@@ -20,11 +20,7 @@ impl Assistants<'_> {
 impl Threads<'_> {
     /// Create a thread.
     pub async fn create(&self, parameters: CreateThreadParameters) -> Result<Thread, APIError> {
-        let response = self
-            .assistant
-            .client
-            .post(format!("/threads").as_str(), &parameters)
-            .await?;
+        let response = self.assistant.client.post("/threads", &parameters).await?;
 
         let value = validate_request(response).await?;
 

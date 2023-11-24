@@ -25,5 +25,5 @@ async fn main() {
 
     println!("{:?}", paths);
 
-    println!("{:?}", result);
+    println!("{:#?}", result);
 }

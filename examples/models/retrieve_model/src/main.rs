@@ -9,5 +9,5 @@ async fn main() {
 
     let result = client.models().get("gpt-3.5-turbo-16k-0613").await.unwrap();
 
-    println!("{:?}", result);
+    println!("{:#?}", result);
 }

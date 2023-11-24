@@ -3,9 +3,9 @@ use crate::v1::error::APIError;
 use crate::v1::helpers::validate_request;
 use crate::v1::resources::assistant::assistant::Assistant;
 use crate::v1::resources::assistant::assistant::AssistantParameters;
-use crate::v1::resources::assistant::assistant::ListAssistantsParameters;
 use crate::v1::resources::assistant::assistant::ListAssistantsResponse;
 use crate::v1::resources::shared::DeletedObject;
+use crate::v1::resources::shared::ListParameters;
 
 pub struct Assistants<'a> {
     pub client: &'a Client,
@@ -83,7 +83,7 @@ impl Assistants<'_> {
     /// Returns a list of assistants.
     pub async fn list(
         &self,
-        query: Option<ListAssistantsParameters>,
+        query: Option<ListParameters>,
     ) -> Result<ListAssistantsResponse, APIError> {
         let response = self.client.get_with_query("/assistants", &query).await?;
 

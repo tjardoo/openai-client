@@ -67,7 +67,7 @@
 //!
 //!     let result = client.models().list().await.unwrap();
 //!
-//!     println!("{:?}", result);
+//!     println!("{:#?}", result);
 //! }
 //! ```
 //!
@@ -89,7 +89,7 @@
 //!
 //!     let result = client.models().get("gpt-3.5-turbo-16k-0613").await.unwrap();
 //!
-//!     println!("{:?}", result);
+//!     println!("{:#?}", result);
 //! }
 //! ```
 //!
@@ -111,7 +111,7 @@
 //!
 //!     let result = client.models().delete("my-custom-model").await.unwrap();
 //!
-//!     println!("{:?}", result);
+//!     println!("{:#?}", result);
 //! }
 //! ```
 //!
@@ -158,7 +158,7 @@
 //!
 //!     let result = client.chat().create(parameters).await.unwrap();
 //!
-//!     println!("{:?}", result);
+//!     println!("{:#?}", result);
 //! }
 //! ```
 //!
@@ -248,7 +248,7 @@
 //!
 //!                         let result = client.chat().create(parameters).await.unwrap();
 //!
-//!                         println!("{:?}", result);
+//!                         println!("{:#?}", result);
 //!                     }
 //!                 }
 //!             }
@@ -307,7 +307,7 @@
 //!
 //!     println!("{:?}", paths);
 //!
-//!     println!("{:?}", result);
+//!     println!("{:#?}", result);
 //! }
 //! ```
 //!
@@ -341,7 +341,7 @@
 //!
 //!     let result = client.images().edit(parameters).await.unwrap();
 //!
-//!     println!("{:?}", result);
+//!     println!("{:#?}", result);
 //! }
 //! ```
 //!
@@ -373,7 +373,7 @@
 //!
 //!     let result = client.images().variation(parameters).await.unwrap();
 //!
-//!     println!("{:?}", result);
+//!     println!("{:#?}", result);
 //! }
 //! ```
 //!
@@ -446,7 +446,7 @@
 //!         .await
 //!         .unwrap();
 //!
-//!     println!("{:?}", result);
+//!     println!("{:#?}", result);
 //! }
 //! ```
 //!
@@ -477,7 +477,7 @@
 //!
 //!     let result = client.audio().create_translation(parameters).await.unwrap();
 //!
-//!     println!("{:?}", result);
+//!     println!("{:#?}", result);
 //! }
 //! ```
 //!
@@ -511,7 +511,7 @@
 //!
 //!     let result = client.embeddings().create(parameters).await.unwrap();
 //!
-//!     println!("{:?}", result);
+//!     println!("{:#?}", result);
 //! }
 //! ```
 //!
@@ -544,7 +544,7 @@
 //!
 //!     let result = client.files().list(Some(query)).await.unwrap();
 //!
-//!     println!("{:?}", result);
+//!     println!("{:#?}", result);
 //! }
 //! ```
 //!
@@ -574,7 +574,7 @@
 //!
 //!     let result = client.files().upload(parameters).await.unwrap();
 //!
-//!     println!("{:?}", result);
+//!     println!("{:#?}", result);
 //! }
 //! ```
 //!
@@ -601,7 +601,7 @@
 //!
 //!     let result = client.files().delete(&file_id).await.unwrap();
 //!
-//!     println!("{:?}", result);
+//!     println!("{:#?}", result);
 //! }
 //! ```
 //!
@@ -628,7 +628,7 @@
 //!
 //!     let result = client.files().retrieve(&file_id).await.unwrap();
 //!
-//!     println!("{:?}", result);
+//!     println!("{:#?}", result);
 //! }
 //! ```
 //!
@@ -655,7 +655,7 @@
 //!
 //!     let result = client.files().retrieve_content(&file_id).await.unwrap();
 //!
-//!     println!("{:?}", result);
+//!     println!("{:#?}", result);
 //! }
 //! ```
 //!
@@ -694,7 +694,7 @@
 //!
 //!     let result = client.fine_tuning().create(parameters).await.unwrap();
 //!
-//!     println!("{:?}", result);
+//!     println!("{:#?}", result);
 //! }
 //! ```
 //!
@@ -705,7 +705,7 @@
 //! List your organization's fine-tuning jobs.
 //!
 //! ```rust
-//! use openai_dive::v1::{api::Client, resources::fine_tuning::ListFineTuningJobsParameters};
+//! use openai_dive::v1::api::Client;
 //! use std::env;
 //!
 //! #[tokio::main]
@@ -714,14 +714,9 @@
 //!
 //!     let client = Client::new(api_key);
 //!
-//!     let query = ListFineTuningJobsParameters {
-//!         after: None,
-//!         limit: None,
-//!     };
+//!     let result = client.fine_tuning().list(None).await.unwrap();
 //!
-//!     let result = client.fine_tuning().list(Some(query)).await.unwrap();
-//!
-//!     println!("{:?}", result);
+//!     println!("{:#?}", result);
 //! }
 //! ```
 //!
@@ -753,7 +748,7 @@
 //!         .await
 //!         .unwrap();
 //!
-//!     println!("{:?}", result);
+//!     println!("{:#?}", result);
 //! }
 //! ```
 //!
@@ -785,7 +780,7 @@
 //!         .await
 //!         .unwrap();
 //!
-//!     println!("{:?}", result);
+//!     println!("{:#?}", result);
 //! }
 //! ```
 //!
@@ -797,7 +792,7 @@
 //!
 //! ```rust
 //! use dotenv::dotenv;
-//! use openai_dive::v1::{api::Client, resources::fine_tuning::ListFineTuningJobEventsParameters};
+//! use openai_dive::v1::api::Client;
 //! use std::env;
 //!
 //! #[tokio::main]
@@ -811,18 +806,13 @@
 //!     let fine_tuning_job_id =
 //!         env::var("FINE_TUNING_JOB_ID").expect("FINE_TUNING_JOB_ID is not set in the .env file.");
 //!
-//!     let query = ListFineTuningJobEventsParameters {
-//!         after: None,
-//!         limit: None,
-//!     };
-//!
 //!     let result = client
 //!         .fine_tuning()
-//!         .list_job_events(&fine_tuning_job_id, Some(query))
+//!         .list_job_events(&fine_tuning_job_id, None)
 //!         .await
 //!         .unwrap();
 //!
-//!     println!("{:?}", result);
+//!     println!("{:#?}", result);
 //! }
 //! ```
 //!
@@ -854,7 +844,7 @@
 //!
 //!     let result = client.moderations().create(parameters).await.unwrap();
 //!
-//!     println!("{:?}", result);
+//!     println!("{:#?}", result);
 //! }
 //! ```
 //!

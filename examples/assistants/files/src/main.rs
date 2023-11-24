@@ -70,7 +70,7 @@ pub async fn list_assistant_files(client: &Client, assistant_id: &str) {
         .await
         .unwrap();
 
-    println!("{:?}", result);
+    println!("{:#?}", result);
 }
 
 pub async fn delete_assistant_file(client: &Client, assistant_id: &str, file_id: &str) {
@@ -81,5 +81,5 @@ pub async fn delete_assistant_file(client: &Client, assistant_id: &str, file_id:
         .await
         .unwrap();
 
-    println!("{:?}", result);
+    println!("{:#?}", result);
 }

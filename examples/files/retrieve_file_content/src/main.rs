@@ -14,5 +14,5 @@ async fn main() {
 
     let result = client.files().retrieve_content(&file_id).await.unwrap();
 
-    println!("{:?}", result);
+    println!("{:#?}", result);
 }
