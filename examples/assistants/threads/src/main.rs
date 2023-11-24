@@ -64,7 +64,7 @@ pub async fn retrieve_thread(client: &Client, thread_id: &str) {
     let result = client
         .assistants()
         .threads()
-        .retrieve(&thread_id)
+        .retrieve(thread_id)
         .await
         .unwrap();
 
@@ -75,7 +75,7 @@ pub async fn delete_thread(client: &Client, thread_id: &str) {
     let result = client
         .assistants()
         .threads()
-        .delete(&thread_id)
+        .delete(thread_id)
         .await
         .unwrap();
 
