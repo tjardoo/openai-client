@@ -38,7 +38,7 @@ pub async fn create_assistant_file(
     let assistant_file = client
         .assistants()
         .files()
-        .create(&assistant_id, parameters)
+        .create(assistant_id, parameters)
         .await
         .unwrap();
 
@@ -53,7 +53,7 @@ pub async fn retrieve_assistant_file(
     let assistant_file = client
         .assistants()
         .files()
-        .retrieve(&assistant_id, &file_id)
+        .retrieve(assistant_id, file_id)
         .await
         .unwrap();
 
@@ -66,7 +66,7 @@ pub async fn list_assistant_files(client: &Client, assistant_id: &str) {
     let result = client
         .assistants()
         .files()
-        .list(&assistant_id, None)
+        .list(assistant_id, None)
         .await
         .unwrap();
 
@@ -77,7 +77,7 @@ pub async fn delete_assistant_file(client: &Client, assistant_id: &str, file_id:
     let result = client
         .assistants()
         .files()
-        .delete(&assistant_id, &file_id)
+        .delete(assistant_id, file_id)
         .await
         .unwrap();
 

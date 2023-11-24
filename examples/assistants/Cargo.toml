@@ -8,4 +8,5 @@ members = [
     "files",
     "threads",
     "messages",
+    "runs",
 ]
