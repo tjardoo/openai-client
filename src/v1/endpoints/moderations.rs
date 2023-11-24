@@ -1,6 +1,6 @@
 use crate::v1::api::Client;
 use crate::v1::error::APIError;
-use crate::v1::helpers::format_request;
+use crate::v1::helpers::format_response;
 use crate::v1::resources::moderation::{ModerationParameters, ModerationResponse};
 
 pub struct Moderations<'a> {
@@ -22,7 +22,7 @@ impl Moderations<'_> {
     ) -> Result<ModerationResponse, APIError> {
         let response = self.client.post("/moderations", &parameters).await?;
 
-        let moderation_response: ModerationResponse = format_request(response)?;
+        let moderation_response: ModerationResponse = format_response(response)?;
 
         Ok(moderation_response)
     }

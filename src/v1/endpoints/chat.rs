@@ -2,7 +2,7 @@ use crate::v1::error::APIError;
 #[cfg(feature = "stream")]
 use crate::v1::resources::chat::ChatCompletionChunkResponse;
 use crate::v1::resources::chat::{ChatCompletionParameters, ChatCompletionResponse};
-use crate::v1::{api::Client, helpers::format_request};
+use crate::v1::{api::Client, helpers::format_response};
 #[cfg(feature = "stream")]
 use futures::Stream;
 #[cfg(feature = "stream")]
@@ -27,7 +27,7 @@ impl Chat<'_> {
     ) -> Result<ChatCompletionResponse, APIError> {
         let response = self.client.post("/chat/completions", &parameters).await?;
 
-        let chat_completion_response: ChatCompletionResponse = format_request(response)?;
+        let chat_completion_response: ChatCompletionResponse = format_response(response)?;
 
         Ok(chat_completion_response)
     }

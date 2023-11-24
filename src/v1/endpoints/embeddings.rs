@@ -1,6 +1,6 @@
 use crate::v1::api::Client;
 use crate::v1::error::APIError;
-use crate::v1::helpers::format_request;
+use crate::v1::helpers::format_response;
 use crate::v1::resources::embedding::{EmbeddingParameters, EmbeddingResponse};
 
 pub struct Embeddings<'a> {
@@ -22,7 +22,7 @@ impl Embeddings<'_> {
     ) -> Result<EmbeddingResponse, APIError> {
         let response = self.client.post("/embeddings", &parameters).await?;
 
-        let embedding_response: EmbeddingResponse = format_request(response)?;
+        let embedding_response: EmbeddingResponse = format_response(response)?;
 
         Ok(embedding_response)
     }

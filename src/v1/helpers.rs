@@ -7,7 +7,7 @@ use serde_json::Value;
 use tokio::fs::File;
 use tokio_util::codec::{BytesCodec, FramedRead};
 
-pub fn validate_request(response: String) -> Result<Value, APIError> {
+pub fn validate_response(response: String) -> Result<Value, APIError> {
     let value: Value = serde_json::from_str(&response).unwrap();
 
     if Value::is_object(&value["error"]) {
@@ -17,8 +17,8 @@ pub fn validate_request(response: String) -> Result<Value, APIError> {
     return Ok(value);
 }
 
-pub fn format_request<R: DeserializeOwned>(response: String) -> Result<R, APIError> {
-    let value = validate_request(response)?;
+pub fn format_response<R: DeserializeOwned>(response: String) -> Result<R, APIError> {
+    let value = validate_response(response)?;
 
     let value: R =
         serde_json::from_value(value).map_err(|error| APIError::ParseError(error.to_string()))?;

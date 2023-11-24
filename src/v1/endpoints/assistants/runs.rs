@@ -1,6 +1,6 @@
 use crate::v1::endpoints::assistants::assistants::Assistants;
 use crate::v1::error::APIError;
-use crate::v1::helpers::format_request;
+use crate::v1::helpers::format_response;
 use crate::v1::resources::assistant::run::CreateRunParameters;
 use crate::v1::resources::assistant::run::ListRunsResponse;
 use crate::v1::resources::assistant::run::ModifyRunParameters;
@@ -31,7 +31,7 @@ impl Runs<'_> {
             .post(format!("/threads/{thread_id}/runs").as_str(), &parameters)
             .await?;
 
-        let run_response: Run = format_request(response)?;
+        let run_response: Run = format_response(response)?;
 
         Ok(run_response)
     }
@@ -44,7 +44,7 @@ impl Runs<'_> {
             .get(format!("/threads/{thread_id}/runs/{run_id}").as_str())
             .await?;
 
-        let run_response: Run = format_request(response)?;
+        let run_response: Run = format_response(response)?;
 
         Ok(run_response)
     }
@@ -65,7 +65,7 @@ impl Runs<'_> {
             )
             .await?;
 
-        let run_response: Run = format_request(response)?;
+        let run_response: Run = format_response(response)?;
 
         Ok(run_response)
     }
@@ -82,7 +82,7 @@ impl Runs<'_> {
             .get_with_query(format!("/threads/{thread_id}/runs").as_str(), &query)
             .await?;
 
-        let list_runs_response: ListRunsResponse = format_request(response)?;
+        let list_runs_response: ListRunsResponse = format_response(response)?;
 
         Ok(list_runs_response)
     }
@@ -98,7 +98,7 @@ impl Runs<'_> {
             )
             .await?;
 
-        let run_response: Run = format_request(response)?;
+        let run_response: Run = format_response(response)?;
 
         Ok(run_response)
     }

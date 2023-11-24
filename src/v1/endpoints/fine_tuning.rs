@@ -1,6 +1,6 @@
 use crate::v1::api::Client;
 use crate::v1::error::APIError;
-use crate::v1::helpers::format_request;
+use crate::v1::helpers::format_response;
 use crate::v1::resources::fine_tuning::CreateFineTuningJobParameters;
 use crate::v1::resources::fine_tuning::FineTuningJob;
 use crate::v1::resources::fine_tuning::ListFineTuningJobEventsResponse;
@@ -27,7 +27,7 @@ impl FineTuning<'_> {
     ) -> Result<FineTuningJob, APIError> {
         let response = self.client.post("/fine_tuning/jobs", &parameters).await?;
 
-        let fine_tuning_job_response: FineTuningJob = format_request(response)?;
+        let fine_tuning_job_response: FineTuningJob = format_response(response)?;
 
         Ok(fine_tuning_job_response)
     }
@@ -42,7 +42,7 @@ impl FineTuning<'_> {
             .get_with_query("/fine_tuning/jobs", &query)
             .await?;
 
-        let list_fine_tuning_jobs_response: ListFineTuningJobsResponse = format_request(response)?;
+        let list_fine_tuning_jobs_response: ListFineTuningJobsResponse = format_response(response)?;
 
         Ok(list_fine_tuning_jobs_response)
     }
@@ -54,7 +54,7 @@ impl FineTuning<'_> {
             .get(format!("/fine_tuning/jobs/{id}").as_str())
             .await?;
 
-        let fine_tuning_job_response: FineTuningJob = format_request(response)?;
+        let fine_tuning_job_response: FineTuningJob = format_response(response)?;
 
         Ok(fine_tuning_job_response)
     }
@@ -69,7 +69,7 @@ impl FineTuning<'_> {
             )
             .await?;
 
-        let fine_tuning_job_response: FineTuningJob = format_request(response)?;
+        let fine_tuning_job_response: FineTuningJob = format_response(response)?;
 
         Ok(fine_tuning_job_response)
     }
@@ -86,7 +86,7 @@ impl FineTuning<'_> {
             .await?;
 
         let list_fine_tuning_job_events_response: ListFineTuningJobEventsResponse =
-            format_request(response)?;
+            format_response(response)?;
 
         Ok(list_fine_tuning_job_events_response)
     }

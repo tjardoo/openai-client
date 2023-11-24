@@ -1,6 +1,6 @@
 use crate::v1::endpoints::assistants::assistants::Assistants;
 use crate::v1::error::APIError;
-use crate::v1::helpers::format_request;
+use crate::v1::helpers::format_response;
 use crate::v1::resources::assistant::assistant::AssistantFile;
 use crate::v1::resources::assistant::assistant::CreateAssistantFileParameters;
 use crate::v1::resources::assistant::assistant::ListAssistantFilesResponse;
@@ -31,7 +31,7 @@ impl Files<'_> {
             .post(format!("/assistants/{id}/files").as_str(), &parameters)
             .await?;
 
-        let assistant_file_response: AssistantFile = format_request(response)?;
+        let assistant_file_response: AssistantFile = format_response(response)?;
 
         Ok(assistant_file_response)
     }
@@ -44,7 +44,7 @@ impl Files<'_> {
             .get(format!("/assistants/{id}/files/{file_id}").as_str())
             .await?;
 
-        let assistant_file_response: AssistantFile = format_request(response)?;
+        let assistant_file_response: AssistantFile = format_response(response)?;
 
         Ok(assistant_file_response)
     }
@@ -57,7 +57,7 @@ impl Files<'_> {
             .delete(format!("/assistants/{id}/files/{file_id}").as_str())
             .await?;
 
-        let deleted_object: DeletedObject = format_request(response)?;
+        let deleted_object: DeletedObject = format_response(response)?;
 
         Ok(deleted_object)
     }
@@ -74,7 +74,7 @@ impl Files<'_> {
             .get_with_query(format!("/assistants/{id}/files").as_str(), &query)
             .await?;
 
-        let list_assistant_files_response: ListAssistantFilesResponse = format_request(response)?;
+        let list_assistant_files_response: ListAssistantFilesResponse = format_response(response)?;
 
         Ok(list_assistant_files_response)
     }

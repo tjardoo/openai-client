@@ -1,6 +1,6 @@
 use crate::v1::api::Client;
 use crate::v1::error::APIError;
-use crate::v1::helpers::format_request;
+use crate::v1::helpers::format_response;
 use crate::v1::resources::model::{ListModelResponse, Model};
 use crate::v1::resources::shared::DeletedObject;
 
@@ -20,7 +20,7 @@ impl Models<'_> {
     pub async fn list(&self) -> Result<ListModelResponse, APIError> {
         let response = self.client.get("/models").await?;
 
-        let list_model_response: ListModelResponse = format_request(response)?;
+        let list_model_response: ListModelResponse = format_response(response)?;
 
         Ok(list_model_response)
     }
@@ -31,7 +31,7 @@ impl Models<'_> {
 
         let response = self.client.get(&path).await?;
 
-        let model_response: Model = format_request(response)?;
+        let model_response: Model = format_response(response)?;
 
         Ok(model_response)
     }
@@ -42,7 +42,7 @@ impl Models<'_> {
 
         let response = self.client.delete(&path).await?;
 
-        let deleted_object: DeletedObject = format_request(response)?;
+        let deleted_object: DeletedObject = format_response(response)?;
 
         Ok(deleted_object)
     }

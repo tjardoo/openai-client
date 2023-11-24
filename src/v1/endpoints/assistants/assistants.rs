@@ -1,6 +1,6 @@
 use crate::v1::api::Client;
 use crate::v1::error::APIError;
-use crate::v1::helpers::format_request;
+use crate::v1::helpers::format_response;
 use crate::v1::resources::assistant::assistant::Assistant;
 use crate::v1::resources::assistant::assistant::AssistantParameters;
 use crate::v1::resources::assistant::assistant::ListAssistantsResponse;
@@ -23,7 +23,7 @@ impl Assistants<'_> {
     pub async fn create(&self, parameters: AssistantParameters) -> Result<Assistant, APIError> {
         let response = self.client.post("/assistants", &parameters).await?;
 
-        let assistant_response: Assistant = format_request(response)?;
+        let assistant_response: Assistant = format_response(response)?;
 
         Ok(assistant_response)
     }
@@ -35,7 +35,7 @@ impl Assistants<'_> {
             .get(format!("/assistants/{id}").as_str())
             .await?;
 
-        let assistant_response: Assistant = format_request(response)?;
+        let assistant_response: Assistant = format_response(response)?;
 
         Ok(assistant_response)
     }
@@ -51,7 +51,7 @@ impl Assistants<'_> {
             .post(format!("/assistants/{id}").as_str(), &parameters)
             .await?;
 
-        let assistant_response: Assistant = format_request(response)?;
+        let assistant_response: Assistant = format_response(response)?;
 
         Ok(assistant_response)
     }
@@ -63,7 +63,7 @@ impl Assistants<'_> {
             .delete(format!("/assistants/{id}").as_str())
             .await?;
 
-        let deleted_object: DeletedObject = format_request(response)?;
+        let deleted_object: DeletedObject = format_response(response)?;
 
         Ok(deleted_object)
     }
@@ -75,7 +75,7 @@ impl Assistants<'_> {
     ) -> Result<ListAssistantsResponse, APIError> {
         let response = self.client.get_with_query("/assistants", &query).await?;
 
-        let list_assistants_response: ListAssistantsResponse = format_request(response)?;
+        let list_assistants_response: ListAssistantsResponse = format_response(response)?;
 
         Ok(list_assistants_response)
     }
