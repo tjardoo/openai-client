@@ -863,15 +863,11 @@ Build assistants that can call models and use tools to perform tasks.
 
 For more information see the examples in the [examples/assistants](https://github.com/tjardoo/openai-client/tree/master/examples/assistants) directory.
 
-- Create assistant
-- Retrieve assistant
-- Modify assistant
-- Delete assistant
-- List assistants
-- Create assistant file
-- Retrieve assistant file
-- Delete assistant file
-- List assistant files
+- Assistants
+- Files
+- Threads
+- Messages
+- Runs (WIP)
 
 More information [Assistants](https://platform.openai.com/docs/api-reference/assistants)
 

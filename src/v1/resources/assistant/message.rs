@@ -139,6 +139,32 @@ pub struct ListMessagesResponse {
 }
 
 #[derive(Serialize, Deserialize, Debug, Clone, PartialEq)]
+pub struct MessageFile {
+    /// The identifier, which can be referenced in API endpoints.
+    pub id: String,
+    /// The object type, which is always 'thread.message.file'.
+    pub object: String,
+    /// The Unix timestamp (in seconds) for when the message file was created.
+    pub created_at: u32,
+    /// The ID of the message that the File is attached to.
+    pub message_id: String,
+}
+
+#[derive(Serialize, Deserialize, Debug, Clone, PartialEq)]
+pub struct ListMessageFilesResponse {
+    /// The object type, which is always 'list'.
+    pub object: String,
+    /// The list of assistant files.
+    pub data: Vec<MessageFile>,
+    /// ID of the first object in the list.
+    pub first_id: String,
+    /// ID of the last object in the list.
+    pub last_id: String,
+    /// Indicates whether there are more assistant files to retrieve.
+    pub has_more: bool,
+}
+
+#[derive(Serialize, Deserialize, Debug, Clone, PartialEq)]
 #[serde(rename_all = "lowercase")]
 pub enum MessageRole {
     User,
