@@ -1,5 +1,4 @@
 use openai_dive::v1::api::Client;
-use openai_dive::v1::resources::assistant::ListAssistantsParameters;
 use std::env;
 
 #[tokio::main]
@@ -8,14 +7,7 @@ async fn main() {
 
     let client = Client::new(api_key);
 
-    let parameters = ListAssistantsParameters {
-        limit: None,
-        order: None,
-        after: None,
-        before: None,
-    };
+    let result = client.assistants().list(None).await.unwrap();
 
-    let result = client.assistants().list(Some(parameters)).await.unwrap();
-
-    println!("{:?}", result);
+    println!("{:#?}", result);
 }

@@ -17,7 +17,7 @@ pub async fn validate_request(response: String) -> Result<Value, APIError> {
 }
 
 pub fn is_beta_feature(path: &str) -> bool {
-    path.starts_with("/assistants")
+    path.starts_with("/assistants") || path.starts_with("/threads")
 }
 
 pub async fn file_from_disk_to_form_part(path: String) -> Result<Part, APIError> {

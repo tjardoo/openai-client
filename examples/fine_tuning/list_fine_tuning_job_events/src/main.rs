@@ -1,5 +1,5 @@
 use dotenv::dotenv;
-use openai_dive::v1::{api::Client, resources::fine_tuning::ListFineTuningJobEventsParameters};
+use openai_dive::v1::api::Client;
 use std::env;
 
 #[tokio::main]
@@ -13,16 +13,11 @@ async fn main() {
     let fine_tuning_job_id =
         env::var("FINE_TUNING_JOB_ID").expect("FINE_TUNING_JOB_ID is not set in the .env file.");
 
-    let query = ListFineTuningJobEventsParameters {
-        after: None,
-        limit: None,
-    };
-
     let result = client
         .fine_tuning()
-        .list_job_events(&fine_tuning_job_id, Some(query))
+        .list_job_events(&fine_tuning_job_id, None)
         .await
         .unwrap();
 
-    println!("{:?}", result);
+    println!("{:#?}", result);
 }

@@ -56,7 +56,7 @@ pub struct ChatCompletionParameters {
     pub frequency_penalty: Option<f32>,
     /// Modify the likelihood of specified tokens appearing in the completion.
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub logit_bias: Option<HashMap<String, serde_json::Value>>,
+    pub logit_bias: Option<HashMap<String, i32>>,
     /// The maximum number of tokens to generate in the chat completion.
     #[serde(skip_serializing_if = "Option::is_none")]
     pub max_tokens: Option<u32>,
@@ -245,7 +245,7 @@ pub struct StreamChatCompletionParameters {
     #[serde(skip_serializing_if = "Option::is_none")]
     pub frequency_penalty: Option<f32>,
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub logit_bias: Option<HashMap<String, serde_json::Value>>,
+    pub logit_bias: Option<HashMap<String, i32>>,
     #[serde(skip_serializing_if = "Option::is_none")]
     pub max_tokens: Option<u32>,
     #[serde(skip_serializing_if = "Option::is_none")]

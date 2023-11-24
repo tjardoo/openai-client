@@ -9,5 +9,5 @@ async fn main() {
 
     let result = client.models().list().await.unwrap();
 
-    println!("{:?}", result);
+    println!("{:#?}", result);
 }

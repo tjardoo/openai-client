@@ -5,5 +5,7 @@ members = [
     "modify_assistant",
     "delete_assistant",
     "list_assistants",
-    "assistant_files",
+    "files",
+    "threads",
+    "messages",
 ]

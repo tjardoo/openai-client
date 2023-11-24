@@ -3,10 +3,9 @@ use crate::v1::error::APIError;
 use crate::v1::helpers::validate_request;
 use crate::v1::resources::fine_tuning::CreateFineTuningJobParameters;
 use crate::v1::resources::fine_tuning::FineTuningJob;
-use crate::v1::resources::fine_tuning::ListFineTuningJobEventsParameters;
 use crate::v1::resources::fine_tuning::ListFineTuningJobEventsResponse;
-use crate::v1::resources::fine_tuning::ListFineTuningJobsParameters;
 use crate::v1::resources::fine_tuning::ListFineTuningJobsResponse;
+use crate::v1::resources::shared::SimpleListParameters;
 use serde_json::Value;
 
 pub struct FineTuning<'a> {
@@ -39,7 +38,7 @@ impl FineTuning<'_> {
     /// List your organization's fine-tuning jobs.
     pub async fn list(
         &self,
-        query: Option<ListFineTuningJobsParameters>,
+        query: Option<SimpleListParameters>,
     ) -> Result<ListFineTuningJobsResponse, APIError> {
         let response = self
             .client
@@ -92,7 +91,7 @@ impl FineTuning<'_> {
     pub async fn list_job_events(
         &self,
         id: &str,
-        query: Option<ListFineTuningJobEventsParameters>,
+        query: Option<SimpleListParameters>,
     ) -> Result<ListFineTuningJobEventsResponse, APIError> {
         let response = self
             .client

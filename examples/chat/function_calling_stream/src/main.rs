@@ -91,7 +91,7 @@ async fn main() {
 
                             let result = block_on(client.chat().create(parameters));
 
-                            println!("{:?}", result);
+                            println!("{:#?}", result);
                         }
                     }
                 }

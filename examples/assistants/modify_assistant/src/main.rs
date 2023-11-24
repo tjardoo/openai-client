@@ -2,7 +2,9 @@ use dotenv::dotenv;
 use openai_dive::v1::{
     api::Client,
     models::Gpt4Engine,
-    resources::assistant::{AssistantCodeInterpreterTool, AssistantParameters, AssistantTools},
+    resources::assistant::assistant::{
+        AssistantCodeInterpreterTool, AssistantParameters, AssistantTools,
+    },
 };
 use std::env;
 
@@ -39,5 +41,5 @@ async fn main() {
         .await
         .unwrap();
 
-    println!("{:?}", result);
+    println!("{:#?}", result);
 }

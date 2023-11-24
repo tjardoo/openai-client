@@ -9,5 +9,5 @@ async fn main() {
 
     let result = client.models().delete("my-custom-model").await.unwrap();
 
-    println!("{:?}", result);
+    println!("{:#?}", result);
 }
