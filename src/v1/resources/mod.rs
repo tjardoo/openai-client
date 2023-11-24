@@ -1,4 +1,5 @@
 pub mod assistant;
+pub mod assistant_resources;
 pub mod audio;
 pub mod chat;
 pub mod embedding;

@@ -9,6 +9,9 @@ use crate::v1::resources::assistant::ListAssistantFilesParameters;
 use crate::v1::resources::assistant::ListAssistantFilesResponse;
 use crate::v1::resources::assistant::ListAssistantsParameters;
 use crate::v1::resources::assistant::ListAssistantsResponse;
+use crate::v1::resources::assistant_resources::thread::CreateThreadParameters;
+use crate::v1::resources::assistant_resources::thread::ModifyThreadParameters;
+use crate::v1::resources::assistant_resources::thread::Thread;
 use crate::v1::resources::shared::DeletedObject;
 
 pub struct Assistants<'a> {
@@ -167,5 +170,72 @@ impl Assistants<'_> {
                 .map_err(|error| APIError::ParseError(error.to_string()))?;
 
         Ok(list_assistant_files_response)
+    }
+
+    /// Create a thread.
+    pub async fn create_thread(
+        &self,
+        parameters: CreateThreadParameters,
+    ) -> Result<Thread, APIError> {
+        let response = self
+            .client
+            .post(format!("/threads").as_str(), &parameters)
+            .await?;
+
+        let value = validate_request(response).await?;
+
+        let thread_response: Thread = serde_json::from_value(value.clone())
+            .map_err(|error| APIError::ParseError(error.to_string()))?;
+
+        Ok(thread_response)
+    }
+
+    /// Retrieves a thread.
+    pub async fn retrieve_thread(&self, thread_id: &str) -> Result<Thread, APIError> {
+        let response = self
+            .client
+            .get(format!("/threads/{thread_id}").as_str())
+            .await?;
+
+        let value = validate_request(response).await?;
+
+        let thread_response: Thread = serde_json::from_value(value)
+            .map_err(|error| APIError::ParseError(error.to_string()))?;
+
+        Ok(thread_response)
+    }
+
+    /// Create threads that assistants can interact with.
+    pub async fn modify_thread(
+        &self,
+        thread_id: &str,
+        parameters: ModifyThreadParameters,
+    ) -> Result<Thread, APIError> {
+        let response = self
+            .client
+            .post(format!("/threads/{thread_id}").as_str(), &parameters)
+            .await?;
+
+        let value = validate_request(response).await?;
+
+        let thread_response: Thread = serde_json::from_value(value)
+            .map_err(|error| APIError::ParseError(error.to_string()))?;
+
+        Ok(thread_response)
+    }
+
+    /// Delete a thread.
+    pub async fn delete_thread(&self, thread_id: &str) -> Result<DeletedObject, APIError> {
+        let response = self
+            .client
+            .delete(format!("/threads/{thread_id}").as_str())
+            .await?;
+
+        let value = validate_request(response).await?;
+
+        let deleted_object: DeletedObject = serde_json::from_value(value)
+            .map_err(|error| APIError::ParseError(error.to_string()))?;
+
+        Ok(deleted_object)
     }
 }
