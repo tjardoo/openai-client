@@ -1,5 +1,5 @@
 use openai_dive::v1::api::Client;
-use openai_dive::v1::resources::assistant::ListAssistantsParameters;
+use openai_dive::v1::resources::assistant::assistant::ListAssistantsParameters;
 use std::env;
 
 #[tokio::main]

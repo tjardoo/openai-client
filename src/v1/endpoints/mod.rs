@@ -1,4 +1,3 @@
-pub mod assistant_endpoints;
 pub mod assistants;
 pub mod audio;
 pub mod chat;

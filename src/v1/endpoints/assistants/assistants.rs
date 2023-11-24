@@ -1,10 +1,10 @@
 use crate::v1::api::Client;
 use crate::v1::error::APIError;
 use crate::v1::helpers::validate_request;
-use crate::v1::resources::assistant::Assistant;
-use crate::v1::resources::assistant::AssistantParameters;
-use crate::v1::resources::assistant::ListAssistantsParameters;
-use crate::v1::resources::assistant::ListAssistantsResponse;
+use crate::v1::resources::assistant::assistant::Assistant;
+use crate::v1::resources::assistant::assistant::AssistantParameters;
+use crate::v1::resources::assistant::assistant::ListAssistantsParameters;
+use crate::v1::resources::assistant::assistant::ListAssistantsResponse;
 use crate::v1::resources::shared::DeletedObject;
 
 pub struct Assistants<'a> {

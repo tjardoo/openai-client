@@ -1,7 +1,7 @@
 use dotenv::dotenv;
 use openai_dive::v1::{
     api::Client,
-    resources::assistant_resources::thread::{
+    resources::assistant::thread::{
         CreateThreadParameters, ModifyThreadParameters, Thread, ThreadMessage, ThreadMessageRole,
     },
 };

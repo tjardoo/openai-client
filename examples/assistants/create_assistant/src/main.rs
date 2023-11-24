@@ -1,8 +1,8 @@
 use openai_dive::v1::api::Client;
 use openai_dive::v1::models::Gpt4Engine;
-use openai_dive::v1::resources::assistant::AssistantCodeInterpreterTool;
-use openai_dive::v1::resources::assistant::AssistantParameters;
-use openai_dive::v1::resources::assistant::AssistantTools;
+use openai_dive::v1::resources::assistant::assistant::AssistantCodeInterpreterTool;
+use openai_dive::v1::resources::assistant::assistant::AssistantParameters;
+use openai_dive::v1::resources::assistant::assistant::AssistantTools;
 use std::env;
 use std::vec;
 

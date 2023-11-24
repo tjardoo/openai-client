@@ -1,9 +1,9 @@
-use crate::v1::endpoints::assistants::Assistants;
+use crate::v1::endpoints::assistants::assistants::Assistants;
 use crate::v1::error::APIError;
 use crate::v1::helpers::validate_request;
-use crate::v1::resources::assistant_resources::thread::CreateThreadParameters;
-use crate::v1::resources::assistant_resources::thread::ModifyThreadParameters;
-use crate::v1::resources::assistant_resources::thread::Thread;
+use crate::v1::resources::assistant::thread::CreateThreadParameters;
+use crate::v1::resources::assistant::thread::ModifyThreadParameters;
+use crate::v1::resources::assistant::thread::Thread;
 use crate::v1::resources::shared::DeletedObject;
 
 pub struct Threads<'a> {

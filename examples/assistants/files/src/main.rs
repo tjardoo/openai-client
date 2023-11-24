@@ -1,7 +1,7 @@
 use dotenv::dotenv;
 use openai_dive::v1::{
     api::Client,
-    resources::assistant::{AssistantFile, CreateAssistantFileParameters},
+    resources::assistant::assistant::{AssistantFile, CreateAssistantFileParameters},
 };
 use std::env;
 

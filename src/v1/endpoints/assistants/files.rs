@@ -1,10 +1,10 @@
-use crate::v1::endpoints::assistants::Assistants;
+use crate::v1::endpoints::assistants::assistants::Assistants;
 use crate::v1::error::APIError;
 use crate::v1::helpers::validate_request;
-use crate::v1::resources::assistant::AssistantFile;
-use crate::v1::resources::assistant::CreateAssistantFileParameters;
-use crate::v1::resources::assistant::ListAssistantFilesParameters;
-use crate::v1::resources::assistant::ListAssistantFilesResponse;
+use crate::v1::resources::assistant::assistant::AssistantFile;
+use crate::v1::resources::assistant::assistant::CreateAssistantFileParameters;
+use crate::v1::resources::assistant::assistant::ListAssistantFilesParameters;
+use crate::v1::resources::assistant::assistant::ListAssistantFilesResponse;
 use crate::v1::resources::shared::DeletedObject;
 
 pub struct Files<'a> {
