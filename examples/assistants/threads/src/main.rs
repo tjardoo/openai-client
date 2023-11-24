@@ -35,7 +35,12 @@ pub async fn create_thread(client: &Client) -> Thread {
         metadata: None,
     };
 
-    let thread = client.assistants().create_thread(parameters).await.unwrap();
+    let thread = client
+        .assistants()
+        .threads()
+        .create(parameters)
+        .await
+        .unwrap();
 
     thread
 }
@@ -52,7 +57,8 @@ pub async fn modify_thread(client: &Client, thread_id: &str) -> Thread {
 
     let thread = client
         .assistants()
-        .modify_thread(thread_id, parameters)
+        .threads()
+        .modify(thread_id, parameters)
         .await
         .unwrap();
 
@@ -62,7 +68,8 @@ pub async fn modify_thread(client: &Client, thread_id: &str) -> Thread {
 pub async fn retrieve_thread(client: &Client, thread_id: &str) {
     let result = client
         .assistants()
-        .retrieve_thread(&thread_id)
+        .threads()
+        .retrieve(&thread_id)
         .await
         .unwrap();
 
@@ -70,7 +77,12 @@ pub async fn retrieve_thread(client: &Client, thread_id: &str) {
 }
 
 pub async fn delete_thread(client: &Client, thread_id: &str) {
-    let result = client.assistants().delete_thread(&thread_id).await.unwrap();
+    let result = client
+        .assistants()
+        .threads()
+        .delete(&thread_id)
+        .await
+        .unwrap();
 
     println!("{:?}", result);
 }
