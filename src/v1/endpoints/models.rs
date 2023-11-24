@@ -1,6 +1,6 @@
 use crate::v1::api::Client;
 use crate::v1::error::APIError;
-use crate::v1::helpers::validate_request;
+use crate::v1::helpers::format_request;
 use crate::v1::resources::model::{ListModelResponse, Model};
 use crate::v1::resources::shared::DeletedObject;
 
@@ -20,10 +20,7 @@ impl Models<'_> {
     pub async fn list(&self) -> Result<ListModelResponse, APIError> {
         let response = self.client.get("/models").await?;
 
-        let value = validate_request(response).await?;
-
-        let list_model_response: ListModelResponse = serde_json::from_value(value.clone())
-            .map_err(|error| APIError::ParseError(error.to_string()))?;
+        let list_model_response: ListModelResponse = format_request(response)?;
 
         Ok(list_model_response)
     }
@@ -34,10 +31,7 @@ impl Models<'_> {
 
         let response = self.client.get(&path).await?;
 
-        let value = validate_request(response).await?;
-
-        let model_response: Model = serde_json::from_value(value)
-            .map_err(|error| APIError::ParseError(error.to_string()))?;
+        let model_response: Model = format_request(response)?;
 
         Ok(model_response)
     }
@@ -48,10 +42,7 @@ impl Models<'_> {
 
         let response = self.client.delete(&path).await?;
 
-        let value = validate_request(response).await?;
-
-        let deleted_object: DeletedObject = serde_json::from_value(value)
-            .map_err(|error| APIError::ParseError(error.to_string()))?;
+        let deleted_object: DeletedObject = format_request(response)?;
 
         Ok(deleted_object)
     }

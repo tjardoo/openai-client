@@ -1,7 +1,7 @@
 use crate::v1::api::Client;
 use crate::v1::error::APIError;
 use crate::v1::helpers::file_from_disk_to_form_part;
-use crate::v1::helpers::validate_request;
+use crate::v1::helpers::format_request;
 use crate::v1::resources::file::ListFilesParameters;
 use crate::v1::resources::file::ListFilesResponse;
 use crate::v1::resources::file::{File, UploadFileParameters};
@@ -26,12 +26,9 @@ impl Files<'_> {
     ) -> Result<ListFilesResponse, APIError> {
         let response = self.client.get_with_query("/files", &query).await?;
 
-        let value = validate_request(response).await?;
+        let list_files_response: ListFilesResponse = format_request(response)?;
 
-        let files: ListFilesResponse = serde_json::from_value(value)
-            .map_err(|error| APIError::ParseError(error.to_string()))?;
-
-        Ok(files)
+        Ok(list_files_response)
     }
 
     /// Upload a file that can be used across various endpoints.
@@ -45,10 +42,7 @@ impl Files<'_> {
 
         let response = self.client.post_with_form("/files", form).await?;
 
-        let value = validate_request(response).await?;
-
-        let file_response: File = serde_json::from_value(value)
-            .map_err(|error| APIError::ParseError(error.to_string()))?;
+        let file_response: File = format_request(response)?;
 
         Ok(file_response)
     }
@@ -57,10 +51,7 @@ impl Files<'_> {
     pub async fn delete(&self, id: &str) -> Result<DeletedObject, APIError> {
         let response = self.client.delete(format!("/files/{id}").as_str()).await?;
 
-        let value = validate_request(response).await?;
-
-        let deleted_object: DeletedObject = serde_json::from_value(value)
-            .map_err(|error| APIError::ParseError(error.to_string()))?;
+        let deleted_object: DeletedObject = format_request(response)?;
 
         Ok(deleted_object)
     }
@@ -69,10 +60,7 @@ impl Files<'_> {
     pub async fn retrieve(&self, id: &str) -> Result<File, APIError> {
         let response = self.client.get(format!("/files/{id}").as_str()).await?;
 
-        let value = validate_request(response).await?;
-
-        let file_response: File = serde_json::from_value(value)
-            .map_err(|error| APIError::ParseError(error.to_string()))?;
+        let file_response: File = format_request(response)?;
 
         Ok(file_response)
     }

@@ -1,6 +1,6 @@
 use crate::v1::api::Client;
 use crate::v1::error::APIError;
-use crate::v1::helpers::{file_from_disk_to_form_part, validate_request};
+use crate::v1::helpers::{file_from_disk_to_form_part, format_request};
 use crate::v1::resources::image::{
     CreateImageParameters, CreateImageVariationParameters, EditImageParameters, ImageResponse,
 };
@@ -24,12 +24,9 @@ impl Images<'_> {
     ) -> Result<ImageResponse, APIError> {
         let response = self.client.post("/images/generations", &parameters).await?;
 
-        let value = validate_request(response).await?;
+        let image_response: ImageResponse = format_request(response)?;
 
-        let create_image_response: ImageResponse = serde_json::from_value(value)
-            .map_err(|error| APIError::ParseError(error.to_string()))?;
-
-        Ok(create_image_response)
+        Ok(image_response)
     }
 
     /// Creates an edited or extended image given an original image and a prompt.
@@ -68,12 +65,9 @@ impl Images<'_> {
 
         let response = self.client.post_with_form("/images/edits", form).await?;
 
-        let value = validate_request(response).await?;
+        let image_response: ImageResponse = format_request(response)?;
 
-        let create_image_response: ImageResponse = serde_json::from_value(value)
-            .map_err(|error| APIError::ParseError(error.to_string()))?;
-
-        Ok(create_image_response)
+        Ok(image_response)
     }
 
     /// Creates a variation of a given image.
@@ -111,11 +105,8 @@ impl Images<'_> {
             .post_with_form("/images/variations", form)
             .await?;
 
-        let value = validate_request(response).await?;
+        let image_response: ImageResponse = format_request(response)?;
 
-        let create_image_response: ImageResponse = serde_json::from_value(value)
-            .map_err(|error| APIError::ParseError(error.to_string()))?;
-
-        Ok(create_image_response)
+        Ok(image_response)
     }
 }

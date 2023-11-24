@@ -1,6 +1,6 @@
 use crate::v1::api::Client;
 use crate::v1::error::APIError;
-use crate::v1::helpers::validate_request;
+use crate::v1::helpers::format_request;
 use crate::v1::resources::assistant::assistant::Assistant;
 use crate::v1::resources::assistant::assistant::AssistantParameters;
 use crate::v1::resources::assistant::assistant::ListAssistantsResponse;
@@ -23,10 +23,7 @@ impl Assistants<'_> {
     pub async fn create(&self, parameters: AssistantParameters) -> Result<Assistant, APIError> {
         let response = self.client.post("/assistants", &parameters).await?;
 
-        let value = validate_request(response).await?;
-
-        let assistant_response: Assistant = serde_json::from_value(value)
-            .map_err(|error| APIError::ParseError(error.to_string()))?;
+        let assistant_response: Assistant = format_request(response)?;
 
         Ok(assistant_response)
     }
@@ -38,10 +35,7 @@ impl Assistants<'_> {
             .get(format!("/assistants/{id}").as_str())
             .await?;
 
-        let value = validate_request(response).await?;
-
-        let assistant_response: Assistant = serde_json::from_value(value)
-            .map_err(|error| APIError::ParseError(error.to_string()))?;
+        let assistant_response: Assistant = format_request(response)?;
 
         Ok(assistant_response)
     }
@@ -57,10 +51,7 @@ impl Assistants<'_> {
             .post(format!("/assistants/{id}").as_str(), &parameters)
             .await?;
 
-        let value = validate_request(response).await?;
-
-        let assistant_response: Assistant = serde_json::from_value(value)
-            .map_err(|error| APIError::ParseError(error.to_string()))?;
+        let assistant_response: Assistant = format_request(response)?;
 
         Ok(assistant_response)
     }
@@ -72,10 +63,7 @@ impl Assistants<'_> {
             .delete(format!("/assistants/{id}").as_str())
             .await?;
 
-        let value = validate_request(response).await?;
-
-        let deleted_object: DeletedObject = serde_json::from_value(value)
-            .map_err(|error| APIError::ParseError(error.to_string()))?;
+        let deleted_object: DeletedObject = format_request(response)?;
 
         Ok(deleted_object)
     }
@@ -87,11 +75,7 @@ impl Assistants<'_> {
     ) -> Result<ListAssistantsResponse, APIError> {
         let response = self.client.get_with_query("/assistants", &query).await?;
 
-        let value = validate_request(response).await?;
-
-        let list_assistants_response: ListAssistantsResponse =
-            serde_json::from_value(value.clone())
-                .map_err(|error| APIError::ParseError(error.to_string()))?;
+        let list_assistants_response: ListAssistantsResponse = format_request(response)?;
 
         Ok(list_assistants_response)
     }

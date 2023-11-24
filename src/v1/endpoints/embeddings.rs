@@ -1,6 +1,6 @@
 use crate::v1::api::Client;
 use crate::v1::error::APIError;
-use crate::v1::helpers::validate_request;
+use crate::v1::helpers::format_request;
 use crate::v1::resources::embedding::{EmbeddingParameters, EmbeddingResponse};
 
 pub struct Embeddings<'a> {
@@ -22,10 +22,7 @@ impl Embeddings<'_> {
     ) -> Result<EmbeddingResponse, APIError> {
         let response = self.client.post("/embeddings", &parameters).await?;
 
-        let value = validate_request(response).await?;
-
-        let embedding_response: EmbeddingResponse = serde_json::from_value(value)
-            .map_err(|error| APIError::ParseError(error.to_string()))?;
+        let embedding_response: EmbeddingResponse = format_request(response)?;
 
         Ok(embedding_response)
     }
