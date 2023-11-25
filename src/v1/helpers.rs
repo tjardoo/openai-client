@@ -2,16 +2,26 @@ use crate::v1::error::APIError;
 #[cfg(feature = "download")]
 use rand::{distributions::Alphanumeric, Rng};
 use reqwest::multipart::Part;
+use serde::de::DeserializeOwned;
 use serde_json::Value;
 use tokio::fs::File;
 use tokio_util::codec::{BytesCodec, FramedRead};
 
-pub async fn validate_request(response: String) -> Result<Value, APIError> {
+pub fn validate_response(response: String) -> Result<Value, APIError> {
     let value: Value = serde_json::from_str(&response).unwrap();
 
     if Value::is_object(&value["error"]) {
         return Err(APIError::InvalidRequestError(value["error"].to_string()));
     }
+
+    return Ok(value);
+}
+
+pub fn format_response<R: DeserializeOwned>(response: String) -> Result<R, APIError> {
+    let value = validate_response(response)?;
+
+    let value: R =
+        serde_json::from_value(value).map_err(|error| APIError::ParseError(error.to_string()))?;
 
     return Ok(value);
 }

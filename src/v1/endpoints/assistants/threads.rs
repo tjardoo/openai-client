@@ -1,6 +1,6 @@
 use crate::v1::endpoints::assistants::assistants::Assistants;
 use crate::v1::error::APIError;
-use crate::v1::helpers::validate_request;
+use crate::v1::helpers::format_response;
 use crate::v1::resources::assistant::thread::CreateThreadParameters;
 use crate::v1::resources::assistant::thread::ModifyThreadParameters;
 use crate::v1::resources::assistant::thread::Thread;
@@ -22,10 +22,7 @@ impl Threads<'_> {
     pub async fn create(&self, parameters: CreateThreadParameters) -> Result<Thread, APIError> {
         let response = self.assistant.client.post("/threads", &parameters).await?;
 
-        let value = validate_request(response).await?;
-
-        let thread_response: Thread = serde_json::from_value(value.clone())
-            .map_err(|error| APIError::ParseError(error.to_string()))?;
+        let thread_response: Thread = format_response(response)?;
 
         Ok(thread_response)
     }
@@ -38,10 +35,7 @@ impl Threads<'_> {
             .get(format!("/threads/{thread_id}").as_str())
             .await?;
 
-        let value = validate_request(response).await?;
-
-        let thread_response: Thread = serde_json::from_value(value)
-            .map_err(|error| APIError::ParseError(error.to_string()))?;
+        let thread_response: Thread = format_response(response)?;
 
         Ok(thread_response)
     }
@@ -58,10 +52,7 @@ impl Threads<'_> {
             .post(format!("/threads/{thread_id}").as_str(), &parameters)
             .await?;
 
-        let value = validate_request(response).await?;
-
-        let thread_response: Thread = serde_json::from_value(value)
-            .map_err(|error| APIError::ParseError(error.to_string()))?;
+        let thread_response: Thread = format_response(response)?;
 
         Ok(thread_response)
     }
@@ -74,10 +65,7 @@ impl Threads<'_> {
             .delete(format!("/threads/{thread_id}").as_str())
             .await?;
 
-        let value = validate_request(response).await?;
-
-        let deleted_object: DeletedObject = serde_json::from_value(value)
-            .map_err(|error| APIError::ParseError(error.to_string()))?;
+        let deleted_object: DeletedObject = format_response(response)?;
 
         Ok(deleted_object)
     }

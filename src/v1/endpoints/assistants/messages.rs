@@ -1,6 +1,6 @@
 use crate::v1::endpoints::assistants::assistants::Assistants;
 use crate::v1::error::APIError;
-use crate::v1::helpers::validate_request;
+use crate::v1::helpers::format_response;
 use crate::v1::resources::assistant::message::CreateMessageParameters;
 use crate::v1::resources::assistant::message::ListMessageFilesResponse;
 use crate::v1::resources::assistant::message::ListMessagesResponse;
@@ -36,10 +36,7 @@ impl Messages<'_> {
             )
             .await?;
 
-        let value = validate_request(response).await?;
-
-        let message_response: Message = serde_json::from_value(value.clone())
-            .map_err(|error| APIError::ParseError(error.to_string()))?;
+        let message_response: Message = format_response(response)?;
 
         Ok(message_response)
     }
@@ -52,10 +49,7 @@ impl Messages<'_> {
             .get(format!("/threads/{thread_id}/messages/{message_id}").as_str())
             .await?;
 
-        let value = validate_request(response).await?;
-
-        let message_response: Message = serde_json::from_value(value)
-            .map_err(|error| APIError::ParseError(error.to_string()))?;
+        let message_response: Message = format_response(response)?;
 
         Ok(message_response)
     }
@@ -76,10 +70,7 @@ impl Messages<'_> {
             )
             .await?;
 
-        let value = validate_request(response).await?;
-
-        let message_response: Message = serde_json::from_value(value)
-            .map_err(|error| APIError::ParseError(error.to_string()))?;
+        let message_response: Message = format_response(response)?;
 
         Ok(message_response)
     }
@@ -96,10 +87,7 @@ impl Messages<'_> {
             .get_with_query(format!("/threads/{thread_id}/messages").as_str(), &query)
             .await?;
 
-        let value = validate_request(response).await?;
-
-        let list_messages_response: ListMessagesResponse = serde_json::from_value(value.clone())
-            .map_err(|error| APIError::ParseError(error.to_string()))?;
+        let list_messages_response: ListMessagesResponse = format_response(response)?;
 
         Ok(list_messages_response)
     }
@@ -117,10 +105,7 @@ impl Messages<'_> {
             .get(format!("/threads/{thread_id}/messages/{message_id}/files/{file_id}").as_str())
             .await?;
 
-        let value = validate_request(response).await?;
-
-        let message_file_response: MessageFile = serde_json::from_value(value)
-            .map_err(|error| APIError::ParseError(error.to_string()))?;
+        let message_file_response: MessageFile = format_response(response)?;
 
         Ok(message_file_response)
     }
@@ -141,11 +126,7 @@ impl Messages<'_> {
             )
             .await?;
 
-        let value = validate_request(response).await?;
-
-        let list_message_files_response: ListMessageFilesResponse =
-            serde_json::from_value(value.clone())
-                .map_err(|error| APIError::ParseError(error.to_string()))?;
+        let list_message_files_response: ListMessageFilesResponse = format_response(response)?;
 
         Ok(list_message_files_response)
     }

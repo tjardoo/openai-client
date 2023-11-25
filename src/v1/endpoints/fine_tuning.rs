@@ -1,6 +1,6 @@
 use crate::v1::api::Client;
 use crate::v1::error::APIError;
-use crate::v1::helpers::validate_request;
+use crate::v1::helpers::format_response;
 use crate::v1::resources::fine_tuning::CreateFineTuningJobParameters;
 use crate::v1::resources::fine_tuning::FineTuningJob;
 use crate::v1::resources::fine_tuning::ListFineTuningJobEventsResponse;
@@ -27,10 +27,7 @@ impl FineTuning<'_> {
     ) -> Result<FineTuningJob, APIError> {
         let response = self.client.post("/fine_tuning/jobs", &parameters).await?;
 
-        let value = validate_request(response).await?;
-
-        let fine_tuning_job_response: FineTuningJob = serde_json::from_value(value)
-            .map_err(|error| APIError::ParseError(error.to_string()))?;
+        let fine_tuning_job_response: FineTuningJob = format_response(response)?;
 
         Ok(fine_tuning_job_response)
     }
@@ -45,11 +42,7 @@ impl FineTuning<'_> {
             .get_with_query("/fine_tuning/jobs", &query)
             .await?;
 
-        let value = validate_request(response).await?;
-
-        let list_fine_tuning_jobs_response: ListFineTuningJobsResponse =
-            serde_json::from_value(value.clone())
-                .map_err(|error| APIError::ParseError(error.to_string()))?;
+        let list_fine_tuning_jobs_response: ListFineTuningJobsResponse = format_response(response)?;
 
         Ok(list_fine_tuning_jobs_response)
     }
@@ -61,12 +54,9 @@ impl FineTuning<'_> {
             .get(format!("/fine_tuning/jobs/{id}").as_str())
             .await?;
 
-        let value = validate_request(response).await?;
+        let fine_tuning_job_response: FineTuningJob = format_response(response)?;
 
-        let file_tuning_job_response: FineTuningJob = serde_json::from_value(value)
-            .map_err(|error| APIError::ParseError(error.to_string()))?;
-
-        Ok(file_tuning_job_response)
+        Ok(fine_tuning_job_response)
     }
 
     /// Immediately cancel a fine-tune job.
@@ -79,12 +69,9 @@ impl FineTuning<'_> {
             )
             .await?;
 
-        let value = validate_request(response).await?;
+        let fine_tuning_job_response: FineTuningJob = format_response(response)?;
 
-        let file_tuning_job_response: FineTuningJob = serde_json::from_value(value)
-            .map_err(|error| APIError::ParseError(error.to_string()))?;
-
-        Ok(file_tuning_job_response)
+        Ok(fine_tuning_job_response)
     }
 
     /// Get status updates for a fine-tuning job.
@@ -98,11 +85,8 @@ impl FineTuning<'_> {
             .get_with_query(format!("/fine_tuning/jobs/{id}/events").as_str(), &query)
             .await?;
 
-        let value = validate_request(response).await?;
-
         let list_fine_tuning_job_events_response: ListFineTuningJobEventsResponse =
-            serde_json::from_value(value.clone())
-                .map_err(|error| APIError::ParseError(error.to_string()))?;
+            format_response(response)?;
 
         Ok(list_fine_tuning_job_events_response)
     }

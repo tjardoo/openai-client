@@ -1,6 +1,6 @@
 use crate::v1::endpoints::assistants::assistants::Assistants;
 use crate::v1::error::APIError;
-use crate::v1::helpers::validate_request;
+use crate::v1::helpers::format_response;
 use crate::v1::resources::assistant::run::CreateRunParameters;
 use crate::v1::resources::assistant::run::ListRunsResponse;
 use crate::v1::resources::assistant::run::ModifyRunParameters;
@@ -31,10 +31,7 @@ impl Runs<'_> {
             .post(format!("/threads/{thread_id}/runs").as_str(), &parameters)
             .await?;
 
-        let value = validate_request(response).await?;
-
-        let run_response: Run = serde_json::from_value(value.clone())
-            .map_err(|error| APIError::ParseError(error.to_string()))?;
+        let run_response: Run = format_response(response)?;
 
         Ok(run_response)
     }
@@ -47,10 +44,7 @@ impl Runs<'_> {
             .get(format!("/threads/{thread_id}/runs/{run_id}").as_str())
             .await?;
 
-        let value = validate_request(response).await?;
-
-        let run_response: Run = serde_json::from_value(value)
-            .map_err(|error| APIError::ParseError(error.to_string()))?;
+        let run_response: Run = format_response(response)?;
 
         Ok(run_response)
     }
@@ -71,10 +65,7 @@ impl Runs<'_> {
             )
             .await?;
 
-        let value = validate_request(response).await?;
-
-        let run_response: Run = serde_json::from_value(value)
-            .map_err(|error| APIError::ParseError(error.to_string()))?;
+        let run_response: Run = format_response(response)?;
 
         Ok(run_response)
     }
@@ -91,10 +82,7 @@ impl Runs<'_> {
             .get_with_query(format!("/threads/{thread_id}/runs").as_str(), &query)
             .await?;
 
-        let value = validate_request(response).await?;
-
-        let list_runs_response: ListRunsResponse = serde_json::from_value(value.clone())
-            .map_err(|error| APIError::ParseError(error.to_string()))?;
+        let list_runs_response: ListRunsResponse = format_response(response)?;
 
         Ok(list_runs_response)
     }
@@ -110,10 +98,7 @@ impl Runs<'_> {
             )
             .await?;
 
-        let value = validate_request(response).await?;
-
-        let run_response: Run = serde_json::from_value(value)
-            .map_err(|error| APIError::ParseError(error.to_string()))?;
+        let run_response: Run = format_response(response)?;
 
         Ok(run_response)
     }
