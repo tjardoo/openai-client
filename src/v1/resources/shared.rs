@@ -63,6 +63,9 @@ pub enum FinishReason {
     /// The model decided to call a function.
     #[serde(rename(deserialize = "function_call"))]
     FunctionCall,
+    /// The model decided to call one or more tools.
+    #[serde(rename(deserialize = "tool_calls"))]
+    ToolCalls,
 }
 
 #[derive(Serialize, Deserialize, Debug, Clone, PartialEq)]
