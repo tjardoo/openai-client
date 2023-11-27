@@ -299,6 +299,7 @@ pub enum Role {
     User,
     Assistant,
     Function,
+    Tool
 }
 
 impl Default for ChatCompletionParameters {
