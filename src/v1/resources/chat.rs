@@ -313,6 +313,7 @@ impl Default for ChatCompletionParameters {
                 content: Some("Hello!".to_string()),
                 tool_calls: None,
                 name: None,
+                tool_call_id: None
             }],
             model: Gpt35Engine::Gpt35Turbo1106.to_string(),
             frequency_penalty: None,
@@ -338,6 +339,7 @@ impl Default for ChatMessage {
             content: None,
             tool_calls: None,
             name: None,
+            tool_call_id: None
         }
     }
 }
