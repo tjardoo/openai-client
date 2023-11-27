@@ -150,6 +150,9 @@ pub struct ChatMessage {
     ///
     #[serde(skip_serializing_if = "Option::is_none")]
     pub name: Option<String>,
+    /// When responding to a tool call; provide the id of the tool call
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub tool_call_id: Option<String>,
 }
 
 #[cfg(feature = "stream")]
