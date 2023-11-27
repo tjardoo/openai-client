@@ -150,6 +150,9 @@ pub struct ChatMessage {
     ///
     #[serde(skip_serializing_if = "Option::is_none")]
     pub name: Option<String>,
+    /// When responding to a tool call; provide the id of the tool call
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub tool_call_id: Option<String>,
 }
 
 #[cfg(feature = "stream")]
@@ -299,6 +302,7 @@ pub enum Role {
     User,
     Assistant,
     Function,
+    Tool
 }
 
 impl Default for ChatCompletionParameters {
@@ -309,6 +313,7 @@ impl Default for ChatCompletionParameters {
                 content: Some("Hello!".to_string()),
                 tool_calls: None,
                 name: None,
+                tool_call_id: None
             }],
             model: Gpt35Engine::Gpt35Turbo1106.to_string(),
             frequency_penalty: None,
@@ -334,6 +339,7 @@ impl Default for ChatMessage {
             content: None,
             tool_calls: None,
             name: None,
+            tool_call_id: None
         }
     }
 }
@@ -348,6 +354,7 @@ impl Display for Role {
                 Role::User => "user",
                 Role::Assistant => "assistant",
                 Role::Function => "function",
+                Role::Tool => "tool",
             }
         )
     }
@@ -362,6 +369,7 @@ impl FromStr for Role {
             "user" => Ok(Role::User),
             "assistant" => Ok(Role::Assistant),
             "function" => Ok(Role::Function),
+            "tool" => Ok(Role::Tool),
             _ => Err(format!("{} is not a valid Role", s)),
         }
     }
