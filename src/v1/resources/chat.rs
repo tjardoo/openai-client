@@ -354,6 +354,7 @@ impl Display for Role {
                 Role::User => "user",
                 Role::Assistant => "assistant",
                 Role::Function => "function",
+                Role::Tool => "tool",
             }
         )
     }
@@ -368,6 +369,7 @@ impl FromStr for Role {
             "user" => Ok(Role::User),
             "assistant" => Ok(Role::Assistant),
             "function" => Ok(Role::Function),
+            "tool" => Ok(Role::Tool),
             _ => Err(format!("{} is not a valid Role", s)),
         }
     }
