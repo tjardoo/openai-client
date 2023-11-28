@@ -1,6 +1,9 @@
+#[cfg(feature = "reqwest")]
 pub mod api;
+#[cfg(feature = "reqwest")]
 pub mod endpoints;
 pub mod error;
+#[cfg(feature = "reqwest")]
 pub mod helpers;
 pub mod models;
 pub mod resources;
