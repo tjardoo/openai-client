@@ -60,9 +60,6 @@ pub enum FinishReason {
     /// Omitted content due to a flag from our content filters.
     #[serde(rename(deserialize = "content_filter"))]
     ContentFilterFlagged,
-    /// The model decided to call a function.
-    #[serde(rename(deserialize = "function_call"))]
-    FunctionCall,
     /// The model decided to call one or more tools.
     #[serde(rename(deserialize = "tool_calls"))]
     ToolCalls,
