@@ -113,6 +113,7 @@ impl Display for AudioOutputFormat {
 }
 
 impl AudioSpeechResponse {
+    #[cfg(feature = "tokio")]
     pub async fn save<P: AsRef<Path>>(&self, file_path: P) -> Result<(), APIError> {
         let directory = file_path.as_ref().parent();
 
