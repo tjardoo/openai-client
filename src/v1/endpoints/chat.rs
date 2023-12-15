@@ -51,7 +51,7 @@ impl Chat<'_> {
             max_tokens: parameters.max_tokens,
             n: parameters.n,
             presence_penalty: parameters.presence_penalty,
-            respsonse_format: parameters.respsonse_format,
+            response_format: parameters.response_format,
             stop: parameters.stop,
             stream: true,
             temperature: parameters.temperature,
