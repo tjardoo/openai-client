@@ -70,7 +70,7 @@ pub struct ChatCompletionParameters {
     /// An object specifying the format that the model must output.
     /// Setting to { "type": "json_object" } enables JSON mode, which guarantees the message the model generates is valid JSON.
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub respsonse_format: Option<ChatCompletionResponseFormat>,
+    pub response_format: Option<ChatCompletionResponseFormat>,
     /// Up to 4 sequences where the API will stop generating further tokens.
     #[serde(skip_serializing_if = "Option::is_none")]
     pub stop: Option<StopToken>,
@@ -256,7 +256,7 @@ pub struct StreamChatCompletionParameters {
     #[serde(skip_serializing_if = "Option::is_none")]
     pub presence_penalty: Option<f32>,
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub respsonse_format: Option<ChatCompletionResponseFormat>,
+    pub response_format: Option<ChatCompletionResponseFormat>,
     #[serde(skip_serializing_if = "Option::is_none")]
     pub stop: Option<StopToken>,
     pub stream: bool,
@@ -321,7 +321,7 @@ impl Default for ChatCompletionParameters {
             max_tokens: None,
             n: None,
             presence_penalty: None,
-            respsonse_format: None,
+            response_format: None,
             stop: None,
             temperature: None,
             top_p: None,
