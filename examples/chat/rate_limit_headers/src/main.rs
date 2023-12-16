@@ -1,5 +1,8 @@
 use openai_dive::v1::api::Client;
-use openai_dive::v1::resources::chat::{ChatCompletionParameters, ChatMessage, Role};
+use openai_dive::v1::resources::chat::{
+    ChatCompletionParameters, ChatCompletionResponse, ChatMessage, Role,
+};
+use openai_dive::v1::resources::shared::ResponseWrapper;
 use std::env;
 
 #[tokio::main]
@@ -26,9 +29,10 @@ async fn main() {
         ..Default::default()
     };
 
-    let result = client.chat().create_with_header(parameters).await.unwrap();
+    let result: ResponseWrapper<ChatCompletionResponse> =
+        client.chat().create_wrapped(parameters).await.unwrap();
 
     println!("{:#?}", result.headers);
 
-    // println!("{:#?}", result.data);
+    println!("{:#?}", result.data);
 }
