@@ -27,7 +27,7 @@ impl FineTuning<'_> {
     ) -> Result<FineTuningJob, APIError> {
         let response = self.client.post("/fine_tuning/jobs", &parameters).await?;
 
-        let fine_tuning_job_response: FineTuningJob = format_response(response)?;
+        let fine_tuning_job_response: FineTuningJob = format_response(response.data)?;
 
         Ok(fine_tuning_job_response)
     }
@@ -69,7 +69,7 @@ impl FineTuning<'_> {
             )
             .await?;
 
-        let fine_tuning_job_response: FineTuningJob = format_response(response)?;
+        let fine_tuning_job_response: FineTuningJob = format_response(response.data)?;
 
         Ok(fine_tuning_job_response)
     }

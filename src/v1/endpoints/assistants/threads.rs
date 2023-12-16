@@ -22,7 +22,7 @@ impl Threads<'_> {
     pub async fn create(&self, parameters: CreateThreadParameters) -> Result<Thread, APIError> {
         let response = self.assistant.client.post("/threads", &parameters).await?;
 
-        let thread_response: Thread = format_response(response)?;
+        let thread_response: Thread = format_response(response.data)?;
 
         Ok(thread_response)
     }
@@ -52,7 +52,7 @@ impl Threads<'_> {
             .post(format!("/threads/{thread_id}").as_str(), &parameters)
             .await?;
 
-        let thread_response: Thread = format_response(response)?;
+        let thread_response: Thread = format_response(response.data)?;
 
         Ok(thread_response)
     }

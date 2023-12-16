@@ -23,7 +23,7 @@ impl Assistants<'_> {
     pub async fn create(&self, parameters: AssistantParameters) -> Result<Assistant, APIError> {
         let response = self.client.post("/assistants", &parameters).await?;
 
-        let assistant_response: Assistant = format_response(response)?;
+        let assistant_response: Assistant = format_response(response.data)?;
 
         Ok(assistant_response)
     }
@@ -51,7 +51,7 @@ impl Assistants<'_> {
             .post(format!("/assistants/{id}").as_str(), &parameters)
             .await?;
 
-        let assistant_response: Assistant = format_response(response)?;
+        let assistant_response: Assistant = format_response(response.data)?;
 
         Ok(assistant_response)
     }

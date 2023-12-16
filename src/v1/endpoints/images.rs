@@ -24,7 +24,7 @@ impl Images<'_> {
     ) -> Result<ImageResponse, APIError> {
         let response = self.client.post("/images/generations", &parameters).await?;
 
-        let image_response: ImageResponse = format_response(response)?;
+        let image_response: ImageResponse = format_response(response.data)?;
 
         Ok(image_response)
     }

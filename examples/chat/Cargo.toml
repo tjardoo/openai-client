@@ -4,4 +4,5 @@ members = [
     "create_chat_completion_stream",
     "function_calling",
     "function_calling_stream",
+    "rate_limit_headers",
 ]

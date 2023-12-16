@@ -22,7 +22,7 @@ impl Embeddings<'_> {
     ) -> Result<EmbeddingResponse, APIError> {
         let response = self.client.post("/embeddings", &parameters).await?;
 
-        let embedding_response: EmbeddingResponse = format_response(response)?;
+        let embedding_response: EmbeddingResponse = format_response(response.data)?;
 
         Ok(embedding_response)
     }

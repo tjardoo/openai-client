@@ -31,7 +31,7 @@ impl Runs<'_> {
             .post(format!("/threads/{thread_id}/runs").as_str(), &parameters)
             .await?;
 
-        let run_response: Run = format_response(response)?;
+        let run_response: Run = format_response(response.data)?;
 
         Ok(run_response)
     }
@@ -65,7 +65,7 @@ impl Runs<'_> {
             )
             .await?;
 
-        let run_response: Run = format_response(response)?;
+        let run_response: Run = format_response(response.data)?;
 
         Ok(run_response)
     }
@@ -98,7 +98,7 @@ impl Runs<'_> {
             )
             .await?;
 
-        let run_response: Run = format_response(response)?;
+        let run_response: Run = format_response(response.data)?;
 
         Ok(run_response)
     }

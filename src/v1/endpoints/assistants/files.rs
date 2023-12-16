@@ -31,7 +31,7 @@ impl Files<'_> {
             .post(format!("/assistants/{id}/files").as_str(), &parameters)
             .await?;
 
-        let assistant_file_response: AssistantFile = format_response(response)?;
+        let assistant_file_response: AssistantFile = format_response(response.data)?;
 
         Ok(assistant_file_response)
     }

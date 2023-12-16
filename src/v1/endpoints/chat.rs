@@ -2,6 +2,7 @@ use crate::v1::error::APIError;
 #[cfg(feature = "stream")]
 use crate::v1::resources::chat::ChatCompletionChunkResponse;
 use crate::v1::resources::chat::{ChatCompletionParameters, ChatCompletionResponse};
+use crate::v1::resources::shared::ResponseWrapper;
 use crate::v1::{api::Client, helpers::format_response};
 #[cfg(feature = "stream")]
 use futures::Stream;
@@ -27,9 +28,24 @@ impl Chat<'_> {
     ) -> Result<ChatCompletionResponse, APIError> {
         let response = self.client.post("/chat/completions", &parameters).await?;
 
-        let chat_completion_response: ChatCompletionResponse = format_response(response)?;
+        let chat_completion_response: ChatCompletionResponse = format_response(response.data)?;
 
         Ok(chat_completion_response)
+    }
+
+    /// Creates a model response for the given chat conversation.
+    pub async fn create_with_headers(
+        &self,
+        parameters: ChatCompletionParameters,
+    ) -> Result<ResponseWrapper<ChatCompletionResponse>, APIError> {
+        let response = self.client.post("/chat/completions", &parameters).await?;
+
+        let chat_completion_response: ChatCompletionResponse = format_response(response.data)?;
+
+        Ok(ResponseWrapper {
+            data: chat_completion_response,
+            headers: response.headers,
+        })
     }
 
     #[cfg(feature = "stream")]
