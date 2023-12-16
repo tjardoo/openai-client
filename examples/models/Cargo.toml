@@ -1,2 +1,3 @@
 [workspace]
+resolver = "2"
 members = ["list_models", "retrieve_model", "delete_fine_tune_model"]

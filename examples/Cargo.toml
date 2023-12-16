@@ -1,4 +1,5 @@
 [workspace]
+resolver = "2"
 members = [
     "audio/create_transcription",
     "audio/create_translation",

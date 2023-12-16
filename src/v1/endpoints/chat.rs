@@ -26,15 +26,13 @@ impl Chat<'_> {
         &self,
         parameters: ChatCompletionParameters,
     ) -> Result<ChatCompletionResponse, APIError> {
-        let response = self.client.post("/chat/completions", &parameters).await?;
+        let chat_completion_response = self.create_with_header(parameters).await?;
 
-        let chat_completion_response: ChatCompletionResponse = format_response(response.data)?;
-
-        Ok(chat_completion_response)
+        Ok(chat_completion_response.data)
     }
 
     /// Creates a model response for the given chat conversation.
-    pub async fn create_with_headers(
+    pub async fn create_with_header(
         &self,
         parameters: ChatCompletionParameters,
     ) -> Result<ResponseWrapper<ChatCompletionResponse>, APIError> {

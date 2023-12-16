@@ -26,7 +26,7 @@ async fn main() {
         ..Default::default()
     };
 
-    let result = client.chat().create_with_headers(parameters).await.unwrap();
+    let result = client.chat().create_with_header(parameters).await.unwrap();
 
     println!("{:#?}", result.headers);
 
