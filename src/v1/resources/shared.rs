@@ -1,3 +1,4 @@
+use reqwest::header::HeaderMap;
 use serde::{Deserialize, Serialize};
 
 #[derive(Serialize, Deserialize, Debug, Clone, PartialEq)]
@@ -9,6 +10,34 @@ pub struct Usage {
     pub completion_tokens: Option<u32>,
     /// Number of tokens in the entire response.
     pub total_tokens: u32,
+}
+
+#[derive(Serialize, Deserialize, Debug, Clone, PartialEq)]
+pub struct ResponseWrapper<T> {
+    pub data: T,
+    pub headers: Headers,
+}
+
+#[derive(Serialize, Deserialize, Debug, Clone, PartialEq)]
+pub struct Headers {
+    /// The maximum number of requests that are permitted before exhausting the rate limit.
+    #[serde(rename = "x-ratelimit-limit-requests")]
+    pub x_ratelimit_limit_requests: u32,
+    /// The maximum number of tokens that are permitted before exhausting the rate limit.
+    #[serde(rename = "x-ratelimit-limit-tokens")]
+    pub x_ratelimit_limit_tokens: u32,
+    /// The remaining number of requests that are permitted before exhausting the rate limit.
+    #[serde(rename = "x-ratelimit-remaining-requests")]
+    pub x_ratelimit_remaining_requests: u32,
+    /// The remaining number of tokens that are permitted before exhausting the rate limit.
+    #[serde(rename = "x-ratelimit-remaining-tokens")]
+    pub x_ratelimit_remaining_tokens: u32,
+    /// The time until the rate limit (based on requests) resets to its initial state.
+    #[serde(rename = "x-ratelimit-reset-requests")]
+    pub x_ratelimit_reset_requests: String,
+    /// The time until the rate limit (based on tokens) resets to its initial state.
+    #[serde(rename = "x-ratelimit-reset-tokens")]
+    pub x_ratelimit_reset_tokens: String,
 }
 
 #[derive(Serialize, Deserialize, Debug, Clone, PartialEq)]
@@ -70,4 +99,51 @@ pub enum FinishReason {
 pub enum StopToken {
     String(String),
     Array(Vec<String>),
+}
+
+impl From<HeaderMap> for Headers {
+    fn from(value: HeaderMap) -> Self {
+        Self {
+            x_ratelimit_limit_requests: value
+                .get("x-ratelimit-limit-requests")
+                .unwrap()
+                .to_str()
+                .unwrap()
+                .parse::<u32>()
+                .unwrap(),
+            x_ratelimit_limit_tokens: value
+                .get("x-ratelimit-limit-tokens")
+                .unwrap()
+                .to_str()
+                .unwrap()
+                .parse::<u32>()
+                .unwrap(),
+            x_ratelimit_remaining_requests: value
+                .get("x-ratelimit-remaining-requests")
+                .unwrap()
+                .to_str()
+                .unwrap()
+                .parse::<u32>()
+                .unwrap(),
+            x_ratelimit_remaining_tokens: value
+                .get("x-ratelimit-remaining-tokens")
+                .unwrap()
+                .to_str()
+                .unwrap()
+                .parse::<u32>()
+                .unwrap(),
+            x_ratelimit_reset_requests: value
+                .get("x-ratelimit-reset-requests")
+                .unwrap()
+                .to_str()
+                .unwrap()
+                .to_string(),
+            x_ratelimit_reset_tokens: value
+                .get("x-ratelimit-reset-tokens")
+                .unwrap()
+                .to_str()
+                .unwrap()
+                .to_string(),
+        }
+    }
 }

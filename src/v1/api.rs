@@ -1,5 +1,5 @@
-use crate::v1::error::APIError;
 use crate::v1::helpers::is_beta_feature;
+use crate::v1::{error::APIError, resources::shared::Headers};
 use bytes::Bytes;
 #[cfg(feature = "stream")]
 use futures::{stream::StreamExt, Stream};
@@ -11,6 +11,8 @@ use serde::de::DeserializeOwned;
 use serde::Serialize;
 #[cfg(feature = "stream")]
 use std::pin::Pin;
+
+use super::resources::shared::ResponseWrapper;
 
 const OPENAI_API_V1_ENDPOINT: &str = "https://api.openai.com/v1";
 
@@ -83,7 +85,11 @@ impl Client {
         Ok(response_text)
     }
 
-    pub async fn post<T: Serialize>(&self, path: &str, parameters: &T) -> Result<String, APIError> {
+    pub async fn post<T: Serialize>(
+        &self,
+        path: &str,
+        parameters: &T,
+    ) -> Result<ResponseWrapper<String>, APIError> {
         let response = self
             .build_request(Method::POST, path)
             .json(&parameters)
@@ -95,12 +101,18 @@ impl Client {
             return Err(APIError::EndpointError(response.text().await.unwrap()));
         }
 
+        let header_map = response.headers().clone();
+
         let response_text = response.text().await.unwrap();
+        let response_headers: Headers = header_map.into();
 
         #[cfg(feature = "log")]
         log::trace!("{}", response_text);
 
-        Ok(response_text)
+        Ok(ResponseWrapper {
+            data: response_text.to_string(),
+            headers: response_headers,
+        })
     }
 
     pub async fn delete(&self, path: &str) -> Result<String, APIError> {

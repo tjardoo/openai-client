@@ -9,7 +9,7 @@
 //! openai_dive = "0.3"
 //! ```
 //!
-//! More information: [set API key](#set-api-key), [add proxy](#add-proxy), [use model names](#use-model-names)
+//! More information: [set API key](#set-api-key), [add proxy](#add-proxy), [rate limit headers](#rate-limit-headers), [use model names](#use-model-names)
 //!
 //! ## Endpoints
 //!
@@ -910,6 +910,30 @@
 //!     api_key,
 //! };
 //! ```
+//! ## Rate limit headers
+//!
+//! In addition to seeing your rate limit on your account page, you can also view important information about your rate limits such as the remaining requests, tokens, and other metadata in the headers of the HTTP response.
+//!
+//! The following endpoints have rate limit headers support:
+//!
+//! - [Create chat completion](#create-chat-completion)
+//! - [Create embeddings](#create-embeddings)
+//!
+//! You can access them by calling the `create_wrapped` method instead of the `create` method. The `create_wrapped` method returns a `Result<WrappedResponse<T>, Error>`.
+//!
+//! ```rust
+//! use openai_dive::v1::api::Client;
+//!
+//! let result = client.chat().create_wrapped(parameters).await.unwrap();
+//!
+//! // the chat completion response
+//! println!("{:#?}", result.data);
+//!
+//! // the rate limit headers
+//! println!("{:#?}", result.headers);
+//! ```
+//!
+//! More information: [Rate limit headers](https://platform.openai.com/docs/guides/rate-limits/rate-limits-in-headers)
 //!
 //! ## Use model names
 //!

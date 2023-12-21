@@ -36,7 +36,7 @@ impl Messages<'_> {
             )
             .await?;
 
-        let message_response: Message = format_response(response)?;
+        let message_response: Message = format_response(response.data)?;
 
         Ok(message_response)
     }
@@ -70,7 +70,7 @@ impl Messages<'_> {
             )
             .await?;
 
-        let message_response: Message = format_response(response)?;
+        let message_response: Message = format_response(response.data)?;
 
         Ok(message_response)
     }
