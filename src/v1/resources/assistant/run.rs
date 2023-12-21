@@ -20,7 +20,7 @@ pub struct Run {
     pub status: RunStatus,
     /// Details on the action required to continue the run. Will be null if no action is required.
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub action: Option<RunAction>,
+    pub required_action: Option<RunAction>,
     /// The last error associated with this run. Will be null if there are no errors.
     #[serde(skip_serializing_if = "Option::is_none")]
     pub last_error: Option<RunError>,
@@ -57,7 +57,7 @@ pub struct RunAction {
     /// For now, this is always 'submit_tool_outputs'.
     pub r#type: String,
     /// Details on the tool outputs needed for this run to continue.
-    pub submit_tool_outputs: Vec<RunActionSubmitToolOutput>,
+    pub submit_tool_outputs: RunActionSubmitToolOutput,
 }
 
 #[derive(Serialize, Deserialize, Debug, Clone, PartialEq)]
