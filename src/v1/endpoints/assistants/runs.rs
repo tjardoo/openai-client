@@ -1,6 +1,7 @@
 use crate::v1::endpoints::assistants::assistants::Assistants;
 use crate::v1::error::APIError;
 use crate::v1::helpers::format_response;
+use crate::v1::resources::assistant::assistant::ToolOutputsParameters;
 use crate::v1::resources::assistant::run::CreateRunParameters;
 use crate::v1::resources::assistant::run::ListRunsResponse;
 use crate::v1::resources::assistant::run::ModifyRunParameters;
@@ -99,6 +100,29 @@ impl Runs<'_> {
             .await?;
 
         let run_response: Run = format_response(response.data)?;
+
+        Ok(run_response)
+    }
+
+    /// When a run has the status: 'requires_action' and required_action.type is 'submit_tool_outputs',
+    /// this endpoint can be used to submit the outputs from the tool calls once they're all completed.
+    /// All outputs must be submitted in a single request.
+    pub async fn submit_tool_outputs(
+        &self,
+        thread_id: &str,
+        run_id: &str,
+        parameters: ToolOutputsParameters,
+    ) -> Result<Run, APIError> {
+        let response = self
+            .assistant
+            .client
+            .post(
+                format!("/threads/{thread_id}/runs/{run_id}/submit_tool_outputs").as_str(),
+                &parameters,
+            )
+            .await?;
+
+        let run_response: Run = format_response(response)?;
 
         Ok(run_response)
     }
