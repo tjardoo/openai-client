@@ -135,6 +135,22 @@ pub struct ListAssistantFilesResponse {
 }
 
 #[derive(Serialize, Deserialize, Debug, Clone, PartialEq)]
+pub struct ToolOutputsParameters {
+    /// A list of tools for which the outputs are being submitted.
+    pub tool_outputs: Vec<ToolOutput>,
+}
+
+#[derive(Serialize, Deserialize, Debug, Clone, PartialEq)]
+pub struct ToolOutput {
+    /// The ID of the tool call in the 'required_action' object within the run object the output is being submitted for.
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub tool_call_id: Option<String>,
+    /// The output of the tool call to be submitted to continue the run.
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub output: Option<String>,
+}
+
+#[derive(Serialize, Deserialize, Debug, Clone, PartialEq)]
 #[serde(untagged)]
 pub enum AssistantTools {
     CodeInterpreter(AssistantCodeInterpreterTool),

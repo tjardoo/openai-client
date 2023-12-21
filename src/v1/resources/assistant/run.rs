@@ -25,7 +25,8 @@ pub struct Run {
     #[serde(skip_serializing_if = "Option::is_none")]
     pub last_error: Option<RunError>,
     /// The Unix timestamp (in seconds) for when the run will expire.
-    pub expires_at: u32,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub expires_at: Option<u32>,
     /// The Unix timestamp (in seconds) for when the run was started.
     #[serde(skip_serializing_if = "Option::is_none")]
     pub started_at: Option<u32>,
