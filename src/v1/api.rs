@@ -16,7 +16,7 @@ use super::resources::shared::ResponseWrapper;
 
 const OPENAI_API_V1_ENDPOINT: &str = "https://api.openai.com/v1";
 
-#[derive(Clone,Default,Debug)]
+#[derive(Clone, Debug)]
 pub struct Client {
     pub http_client: reqwest::Client,
     pub base_url: String,
