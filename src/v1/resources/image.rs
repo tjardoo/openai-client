@@ -128,11 +128,18 @@ pub enum ResponseFormat {
 }
 
 #[derive(Serialize, Deserialize, Debug, Clone, PartialEq)]
+#[serde(untagged)]
 pub enum ImageData {
-    #[serde(rename = "url")]
-    Url(String),
-    #[serde(rename = "b64_json")]
-    B64Json(String),
+    Url {
+        url: String,
+        #[serde(skip_serializing_if = "Option::is_none")]
+        revised_prompt: Option<String>,
+    },
+    B64Json {
+        b64_json: String,
+        #[serde(skip_serializing_if = "Option::is_none")]
+        revised_prompt: Option<String>,
+    },
 }
 
 impl ImageResponse {
@@ -167,8 +174,10 @@ impl ImageData {
     #[cfg(feature = "download")]
     pub async fn save_to_disk(&self, path: &str) -> Result<String, APIError> {
         match self {
-            ImageData::Url(url) => self.download_image_from_url(url, path).await,
-            ImageData::B64Json(b64_json) => self.download_b64_json_image(b64_json, path).await,
+            ImageData::Url { url, .. } => self.download_image_from_url(url, path).await,
+            ImageData::B64Json { b64_json, .. } => {
+                self.download_b64_json_image(b64_json, path).await
+            }
         }
     }
 
