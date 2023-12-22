@@ -1,4 +1,5 @@
 use openai_dive::v1::api::Client;
+use openai_dive::v1::models::DallEEngine;
 use openai_dive::v1::resources::image::{CreateImageParameters, ImageSize, ResponseFormat};
 use std::env;
 
@@ -10,11 +11,11 @@ async fn main() {
 
     let parameters = CreateImageParameters {
         prompt: "A cute baby dog".to_string(),
-        model: None,
+        model: Some(DallEEngine::DallE3.to_string()),
         n: Some(1),
         quality: None,
         response_format: Some(ResponseFormat::Url),
-        size: Some(ImageSize::Size256X256),
+        size: Some(ImageSize::Size1024X1024),
         style: None,
         user: None,
     };
