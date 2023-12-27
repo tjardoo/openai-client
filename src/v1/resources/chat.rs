@@ -57,6 +57,15 @@ pub struct ChatCompletionParameters {
     /// Modify the likelihood of specified tokens appearing in the completion.
     #[serde(skip_serializing_if = "Option::is_none")]
     pub logit_bias: Option<HashMap<String, i32>>,
+    /// Whether to return log probabilities of the output tokens or not.
+    /// If true, returns the log probabilities of each output token returned in the 'content' of 'message'.
+    /// This option is currently not available on the 'gpt-4-vision-preview' model.
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub logprobs: Option<bool>,
+    /// An integer between 0 and 5 specifying the number of most likely tokens to return at each token position,
+    /// each with an associated log probability. 'logprobs' must be set to 'true' if this parameter is used.
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub top_logprobs: Option<u32>,
     /// The maximum number of tokens to generate in the chat completion.
     #[serde(skip_serializing_if = "Option::is_none")]
     pub max_tokens: Option<u32>,
@@ -71,6 +80,11 @@ pub struct ChatCompletionParameters {
     /// Setting to { "type": "json_object" } enables JSON mode, which guarantees the message the model generates is valid JSON.
     #[serde(skip_serializing_if = "Option::is_none")]
     pub response_format: Option<ChatCompletionResponseFormat>,
+    /// This feature is in Beta. If specified, our system will make a best effort to sample deterministically,
+    /// such that repeated requests with the same seed and parameters should return the same result.
+    /// Determinism is not guaranteed, and you should refer to the system_fingerprint response parameter to monitor changes in the backend.
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub seed: Option<u32>,
     /// Up to 4 sequences where the API will stop generating further tokens.
     #[serde(skip_serializing_if = "Option::is_none")]
     pub stop: Option<StopToken>,
@@ -318,10 +332,13 @@ impl Default for ChatCompletionParameters {
             model: Gpt35Engine::Gpt35Turbo1106.to_string(),
             frequency_penalty: None,
             logit_bias: None,
+            logprobs: None,
+            top_logprobs: None,
             max_tokens: None,
             n: None,
             presence_penalty: None,
             response_format: None,
+            seed: None,
             stop: None,
             temperature: None,
             top_p: None,
