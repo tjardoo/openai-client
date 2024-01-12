@@ -24,6 +24,7 @@ More information: [set API key](#set-api-key), [add proxy](#add-proxy), [rate li
   - [Delete fine-tune model](#delete-fine-tune-model)
 - Chat
   - [Create chat completion](#create-chat-completion)
+  - [Create chat completion with image](#create-chat-completion-with-image)
   - [Function calling](#function-calling)
 - Images
   - [Create image](#create-image)
@@ -135,6 +136,7 @@ Creates a model response for the given chat conversation.
 
 ```rust
 use openai_dive::v1::api::Client;
+use openai_dive::v1::models::Gpt4Engine;
 use openai_dive::v1::resources::chat::{ChatCompletionParameters, ChatMessage, Role};
 use std::env;
 
@@ -145,20 +147,69 @@ async fn main() {
     let client = Client::new(api_key);
 
     let parameters = ChatCompletionParameters {
-        model: "gpt-3.5-turbo-16k-0613".to_string(),
+        model: Gpt4Engine::Gpt41106Preview.to_string(),
         messages: vec![
             ChatMessage {
                 role: Role::User,
-                content: Some("Hello!".to_string()),
+                content: ChatMessageContent::Text("Hello!".to_string()),
                 ..Default::default()
             },
             ChatMessage {
                 role: Role::User,
-                content: Some("Where are you located?".to_string()),
+                content: ChatMessageContent::Text("What is the capital of Vietnam?".to_string()),
                 ..Default::default()
             },
         ],
         max_tokens: Some(12),
+        ..Default::default()
+    };
+
+    let result = client.chat().create(parameters).await.unwrap();
+
+    println!("{:#?}", result);
+}
+```
+
+More information: [Create chat completion](https://platform.openai.com/docs/api-reference/chat/create)
+
+### Create chat completion with image
+
+Creates a model response for the given chat conversation.
+
+```rust
+use openai_dive::v1::api::Client;
+use openai_dive::v1::models::Gpt4Engine;
+use openai_dive::v1::resources::chat::{ChatCompletionParameters, ChatMessage, Role};
+use std::env;
+
+#[tokio::main]
+async fn main() {
+    let api_key = env::var("OPENAI_API_KEY").expect("$OPENAI_API_KEY is not set");
+
+    let client = Client::new(api_key);
+
+    let parameters = ChatCompletionParameters {
+        model: Gpt4Engine::Gpt4VisionPreview.to_string(),
+        messages: vec![
+            ChatMessage {
+                role: Role::User,
+                content: ChatMessageContent::Text("What is in this image?".to_string()),
+                ..Default::default()
+            },
+            ChatMessage {
+                role: Role::User,
+                content: ChatMessageContent::ImageUrl(vec![ImageUrl {
+                    r#type: "image_url".to_string(),
+                    text: None,
+                    image_url: ImageUrlType {
+                        url: "https://images.unsplash.com/photo-1526682847805-721837c3f83b?w=640".to_string(),
+                        detail: None,
+                    },
+                }]),
+                ..Default::default()
+            },
+        ],
+        max_tokens: Some(50),
         ..Default::default()
     };
 
@@ -179,6 +230,7 @@ In an API call, you can describe functions and have the model intelligently choo
 
 ```rust
 use openai_dive::v1::api::Client;
+use openai_dive::v1::models::Gpt4Engine;
 use openai_dive::v1::resources::chat::{
     ChatCompletionFunction, ChatCompletionParameters, ChatCompletionTool, ChatCompletionToolChoice,
     ChatCompletionToolChoiceFunction, ChatCompletionToolChoiceFunctionName, ChatCompletionToolType,
@@ -196,12 +248,12 @@ async fn main() {
     let client = Client::new(api_key);
 
     let mut messages = vec![ChatMessage {
-        content: Some("Give me a random number between 25 and 50?".to_string()),
+        content: ChatMessageContent::Text("Give me a random number between 25 and 50?".to_string()),
         ..Default::default()
     }];
 
     let parameters = ChatCompletionParameters {
-        model: "gpt-3.5-turbo-0613".to_string(),
+        model: Gpt4Engine::Gpt41106Preview.to_string(),
         messages: messages.clone(),
         tool_choice: Some(ChatCompletionToolChoice::ChatCompletionToolChoiceFunction(
             ChatCompletionToolChoiceFunction {
@@ -242,13 +294,15 @@ async fn main() {
 
                         messages.push(ChatMessage {
                             role: Role::Function,
-                            content: Some(serde_json::to_string(&random_number_result).unwrap()),
+                            content: ChatMessageContent::Text(
+                                serde_json::to_string(&random_number_result).unwrap(),
+                            ),
                             name: Some("get_random_number".to_string()),
                             ..Default::default()
                         });
 
                         let parameters = ChatCompletionParameters {
-                            model: "gpt-3.5-turbo-0613".to_string(),
+                            model: Gpt4Engine::Gpt41106Preview.to_string(),
                             messages: messages.clone(),
                             ..Default::default()
                         };

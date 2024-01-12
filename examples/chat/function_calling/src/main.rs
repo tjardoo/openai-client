@@ -1,8 +1,8 @@
 use openai_dive::v1::api::Client;
+use openai_dive::v1::models::Gpt4Engine;
 use openai_dive::v1::resources::chat::{
-    ChatCompletionFunction, ChatCompletionParameters, ChatCompletionTool, ChatCompletionToolChoice,
-    ChatCompletionToolChoiceFunction, ChatCompletionToolChoiceFunctionName, ChatCompletionToolType,
-    ChatMessage, Role,
+    ChatCompletionFunction, ChatCompletionParameters, ChatCompletionTool, ChatCompletionToolChoice, ChatCompletionToolChoiceFunction, ChatCompletionToolChoiceFunctionName, ChatCompletionToolType,
+    ChatMessage, ChatMessageContent, Role,
 };
 use openai_dive::v1::resources::shared::FinishReason;
 use rand::Rng;
@@ -16,21 +16,19 @@ async fn main() {
     let client = Client::new(api_key);
 
     let mut messages = vec![ChatMessage {
-        content: Some("Give me a random number between 25 and 50?".to_string()),
+        content: ChatMessageContent::Text("Give me a random number between 25 and 50?".to_string()),
         ..Default::default()
     }];
 
     let parameters = ChatCompletionParameters {
-        model: "gpt-3.5-turbo-0613".to_string(),
+        model: Gpt4Engine::Gpt41106Preview.to_string(),
         messages: messages.clone(),
-        tool_choice: Some(ChatCompletionToolChoice::ChatCompletionToolChoiceFunction(
-            ChatCompletionToolChoiceFunction {
-                r#type: Some(ChatCompletionToolType::Function),
-                function: ChatCompletionToolChoiceFunctionName {
-                    name: "get_random_number".to_string(),
-                },
+        tool_choice: Some(ChatCompletionToolChoice::ChatCompletionToolChoiceFunction(ChatCompletionToolChoiceFunction {
+            r#type: Some(ChatCompletionToolType::Function),
+            function: ChatCompletionToolChoiceFunctionName {
+                name: "get_random_number".to_string(),
             },
-        )),
+        })),
         tools: Some(vec![ChatCompletionTool {
             r#type: ChatCompletionToolType::Function,
             function: ChatCompletionFunction {
@@ -54,15 +52,14 @@ async fn main() {
         if choice.finish_reason == FinishReason::StopSequenceReached {
             if let Some(tool_calls) = &choice.message.tool_calls {
                 for tool_call in tool_calls.iter() {
-                    let random_numbers =
-                        serde_json::from_str(&tool_call.function.arguments).unwrap();
+                    let random_numbers = serde_json::from_str(&tool_call.function.arguments).unwrap();
 
                     if tool_call.function.name == "get_random_number" {
                         let random_number_result = get_random_number(random_numbers);
 
                         messages.push(ChatMessage {
                             role: Role::Function,
-                            content: Some(serde_json::to_string(&random_number_result).unwrap()),
+                            content: ChatMessageContent::Text(serde_json::to_string(&random_number_result).unwrap()),
                             name: Some("get_random_number".to_string()),
                             ..Default::default()
                         });

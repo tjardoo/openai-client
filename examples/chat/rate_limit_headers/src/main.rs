@@ -1,6 +1,6 @@
 use openai_dive::v1::api::Client;
 use openai_dive::v1::resources::chat::{
-    ChatCompletionParameters, ChatCompletionResponse, ChatMessage, Role,
+    ChatCompletionParameters, ChatCompletionResponse, ChatMessage, ChatMessageContent, Role,
 };
 use openai_dive::v1::resources::shared::ResponseWrapper;
 use std::env;
@@ -16,12 +16,12 @@ async fn main() {
         messages: vec![
             ChatMessage {
                 role: Role::User,
-                content: Some("Hello!".to_string()),
+                content: ChatMessageContent::Text("Hello!".to_string()),
                 ..Default::default()
             },
             ChatMessage {
                 role: Role::User,
-                content: Some("Where are you located?".to_string()),
+                content: ChatMessageContent::Text("Where are you located?".to_string()),
                 ..Default::default()
             },
         ],

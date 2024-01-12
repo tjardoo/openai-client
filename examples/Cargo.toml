@@ -6,6 +6,7 @@ members = [
     "audio/create_speech",
     "chat/create_chat_completion",
     "chat/create_chat_completion_stream",
+    "chat/create_image_chat_completion",
     "chat/function_calling",
     "chat/function_calling_stream",
     "chat/rate_limit_headers",

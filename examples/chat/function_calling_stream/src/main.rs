@@ -4,7 +4,7 @@ use openai_dive::v1::api::Client;
 use openai_dive::v1::resources::chat::{
     ChatCompletionFunction, ChatCompletionParameters, ChatCompletionTool, ChatCompletionToolChoice,
     ChatCompletionToolChoiceFunction, ChatCompletionToolChoiceFunctionName, ChatCompletionToolType,
-    ChatMessage, DeltaFunction, Role,
+    ChatMessage, ChatMessageContent, DeltaFunction, Role,
 };
 use openai_dive::v1::resources::shared::FinishReason;
 use rand::Rng;
@@ -18,7 +18,7 @@ async fn main() {
     let client = Client::new(api_key);
 
     let mut messages = vec![ChatMessage {
-        content: Some("Give me a random number between 25 and 50?".to_string()),
+        content: ChatMessageContent::Text("Give me a random number between 25 and 50?".to_string()),
         ..Default::default()
     }];
 
@@ -76,7 +76,7 @@ async fn main() {
 
                             messages.push(ChatMessage {
                                 role: Role::Function,
-                                content: Some(
+                                content: ChatMessageContent::Text(
                                     serde_json::to_string(&random_number_result).unwrap(),
                                 ),
                                 name: Some("get_random_number".to_string()),
