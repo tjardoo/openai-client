@@ -3,7 +3,15 @@ use crate::v1::error::APIError;
 use crate::v1::helpers::file_from_disk_to_form_part;
 use crate::v1::resources::audio::AudioSpeechParameters;
 use crate::v1::resources::audio::AudioSpeechResponse;
+#[cfg(feature = "stream")]
+use crate::v1::resources::audio::AudioSpeechResponseChunkResponse;
 use crate::v1::resources::audio::{AudioTranscriptionParameters, AudioTranslationParameters};
+#[cfg(feature = "stream")]
+use futures::Stream;
+#[cfg(feature = "stream")]
+use futures::StreamExt;
+#[cfg(feature = "stream")]
+use std::pin::Pin;
 
 pub struct Audio<'a> {
     pub client: &'a Client,
@@ -93,5 +101,36 @@ impl Audio<'_> {
             .await?;
 
         Ok(response)
+    }
+
+    #[cfg(feature = "stream")]
+    /// Generates audio from the input text.
+    pub async fn create_speech_stream(
+        &self,
+        parameters: AudioSpeechParameters,
+    ) -> Result<
+        Pin<Box<dyn Stream<Item = Result<AudioSpeechResponseChunkResponse, APIError>> + Send>>,
+        APIError,
+    > {
+        use crate::v1::resources::audio::StreamAudioSpeechParameters;
+
+        let stream_parameters = StreamAudioSpeechParameters {
+            model: parameters.model,
+            input: parameters.input,
+            voice: parameters.voice,
+            response_format: parameters.response_format,
+            speed: parameters.speed,
+            stream: true,
+        };
+
+        let stream = Box::pin(
+            self.client
+                .post_stream_raw("/audio/speech", &stream_parameters)
+                .await
+                .unwrap()
+                .map(|item| item.map(|bytes| AudioSpeechResponseChunkResponse { bytes })),
+        );
+
+        Ok(stream)
     }
 }
