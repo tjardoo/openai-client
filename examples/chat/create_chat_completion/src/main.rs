@@ -19,7 +19,7 @@ async fn main() {
             },
             ChatMessage {
                 role: Role::User,
-                content: ChatMessageContent::Text("Where are you located?".to_string()),
+                content: ChatMessageContent::Text("What is the capital of Vietnam?".to_string()),
                 ..Default::default()
             },
         ],

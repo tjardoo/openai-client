@@ -1,4 +1,4 @@
-use crate::v1::models::Gpt35Engine;
+use crate::v1::models::Gpt4Engine;
 use crate::v1::resources::shared::StopToken;
 use crate::v1::resources::shared::{FinishReason, Usage};
 use serde::{Deserialize, Serialize};
@@ -6,7 +6,9 @@ use std::collections::HashMap;
 use std::fmt::Display;
 use std::str::FromStr;
 
-#[derive(Serialize, Deserialize, Debug, Clone, PartialEq)]
+#[derive(
+    Serialize, Deserialize, Debug, Clone, PartialEq,
+)]
 pub struct ChatCompletionResponse {
     /// A unique identifier for the chat completion.
     pub id: String,
@@ -26,7 +28,9 @@ pub struct ChatCompletionResponse {
 }
 
 #[cfg(feature = "stream")]
-#[derive(Serialize, Deserialize, Debug, Clone, PartialEq)]
+#[derive(
+    Serialize, Deserialize, Debug, Clone, PartialEq,
+)]
 pub struct ChatCompletionChunkResponse {
     /// A unique identifier for the chat completion. Each chunk has the same ID.
     pub id: String,
@@ -44,7 +48,9 @@ pub struct ChatCompletionChunkResponse {
     pub object: String,
 }
 
-#[derive(Serialize, Deserialize, Debug, Clone, PartialEq)]
+#[derive(
+    Serialize, Deserialize, Debug, Clone, PartialEq,
+)]
 pub struct ChatCompletionParameters {
     /// A list of messages comprising the conversation so far.
     pub messages: Vec<ChatMessage>,
@@ -79,7 +85,8 @@ pub struct ChatCompletionParameters {
     /// An object specifying the format that the model must output.
     /// Setting to { "type": "json_object" } enables JSON mode, which guarantees the message the model generates is valid JSON.
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub response_format: Option<ChatCompletionResponseFormat>,
+    pub response_format:
+        Option<ChatCompletionResponseFormat>,
     /// This feature is in Beta. If specified, our system will make a best effort to sample deterministically,
     /// such that repeated requests with the same seed and parameters should return the same result.
     /// Determinism is not guaranteed, and you should refer to the system_fingerprint response parameter to monitor changes in the backend.
@@ -111,7 +118,9 @@ pub struct ChatCompletionParameters {
     pub user: Option<String>,
 }
 
-#[derive(Serialize, Deserialize, Debug, Clone, PartialEq)]
+#[derive(
+    Serialize, Deserialize, Debug, Clone, PartialEq,
+)]
 pub struct ChatCompletionToolChoiceFunction {
     /// The type of the tool. Currently, only 'function' is supported.
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -120,13 +129,17 @@ pub struct ChatCompletionToolChoiceFunction {
     pub function: ChatCompletionToolChoiceFunctionName,
 }
 
-#[derive(Serialize, Deserialize, Debug, Clone, PartialEq)]
+#[derive(
+    Serialize, Deserialize, Debug, Clone, PartialEq,
+)]
 pub struct ChatCompletionToolChoiceFunctionName {
     /// Name of the function.
     pub name: String,
 }
 
-#[derive(Serialize, Deserialize, Debug, Clone, PartialEq)]
+#[derive(
+    Serialize, Deserialize, Debug, Clone, PartialEq,
+)]
 pub struct ChatCompletionFunction {
     /// Name of the function.
     pub name: String,
@@ -137,13 +150,17 @@ pub struct ChatCompletionFunction {
     pub parameters: serde_json::Value,
 }
 
-#[derive(Serialize, Deserialize, Debug, Clone, PartialEq)]
+#[derive(
+    Serialize, Deserialize, Debug, Clone, PartialEq,
+)]
 pub struct ChatCompletionResponseFormat {
     /// The type of response format. Currently, only 'json_object' and 'text' are supported.
     pub r#type: ChatCompletionResponseFormatType,
 }
 
-#[derive(Serialize, Deserialize, Debug, Clone, PartialEq)]
+#[derive(
+    Serialize, Deserialize, Debug, Clone, PartialEq,
+)]
 pub struct ChatCompletionTool {
     /// The type of the tool. Currently, only 'function' is supported.
     pub r#type: ChatCompletionToolType,
@@ -151,7 +168,9 @@ pub struct ChatCompletionTool {
     pub function: ChatCompletionFunction,
 }
 
-#[derive(Serialize, Deserialize, Debug, Clone, PartialEq)]
+#[derive(
+    Serialize, Deserialize, Debug, Clone, PartialEq,
+)]
 pub struct ChatMessage {
     /// The role of the author of this message.
     pub role: Role,
@@ -169,7 +188,9 @@ pub struct ChatMessage {
 }
 
 #[cfg(feature = "stream")]
-#[derive(Serialize, Deserialize, Debug, Clone, PartialEq)]
+#[derive(
+    Serialize, Deserialize, Debug, Clone, PartialEq,
+)]
 pub struct DeltaChatMessage {
     /// The role of the author of this message.
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -182,7 +203,9 @@ pub struct DeltaChatMessage {
     pub tool_calls: Option<Vec<DeltaToolCall>>,
 }
 
-#[derive(Serialize, Deserialize, Debug, Clone, PartialEq)]
+#[derive(
+    Serialize, Deserialize, Debug, Clone, PartialEq,
+)]
 pub struct ToolCall {
     /// The index of the tool call in the list of tool calls.
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -197,7 +220,9 @@ pub struct ToolCall {
     pub function: Function,
 }
 
-#[derive(Serialize, Deserialize, Debug, Clone, PartialEq)]
+#[derive(
+    Serialize, Deserialize, Debug, Clone, PartialEq,
+)]
 pub struct DeltaToolCall {
     /// The index of the tool call in the list of tool calls.
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -212,7 +237,9 @@ pub struct DeltaToolCall {
     pub function: DeltaFunction,
 }
 
-#[derive(Serialize, Deserialize, Debug, Clone, PartialEq)]
+#[derive(
+    Serialize, Deserialize, Debug, Clone, PartialEq,
+)]
 pub struct Function {
     /// The name of the function to call.
     pub name: String,
@@ -220,7 +247,9 @@ pub struct Function {
     pub arguments: String,
 }
 
-#[derive(Serialize, Deserialize, Debug, Clone, PartialEq)]
+#[derive(
+    Serialize, Deserialize, Debug, Clone, PartialEq,
+)]
 pub struct DeltaFunction {
     /// The name of the function to call.
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -230,7 +259,9 @@ pub struct DeltaFunction {
     pub arguments: Option<String>,
 }
 
-#[derive(Serialize, Deserialize, Debug, Clone, PartialEq)]
+#[derive(
+    Serialize, Deserialize, Debug, Clone, PartialEq,
+)]
 pub struct ChatCompletionChoice {
     /// The index of the choice in the list of choices.
     pub index: u32,
@@ -241,7 +272,9 @@ pub struct ChatCompletionChoice {
 }
 
 #[cfg(feature = "stream")]
-#[derive(Serialize, Deserialize, Debug, Clone, PartialEq)]
+#[derive(
+    Serialize, Deserialize, Debug, Clone, PartialEq,
+)]
 pub struct ChatCompletionChunkChoice {
     /// The index of the choice in the list of choices.
     pub index: u32,
@@ -253,7 +286,9 @@ pub struct ChatCompletionChunkChoice {
 }
 
 #[cfg(feature = "stream")]
-#[derive(Serialize, Deserialize, Debug, Clone, PartialEq)]
+#[derive(
+    Serialize, Deserialize, Debug, Clone, PartialEq,
+)]
 pub struct StreamChatCompletionParameters {
     pub messages: Vec<ChatMessage>,
     pub model: String,
@@ -268,7 +303,8 @@ pub struct StreamChatCompletionParameters {
     #[serde(skip_serializing_if = "Option::is_none")]
     pub presence_penalty: Option<f32>,
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub response_format: Option<ChatCompletionResponseFormat>,
+    pub response_format:
+        Option<ChatCompletionResponseFormat>,
     #[serde(skip_serializing_if = "Option::is_none")]
     pub stop: Option<StopToken>,
     pub stream: bool,
@@ -284,7 +320,9 @@ pub struct StreamChatCompletionParameters {
     pub user: Option<String>,
 }
 
-#[derive(Serialize, Deserialize, Debug, Clone, PartialEq)]
+#[derive(
+    Serialize, Deserialize, Debug, Clone, PartialEq,
+)]
 pub struct ImageUrl {
     /// The type of the content part.
     pub r#type: String,
@@ -295,7 +333,9 @@ pub struct ImageUrl {
     pub image_url: ImageUrlType,
 }
 
-#[derive(Serialize, Deserialize, Debug, Clone, PartialEq)]
+#[derive(
+    Serialize, Deserialize, Debug, Clone, PartialEq,
+)]
 pub struct ImageUrlType {
     /// Either a URL of the image or the base64 encoded image data.
     pub url: String,
@@ -304,7 +344,9 @@ pub struct ImageUrlType {
     pub detail: Option<ImageUrlDetail>,
 }
 
-#[derive(Serialize, Deserialize, Debug, Clone, PartialEq)]
+#[derive(
+    Serialize, Deserialize, Debug, Clone, PartialEq,
+)]
 #[serde(rename_all = "lowercase")]
 pub enum ImageUrlDetail {
     Auto,
@@ -312,7 +354,9 @@ pub enum ImageUrlDetail {
     Low,
 }
 
-#[derive(Serialize, Deserialize, Debug, Clone, PartialEq)]
+#[derive(
+    Serialize, Deserialize, Debug, Clone, PartialEq,
+)]
 #[serde(untagged)]
 pub enum ChatMessageContent {
     Text(String),
@@ -320,7 +364,9 @@ pub enum ChatMessageContent {
     None,
 }
 
-#[derive(Serialize, Deserialize, Debug, Clone, PartialEq)]
+#[derive(
+    Serialize, Deserialize, Debug, Clone, PartialEq,
+)]
 pub enum ChatCompletionResponseFormatType {
     #[serde(rename = "text")]
     Text,
@@ -328,22 +374,30 @@ pub enum ChatCompletionResponseFormatType {
     JsonObject,
 }
 
-#[derive(Serialize, Deserialize, Debug, Clone, PartialEq)]
+#[derive(
+    Serialize, Deserialize, Debug, Clone, PartialEq,
+)]
 #[serde(rename_all = "lowercase")]
 pub enum ChatCompletionToolType {
     Function,
 }
 
-#[derive(Serialize, Deserialize, Debug, Clone, PartialEq)]
+#[derive(
+    Serialize, Deserialize, Debug, Clone, PartialEq,
+)]
 #[serde(rename_all = "lowercase")]
 #[serde(untagged)]
 pub enum ChatCompletionToolChoice {
     None,
     Auto,
-    ChatCompletionToolChoiceFunction(ChatCompletionToolChoiceFunction),
+    ChatCompletionToolChoiceFunction(
+        ChatCompletionToolChoiceFunction,
+    ),
 }
 
-#[derive(Serialize, Deserialize, Debug, Clone, PartialEq)]
+#[derive(
+    Serialize, Deserialize, Debug, Clone, PartialEq,
+)]
 #[serde(rename_all = "lowercase")]
 pub enum Role {
     System,
@@ -358,12 +412,14 @@ impl Default for ChatCompletionParameters {
         ChatCompletionParameters {
             messages: vec![ChatMessage {
                 role: Role::User,
-                content: ChatMessageContent::Text("Hello, World!".to_string()),
+                content: ChatMessageContent::Text(
+                    "Hello, World!".to_string(),
+                ),
                 tool_calls: None,
                 name: None,
                 tool_call_id: None,
             }],
-            model: Gpt35Engine::Gpt35Turbo1106.to_string(),
+            model: Gpt4Engine::Gpt4.to_string(),
             frequency_penalty: None,
             logit_bias: None,
             logprobs: None,
@@ -387,7 +443,9 @@ impl Default for ChatMessage {
     fn default() -> Self {
         ChatMessage {
             role: Role::User,
-            content: ChatMessageContent::Text("Hello, World!".to_string()),
+            content: ChatMessageContent::Text(
+                "Hello, World!".to_string(),
+            ),
             tool_calls: None,
             name: None,
             tool_call_id: None,
@@ -396,7 +454,10 @@ impl Default for ChatMessage {
 }
 
 impl Display for Role {
-    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+    fn fmt(
+        &self,
+        f: &mut std::fmt::Formatter<'_>,
+    ) -> std::fmt::Result {
         write!(
             f,
             "{}",
@@ -428,12 +489,16 @@ impl FromStr for Role {
 
 impl DeltaFunction {
     pub fn merge(&mut self, other: &Self) {
-        if self.name.is_none() && other.name.is_none() == false {
+        if self.name.is_none()
+            && other.name.is_none() == false
+        {
             self.name = other.name.clone();
         }
 
         if let Some(arguments) = &other.arguments {
-            if let Some(self_arguments) = &mut self.arguments {
+            if let Some(self_arguments) =
+                &mut self.arguments
+            {
                 self_arguments.push_str(arguments);
             } else {
                 self.arguments = Some(arguments.clone());

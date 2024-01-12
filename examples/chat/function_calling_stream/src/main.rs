@@ -1,10 +1,9 @@
-use futures::executor::block_on;
 use futures::StreamExt;
 use openai_dive::v1::api::Client;
+use openai_dive::v1::models::Gpt4Engine;
 use openai_dive::v1::resources::chat::{
-    ChatCompletionFunction, ChatCompletionParameters, ChatCompletionTool, ChatCompletionToolChoice,
-    ChatCompletionToolChoiceFunction, ChatCompletionToolChoiceFunctionName, ChatCompletionToolType,
-    ChatMessage, ChatMessageContent, DeltaFunction, Role,
+    ChatCompletionFunction, ChatCompletionParameters, ChatCompletionTool, ChatCompletionToolType, ChatMessage,
+    ChatMessageContent, DeltaFunction,
 };
 use openai_dive::v1::resources::shared::FinishReason;
 use rand::Rng;
@@ -17,22 +16,14 @@ async fn main() {
 
     let client = Client::new(api_key);
 
-    let mut messages = vec![ChatMessage {
-        content: ChatMessageContent::Text("Give me a random number between 25 and 50?".to_string()),
+    let messages = vec![ChatMessage {
+        content: ChatMessageContent::Text("Give me a random number higher than 100 but less than 2*150?".to_string()),
         ..Default::default()
     }];
 
     let parameters = ChatCompletionParameters {
-        model: "gpt-3.5-turbo-0613".to_string(),
+        model: Gpt4Engine::Gpt41106Preview.to_string(),
         messages: messages.clone(),
-        tool_choice: Some(ChatCompletionToolChoice::ChatCompletionToolChoiceFunction(
-            ChatCompletionToolChoiceFunction {
-                r#type: Some(ChatCompletionToolType::Function),
-                function: ChatCompletionToolChoiceFunctionName {
-                    name: "get_random_number".to_string(),
-                },
-            },
-        )),
         tools: Some(vec![ChatCompletionTool {
             r#type: ChatCompletionToolType::Function,
             function: ChatCompletionFunction {
@@ -43,7 +34,8 @@ async fn main() {
                     "properties": {
                         "min": {"type": "integer", "description": "Minimum value of the random number."},
                         "max": {"type": "integer", "description": "Maximum value of the random number."},
-                    }
+                    },
+                    "required": ["min", "max"],
                 }),
             },
         }]),
@@ -66,33 +58,22 @@ async fn main() {
                     print!("{}", content);
                 }
 
-                if choice.finish_reason == Some(FinishReason::StopSequenceReached) {
-                    let random_numbers =
-                        serde_json::from_str(function.clone().arguments.unwrap().as_ref()).unwrap();
+                if choice.finish_reason == Some(FinishReason::ToolCalls) {
+                    let name = function.name.clone().unwrap();
+                    let arguments = function.arguments.clone().unwrap();
 
-                    if let Some(name) = function.clone().name {
-                        if name == "get_random_number" {
-                            let random_number_result = get_random_number(random_numbers);
+                    if name == "get_random_number" {
+                        let random_numbers: RandomNumber = serde_json::from_str(&arguments).unwrap();
 
-                            messages.push(ChatMessage {
-                                role: Role::Function,
-                                content: ChatMessageContent::Text(
-                                    serde_json::to_string(&random_number_result).unwrap(),
-                                ),
-                                name: Some("get_random_number".to_string()),
-                                ..Default::default()
-                            });
+                        println!("Min: {:?}", &random_numbers.min);
+                        println!("Max: {:?}", &random_numbers.max);
 
-                            let parameters = ChatCompletionParameters {
-                                model: "gpt-3.5-turbo-0613".to_string(),
-                                messages: messages.clone(),
-                                ..Default::default()
-                            };
+                        let random_number_result = get_random_number(random_numbers);
 
-                            let result = block_on(client.chat().create(parameters));
-
-                            println!("{:#?}", result);
-                        }
+                        println!(
+                            "Random number between those numbers: {:?}",
+                            random_number_result.clone()
+                        );
                     }
                 }
             }),
