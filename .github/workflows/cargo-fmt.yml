@@ -1,4 +1,4 @@
-name: Cargo build
+name: Cargo fmt
 
 on:
   push:
@@ -16,5 +16,5 @@ jobs:
 
     steps:
     - uses: actions/checkout@v3
-    - name: Build
-      run: cargo build --verbose
+    - name: Cargo fmt
+      run: cargo fmt -- --check
