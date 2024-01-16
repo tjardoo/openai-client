@@ -1,6 +1,7 @@
 use openai_dive::v1::api::Client;
+use openai_dive::v1::models::Gpt4Engine;
 use openai_dive::v1::resources::chat::{
-    ChatCompletionParameters, ChatCompletionResponse, ChatMessage, Role,
+    ChatCompletionParameters, ChatCompletionResponse, ChatMessage, ChatMessageContent, Role,
 };
 use openai_dive::v1::resources::shared::ResponseWrapper;
 use std::env;
@@ -12,16 +13,16 @@ async fn main() {
     let client = Client::new(api_key);
 
     let parameters = ChatCompletionParameters {
-        model: "gpt-3.5-turbo-16k-0613".to_string(),
+        model: Gpt4Engine::Gpt41106Preview.to_string(),
         messages: vec![
             ChatMessage {
                 role: Role::User,
-                content: Some("Hello!".to_string()),
+                content: ChatMessageContent::Text("Hello!".to_string()),
                 ..Default::default()
             },
             ChatMessage {
                 role: Role::User,
-                content: Some("Where are you located?".to_string()),
+                content: ChatMessageContent::Text("Which country has the largest population?".to_string()),
                 ..Default::default()
             },
         ],
@@ -29,8 +30,7 @@ async fn main() {
         ..Default::default()
     };
 
-    let result: ResponseWrapper<ChatCompletionResponse> =
-        client.chat().create_wrapped(parameters).await.unwrap();
+    let result: ResponseWrapper<ChatCompletionResponse> = client.chat().create_wrapped(parameters).await.unwrap();
 
     println!("{:#?}", result.headers);
 

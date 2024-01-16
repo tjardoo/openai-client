@@ -13,7 +13,7 @@ async fn main() {
     let file_id = env::var("FILE_ID").expect("FILE_ID is not set in the .env file.");
 
     let parameters = CreateFineTuningJobParameters {
-        model: "gpt-3.5-turbo-1106".to_string(),
+        model: "gpt-4-1106-preview".to_string(),
         training_file: file_id,
         hyperparameters: None,
         suffix: None,

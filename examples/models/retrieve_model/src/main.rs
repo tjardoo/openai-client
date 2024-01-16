@@ -3,11 +3,16 @@ use std::env;
 
 #[tokio::main]
 async fn main() {
-    let api_key = env::var("OPENAI_API_KEY").expect("$OPENAI_API_KEY is not set");
+    let api_key = env::var("OPENAI_API_KEY")
+        .expect("$OPENAI_API_KEY is not set");
 
     let client = Client::new(api_key);
 
-    let result = client.models().get("gpt-3.5-turbo-16k-0613").await.unwrap();
+    let result = client
+        .models()
+        .get("gpt-4-1106-preview")
+        .await
+        .unwrap();
 
     println!("{:#?}", result);
 }
