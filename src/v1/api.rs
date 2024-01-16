@@ -184,6 +184,30 @@ impl Client {
     }
 
     #[cfg(feature = "stream")]
+    pub async fn post_stream_raw<I>(
+        &self,
+        path: &str,
+        parameters: &I,
+    ) -> Result<Pin<Box<dyn Stream<Item = Result<Bytes, APIError>> + Send>>, APIError>
+    where
+        I: Serialize,
+    {
+        let stream = self
+            .build_request(Method::POST, path)
+            .json(&parameters)
+            .send()
+            .await
+            .unwrap()
+            .bytes_stream()
+            .map(|item| item.map_err(|error| APIError::StreamError(error.to_string())));
+
+        Ok(Box::pin(stream)
+            as Pin<
+                Box<dyn Stream<Item = Result<Bytes, APIError>> + Send>,
+            >)
+    }
+
+    #[cfg(feature = "stream")]
     pub async fn process_stream<O>(
         mut event_soure: EventSource,
     ) -> Pin<Box<dyn Stream<Item = Result<O, APIError>> + Send>>

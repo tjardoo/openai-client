@@ -425,6 +425,9 @@ Learn how to turn audio into text or text into audio.
 
 Generates audio from the input text.
 
+> [!NOTE]
+> This endpoint also has `stream` support. See the [examples/audio/create_speech_stream](https://github.com/tjardoo/openai-client/tree/master/examples/audio/create_speech_stream) example.
+
 ```rust
 use openai_dive::v1::api::Client;
 use openai_dive::v1::resources::audio::{

@@ -4,6 +4,7 @@ members = [
     "audio/create_transcription",
     "audio/create_translation",
     "audio/create_speech",
+    "audio/create_speech_stream",
     "chat/create_chat_completion",
     "chat/create_chat_completion_stream",
     "chat/create_image_chat_completion",

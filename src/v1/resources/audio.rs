@@ -65,6 +65,30 @@ pub struct AudioSpeechResponse {
     pub bytes: Bytes,
 }
 
+#[cfg(feature = "stream")]
+#[derive(Serialize, Deserialize, Debug, Clone, PartialEq)]
+pub struct StreamAudioSpeechParameters {
+    /// One of the available TTS models: tts-1 or tts-1-hd.
+    pub model: String,
+    /// The text to generate audio for. The maximum length is 4096 characters.
+    pub input: String,
+    /// The voice to use when generating the audio. Supported voices are alloy, echo, fable, onyx, nova, and shimmer.
+    pub voice: AudioVoice,
+    /// The format to audio in. Supported formats are mp3, opus, aac, and flac.
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub response_format: Option<AudioSpeechResponseFormat>,
+    /// The speed of the generated audio. Select a value from 0.25 to 4.0. 1.0 is the default.
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub speed: Option<f32>,
+    pub stream: bool,
+}
+
+#[cfg(feature = "stream")]
+#[derive(Debug, Clone, PartialEq)]
+pub struct AudioSpeechResponseChunkResponse {
+    pub bytes: Bytes,
+}
+
 #[derive(Serialize, Deserialize, Debug, Clone, PartialEq)]
 #[serde(rename_all = "lowercase")]
 pub enum AudioOutputFormat {
