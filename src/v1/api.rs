@@ -32,13 +32,18 @@ impl Client {
         }
     }
 
-    pub fn build_request(&self, method: reqwest::Method, path: &str) -> RequestBuilder {
+    pub fn build_request(
+        &self,
+        method: reqwest::Method,
+        path: &str,
+        content_type: &str,
+    ) -> RequestBuilder {
         let url = format!("{}{}", &self.base_url, path);
 
         let mut request = self
             .http_client
             .request(method, &url)
-            .header(reqwest::header::CONTENT_TYPE, "application/json")
+            .header(reqwest::header::CONTENT_TYPE, content_type)
             .bearer_auth(&self.api_key);
 
         if is_beta_feature(path) {
@@ -49,7 +54,11 @@ impl Client {
     }
 
     pub async fn get(&self, path: &str) -> Result<String, APIError> {
-        let response = self.build_request(Method::GET, path).send().await.unwrap();
+        let response = self
+            .build_request(Method::GET, path, "application/json")
+            .send()
+            .await
+            .unwrap();
 
         if response.status().is_server_error() {
             return Err(APIError::EndpointError(response.text().await.unwrap()));
@@ -68,7 +77,7 @@ impl Client {
         Q: Serialize,
     {
         let response = self
-            .build_request(Method::GET, path)
+            .build_request(Method::GET, path, "application/json")
             .query(query)
             .send()
             .await
@@ -92,7 +101,7 @@ impl Client {
         parameters: &T,
     ) -> Result<ResponseWrapper<String>, APIError> {
         let response = self
-            .build_request(Method::POST, path)
+            .build_request(Method::POST, path, "application/json")
             .json(&parameters)
             .send()
             .await
@@ -118,7 +127,7 @@ impl Client {
 
     pub async fn delete(&self, path: &str) -> Result<String, APIError> {
         let response = self
-            .build_request(Method::DELETE, path)
+            .build_request(Method::DELETE, path, "application/json")
             .send()
             .await
             .unwrap();
@@ -132,7 +141,11 @@ impl Client {
 
     pub async fn post_with_form(&self, path: &str, form: Form) -> Result<String, APIError> {
         let response = self
-            .build_request(Method::POST, path)
+            .build_request(
+                Method::POST,
+                path,
+                format!("multipart/form-data; boundary={}", form.boundary()).as_str(),
+            )
             .multipart(form)
             .send()
             .await
@@ -151,7 +164,7 @@ impl Client {
         parameters: &T,
     ) -> Result<Bytes, APIError> {
         let response = self
-            .build_request(Method::POST, path)
+            .build_request(Method::POST, path, "application/json")
             .json(&parameters)
             .send()
             .await
@@ -175,7 +188,7 @@ impl Client {
         O: DeserializeOwned + std::marker::Send + 'static,
     {
         let event_source = self
-            .build_request(Method::POST, path)
+            .build_request(Method::POST, path, "application/json")
             .json(&parameters)
             .eventsource()
             .unwrap();
@@ -193,7 +206,7 @@ impl Client {
         I: Serialize,
     {
         let stream = self
-            .build_request(Method::POST, path)
+            .build_request(Method::POST, path, "application/json")
             .json(&parameters)
             .send()
             .await
