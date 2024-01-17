@@ -6,7 +6,7 @@
 //!
 //! ```ini
 //! [dependencies]
-//! openai_dive = "0.3"
+//! openai_dive = "0.4"
 //! ```
 //!
 //! More information: [set API key](#set-api-key), [add proxy](#add-proxy), [rate limit headers](#rate-limit-headers), [use model names](#use-model-names)
