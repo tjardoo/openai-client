@@ -10,7 +10,7 @@ env:
   CARGO_TERM_COLOR: always
 
 jobs:
-  build:
+  cargo-fmt:
 
     runs-on: ubuntu-latest
 

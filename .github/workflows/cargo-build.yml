@@ -10,7 +10,7 @@ env:
   CARGO_TERM_COLOR: always
 
 jobs:
-  build:
+  cargo-build:
 
     runs-on: ubuntu-latest
 
@@ -19,7 +19,7 @@ jobs:
     - name: Build
       run: cargo build --verbose
 
-  build-without-reqwest:
+  cargo-build-without-default-features:
 
     runs-on: ubuntu-latest
 
