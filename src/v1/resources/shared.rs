@@ -1,3 +1,4 @@
+#[cfg(feature = "reqwest")]
 use reqwest::header::HeaderMap;
 use serde::{Deserialize, Serialize};
 
@@ -101,6 +102,7 @@ pub enum StopToken {
     Array(Vec<String>),
 }
 
+#[cfg(feature = "reqwest")]
 impl From<HeaderMap> for Headers {
     fn from(value: HeaderMap) -> Self {
         if value.get("x-ratelimit-limit-requests").is_none()
