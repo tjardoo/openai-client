@@ -18,3 +18,12 @@ jobs:
     - uses: actions/checkout@v3
     - name: Build
       run: cargo build --verbose
+
+  build-without-reqwest:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v3
+    - name: Build
+      run: cargo build --verbose --no-default-features
