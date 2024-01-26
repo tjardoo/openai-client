@@ -3,13 +3,17 @@ use serde::{Deserialize, Serialize};
 
 #[derive(Serialize, Deserialize, Debug, Clone, PartialEq)]
 pub struct EmbeddingParameters {
-    /// Input text to embed, encoded as a string or array of tokens. To embed multiple inputs in a single request, pass an array of strings or array of token arrays.
-    pub input: String,
+    /// Input text to embed, encoded as a string or array of tokens.
+    /// To embed multiple inputs in a single request, pass an array of strings or array of token arrays.
+    pub input: EmbeddingInput,
     /// ID of the model to use.
     pub model: String,
     /// The format to return the embeddings in. Can be either float or base64.
     #[serde(skip_serializing_if = "Option::is_none")]
     pub encoding_format: Option<EmbeddingEncodingFormat>,
+    /// The number of dimensions the resulting output embeddings should have. Only supported in 'text-embedding-3' and later models.
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub dimensions: Option<u32>,
     /// A unique identifier representing your end-user, which can help OpenAI to monitor and detect abuse.
     #[serde(skip_serializing_if = "Option::is_none")]
     pub user: Option<String>,
@@ -25,6 +29,19 @@ pub struct EmbeddingResponse {
     pub model: String,
     /// Object containing usage information for the request.
     pub usage: Usage,
+}
+
+#[derive(Serialize, Deserialize, Debug, Clone, PartialEq)]
+#[serde(untagged)]
+pub enum EmbeddingInput {
+    /// The string that will be turned into an embedding.
+    String(String),
+    /// The array of strings that will be turned into an embedding.
+    StringArray(Vec<String>),
+    /// The array of integers that will be turned into an embedding.
+    IntegerArray(Vec<u32>),
+    /// The array of arrays containing integers that will be turned into an embedding.
+    IntegerArrayArray(Vec<Vec<u32>>),
 }
 
 #[derive(Serialize, Deserialize, Debug, Clone, PartialEq)]
