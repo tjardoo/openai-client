@@ -1,8 +1,8 @@
 use openai_dive::v1::api::Client;
 use openai_dive::v1::models::Gpt4Engine;
 use openai_dive::v1::resources::chat::{
-    ChatCompletionFunction, ChatCompletionParameters, ChatCompletionTool, ChatCompletionToolType, ChatMessage,
-    ChatMessageContent,
+    ChatCompletionFunction, ChatCompletionParameters, ChatCompletionTool, ChatCompletionToolType,
+    ChatMessage, ChatMessageContent,
 };
 use rand::Rng;
 use serde::{Deserialize, Serialize};
@@ -15,12 +15,14 @@ async fn main() {
     let client = Client::new(api_key);
 
     let messages = vec![ChatMessage {
-        content: ChatMessageContent::Text("Give me a random number between 100 and no more than 150?".to_string()),
+        content: ChatMessageContent::Text(
+            "Give me a random number between 100 and no more than 150?".to_string(),
+        ),
         ..Default::default()
     }];
 
     let parameters = ChatCompletionParameters {
-        model: Gpt4Engine::Gpt41106Preview.to_string(),
+        model: Gpt4Engine::Gpt40125Preview.to_string(),
         messages: messages.clone(),
         tools: Some(vec![ChatCompletionTool {
             r#type: ChatCompletionToolType::Function,

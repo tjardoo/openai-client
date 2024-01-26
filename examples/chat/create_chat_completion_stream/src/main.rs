@@ -1,7 +1,9 @@
 use futures::StreamExt;
 use openai_dive::v1::api::Client;
 use openai_dive::v1::models::Gpt4Engine;
-use openai_dive::v1::resources::chat::{ChatCompletionParameters, ChatMessage, ChatMessageContent, Role};
+use openai_dive::v1::resources::chat::{
+    ChatCompletionParameters, ChatMessage, ChatMessageContent, Role,
+};
 use std::env;
 
 #[tokio::main]
@@ -11,7 +13,7 @@ async fn main() {
     let client = Client::new(api_key);
 
     let parameters = ChatCompletionParameters {
-        model: Gpt4Engine::Gpt41106Preview.to_string(),
+        model: Gpt4Engine::Gpt40125Preview.to_string(),
         messages: vec![
             ChatMessage {
                 role: Role::User,

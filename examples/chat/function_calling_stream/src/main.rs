@@ -2,8 +2,8 @@ use futures::StreamExt;
 use openai_dive::v1::api::Client;
 use openai_dive::v1::models::Gpt4Engine;
 use openai_dive::v1::resources::chat::{
-    ChatCompletionFunction, ChatCompletionParameters, ChatCompletionTool, ChatCompletionToolType, ChatMessage,
-    ChatMessageContent, DeltaFunction,
+    ChatCompletionFunction, ChatCompletionParameters, ChatCompletionTool, ChatCompletionToolType,
+    ChatMessage, ChatMessageContent, DeltaFunction,
 };
 use openai_dive::v1::resources::shared::FinishReason;
 use rand::Rng;
@@ -17,12 +17,14 @@ async fn main() {
     let client = Client::new(api_key);
 
     let messages = vec![ChatMessage {
-        content: ChatMessageContent::Text("Give me a random number higher than 100 but less than 2*150?".to_string()),
+        content: ChatMessageContent::Text(
+            "Give me a random number higher than 100 but less than 2*150?".to_string(),
+        ),
         ..Default::default()
     }];
 
     let parameters = ChatCompletionParameters {
-        model: Gpt4Engine::Gpt41106Preview.to_string(),
+        model: Gpt4Engine::Gpt40125Preview.to_string(),
         messages: messages.clone(),
         tools: Some(vec![ChatCompletionTool {
             r#type: ChatCompletionToolType::Function,
@@ -63,7 +65,8 @@ async fn main() {
                     let arguments = function.arguments.clone().unwrap();
 
                     if name == "get_random_number" {
-                        let random_numbers: RandomNumber = serde_json::from_str(&arguments).unwrap();
+                        let random_numbers: RandomNumber =
+                            serde_json::from_str(&arguments).unwrap();
 
                         println!("Min: {:?}", &random_numbers.min);
                         println!("Max: {:?}", &random_numbers.max);

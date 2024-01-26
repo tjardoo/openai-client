@@ -13,7 +13,7 @@ async fn main() {
     let client = Client::new(api_key);
 
     let parameters = ChatCompletionParameters {
-        model: Gpt4Engine::Gpt41106Preview.to_string(),
+        model: Gpt4Engine::Gpt40125Preview.to_string(),
         messages: vec![
             ChatMessage {
                 role: Role::User,
@@ -22,15 +22,18 @@ async fn main() {
             },
             ChatMessage {
                 role: Role::User,
-                content: ChatMessageContent::Text("Which country has the largest population?".to_string()),
+                content: ChatMessageContent::Text(
+                    "Which country has the largest population?".to_string(),
+                ),
                 ..Default::default()
             },
         ],
-        max_tokens: Some(12),
+        max_tokens: Some(50),
         ..Default::default()
     };
 
-    let result: ResponseWrapper<ChatCompletionResponse> = client.chat().create_wrapped(parameters).await.unwrap();
+    let result: ResponseWrapper<ChatCompletionResponse> =
+        client.chat().create_wrapped(parameters).await.unwrap();
 
     println!("{:#?}", result.headers);
 
