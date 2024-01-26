@@ -53,6 +53,10 @@ pub enum WhisperEngine {
 
 #[derive(Serialize, Deserialize, Debug, Clone, PartialEq)]
 pub enum EmbeddingsEngine {
+    #[serde(rename = "text-embedding-3-small")]
+    TextEmbedding3Small,
+    #[serde(rename = "text-embedding-3-large")]
+    TextEmbedding3Large,
     #[serde(rename = "text-embedding-ada-002")]
     TextEmbeddingAda002,
 }
@@ -118,6 +122,8 @@ impl Display for WhisperEngine {
 impl Display for EmbeddingsEngine {
     fn fmt(&self, f: &mut Formatter<'_>) -> Result {
         match self {
+            EmbeddingsEngine::TextEmbedding3Small => write!(f, "text-embedding-3-small"),
+            EmbeddingsEngine::TextEmbedding3Large => write!(f, "text-embedding-3-large"),
             EmbeddingsEngine::TextEmbeddingAda002 => write!(f, "text-embedding-ada-002"),
         }
     }
