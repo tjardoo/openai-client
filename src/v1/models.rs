@@ -3,12 +3,18 @@ use std::fmt::{Display, Formatter, Result};
 
 #[derive(Serialize, Deserialize, Debug, Clone, PartialEq)]
 pub enum Gpt4Engine {
+    /// Alias
+    #[serde(rename = "gpt-4")]
+    Gpt4,
+    /// Alias
+    #[serde(rename = "gpt-4-turbo-preview")]
+    Gpt4TurboPreview,
+    #[serde(rename = "gpt-4-0125-preview")]
+    Gpt40125Preview,
     #[serde(rename = "gpt-4-1106-preview")]
     Gpt41106Preview,
     #[serde(rename = "gpt-4-vision-preview")]
     Gpt4VisionPreview,
-    #[serde(rename = "gpt-4")]
-    Gpt4,
     #[serde(rename = "gpt-4-32k")]
     Gpt432K,
     #[serde(rename = "gpt-4-0613")]
@@ -19,10 +25,13 @@ pub enum Gpt4Engine {
 
 #[derive(Serialize, Deserialize, Debug, Clone, PartialEq)]
 pub enum Gpt35Engine {
-    #[serde(rename = "gpt-3.5-turbo-1106")]
-    Gpt35Turbo1106,
+    /// Alias
     #[serde(rename = "gpt-3.5-turbo")]
     Gpt35Turbo,
+    #[serde(rename = "gpt-3.5-turbo-0125")]
+    Gpt35Turbo0125,
+    #[serde(rename = "gpt-3.5-turbo-1106")]
+    Gpt35Turbo1106,
     #[serde(rename = "gpt-3.5-turbo-16k")]
     Gpt35Turbo16K,
     #[serde(rename = "gpt-3.5-turbo-instruct")]
@@ -59,16 +68,22 @@ pub enum EmbeddingsEngine {
 
 #[derive(Serialize, Deserialize, Debug, Clone, PartialEq)]
 pub enum ModerationsEngine {
+    /// Alias
     #[serde(rename = "text-moderation-latest")]
     TextModerationLatest,
+    /// Alias
     #[serde(rename = "text-moderation-stable")]
     TextModerationStable,
+    #[serde(rename = "text-moderation-007")]
+    TextModeration007,
 }
 
 impl Display for Gpt4Engine {
     fn fmt(&self, f: &mut Formatter<'_>) -> Result {
         match self {
             Gpt4Engine::Gpt4 => write!(f, "gpt-4"),
+            Gpt4Engine::Gpt4TurboPreview => write!(f, "gpt-4-turbo-preview"),
+            Gpt4Engine::Gpt40125Preview => write!(f, "gpt-4-0125-preview"),
             Gpt4Engine::Gpt40613 => write!(f, "gpt-4-0613"),
             Gpt4Engine::Gpt41106Preview => write!(f, "gpt-4-1106-preview"),
             Gpt4Engine::Gpt432K => write!(f, "gpt-4-32k"),
@@ -82,6 +97,7 @@ impl Display for Gpt35Engine {
     fn fmt(&self, f: &mut Formatter<'_>) -> Result {
         match self {
             Gpt35Engine::Gpt35Turbo => write!(f, "gpt-3.5-turbo"),
+            Gpt35Engine::Gpt35Turbo0125 => write!(f, "gpt-3.5-turbo-0125"),
             Gpt35Engine::Gpt35Turbo1106 => write!(f, "gpt-3.5-turbo-1106"),
             Gpt35Engine::Gpt35Turbo16K => write!(f, "gpt-3.5-turbo-16k"),
             Gpt35Engine::Gpt35TurboInstruct => write!(f, "gpt-3.5-turbo-instruct"),
@@ -128,6 +144,7 @@ impl Display for ModerationsEngine {
         match self {
             ModerationsEngine::TextModerationLatest => write!(f, "text-moderation-latest"),
             ModerationsEngine::TextModerationStable => write!(f, "text-moderation-stable"),
+            ModerationsEngine::TextModeration007 => write!(f, "text-moderation-007"),
         }
     }
 }
