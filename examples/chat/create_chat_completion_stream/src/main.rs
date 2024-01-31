@@ -27,6 +27,7 @@ async fn main() {
             },
         ],
         max_tokens: Some(12),
+        stream: Some(true),
         ..Default::default()
     };
 

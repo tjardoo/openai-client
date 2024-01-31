@@ -88,6 +88,10 @@ pub struct ChatCompletionParameters {
     /// Up to 4 sequences where the API will stop generating further tokens.
     #[serde(skip_serializing_if = "Option::is_none")]
     pub stop: Option<StopToken>,
+    /// If set, partial messages will be sent, like in ChatGPT. Tokens will be sent as data-only server-sent events
+    /// as they become available, with the stream terminated by a data: [DONE] message.
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub stream: Option<bool>,
     /// What sampling temperature to use, between 0 and 2. Higher values like 0.8 will make the output more random,
     /// while lower values like 0.2 will make it more focused and deterministic.
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -252,38 +256,6 @@ pub struct ChatCompletionChunkChoice {
     pub finish_reason: Option<FinishReason>,
 }
 
-#[cfg(feature = "stream")]
-#[derive(Serialize, Deserialize, Debug, Clone, PartialEq)]
-pub struct StreamChatCompletionParameters {
-    pub messages: Vec<ChatMessage>,
-    pub model: String,
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub frequency_penalty: Option<f32>,
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub logit_bias: Option<HashMap<String, i32>>,
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub max_tokens: Option<u32>,
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub n: Option<u32>,
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub presence_penalty: Option<f32>,
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub response_format: Option<ChatCompletionResponseFormat>,
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub stop: Option<StopToken>,
-    pub stream: bool,
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub temperature: Option<f32>,
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub top_p: Option<f32>,
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub tools: Option<Vec<ChatCompletionTool>>,
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub tool_choice: Option<ChatCompletionToolChoice>,
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub user: Option<String>,
-}
-
 #[derive(Serialize, Deserialize, Debug, Clone, PartialEq)]
 pub struct ImageUrl {
     /// The type of the content part.
@@ -374,6 +346,7 @@ impl Default for ChatCompletionParameters {
             response_format: None,
             seed: None,
             stop: None,
+            stream: None,
             temperature: None,
             top_p: None,
             tools: None,
