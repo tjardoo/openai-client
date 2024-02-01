@@ -21,6 +21,7 @@ pub struct Client {
     pub http_client: reqwest::Client,
     pub base_url: String,
     pub api_key: String,
+    pub organization: Option<String>,
 }
 
 impl Client {
@@ -29,6 +30,16 @@ impl Client {
             http_client: reqwest::Client::new(),
             base_url: OPENAI_API_V1_ENDPOINT.to_string(),
             api_key,
+            organization: None,
+        }
+    }
+
+    pub fn new_with_organization(api_key: String, organization: String) -> Self {
+        Self {
+            http_client: reqwest::Client::new(),
+            base_url: OPENAI_API_V1_ENDPOINT.to_string(),
+            api_key,
+            organization: Some(organization),
         }
     }
 
@@ -45,6 +56,10 @@ impl Client {
             .request(method, &url)
             .header(reqwest::header::CONTENT_TYPE, content_type)
             .bearer_auth(&self.api_key);
+
+        if let Some(organization) = &self.organization {
+            request = request.header("OpenAI-Organization", organization);
+        }
 
         if is_beta_feature(path) {
             request = request.header("OpenAI-Beta", "assistants=v1");
