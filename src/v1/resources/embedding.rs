@@ -28,7 +28,7 @@ pub struct EmbeddingResponse {
     /// The model used to generate the embeddings.
     pub model: String,
     /// Object containing usage information for the request.
-    pub usage: Usage,
+    pub usage: Option<Usage>,
 }
 
 #[derive(Serialize, Deserialize, Debug, Clone, PartialEq)]
