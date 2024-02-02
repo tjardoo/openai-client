@@ -28,6 +28,7 @@ pub struct EmbeddingResponse {
     /// The model used to generate the embeddings.
     pub model: String,
     /// Object containing usage information for the request.
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub usage: Option<Usage>,
 }
 
