@@ -55,25 +55,8 @@ impl Chat<'_> {
         Pin<Box<dyn Stream<Item = Result<ChatCompletionChunkResponse, APIError>> + Send>>,
         APIError,
     > {
-        use crate::v1::resources::chat::StreamChatCompletionParameters;
-
-        let stream_parameters = StreamChatCompletionParameters {
-            messages: parameters.messages,
-            model: parameters.model,
-            frequency_penalty: parameters.frequency_penalty,
-            logit_bias: parameters.logit_bias,
-            max_tokens: parameters.max_tokens,
-            n: parameters.n,
-            presence_penalty: parameters.presence_penalty,
-            response_format: parameters.response_format,
-            stop: parameters.stop,
-            stream: true,
-            temperature: parameters.temperature,
-            top_p: parameters.top_p,
-            tools: parameters.tools,
-            tool_choice: parameters.tool_choice,
-            user: parameters.user,
-        };
+        let mut stream_parameters = parameters;
+        stream_parameters.stream = Some(true);
 
         Ok(self
             .client
