@@ -950,6 +950,7 @@ let client = Client {
     http_client,
     base_url: "https://api.openai.com/v1".to_string(),
     api_key,
+    organization: None,
 };
 ```
 
@@ -981,15 +982,18 @@ More information: [Rate limit headers](https://platform.openai.com/docs/guides/r
 ## Use model names
 
 - Gpt4Engine
+  - Gpt4 `gpt-4` (alias)
+  - Gpt4TurboPreview `gpt-4-turbo-preview` (alias)
+  - Gpt40125Preview `gpt-4-0125-preview`
   - Gpt41106Preview `gpt-4-1106-preview`
   - Gpt4VisionPreview `gpt-4-vision-preview`
-  - Gpt4 `gpt-4`
   - Gpt432K `gpt-4-32k`
   - Gpt40613 `gpt-4-0613`
   - Gpt432K0613 `gpt-4-32k-0613`
 - Gpt35Engine
+  - Gpt35Turbo `gpt-3.5-turbo` (alias)
+  - Gpt35Turbo0125 `gpt-3.5-turbo-0125`
   - Gpt35Turbo1106 `gpt-3.5-turbo-1106`
-  - Gpt35Turbo `gpt-3.5-turbo`
   - Gpt35Turbo16K `gpt-3.5-turbo-16k`
   - Gpt35TurboInstruct `gpt-3.5-turbo-instruct`
 - DallEEngine
@@ -1001,9 +1005,12 @@ More information: [Rate limit headers](https://platform.openai.com/docs/guides/r
 - WhisperEngine
   - Whisper1 `whisper-1`
 - EmbeddingsEngine
+  - TextEmbedding3Small `text-embedding-3-small`
+  - TextEmbedding3Large `text-embedding-3-large`
   - TextEmbeddingAda002 `text-embedding-ada-002`
 - ModerationsEngine
-  - TextModerationLatest `text-moderation-latest`
-  - TextModerationStable `text-moderation-stable`
+  - TextModerationLatest `text-moderation-latest` (alias)
+  - TextModerationStable `text-moderation-stable` (alias)
+  - TextModeration007 `text-moderation-007`
 
 More information: [Models](https://platform.openai.com/docs/models)
