@@ -1,4 +1,5 @@
 use openai_dive::v1::api::Client;
+use openai_dive::v1::models::EmbeddingsEngine;
 use openai_dive::v1::resources::embedding::{EmbeddingInput, EmbeddingParameters};
 use std::env;
 
@@ -9,7 +10,7 @@ async fn main() {
     let client = Client::new(api_key);
 
     let parameters = EmbeddingParameters {
-        model: "text-embedding-ada-002".to_string(),
+        model: EmbeddingsEngine::TextEmbedding3Small.to_string(),
         input: EmbeddingInput::String("The food was delicious and the waiter...".to_string()),
         encoding_format: None,
         dimensions: None,
