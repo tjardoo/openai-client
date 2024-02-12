@@ -39,6 +39,10 @@ pub struct AudioTranscriptionParameters {
     /// If set to 0, the model will use log probability to automatically increase the temperature until certain thresholds are hit.
     #[serde(skip_serializing_if = "Option::is_none")]
     pub temperature: Option<f32>,
+    /// The timestamp granularities to populate for this transcription. response_format must be set verbose_json to use timestamp granularities.
+    /// Either or both of these options are supported: word, or segment.
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub timestamp_granularities: Option<Vec<TimestampGranularity>>,
 }
 
 #[derive(Serialize, Deserialize, Debug, Clone, PartialEq)]
@@ -118,6 +122,13 @@ pub enum AudioVoice {
     Onyx,
     Nova,
     Shimmer,
+}
+
+#[derive(Serialize, Deserialize, Debug, Clone, PartialEq)]
+#[serde(rename_all = "lowercase")]
+pub enum TimestampGranularity {
+    Word,
+    Segment,
 }
 
 impl Display for AudioOutputFormat {
