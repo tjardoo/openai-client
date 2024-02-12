@@ -9,7 +9,7 @@
 //! openai_dive = "0.4"
 //! ```
 //!
-//! More information: [set API key](#set-api-key), [add proxy](#add-proxy), [rate limit headers](#rate-limit-headers), [use model names](#use-model-names)
+//! More information: [set API key](#set-api-key), [add proxy](#add-proxy), [add organization header](#add-organization-header), [rate limit headers](#rate-limit-headers), [use model names](#use-model-names)
 //!
 //! ## Endpoints
 //!
@@ -947,6 +947,25 @@
 //!     organization: None,
 //! };
 //! ```
+//!
+//! ### Add organization header
+//!
+//! You can add the organization header to your requests by creating a new client with the `Client::new_with_organization` method.
+//!
+//! ```rust
+//! #[tokio::main]
+//! use openai_dive::v1::api::Client;
+//! use std::env;
+//!
+//! async fn main() {
+//!     let api_key = env::var("OPENAI_API_KEY").expect("$OPENAI_API_KEY is not set");
+//!
+//!     let client = Client::new_with_organization(api_key, "org-XXX".to_string());
+//!
+//!     // your code
+//! }
+//! ```
+//!
 //! ## Rate limit headers
 //!
 //! In addition to seeing your rate limit on your account page, you can also view important information about your rate limits such as the remaining requests, tokens, and other metadata in the headers of the HTTP response.
