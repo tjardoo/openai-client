@@ -472,6 +472,7 @@
 //!         prompt: None,
 //!         response_format: Some(AudioOutputFormat::Text),
 //!         temperature: None,
+//!         timestamp_granularities: None,
 //!     };
 //!
 //!     let result = client
