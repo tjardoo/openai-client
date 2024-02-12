@@ -46,11 +46,18 @@ pub enum EmbeddingInput {
 }
 
 #[derive(Serialize, Deserialize, Debug, Clone, PartialEq)]
+#[serde(untagged)]
+pub enum EmbeddingOutput {
+    Float(Vec<f64>),
+    Base64(String),
+}
+
+#[derive(Serialize, Deserialize, Debug, Clone, PartialEq)]
 pub struct Embedding {
     /// The index of the embedding in the list of embeddings.
     pub index: u32,
-    /// The embedding vector, which is a list of floats.
-    pub embedding: Vec<f64>,
+    /// The embedding vector, which is a list of floats. Or String when encoding format is set to 'base64'.
+    pub embedding: EmbeddingOutput,
     /// The object type, which is always "embedding".
     pub object: String,
 }
