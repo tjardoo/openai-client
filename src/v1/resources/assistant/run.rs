@@ -1,5 +1,5 @@
-use crate::v1::resources::assistant::assistant::AssistantTools;
 use crate::v1::resources::chat::ToolCall;
+use crate::v1::resources::{assistant::assistant::AssistantTools, shared::Usage};
 use serde::{Deserialize, Serialize};
 use std::collections::HashMap;
 
@@ -50,6 +50,10 @@ pub struct Run {
     /// Set of 16 key-value pairs that can be attached to an object.
     #[serde(skip_serializing_if = "Option::is_none")]
     pub metadata: Option<HashMap<String, String>>,
+    /// Usage statistics related to the run.
+    /// This value will be null if the run is not in a terminal state (i.e. in_progress, queued, etc.).
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub usage: Option<Usage>,
 }
 
 #[derive(Serialize, Deserialize, Debug, Clone, PartialEq)]
