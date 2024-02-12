@@ -55,6 +55,10 @@ pub struct ChatCompletionParameters {
     /// decreasing the model's likelihood to repeat the same line verbatim.
     #[serde(skip_serializing_if = "Option::is_none")]
     pub frequency_penalty: Option<f32>,
+    /// An unique identifier to a custom instance to execute the request.
+    /// The requesting organization is required to have access to the instance.
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub instance_id: Option<String>,
     /// Modify the likelihood of specified tokens appearing in the completion.
     #[serde(skip_serializing_if = "Option::is_none")]
     pub logit_bias: Option<HashMap<String, i32>>,
@@ -339,6 +343,7 @@ impl Default for ChatCompletionParameters {
             }],
             model: Gpt4Engine::Gpt4.to_string(),
             frequency_penalty: None,
+            instance_id: None,
             logit_bias: None,
             logprobs: None,
             top_logprobs: None,
