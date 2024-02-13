@@ -131,9 +131,9 @@ pub struct ListMessagesResponse {
     /// The list of assistant files.
     pub data: Vec<Message>,
     /// ID of the first object in the list.
-    pub first_id: String,
+    pub first_id: Option<String>,
     /// ID of the last object in the list.
-    pub last_id: String,
+    pub last_id: Option<String>,
     /// Indicates whether there are more assistant files to retrieve.
     pub has_more: bool,
 }
