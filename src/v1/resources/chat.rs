@@ -408,7 +408,7 @@ impl FromStr for Role {
 
 impl DeltaFunction {
     pub fn merge(&mut self, other: &Self) {
-        if self.name.is_none() && other.name.is_none() == false {
+        if self.name.is_none() && other.name.is_some() {
             self.name = other.name.clone();
         }
 

@@ -53,7 +53,7 @@ impl Client {
 
         let mut request = self
             .http_client
-            .request(method, &url)
+            .request(method, url)
             .header(reqwest::header::CONTENT_TYPE, content_type)
             .bearer_auth(&self.api_key);
 

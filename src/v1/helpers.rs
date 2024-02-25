@@ -14,7 +14,7 @@ pub fn validate_response(response: String) -> Result<Value, APIError> {
         return Err(APIError::InvalidRequestError(value["error"].to_string()));
     }
 
-    return Ok(value);
+    Ok(value)
 }
 
 pub fn format_response<R: DeserializeOwned>(response: String) -> Result<R, APIError> {
@@ -23,7 +23,7 @@ pub fn format_response<R: DeserializeOwned>(response: String) -> Result<R, APIEr
     let value: R =
         serde_json::from_value(value).map_err(|error| APIError::ParseError(error.to_string()))?;
 
-    return Ok(value);
+    Ok(value)
 }
 
 pub fn is_beta_feature(path: &str) -> bool {

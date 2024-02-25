@@ -153,15 +153,13 @@ impl AudioSpeechResponse {
         let directory = file_path.as_ref().parent();
 
         if let Some(directory) = directory {
-            let is_existing_directory = match Path::try_exists(directory.as_ref()) {
+            let is_existing_directory = match Path::try_exists(directory) {
                 Ok(exists) => exists,
                 Err(error) => return Err(APIError::FileError(error.to_string())),
             };
 
-            let directory_path: &Path = directory.as_ref();
-
-            if is_existing_directory == false {
-                std::fs::create_dir_all(directory_path)
+            if !is_existing_directory {
+                std::fs::create_dir_all(directory)
                     .map_err(|error| APIError::FileError(error.to_string()))?;
             }
         }
