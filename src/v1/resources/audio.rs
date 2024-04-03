@@ -11,7 +11,7 @@ pub struct AudioSpeechParameters {
     pub input: String,
     /// The voice to use when generating the audio. Supported voices are alloy, echo, fable, onyx, nova, and shimmer.
     pub voice: AudioVoice,
-    /// The format to audio in. Supported formats are mp3, opus, aac, and flac.
+    /// The format to audio in. Supported formats are mp3, opus, aac, flac, wav and pcm.
     #[serde(skip_serializing_if = "Option::is_none")]
     pub response_format: Option<AudioSpeechResponseFormat>,
     /// The speed of the generated audio. Select a value from 0.25 to 4.0. 1.0 is the default.
@@ -78,7 +78,7 @@ pub struct StreamAudioSpeechParameters {
     pub input: String,
     /// The voice to use when generating the audio. Supported voices are alloy, echo, fable, onyx, nova, and shimmer.
     pub voice: AudioVoice,
-    /// The format to audio in. Supported formats are mp3, opus, aac, and flac.
+    /// The format to audio in. Supported formats are mp3, opus, aac, flac, wav and pcm.
     #[serde(skip_serializing_if = "Option::is_none")]
     pub response_format: Option<AudioSpeechResponseFormat>,
     /// The speed of the generated audio. Select a value from 0.25 to 4.0. 1.0 is the default.
@@ -111,6 +111,8 @@ pub enum AudioSpeechResponseFormat {
     Opus,
     Aac,
     Flac,
+    Wav,
+    Pcm,
 }
 
 #[derive(Serialize, Deserialize, Debug, Clone, PartialEq)]
