@@ -42,14 +42,13 @@ pub struct UploadFileParameters {
 }
 
 #[derive(Serialize, Deserialize, Debug, Clone, PartialEq)]
+#[serde(rename_all = "snake_case")]
 pub enum FilePurpose {
     #[serde(rename = "fine-tune")]
     FineTune,
     #[serde(rename = "fine-tune-results")]
     FineTuneResults,
-    #[serde(rename = "assistants")]
     Assistants,
-    #[serde(rename = "assistants_output")]
     AssistantsOutput,
 }
 

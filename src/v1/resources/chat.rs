@@ -295,10 +295,9 @@ pub enum ChatMessageContent {
 }
 
 #[derive(Serialize, Deserialize, Debug, Clone, PartialEq)]
+#[serde(rename_all = "snake_case")]
 pub enum ChatCompletionResponseFormatType {
-    #[serde(rename = "text")]
     Text,
-    #[serde(rename = "json_object")]
     JsonObject,
 }
 

@@ -95,12 +95,11 @@ pub struct AudioSpeechResponseChunkResponse {
 }
 
 #[derive(Serialize, Deserialize, Debug, Clone, PartialEq)]
-#[serde(rename_all = "lowercase")]
+#[serde(rename_all = "snake_case")]
 pub enum AudioOutputFormat {
     Json,
     Text,
     Srt,
-    #[serde(rename = "verbose_json")]
     VerboseJson,
     Vtt,
 }

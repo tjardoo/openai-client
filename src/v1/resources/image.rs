@@ -120,10 +120,9 @@ pub enum ImageStyle {
 }
 
 #[derive(Serialize, Deserialize, Debug, Clone, PartialEq)]
+#[serde(rename_all = "snake_case")]
 pub enum ResponseFormat {
-    #[serde(rename = "url")]
     Url,
-    #[serde(rename = "b64_json")]
     B64Json,
 }
 

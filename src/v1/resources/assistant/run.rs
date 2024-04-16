@@ -122,12 +122,10 @@ pub struct ListRunsResponse {
 }
 
 #[derive(Serialize, Deserialize, Debug, Clone, PartialEq)]
-#[serde(rename_all = "lowercase")]
+#[serde(rename_all = "snake_case")]
 pub enum RunStatus {
     Queued,
-    #[serde(rename = "in_progress")]
     InProgress,
-    #[serde(rename = "requires_action")]
     RequiresAction,
     Cancelling,
     Cancelled,
@@ -137,10 +135,9 @@ pub enum RunStatus {
 }
 
 #[derive(Serialize, Deserialize, Debug, Clone, PartialEq)]
+#[serde(rename_all = "snake_case")]
 pub enum RunErrorCode {
-    #[serde(rename = "server_error")]
     ServerError,
-    #[serde(rename = "rate_limit_exceeded")]
     RateLimitExceeded,
 }
 
