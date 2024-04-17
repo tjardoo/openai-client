@@ -1,4 +1,5 @@
 use crate::v1::error::APIError;
+use crate::v1::resources::audio::AudioTranscriptionBytes;
 #[cfg(feature = "download")]
 use rand::{distributions::Alphanumeric, Rng};
 use reqwest::multipart::Part;
@@ -28,6 +29,13 @@ pub fn format_response<R: DeserializeOwned>(response: String) -> Result<R, APIEr
 
 pub fn is_beta_feature(path: &str) -> bool {
     path.starts_with("/assistants") || path.starts_with("/threads")
+}
+
+pub fn file_from_bytes_to_form_part(input: AudioTranscriptionBytes) -> Result<Part, APIError> {
+    reqwest::multipart::Part::bytes(input.bytes.to_vec())
+        .file_name(input.filename)
+        .mime_str("application/octet-stream")
+        .map_err(|error| APIError::FileError(error.to_string()))
 }
 
 pub async fn file_from_disk_to_form_part(path: String) -> Result<Part, APIError> {

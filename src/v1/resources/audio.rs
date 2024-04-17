@@ -22,6 +22,7 @@ pub struct AudioSpeechParameters {
 #[derive(Serialize, Deserialize, Debug, Clone, PartialEq)]
 pub struct AudioTranscriptionParameters {
     /// The audio file object (not file name) to transcribe, in one of these formats: flac, mp3, mp4, mpeg, mpga, m4a, ogg, wav, or webm.
+    #[serde(skip)]
     pub file: AudioTranscriptionFile,
     /// ID of the model to use. Only whisper-1 is currently available.
     pub model: String,
@@ -115,8 +116,15 @@ pub enum AudioSpeechResponseFormat {
     Pcm,
 }
 
-#[derive(Clone, Debug, Deserialize, PartialEq, Serialize)]
+#[derive(Clone, Debug, PartialEq)]
+pub struct AudioTranscriptionBytes {
+    pub bytes: Bytes,
+    pub filename: String,
+}
+
+#[derive(Clone, Debug, PartialEq)]
 pub enum AudioTranscriptionFile {
+    Bytes(AudioTranscriptionBytes),
     File(String),
 }
 
@@ -176,5 +184,11 @@ impl AudioSpeechResponse {
             .map_err(|error| APIError::FileError(error.to_string()))?;
 
         Ok(())
+    }
+}
+
+impl Default for AudioTranscriptionFile {
+    fn default() -> Self {
+        Self::File(String::new())
     }
 }

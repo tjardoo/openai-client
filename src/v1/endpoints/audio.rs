@@ -1,6 +1,6 @@
 use crate::v1::api::Client;
 use crate::v1::error::APIError;
-use crate::v1::helpers::file_from_disk_to_form_part;
+use crate::v1::helpers::{file_from_bytes_to_form_part, file_from_disk_to_form_part};
 use crate::v1::resources::audio::AudioSpeechParameters;
 use crate::v1::resources::audio::AudioSpeechResponse;
 #[cfg(feature = "stream")]
@@ -45,6 +45,7 @@ impl Audio<'_> {
         let mut form = reqwest::multipart::Form::new();
 
         let file = match parameters.file {
+            AudioTranscriptionFile::Bytes(b) => file_from_bytes_to_form_part(b)?,
             AudioTranscriptionFile::File(f) => file_from_disk_to_form_part(f).await?,
         };
 
