@@ -93,6 +93,8 @@ pub enum FinishReason {
     /// The model decided to call one or more tools.
     #[serde(rename = "tool_calls")]
     ToolCalls,
+    #[serde(rename = "end_turn")]
+    EndTurn
 }
 
 #[derive(Serialize, Deserialize, Debug, Clone, PartialEq)]
