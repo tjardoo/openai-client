@@ -1,5 +1,5 @@
 use openai_dive::v1::api::Client;
-use openai_dive::v1::resources::audio::{AudioOutputFormat, AudioTranscriptionParameters};
+use openai_dive::v1::resources::audio::{AudioOutputFormat, AudioTranscriptionFile, AudioTranscriptionParameters};
 use std::env;
 
 #[tokio::main]
@@ -9,7 +9,7 @@ async fn main() {
     let client = Client::new(api_key);
 
     let parameters = AudioTranscriptionParameters {
-        file: "./audio/micro-machines.mp3".to_string(),
+        file: AudioTranscriptionFile::File("./audio/micro-machines.mp3".to_string()),
         model: "whisper-1".to_string(),
         language: None,
         prompt: None,

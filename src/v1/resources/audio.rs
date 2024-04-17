@@ -22,7 +22,7 @@ pub struct AudioSpeechParameters {
 #[derive(Serialize, Deserialize, Debug, Clone, PartialEq)]
 pub struct AudioTranscriptionParameters {
     /// The audio file object (not file name) to transcribe, in one of these formats: flac, mp3, mp4, mpeg, mpga, m4a, ogg, wav, or webm.
-    pub file: String,
+    pub file: AudioTranscriptionFile,
     /// ID of the model to use. Only whisper-1 is currently available.
     pub model: String,
     /// The language of the input audio. Supplying the input language in ISO-639-1 format will improve accuracy and latency.
@@ -113,6 +113,11 @@ pub enum AudioSpeechResponseFormat {
     Flac,
     Wav,
     Pcm,
+}
+
+#[derive(Clone, Debug, Deserialize, PartialEq, Serialize)]
+pub enum AudioTranscriptionFile {
+    File(String),
 }
 
 #[derive(Serialize, Deserialize, Debug, Clone, PartialEq)]
