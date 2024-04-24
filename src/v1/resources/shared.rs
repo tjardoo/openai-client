@@ -93,6 +93,9 @@ pub enum FinishReason {
     /// The model decided to call one or more tools.
     #[serde(rename = "tool_calls")]
     ToolCalls,
+    /// The model reached a natural stopping point. [Claude]
+    #[serde(rename = "end_turn")]
+    EndTurn,
 }
 
 #[derive(Serialize, Deserialize, Debug, Clone, PartialEq)]
