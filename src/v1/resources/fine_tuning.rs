@@ -52,6 +52,11 @@ pub struct CreateFineTuningJobParameters {
     /// The ID of an uploaded file that contains validation data.
     #[serde(skip_serializing_if = "Option::is_none")]
     pub validation_file: Option<String>,
+    /// The seed controls the reproducibility of the job.
+    /// Passing in the same seed and job parameters should produce the same results, but may differ in rare cases.
+    /// If a seed is not specified, one will be generated for you.
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub seed: Option<u32>,
 }
 
 #[derive(Serialize, Deserialize, Debug, Clone, PartialEq)]

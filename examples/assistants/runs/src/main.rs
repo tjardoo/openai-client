@@ -29,7 +29,10 @@ pub async fn create_run(client: &Client, thread_id: &str, assistant_id: &str) ->
         assistant_id: assistant_id.to_string(),
         model: None,
         instructions: None,
+        additional_instructions: None,
         tools: None,
+        metadata: None,
+        temperature: None,
     };
 
     let run = client

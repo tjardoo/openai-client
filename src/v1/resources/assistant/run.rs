@@ -82,9 +82,22 @@ pub struct CreateRunParameters {
     /// Override the default system message of the assistant. This is useful for modifying the behavior on a per-run basis.
     #[serde(skip_serializing_if = "Option::is_none")]
     pub instructions: Option<String>,
+    /// Appends additional instructions at the end of the instructions for the run.
+    /// This is useful for modifying the behavior on a per-run basis without overriding other instructions.
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub additional_instructions: Option<String>,
     /// Override the tools the assistant can use for this run. This is useful for modifying the behavior on a per-run basis.
     #[serde(skip_serializing_if = "Option::is_none")]
     pub tools: Option<Vec<AssistantTools>>,
+    /// Set of 16 key-value pairs that can be attached to an object.
+    /// This can be useful for storing additional information about the object in a structured format.
+    /// Keys can be a maximum of 64 characters long and values can be a maxium of 512 characters long.
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub metadata: Option<HashMap<String, String>>,
+    /// What sampling temperature to use, between 0 and 2. Higher values like 0.8 will make the output more random,
+    /// while lower values like 0.2 will make it more focused and deterministic.
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub temperature: Option<f32>,
 }
 
 #[derive(Serialize, Deserialize, Debug, Clone, PartialEq)]
