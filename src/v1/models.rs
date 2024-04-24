@@ -7,8 +7,13 @@ pub enum Gpt4Engine {
     #[serde(rename = "gpt-4")]
     Gpt4,
     /// Alias
+    #[serde(rename = "gpt-4-turbo")]
+    Gpt4Turbo,
+    /// Alias
     #[serde(rename = "gpt-4-turbo-preview")]
     Gpt4TurboPreview,
+    #[serde(rename = "gpt-4-turbo-2024-04-09")]
+    Gpt4Turbo20240409,
     #[serde(rename = "gpt-4-0125-preview")]
     Gpt40125Preview,
     #[serde(rename = "gpt-4-1106-preview")]
@@ -86,7 +91,9 @@ impl Display for Gpt4Engine {
     fn fmt(&self, f: &mut Formatter<'_>) -> Result {
         match self {
             Gpt4Engine::Gpt4 => write!(f, "gpt-4"),
+            Gpt4Engine::Gpt4Turbo => write!(f, "gpt-4-turbo"),
             Gpt4Engine::Gpt4TurboPreview => write!(f, "gpt-4-turbo-preview"),
+            Gpt4Engine::Gpt4Turbo20240409 => write!(f, "gpt-4-turbo-2024-04-09"),
             Gpt4Engine::Gpt40125Preview => write!(f, "gpt-4-0125-preview"),
             Gpt4Engine::Gpt40613 => write!(f, "gpt-4-0613"),
             Gpt4Engine::Gpt41106Preview => write!(f, "gpt-4-1106-preview"),

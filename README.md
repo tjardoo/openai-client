@@ -1002,7 +1002,9 @@ More information: [Rate limit headers](https://platform.openai.com/docs/guides/r
 
 - Gpt4Engine
   - Gpt4 `gpt-4` (alias)
+  - Gpt4Turbo `gpt-4-turbo` (alias)
   - Gpt4TurboPreview `gpt-4-turbo-preview` (alias)
+  - Gpt4Turbo20240409 `gpt-4-turbo-2024-04-09`
   - Gpt40125Preview `gpt-4-0125-preview`
   - Gpt41106Preview `gpt-4-1106-preview`
   - Gpt4VisionPreview `gpt-4-vision-preview`
