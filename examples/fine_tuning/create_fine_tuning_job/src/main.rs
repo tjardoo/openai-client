@@ -18,6 +18,7 @@ async fn main() {
         hyperparameters: None,
         suffix: None,
         validation_file: None,
+        seed: None,
     };
 
     let result = client.fine_tuning().create(parameters).await.unwrap();
