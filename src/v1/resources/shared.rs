@@ -80,6 +80,7 @@ pub struct DeletedObject {
 }
 
 #[derive(Serialize, Deserialize, Debug, Clone, PartialEq)]
+#[serde(rename_all = "snake_case")]
 pub enum FinishReason {
     /// API returned complete message, or a message terminated by one of the stop sequences provided via the stop parameter.
     #[serde(rename = "stop")]
@@ -91,10 +92,8 @@ pub enum FinishReason {
     #[serde(rename = "content_filter")]
     ContentFilterFlagged,
     /// The model decided to call one or more tools.
-    #[serde(rename = "tool_calls")]
     ToolCalls,
     /// The model reached a natural stopping point. [Claude]
-    #[serde(rename = "end_turn")]
     EndTurn,
 }
 
