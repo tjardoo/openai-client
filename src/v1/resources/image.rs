@@ -8,6 +8,7 @@ use base64::{engine::general_purpose, Engine as _};
 use futures::future;
 use serde::{Deserialize, Serialize};
 use std::fmt::Display;
+use strum_macros::EnumString;
 
 #[derive(Serialize, Debug, Clone)]
 pub struct CreateImageParameters {
@@ -98,7 +99,7 @@ pub struct ImageResponse {
     pub data: Vec<ImageData>,
 }
 
-#[derive(Serialize, Deserialize, Debug, Clone, PartialEq)]
+#[derive(Serialize, Deserialize, Debug, Clone, EnumString, PartialEq)]
 pub enum ImageSize {
     #[serde(rename = "256x256")]
     Size256X256,
@@ -112,21 +113,21 @@ pub enum ImageSize {
     Size1024X1792,
 }
 
-#[derive(Serialize, Deserialize, Debug, Clone, PartialEq)]
+#[derive(Serialize, Deserialize, Debug, Clone, EnumString, PartialEq)]
 #[serde(rename_all = "lowercase")]
 pub enum ImageStyle {
     Vivid,
     Natural,
 }
 
-#[derive(Serialize, Deserialize, Debug, Clone, PartialEq)]
+#[derive(Serialize, Deserialize, Debug, Clone, EnumString, PartialEq)]
 #[serde(rename_all = "snake_case")]
 pub enum ResponseFormat {
     Url,
     B64Json,
 }
 
-#[derive(Serialize, Deserialize, Debug, Clone, PartialEq)]
+#[derive(Serialize, Deserialize, Debug, Clone, EnumString, PartialEq)]
 #[serde(untagged)]
 pub enum ImageData {
     Url {

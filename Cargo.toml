@@ -25,6 +25,8 @@ rand = { version = "0.8", optional = true }
 base64 = { version = "0.22", optional = true }
 log = { version = "0.4", optional = true }
 bytes = "1.5.0"
+strum = "0.26.2"
+strum_macros = "0.26.2"
 
 [features]
 default = ["reqwest", "tokio", "tokio-util", "reqwest/default-tls"]

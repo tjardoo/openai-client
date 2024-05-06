@@ -2,6 +2,7 @@ use crate::v1::error::APIError;
 use bytes::Bytes;
 use serde::{Deserialize, Serialize};
 use std::{fmt::Display, path::Path};
+use strum_macros::EnumString;
 
 #[derive(Serialize, Deserialize, Debug, Clone, PartialEq)]
 pub struct AudioSpeechParameters {
@@ -94,7 +95,7 @@ pub struct AudioSpeechResponseChunkResponse {
     pub bytes: Bytes,
 }
 
-#[derive(Serialize, Deserialize, Debug, Clone, PartialEq)]
+#[derive(Serialize, Deserialize, Debug, Clone, EnumString, PartialEq)]
 #[serde(rename_all = "snake_case")]
 pub enum AudioOutputFormat {
     Json,
@@ -104,7 +105,7 @@ pub enum AudioOutputFormat {
     Vtt,
 }
 
-#[derive(Serialize, Deserialize, Debug, Clone, PartialEq)]
+#[derive(Serialize, Deserialize, Debug, Clone, EnumString, PartialEq)]
 #[serde(rename_all = "lowercase")]
 pub enum AudioSpeechResponseFormat {
     Mp3,
@@ -127,7 +128,7 @@ pub enum AudioTranscriptionFile {
     File(String),
 }
 
-#[derive(Serialize, Deserialize, Debug, Clone, PartialEq)]
+#[derive(Serialize, Deserialize, Debug, Clone, EnumString, PartialEq)]
 #[serde(rename_all = "lowercase")]
 pub enum AudioVoice {
     Alloy,
@@ -138,7 +139,7 @@ pub enum AudioVoice {
     Shimmer,
 }
 
-#[derive(Serialize, Deserialize, Debug, Clone, PartialEq)]
+#[derive(Serialize, Deserialize, Debug, Clone, EnumString, PartialEq)]
 #[serde(rename_all = "lowercase")]
 pub enum TimestampGranularity {
     Word,
