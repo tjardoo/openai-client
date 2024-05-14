@@ -4,6 +4,9 @@ use std::fmt::{Display, Formatter, Result};
 #[derive(Serialize, Deserialize, Debug, Clone, PartialEq)]
 pub enum Gpt4Engine {
     /// Alias
+    #[serde(rename = "gpt-4-o")]
+    Gpt4O,
+    /// Alias
     #[serde(rename = "gpt-4")]
     Gpt4,
     /// Alias
@@ -12,20 +15,6 @@ pub enum Gpt4Engine {
     /// Alias
     #[serde(rename = "gpt-4-turbo-preview")]
     Gpt4TurboPreview,
-    #[serde(rename = "gpt-4-turbo-2024-04-09")]
-    Gpt4Turbo20240409,
-    #[serde(rename = "gpt-4-0125-preview")]
-    Gpt40125Preview,
-    #[serde(rename = "gpt-4-1106-preview")]
-    Gpt41106Preview,
-    #[serde(rename = "gpt-4-vision-preview")]
-    Gpt4VisionPreview,
-    #[serde(rename = "gpt-4-32k")]
-    Gpt432K,
-    #[serde(rename = "gpt-4-0613")]
-    Gpt40613,
-    #[serde(rename = "gpt-4-32k-0613")]
-    Gpt432K0613,
 }
 
 #[derive(Serialize, Deserialize, Debug, Clone, PartialEq)]
@@ -33,14 +22,8 @@ pub enum Gpt35Engine {
     /// Alias
     #[serde(rename = "gpt-3.5-turbo")]
     Gpt35Turbo,
-    #[serde(rename = "gpt-3.5-turbo-0125")]
-    Gpt35Turbo0125,
     #[serde(rename = "gpt-3.5-turbo-1106")]
     Gpt35Turbo1106,
-    #[serde(rename = "gpt-3.5-turbo-16k")]
-    Gpt35Turbo16K,
-    #[serde(rename = "gpt-3.5-turbo-instruct")]
-    Gpt35TurboInstruct,
 }
 
 #[derive(Serialize, Deserialize, Debug, Clone, PartialEq)]
@@ -90,16 +73,10 @@ pub enum ModerationsEngine {
 impl Display for Gpt4Engine {
     fn fmt(&self, f: &mut Formatter<'_>) -> Result {
         match self {
+            Gpt4Engine::Gpt4O => write!(f, "gpt-4-o"),
             Gpt4Engine::Gpt4 => write!(f, "gpt-4"),
             Gpt4Engine::Gpt4Turbo => write!(f, "gpt-4-turbo"),
             Gpt4Engine::Gpt4TurboPreview => write!(f, "gpt-4-turbo-preview"),
-            Gpt4Engine::Gpt4Turbo20240409 => write!(f, "gpt-4-turbo-2024-04-09"),
-            Gpt4Engine::Gpt40125Preview => write!(f, "gpt-4-0125-preview"),
-            Gpt4Engine::Gpt40613 => write!(f, "gpt-4-0613"),
-            Gpt4Engine::Gpt41106Preview => write!(f, "gpt-4-1106-preview"),
-            Gpt4Engine::Gpt432K => write!(f, "gpt-4-32k"),
-            Gpt4Engine::Gpt432K0613 => write!(f, "gpt-4-32k-0613"),
-            Gpt4Engine::Gpt4VisionPreview => write!(f, "gpt-4-vision-preview"),
         }
     }
 }
@@ -108,10 +85,7 @@ impl Display for Gpt35Engine {
     fn fmt(&self, f: &mut Formatter<'_>) -> Result {
         match self {
             Gpt35Engine::Gpt35Turbo => write!(f, "gpt-3.5-turbo"),
-            Gpt35Engine::Gpt35Turbo0125 => write!(f, "gpt-3.5-turbo-0125"),
             Gpt35Engine::Gpt35Turbo1106 => write!(f, "gpt-3.5-turbo-1106"),
-            Gpt35Engine::Gpt35Turbo16K => write!(f, "gpt-3.5-turbo-16k"),
-            Gpt35Engine::Gpt35TurboInstruct => write!(f, "gpt-3.5-turbo-instruct"),
         }
     }
 }

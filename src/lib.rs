@@ -994,22 +994,13 @@
 //! ## Use model names
 //!
 //! - Gpt4Engine
+//!   - Gpt4O `gpt-4-o` (alias)
 //!   - Gpt4 `gpt-4` (alias)
 //!   - Gpt4Turbo `gpt-4-turbo` (alias)
 //!   - Gpt4TurboPreview `gpt-4-turbo-preview` (alias)
-//!   - Gpt4Turbo20240409 `gpt-4-turbo-2024-04-09`
-//!   - Gpt40125Preview `gpt-4-0125-preview`
-//!   - Gpt41106Preview `gpt-4-1106-preview`
-//!   - Gpt4VisionPreview `gpt-4-vision-preview`
-//!   - Gpt432K `gpt-4-32k`
-//!   - Gpt40613 `gpt-4-0613`
-//!   - Gpt432K0613 `gpt-4-32k-0613`
 //! - Gpt35Engine
 //!   - Gpt35Turbo `gpt-3.5-turbo` (alias)
-//!   - Gpt35Turbo0125 `gpt-3.5-turbo-0125`
 //!   - Gpt35Turbo1106 `gpt-3.5-turbo-1106`
-//!   - Gpt35Turbo16K `gpt-3.5-turbo-16k`
-//!   - Gpt35TurboInstruct `gpt-3.5-turbo-instruct`
 //! - DallEEngine
 //!   - DallE3 `dall-e-2`
 //!   - DallE2 `dall-e-3`
