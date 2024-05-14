@@ -4,7 +4,7 @@ use std::fmt::{Display, Formatter, Result};
 #[derive(Serialize, Deserialize, Debug, Clone, PartialEq)]
 pub enum Gpt4Engine {
     /// Alias
-    #[serde(rename = "gpt-4-o")]
+    #[serde(rename = "gpt-4o")]
     Gpt4O,
     /// Alias
     #[serde(rename = "gpt-4")]
@@ -73,7 +73,7 @@ pub enum ModerationsEngine {
 impl Display for Gpt4Engine {
     fn fmt(&self, f: &mut Formatter<'_>) -> Result {
         match self {
-            Gpt4Engine::Gpt4O => write!(f, "gpt-4-o"),
+            Gpt4Engine::Gpt4O => write!(f, "gpt-4o"),
             Gpt4Engine::Gpt4 => write!(f, "gpt-4"),
             Gpt4Engine::Gpt4Turbo => write!(f, "gpt-4-turbo"),
             Gpt4Engine::Gpt4TurboPreview => write!(f, "gpt-4-turbo-preview"),

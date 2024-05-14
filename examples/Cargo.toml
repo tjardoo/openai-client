@@ -17,6 +17,7 @@ members = [
     "fine_tuning/retrieve_fine_tuning_job",
     "fine_tuning/cancel_fine_tuning_job",
     "fine_tuning/list_fine_tuning_job_events",
+    "fine_tuning/list_fine_tuning_checkpoints",
     "files/delete_file",
     "files/list_files",
     "files/retrieve_file",

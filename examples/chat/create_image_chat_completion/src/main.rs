@@ -12,7 +12,7 @@ async fn main() {
     let client = Client::new(api_key);
 
     let parameters = ChatCompletionParameters {
-        model: Gpt4Engine::Gpt4VisionPreview.to_string(),
+        model: Gpt4Engine::Gpt4O.to_string(),
         messages: vec![
             ChatMessage {
                 role: Role::User,

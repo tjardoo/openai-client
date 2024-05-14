@@ -13,7 +13,7 @@ async fn main() {
     let client = Client::new(api_key);
 
     let parameters = AssistantParameters {
-        model: Gpt4Engine::Gpt41106Preview.to_string(),
+        model: Gpt4Engine::Gpt4.to_string(),
         name: Some("Mathematician".to_string()),
         description: None,
         instructions: Some(

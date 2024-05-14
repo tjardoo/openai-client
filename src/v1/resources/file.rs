@@ -11,9 +11,9 @@ pub struct File {
     pub created_at: u32,
     /// The name of the file.
     pub filename: String,
-    /// The object type, which is always file.
+    /// The object type, which is always "file".
     pub object: String,
-    /// The intended purpose of the file. Supported values are fine-tune, fine-tune-results, assistants, and assistants_output.
+    /// The intended purpose of the file.
     pub purpose: FilePurpose,
 }
 
@@ -36,20 +36,23 @@ pub struct UploadFileParameters {
     /// The File object (not file name) to be uploaded.
     pub file: String,
     /// The intended purpose of the uploaded file.
-    /// Use "fine-tune" for Fine-tuning and "assistants" for Assistants and Messages.
-    /// This allows us to validate the format of the uploaded file is correct for fine-tuning.
+    /// Use "assistants" for Assistants and Message files, "vision" for Assistants image file inputs,
+    /// "batch" for Batch API, and "fine-tune" for Fine-tuning.
     pub purpose: FilePurpose,
 }
 
 #[derive(Serialize, Deserialize, Debug, Clone, PartialEq)]
 #[serde(rename_all = "snake_case")]
 pub enum FilePurpose {
+    Assistants,
+    AssistantsOutput,
+    Batch,
+    BatchOutput,
     #[serde(rename = "fine-tune")]
     FineTune,
     #[serde(rename = "fine-tune-results")]
     FineTuneResults,
-    Assistants,
-    AssistantsOutput,
+    Vision,
 }
 
 impl Display for FilePurpose {
@@ -58,10 +61,13 @@ impl Display for FilePurpose {
             f,
             "{}",
             match self {
-                FilePurpose::FineTune => "fine-tune",
-                FilePurpose::FineTuneResults => "fine-tune-results",
                 FilePurpose::Assistants => "assistants",
                 FilePurpose::AssistantsOutput => "assistants_output",
+                FilePurpose::Batch => "batch",
+                FilePurpose::BatchOutput => "batch_output",
+                FilePurpose::FineTune => "fine-tune",
+                FilePurpose::FineTuneResults => "fine-tune-results",
+                FilePurpose::Vision => "vision",
             }
         )
     }

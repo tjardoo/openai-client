@@ -3,6 +3,7 @@ use crate::v1::error::APIError;
 use crate::v1::helpers::format_response;
 use crate::v1::resources::fine_tuning::CreateFineTuningJobParameters;
 use crate::v1::resources::fine_tuning::FineTuningJob;
+use crate::v1::resources::fine_tuning::ListFineTuningCheckpointsResponse;
 use crate::v1::resources::fine_tuning::ListFineTuningJobEventsResponse;
 use crate::v1::resources::fine_tuning::ListFineTuningJobsResponse;
 use crate::v1::resources::shared::SimpleListParameters;
@@ -89,5 +90,25 @@ impl FineTuning<'_> {
             format_response(response)?;
 
         Ok(list_fine_tuning_job_events_response)
+    }
+
+    /// List checkpoints for a fine-tuning job.
+    pub async fn list_checkpoints(
+        &self,
+        id: &str,
+        query: Option<SimpleListParameters>,
+    ) -> Result<ListFineTuningCheckpointsResponse, APIError> {
+        let response = self
+            .client
+            .get_with_query(
+                format!("/fine_tuning/jobs/{id}/checkpoints").as_str(),
+                &query,
+            )
+            .await?;
+
+        let list_fine_tuning_checkpoints_response: ListFineTuningCheckpointsResponse =
+            format_response(response)?;
+
+        Ok(list_fine_tuning_checkpoints_response)
     }
 }

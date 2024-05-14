@@ -35,6 +35,16 @@ pub struct FineTuningJob {
     /// The file ID used for validation.
     #[serde(skip_serializing_if = "Option::is_none")]
     pub validation_file: Option<String>,
+    /// A list of integrations to enable for this fine-tuning job.
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub integrations: Option<Vec<FineTuningIntegration>>,
+    /// The seed used for the fine-tuning job.
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub seed: Option<u32>,
+    /// The Unix timestamp (in seconds) for when the fine-tuning job is estimated to finish.
+    /// The value will be null if the fine-tuning job is not running.
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub estimated_finish: Option<u32>,
 }
 
 #[derive(Serialize, Deserialize, Debug, Clone, PartialEq)]
@@ -52,6 +62,9 @@ pub struct CreateFineTuningJobParameters {
     /// The ID of an uploaded file that contains validation data.
     #[serde(skip_serializing_if = "Option::is_none")]
     pub validation_file: Option<String>,
+    /// A list of integrations to enable for your fine-tuning job.
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub integrations: Option<FineTuningIntegration>,
     /// The seed controls the reproducibility of the job.
     /// Passing in the same seed and job parameters should produce the same results, but may differ in rare cases.
     /// If a seed is not specified, one will be generated for you.
@@ -61,6 +74,7 @@ pub struct CreateFineTuningJobParameters {
 
 #[derive(Serialize, Deserialize, Debug, Clone, PartialEq)]
 pub struct FineTuningJobEvent {
+    /// The job event identifier, which can be referenced in the API endpoints.
     pub id: String,
     /// The Unix timestamp (in seconds) when the fine tuning job event was created.
     pub created_at: u32,
@@ -70,6 +84,39 @@ pub struct FineTuningJobEvent {
     pub message: String,
     /// The object type, which is always "fine_tuning.job.event".
     pub object: String,
+}
+
+#[derive(Serialize, Deserialize, Debug, Clone, PartialEq)]
+pub struct FineTuningJobCheckpoint {
+    /// The checkpoint identifier, which can be referenced in the API endpoints.
+    pub id: String,
+    /// The Unix timestamp (in seconds) for when the checkpoint was created.
+    pub created_at: u32,
+    /// The name of the fine-tuned checkpoint model that is created.
+    pub fine_tuned_model_checkpoint: String,
+    /// The step number that the checkpoint was created at.
+    pub step_number: u32,
+    /// Metrics at the step number during the fine-tuning job.
+    pub metrics: FineTuningJobCheckpointMetrics,
+    /// The name of the fine-tuning job that this checkpoint was created from.
+    pub fine_tuning_job_id: String,
+    /// The object type, which is always "fine_tuning.job.checkpoint".
+    pub object: String,
+}
+
+#[derive(Serialize, Deserialize, Debug, Clone, PartialEq)]
+pub struct FineTuningJobCheckpointMetrics {
+    pub step: u32,
+    pub train_loss: f32,
+    pub train_mean_token_accuracy: f32,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub valid_loss: Option<f32>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub valid_mean_token_accuracy: Option<f32>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub full_valid_loss: Option<f32>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub full_valid_mean_token_accuracy: Option<f32>,
 }
 
 #[derive(Serialize, Deserialize, Debug, Clone, PartialEq)]
@@ -93,19 +140,62 @@ pub struct ListFineTuningJobEventsResponse {
 }
 
 #[derive(Serialize, Deserialize, Debug, Clone, PartialEq)]
+pub struct ListFineTuningCheckpointsResponse {
+    /// The object type, which is always "list".
+    pub object: String,
+    /// The list of fine-tuning checkpoints.
+    pub data: Vec<FineTuningJobCheckpoint>,
+    /// The ID of the first checkpoint in the list.
+    pub first_id: Option<String>,
+    /// The ID of the last checkpoint in the list.
+    pub last_id: Option<String>,
+    /// Indicates whether there are more fine-tuning checkpoints to retrieve.
+    pub has_more: bool,
+}
+
+#[derive(Serialize, Deserialize, Debug, Clone, PartialEq)]
 pub struct FineTuningJobError {
     /// The error code.
-    pub code: String,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub code: Option<String>,
     /// The error message.
-    pub message: String,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub message: Option<String>,
     /// The parameter that caused the error.
     #[serde(skip_serializing_if = "Option::is_none")]
     pub param: Option<String>,
 }
 
 #[derive(Serialize, Deserialize, Debug, Clone, PartialEq)]
+pub struct FineTuningIntegration {
+    /// The type of the integration being enabled for the fine-tuning job.
+    pub r#type: String,
+    /// The settings for your integration with Weights and Biases.
+    /// This payload specifies the project that metrics will be sent to.
+    pub wandb: WandB,
+}
+
+#[derive(Serialize, Deserialize, Debug, Clone, PartialEq)]
+pub struct WandB {
+    /// The name of the project that the new run will be created under.
+    pub project: String,
+    /// A display name to set for the run. If not set, we will use the Job ID as the name.
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub name: Option<String>,
+    /// The entity to use for the run.
+    /// This allows you to set the team or username of the WandB user that you would like associated with the run.
+    /// If not set, the default entity for the registered WandB API key is used.
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub entity: Option<String>,
+    /// A list of tags to be attached to the newly created run. These tags are passed through directly to WandB.
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub tags: Option<Vec<String>>,
+}
+
+#[derive(Serialize, Deserialize, Debug, Clone, PartialEq)]
 pub struct FineTuningJobHyperparameters {
-    /// Number of examples in each batch. A larger batch size means that model parameters are updated less frequently, but with lower variance.
+    /// Number of examples in each batch.
+    /// A larger batch size means that model parameters are updated less frequently, but with lower variance.
     #[serde(skip_serializing_if = "Option::is_none")]
     pub batch_size: Option<BatchSize>,
     /// Scaling factor for the learning rate. A smaller learning rate may be useful to avoid overfitting.

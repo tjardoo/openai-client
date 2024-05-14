@@ -69,6 +69,17 @@ impl Audio<'_> {
             form = form.text("temperature", temperature.to_string());
         }
 
+        if let Some(timestamp_granularities) = parameters.timestamp_granularities {
+            form = form.text(
+                "timestamp_granularities",
+                timestamp_granularities
+                    .iter()
+                    .map(|t| t.to_string())
+                    .collect::<Vec<String>>()
+                    .join(","),
+            );
+        }
+
         let response = self
             .client
             .post_with_form("/audio/transcriptions", form)

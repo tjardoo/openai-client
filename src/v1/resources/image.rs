@@ -23,7 +23,7 @@ pub struct CreateImageParameters {
     /// The quality of the image that will be generated. hd creates images with finer details and greater consistency across the image.
     /// This param is only supported for dall-e-3.
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub quality: Option<String>,
+    pub quality: Option<ImageQuality>,
     /// The format in which the generated images are returned. Must be one of url or b64_json.
     #[serde(skip_serializing_if = "Option::is_none")]
     pub response_format: Option<ResponseFormat>,
@@ -55,7 +55,7 @@ pub struct EditImageParameters {
     /// The model to use for image generation. Only dall-e-2 is supported at this time.
     #[serde(skip_serializing_if = "Option::is_none")]
     pub model: Option<String>,
-    /// The model to use for image generation. Only dall-e-2 is supported at this time.
+    /// The number of images to generate. Must be between 1 and 10.
     #[serde(skip_serializing_if = "Option::is_none")]
     pub n: Option<u32>,
     /// The size of the generated images. Must be one of 256x256, 512x512, or 1024x1024.
@@ -111,6 +111,13 @@ pub enum ImageSize {
     Size1792X1024,
     #[serde(rename = "1024x1792")]
     Size1024X1792,
+}
+
+#[derive(Serialize, Deserialize, Debug, Clone, EnumString, PartialEq)]
+#[serde(rename_all = "lowercase")]
+pub enum ImageQuality {
+    Standard,
+    Hd,
 }
 
 #[derive(Serialize, Deserialize, Debug, Clone, EnumString, PartialEq)]

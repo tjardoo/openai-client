@@ -1,4 +1,5 @@
 use openai_dive::v1::api::Client;
+use openai_dive::v1::models::WhisperEngine;
 use openai_dive::v1::resources::audio::{AudioOutputFormat, AudioTranslationParameters};
 use std::env;
 
@@ -10,7 +11,7 @@ async fn main() {
 
     let parameters = AudioTranslationParameters {
         file: "./audio/multilingual.mp3".to_string(),
-        model: "whisper-1".to_string(),
+        model: WhisperEngine::Whisper1.to_string(),
         prompt: None,
         response_format: Some(AudioOutputFormat::Srt),
         temperature: None,

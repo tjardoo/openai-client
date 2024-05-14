@@ -20,7 +20,7 @@ pub struct ModerationResponse {
 
 #[derive(Serialize, Deserialize, Debug, Clone, PartialEq)]
 pub struct Results {
-    /// Whether the content violates OpenAI's usage policies.
+    /// Whether any of the below categories are flagged.
     pub flagged: bool,
     /// A list of the categories, and whether they are flagged or not.
     pub categories: Categories,

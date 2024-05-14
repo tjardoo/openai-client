@@ -22,7 +22,7 @@ async fn main() {
     }];
 
     let parameters = ChatCompletionParameters {
-        model: Gpt4Engine::Gpt40125Preview.to_string(),
+        model: Gpt4Engine::Gpt4O.to_string(),
         messages: messages.clone(),
         tools: Some(vec![ChatCompletionTool {
             r#type: ChatCompletionToolType::Function,

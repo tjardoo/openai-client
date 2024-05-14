@@ -47,7 +47,6 @@ More information: [set API key](#set-api-key), [add proxy](#add-proxy), [add org
   - [List fine tuning jobs](#list-fine-tuning-jobs)
   - [Retrieve fine tuning job](#retrieve-fine-tuning-job)
   - [Cancel fine tuning](#cancel-fine-tuning)
-  - [List fine tuning events](#list-fine-tuning-events)
 - Moderation
   - [Create moderation](#create-moderation)
 - Assistants
@@ -829,38 +828,6 @@ async fn main() {
 
 More information [Cancel fine tuning](https://platform.openai.com/docs/api-reference/fine-tuning/cancel)
 
-### List fine tuning events
-
-Get status updates for a fine-tuning job.
-
-```rust
-use dotenv::dotenv;
-use openai_dive::v1::api::Client;
-use std::env;
-
-#[tokio::main]
-async fn main() {
-    dotenv().ok();
-
-    let api_key = env::var("OPENAI_API_KEY").expect("$OPENAI_API_KEY is not set");
-
-    let client = Client::new(api_key);
-
-    let fine_tuning_job_id =
-        env::var("FINE_TUNING_JOB_ID").expect("FINE_TUNING_JOB_ID is not set in the .env file.");
-
-    let result = client
-        .fine_tuning()
-        .list_job_events(&fine_tuning_job_id, None)
-        .await
-        .unwrap();
-
-    println!("{:#?}", result);
-}
-```
-
-More information [List fine tuning events](https://platform.openai.com/docs/api-reference/fine-tuning/list-events)
-
 ## Moderation
 
 Given a input text, outputs if the model classifies it as violating OpenAI's content policy.
@@ -1001,7 +968,7 @@ More information: [Rate limit headers](https://platform.openai.com/docs/guides/r
 ## Use model names
 
 - Gpt4Engine
-  - Gpt4O `gpt-4-o` (alias)
+  - Gpt4O `gpt-4o` (alias)
   - Gpt4 `gpt-4` (alias)
   - Gpt4Turbo `gpt-4-turbo` (alias)
   - Gpt4TurboPreview `gpt-4-turbo-preview` (alias)

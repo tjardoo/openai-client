@@ -14,7 +14,7 @@ async fn main() {
         mask: Some("./images/image_edit_mask.png".to_string()),
         model: None,
         n: Some(1),
-        size: Some(ImageSize::Size256X256),
+        size: Some(ImageSize::Size512X512),
         response_format: None,
         user: None,
     };

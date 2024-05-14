@@ -1,5 +1,7 @@
 use dotenv::dotenv;
-use openai_dive::v1::{api::Client, resources::fine_tuning::CreateFineTuningJobParameters};
+use openai_dive::v1::{
+    api::Client, models::Gpt35Engine, resources::fine_tuning::CreateFineTuningJobParameters,
+};
 use std::env;
 
 #[tokio::main]
@@ -13,11 +15,12 @@ async fn main() {
     let file_id = env::var("FILE_ID").expect("FILE_ID is not set in the .env file.");
 
     let parameters = CreateFineTuningJobParameters {
-        model: "gpt-4-1106-preview".to_string(),
+        model: Gpt35Engine::Gpt35Turbo.to_string(),
         training_file: file_id,
         hyperparameters: None,
         suffix: None,
         validation_file: None,
+        integrations: None,
         seed: None,
     };
 

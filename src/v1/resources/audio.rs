@@ -162,6 +162,19 @@ impl Display for AudioOutputFormat {
     }
 }
 
+impl Display for TimestampGranularity {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        write!(
+            f,
+            "{}",
+            match self {
+                TimestampGranularity::Word => "word",
+                TimestampGranularity::Segment => "segment",
+            }
+        )
+    }
+}
+
 impl AudioSpeechResponse {
     #[cfg(feature = "tokio")]
     pub async fn save<P: AsRef<Path>>(&self, file_path: P) -> Result<(), APIError> {

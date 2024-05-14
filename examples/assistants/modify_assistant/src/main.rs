@@ -19,7 +19,7 @@ async fn main() {
     let assistant_id = env::var("ASSISTANT_ID").expect("ASSISTANT_ID is not set in the .env file.");
 
     let parameters = AssistantParameters {
-        model: Gpt4Engine::Gpt41106Preview.to_string(),
+        model: Gpt4Engine::Gpt4.to_string(),
         name: Some("Mathematician".to_string()),
         description: None,
         instructions: Some(

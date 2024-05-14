@@ -6,4 +6,5 @@ members = [
     "retrieve_fine_tuning_job",
     "cancel_fine_tuning_job",
     "list_fine_tuning_job_events",
+    "list_fine_tuning_checkpoints",
 ]
