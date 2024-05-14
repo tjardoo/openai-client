@@ -22,6 +22,7 @@ pub struct Client {
     pub base_url: String,
     pub api_key: String,
     pub organization: Option<String>,
+    pub project: Option<String>,
 }
 
 impl Client {
@@ -31,16 +32,20 @@ impl Client {
             base_url: OPENAI_API_V1_ENDPOINT.to_string(),
             api_key,
             organization: None,
+            project: None,
         }
     }
 
-    pub fn new_with_organization(api_key: String, organization: String) -> Self {
-        Self {
-            http_client: reqwest::Client::new(),
-            base_url: OPENAI_API_V1_ENDPOINT.to_string(),
-            api_key,
-            organization: Some(organization),
-        }
+    pub fn set_organization(&mut self, organization: &str) -> &mut Self {
+        self.organization = Some(organization.to_string());
+
+        self
+    }
+
+    pub fn set_project(&mut self, project: &str) -> &mut Self {
+        self.project = Some(project.to_string());
+
+        self
     }
 
     pub fn build_request(
@@ -59,6 +64,10 @@ impl Client {
 
         if let Some(organization) = &self.organization {
             request = request.header("OpenAI-Organization", organization);
+        }
+
+        if let Some(project) = &self.project {
+            request = request.header("OpenAI-Project", project);
         }
 
         if is_beta_feature(path) {

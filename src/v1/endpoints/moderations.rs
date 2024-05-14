@@ -8,14 +8,14 @@ pub struct Moderations<'a> {
 }
 
 impl Client {
-    /// Given a input text, outputs if the model classifies it as violating OpenAI's content policy.
+    /// Given some input text, outputs if the model classifies it as potentially harmful across several categories.
     pub fn moderations(&self) -> Moderations {
         Moderations { client: self }
     }
 }
 
 impl Moderations<'_> {
-    /// Classifies if text violates OpenAI's Content Policy
+    /// Classifies if text is potentially harmful.
     pub async fn create(
         &self,
         parameters: ModerationParameters,

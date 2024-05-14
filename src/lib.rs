@@ -9,7 +9,7 @@
 //! openai_dive = "0.4"
 //! ```
 //!
-//! More information: [set API key](#set-api-key), [add proxy](#add-proxy), [add organization header](#add-organization-header), [rate limit headers](#rate-limit-headers), [use model names](#use-model-names)
+//! More information: [set API key](#set-api-key), [add proxy](#add-proxy), [add organization/project header](#add-organizationproject-header), [rate limit headers](#rate-limit-headers), [use model names](#use-model-names)
 //!
 //! ## Endpoints
 //!
@@ -922,9 +922,11 @@
 //! };
 //! ```
 //!
-//! ### Add organization header
+//! ### Add organization/project header
 //!
-//! You can add the organization header to your requests by creating a new client with the `Client::new_with_organization` method.
+//! You can add the organization and/or project header to your requests by creating a new client and setting the organization and/or project ID.
+//!
+//! If you don't set the organization and/or project ID, the client will use the default organization and default project.
 //!
 //! ```rust
 //! #[tokio::main]
@@ -934,7 +936,11 @@
 //! async fn main() {
 //!     let api_key = env::var("OPENAI_API_KEY").expect("$OPENAI_API_KEY is not set");
 //!
-//!     let client = Client::new_with_organization(api_key, "org-XXX".to_string());
+//!     let mut client = Client::new(api_key);
+//!
+//!     client
+//!         .set_organization("org-XXX")
+//!         .set_project("proj_XXX");
 //!
 //!     // your code
 //! }
