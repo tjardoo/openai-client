@@ -11,9 +11,11 @@ use tokio_util::codec::{BytesCodec, FramedRead};
 pub fn validate_response(response: String) -> Result<Value, APIError> {
     let value: Value = serde_json::from_str(&response).unwrap();
 
-    // if Value::is_object(&value["error"]) && &value["id"] {
-    //     return Err(APIError::InvalidRequestError(value["error"].to_string()));
-    // }
+    if let Some(object) = value.as_object() {
+        if object.len() == 1 && object.contains_key("error") {
+            return Err(APIError::InvalidRequestError(value["error"].to_string()));
+        }
+    }
 
     Ok(value)
 }
