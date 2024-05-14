@@ -92,7 +92,7 @@ async fn main() {
 
     let client = Client::new(api_key);
 
-    let result = client.models().get("gpt-3.5-turbo-16k-0613").await.unwrap();
+    let result = client.models().get("gpt-4o").await.unwrap();
 
     println!("{:#?}", result);
 }
@@ -146,7 +146,7 @@ async fn main() {
     let client = Client::new(api_key);
 
     let parameters = ChatCompletionParameters {
-        model: Gpt4Engine::Gpt41106Preview.to_string(),
+        model: Gpt4Engine::Gpt4O.to_string(),
         messages: vec![
             ChatMessage {
                 role: Role::User,
@@ -188,7 +188,7 @@ async fn main() {
     let client = Client::new(api_key);
 
     let parameters = ChatCompletionParameters {
-        model: Gpt4Engine::Gpt4VisionPreview.to_string(),
+        model: Gpt4Engine::Gpt4O.to_string(),
         messages: vec![
             ChatMessage {
                 role: Role::User,
@@ -250,7 +250,7 @@ async fn main() {
     }];
 
     let parameters = ChatCompletionParameters {
-        model: Gpt4Engine::Gpt41106Preview.to_string(),
+        model: Gpt4Engine::Gpt4O.to_string(),
         messages: messages.clone(),
         tools: Some(vec![ChatCompletionTool {
             r#type: ChatCompletionToolType::Function,
@@ -429,6 +429,7 @@ Generates audio from the input text.
 
 ```rust
 use openai_dive::v1::api::Client;
+use openai_dive::v1::models::TTSEngine;
 use openai_dive::v1::resources::audio::{
     AudioSpeechParameters, AudioSpeechResponseFormat, AudioVoice,
 };
@@ -441,7 +442,7 @@ async fn main() {
     let client = Client::new(api_key);
 
     let parameters = AudioSpeechParameters {
-        model: "tts-1".to_string(),
+        model: TTSEngine::Tts1.to_string(),
         input: "Hallo, this is a test from OpenAI Dive.".to_string(),
         voice: AudioVoice::Alloy,
         response_format: Some(AudioSpeechResponseFormat::Mp3),
@@ -462,6 +463,7 @@ Transcribes audio into the input language.
 
 ```rust
 use openai_dive::v1::api::Client;
+use openai_dive::v1::models::WhisperEngine;
 use openai_dive::v1::resources::audio::{AudioOutputFormat, AudioTranscriptionFile, AudioTranscriptionParameters};
 use std::env;
 
@@ -473,7 +475,7 @@ async fn main() {
 
     let parameters = AudioTranscriptionParameters {
         file: AudioTranscriptionFile::File("./audio/micro-machines.mp3".to_string()),
-        model: "whisper-1".to_string(),
+        model: WhisperEngine::Whisper1.to_string(),
         language: None,
         prompt: None,
         response_format: Some(AudioOutputFormat::Text),
@@ -499,6 +501,7 @@ Translates audio into English.
 
 ```rust
 use openai_dive::v1::api::Client;
+use openai_dive::v1::models::WhisperEngine;
 use openai_dive::v1::resources::audio::{AudioOutputFormat, AudioTranslationParameters};
 use std::env;
 
@@ -510,7 +513,7 @@ async fn main() {
 
     let parameters = AudioTranslationParameters {
         file: "./audio/multilingual.mp3".to_string(),
-        model: "whisper-1".to_string(),
+        model: WhisperEngine::Whisper1.to_string(),
         prompt: None,
         response_format: Some(AudioOutputFormat::Srt),
         temperature: None,
@@ -534,6 +537,7 @@ Creates an embedding vector representing the input text.
 
 ```rust
 use openai_dive::v1::api::Client;
+use openai_dive::v1::models::EmbeddingsEngine;
 use openai_dive::v1::resources::embedding::{EmbeddingInput, EmbeddingParameters};
 use std::env;
 
@@ -544,7 +548,7 @@ async fn main() {
     let client = Client::new(api_key);
 
     let parameters = EmbeddingParameters {
-        model: "text-embedding-ada-002".to_string(),
+        model: EmbeddingsEngine::TextEmbedding3Small.to_string(),
         input: EmbeddingInput::String("The food was delicious and the waiter...".to_string()),
         encoding_format: None,
         dimensions: None,
@@ -713,7 +717,9 @@ Creates a job that fine-tunes a specified model from a given dataset.
 
 ```rust
 use dotenv::dotenv;
-use openai_dive::v1::{api::Client, resources::fine_tuning::CreateFineTuningJobParameters};
+use openai_dive::v1::{
+    api::Client, models::Gpt35Engine, resources::fine_tuning::CreateFineTuningJobParameters,
+};
 use std::env;
 
 #[tokio::main]
@@ -727,7 +733,7 @@ async fn main() {
     let file_id = env::var("FILE_ID").expect("FILE_ID is not set in the .env file.");
 
     let parameters = CreateFineTuningJobParameters {
-        model: "gpt-3.5-turbo-1106".to_string(),
+        model: Gpt35Engine::Gpt35Turbo.to_string(),
         training_file: file_id,
         hyperparameters: None,
         suffix: None,
@@ -838,6 +844,7 @@ Classifies if text violates OpenAI's Content Policy
 
 ```rust
 use openai_dive::v1::api::Client;
+use openai_dive::v1::models::ModerationsEngine;
 use openai_dive::v1::resources::moderation::ModerationParameters;
 use std::env;
 
@@ -849,7 +856,7 @@ async fn main() {
 
     let parameters = ModerationParameters {
         input: "I want to kill them.".to_string(),
-        model: "text-moderation-latest".to_string(),
+        model: ModerationsEngine::TextModerationLatest.to_string(),
     };
 
     let result = client.moderations().create(parameters).await.unwrap();
