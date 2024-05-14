@@ -1,7 +1,6 @@
 use dotenv::dotenv;
-use openai_dive::v1::{
-    api::Client, models::Gpt35Engine, resources::fine_tuning::CreateFineTuningJobParameters,
-};
+use openai_dive::v1::models::Gpt35Engine;
+use openai_dive::v1::{api::Client, resources::fine_tuning::CreateFineTuningJobParameters};
 use std::env;
 
 #[tokio::main]

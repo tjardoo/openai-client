@@ -717,9 +717,8 @@ Creates a job that fine-tunes a specified model from a given dataset.
 
 ```rust
 use dotenv::dotenv;
-use openai_dive::v1::{
-    api::Client, models::Gpt35Engine, resources::fine_tuning::CreateFineTuningJobParameters,
-};
+use openai_dive::v1::models::Gpt35Engine;
+use openai_dive::v1::{api::Client, resources::fine_tuning::CreateFineTuningJobParameters};
 use std::env;
 
 #[tokio::main]
@@ -738,6 +737,8 @@ async fn main() {
         hyperparameters: None,
         suffix: None,
         validation_file: None,
+        integrations: None,
+        seed: None,
     };
 
     let result = client.fine_tuning().create(parameters).await.unwrap();
@@ -836,11 +837,11 @@ More information [Cancel fine tuning](https://platform.openai.com/docs/api-refer
 
 ## Moderation
 
-Given a input text, outputs if the model classifies it as violating OpenAI's content policy.
+Given some input text, outputs if the model classifies it as potentially harmful across several categories.
 
 ### Create moderation
 
-Classifies if text violates OpenAI's Content Policy
+Classifies if text is potentially harmful.
 
 ```rust
 use openai_dive::v1::api::Client;
