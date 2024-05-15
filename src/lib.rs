@@ -37,15 +37,11 @@
 //!   - [Delete file](#delete-file)
 //!   - [Retrieve file](#retrieve-file)
 //!   - [Retrieve file content](#retrieve-file-content)
-//! - Fine tuning
-//!   - [Create fine tuning job](#create-fine-tuning-job)
-//!   - [List fine tuning jobs](#list-fine-tuning-jobs)
-//!   - [Retrieve fine tuning job](#retrieve-fine-tuning-job)
-//!   - [Cancel fine tuning](#cancel-fine-tuning)
 //! - Moderation
 //!   - [Create moderation](#create-moderation)
-//! - Assistants
-//!   - [Assistants (beta)](#assistants-beta)
+//! - [Fine-tuning](#fine-tuning)
+//! - [Batches](#batches)
+//! - [Assistants (beta)](#assistants-beta)
 //!
 //! ## Models
 //!
@@ -558,7 +554,7 @@
 //!
 //! ## Files
 //!
-//! Files are used to upload documents that can be used with features like Assistants and Fine-tuning.
+//! Files are used to upload documents that can be used with features like Assistants, Fine-tuning, and Batch API.
 //!
 //! ### List files
 //!
@@ -700,134 +696,6 @@
 //!
 //! More information [Retrieve file content](https://platform.openai.com/docs/api-reference/files/retrieve-contents)
 //!
-//! ### Fine tuning
-//!
-//! Manage fine-tuning jobs to tailor a model to your specific training data.
-//!
-//! ### Create fine tuning job
-//!
-//! Creates a job that fine-tunes a specified model from a given dataset.
-//!
-//! ```rust
-//! use dotenv::dotenv;
-//! use openai_dive::v1::models::Gpt35Engine;
-//! use openai_dive::v1::{api::Client, resources::fine_tuning::CreateFineTuningJobParameters};
-//! use std::env;
-//!
-//! #[tokio::main]
-//! async fn main() {
-//!     dotenv().ok();
-//!
-//!     let api_key = env::var("OPENAI_API_KEY").expect("$OPENAI_API_KEY is not set");
-//!
-//!     let client = Client::new(api_key);
-//!
-//!     let file_id = env::var("FILE_ID").expect("FILE_ID is not set in the .env file.");
-//!
-//!     let parameters = CreateFineTuningJobParameters {
-//!         model: Gpt35Engine::Gpt35Turbo.to_string(),
-//!         training_file: file_id,
-//!         hyperparameters: None,
-//!         suffix: None,
-//!         validation_file: None,
-//!         integrations: None,
-//!         seed: None,
-//!     };
-//!
-//!     let result = client.fine_tuning().create(parameters).await.unwrap();
-//!
-//!     println!("{:#?}", result);
-//! }
-//! ```
-//!
-//! More information [Create fine tuning job](https://platform.openai.com/docs/api-reference/fine-tuning/create)
-//!
-//! ### List fine tuning jobs
-//!
-//! List your organization's fine-tuning jobs.
-//!
-//! ```rust
-//! use openai_dive::v1::api::Client;
-//! use std::env;
-//!
-//! #[tokio::main]
-//! async fn main() {
-//!     let api_key = env::var("OPENAI_API_KEY").expect("$OPENAI_API_KEY is not set");
-//!
-//!     let client = Client::new(api_key);
-//!
-//!     let result = client.fine_tuning().list(None).await.unwrap();
-//!
-//!     println!("{:#?}", result);
-//! }
-//! ```
-//!
-//! More information [List fine tuning jobs](https://platform.openai.com/docs/api-reference/fine-tuning/list)
-//!
-//! ### Retrieve fine tuning job
-//!
-//! Get info about a fine-tuning job.
-//!
-//! ```rust
-//! use dotenv::dotenv;
-//! use openai_dive::v1::api::Client;
-//! use std::env;
-//!
-//! #[tokio::main]
-//! async fn main() {
-//!     dotenv().ok();
-//!
-//!     let api_key = env::var("OPENAI_API_KEY").expect("$OPENAI_API_KEY is not set");
-//!
-//!     let client = Client::new(api_key);
-//!
-//!     let fine_tuning_job_id =
-//!         env::var("FINE_TUNING_JOB_ID").expect("FINE_TUNING_JOB_ID is not set in the .env file.");
-//!
-//!     let result = client
-//!         .fine_tuning()
-//!         .retrieve(&fine_tuning_job_id)
-//!         .await
-//!         .unwrap();
-//!
-//!     println!("{:#?}", result);
-//! }
-//! ```
-//!
-//! More information [Retrieve fine tuning jobs](https://platform.openai.com/docs/api-reference/fine-tuning/retrieve)
-//!
-//! ### Cancel fine tuning
-//!
-//! Immediately cancel a fine-tune job.
-//!
-//! ```rust
-//! use dotenv::dotenv;
-//! use openai_dive::v1::api::Client;
-//! use std::env;
-//!
-//! #[tokio::main]
-//! async fn main() {
-//!     dotenv().ok();
-//!
-//!     let api_key = env::var("OPENAI_API_KEY").expect("$OPENAI_API_KEY is not set");
-//!
-//!     let client = Client::new(api_key);
-//!
-//!     let fine_tuning_job_id =
-//!         env::var("FINE_TUNING_JOB_ID").expect("FINE_TUNING_JOB_ID is not set in the .env file.");
-//!
-//!     let result = client
-//!         .fine_tuning()
-//!         .cancel(&fine_tuning_job_id)
-//!         .await
-//!         .unwrap();
-//!
-//!     println!("{:#?}", result);
-//! }
-//! ```
-//!
-//! More information [Cancel fine tuning](https://platform.openai.com/docs/api-reference/fine-tuning/cancel)
-//!
 //! ## Moderation
 //!
 //! Given some input text, outputs if the model classifies it as potentially harmful across several categories.
@@ -860,6 +728,34 @@
 //! ```
 //!
 //! More information [Create moderation](https://platform.openai.com/docs/api-reference/moderations/create)
+//!
+//! ### Fine-tuning
+//!
+//! Manage fine-tuning jobs to tailor a model to your specific training data.
+//!
+//! For more information see the examples in the [examples/fine_tuning](https://github.com/tjardoo/openai-client/tree/master/examples/fine_tuning) directory.
+//!
+//! - Create fine-tuning job
+//! - List fine-tuning jobs
+//! - Retrieve fine-tuning job
+//! - Cancel fine-tuning job
+//! - List fine-tuning events
+//! - List fine-tuning checkpoints
+//!
+//! More information [Fine-tuning](https://platform.openai.com/docs/api-reference/fine-tuning)
+//!
+//! ### Batches
+//!
+//! Create large batches of API requests for asynchronous processing. The Batch API returns completions within 24 hours for a 50% discount.
+//!
+//! For more information see the examples in the [examples/batches](https://github.com/tjardoo/openai-client/tree/master/examples/batches) directory.
+//!
+//! - Create batch
+//! - List batches
+//! - Retrieve batch
+//! - Cancel batch
+//!
+//! More information [Batch](https://platform.openai.com/docs/api-reference/batch)
 //!
 //! ## Assistants (beta)
 //!
