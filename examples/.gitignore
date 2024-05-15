@@ -3,6 +3,7 @@
 /models/target
 /chat/target
 /audio/target
+/batches/target
 /embeddings/target
 /moderations/target
 /images/target
@@ -12,6 +13,7 @@
 /models/Cargo.lock
 /chat/Cargo.lock
 /audio/Cargo.lock
+/batches/Cargo.lock
 /embeddings/Cargo.lock
 /moderations/Cargo.lock
 /images/Cargo.lock

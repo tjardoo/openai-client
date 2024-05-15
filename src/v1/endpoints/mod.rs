@@ -1,5 +1,6 @@
 pub mod assistants;
 pub mod audio;
+pub mod batch;
 pub mod chat;
 pub mod embeddings;
 pub mod files;
