@@ -1,4 +1,4 @@
-use crate::v1::helpers::is_beta_feature;
+use crate::v1::helpers::{check_status_code, is_beta_feature};
 use crate::v1::{error::APIError, resources::shared::Headers};
 use bytes::Bytes;
 #[cfg(feature = "stream")]
@@ -78,15 +78,15 @@ impl Client {
     }
 
     pub async fn get(&self, path: &str) -> Result<String, APIError> {
-        let response = self
+        let result = self
             .build_request(Method::GET, path, "application/json")
             .send()
-            .await
-            .unwrap();
+            .await;
 
-        if response.status().is_server_error() {
-            return Err(APIError::EndpointError(response.text().await.unwrap()));
-        }
+        let response = match check_status_code(result).await {
+            Ok(response) => response,
+            Err(error) => return Err(error),
+        };
 
         let response_text = response.text().await.unwrap();
 
@@ -100,16 +100,16 @@ impl Client {
     where
         Q: Serialize,
     {
-        let response = self
+        let result = self
             .build_request(Method::GET, path, "application/json")
             .query(query)
             .send()
-            .await
-            .unwrap();
+            .await;
 
-        if response.status().is_server_error() {
-            return Err(APIError::EndpointError(response.text().await.unwrap()));
-        }
+        let response = match check_status_code(result).await {
+            Ok(response) => response,
+            Err(error) => return Err(error),
+        };
 
         let response_text = response.text().await.unwrap();
 
@@ -124,16 +124,16 @@ impl Client {
         path: &str,
         parameters: &T,
     ) -> Result<ResponseWrapper<String>, APIError> {
-        let response = self
+        let result = self
             .build_request(Method::POST, path, "application/json")
             .json(&parameters)
             .send()
-            .await
-            .unwrap();
+            .await;
 
-        if response.status().is_server_error() {
-            return Err(APIError::EndpointError(response.text().await.unwrap()));
-        }
+        let response = match check_status_code(result).await {
+            Ok(response) => response,
+            Err(error) => return Err(error),
+        };
 
         let header_map = response.headers().clone();
 
@@ -150,21 +150,21 @@ impl Client {
     }
 
     pub async fn delete(&self, path: &str) -> Result<String, APIError> {
-        let response = self
+        let result = self
             .build_request(Method::DELETE, path, "application/json")
             .send()
-            .await
-            .unwrap();
+            .await;
 
-        if response.status().is_server_error() {
-            return Err(APIError::EndpointError(response.text().await.unwrap()));
-        }
+        let response = match check_status_code(result).await {
+            Ok(response) => response,
+            Err(error) => return Err(error),
+        };
 
         Ok(response.text().await.unwrap())
     }
 
     pub async fn post_with_form(&self, path: &str, form: Form) -> Result<String, APIError> {
-        let response = self
+        let result = self
             .build_request(
                 Method::POST,
                 path,
@@ -172,12 +172,12 @@ impl Client {
             )
             .multipart(form)
             .send()
-            .await
-            .unwrap();
+            .await;
 
-        if response.status().is_server_error() {
-            return Err(APIError::EndpointError(response.text().await.unwrap()));
-        }
+        let response = match check_status_code(result).await {
+            Ok(response) => response,
+            Err(error) => return Err(error),
+        };
 
         Ok(response.text().await.unwrap())
     }
@@ -187,16 +187,16 @@ impl Client {
         path: &str,
         parameters: &T,
     ) -> Result<Bytes, APIError> {
-        let response = self
+        let result = self
             .build_request(Method::POST, path, "application/json")
             .json(&parameters)
             .send()
-            .await
-            .unwrap();
+            .await;
 
-        if response.status().is_server_error() {
-            return Err(APIError::EndpointError(response.text().await.unwrap()));
-        }
+        let response = match check_status_code(result).await {
+            Ok(response) => response,
+            Err(error) => return Err(error),
+        };
 
         Ok(response.bytes().await.unwrap())
     }

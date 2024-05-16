@@ -4,6 +4,7 @@ use std::fmt::{Display, Formatter, Result};
 #[derive(Debug, Deserialize, Serialize)]
 pub enum APIError {
     EndpointError(String),
+    ServerError(String),
     InvalidRequestError(String),
     ParseError(String),
     FileError(String),
@@ -14,6 +15,7 @@ impl APIError {
     fn message(&self) -> &str {
         match self {
             APIError::EndpointError(message)
+            | APIError::ServerError(message)
             | APIError::InvalidRequestError(message)
             | APIError::ParseError(message)
             | APIError::FileError(message)
