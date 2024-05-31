@@ -2,11 +2,24 @@ use crate::v1::error::APIError;
 use crate::v1::resources::audio::AudioTranscriptionBytes;
 #[cfg(feature = "download")]
 use rand::{distributions::Alphanumeric, Rng};
-use reqwest::multipart::Part;
+use reqwest::{multipart::Part, Response};
 use serde::de::DeserializeOwned;
 use serde_json::Value;
 use tokio::fs::File;
 use tokio_util::codec::{BytesCodec, FramedRead};
+
+pub async fn check_status_code(result: reqwest::Result<Response>) -> Result<Response, APIError> {
+    match result {
+        Ok(response) => {
+            if &response.status().is_success() == &false {
+                return Err(APIError::EndpointError(response.text().await.unwrap()));
+            }
+
+            Ok(response)
+        }
+        Err(error) => Err(APIError::ServerError(error.to_string())),
+    }
+}
 
 pub fn validate_response(response: String) -> Result<Value, APIError> {
     let value: Value = serde_json::from_str(&response).unwrap();
