@@ -45,7 +45,7 @@ pub struct ChatCompletionChunkResponse {
     pub object: String,
 }
 
-#[derive(Serialize, Deserialize, Debug, Builder, Clone, PartialEq)]
+#[derive(Serialize, Deserialize, Debug, Default, Builder, Clone, PartialEq)]
 #[builder(name = "ChatCompletionParametersBuilder")]
 #[builder(setter(into, strip_option), default)]
 pub struct ChatCompletionParameters {
@@ -158,7 +158,7 @@ pub struct ChatCompletionTool {
     pub function: ChatCompletionFunction,
 }
 
-#[derive(Serialize, Deserialize, Debug, Builder, Clone, PartialEq)]
+#[derive(Serialize, Deserialize, Debug, Default, Builder, Clone, PartialEq)]
 #[builder(name = "ChatMessageBuilder")]
 #[builder(setter(into, strip_option), default)]
 pub struct ChatMessage {
@@ -321,50 +321,20 @@ pub enum ChatCompletionToolChoice {
     ChatCompletionToolChoiceFunction(ChatCompletionToolChoiceFunction),
 }
 
-#[derive(Serialize, Deserialize, Debug, Clone, PartialEq)]
+#[derive(Serialize, Deserialize, Default, Debug, Clone, PartialEq)]
 #[serde(rename_all = "lowercase")]
 pub enum Role {
     System,
+    #[default]
     User,
     Assistant,
     Function,
     Tool,
 }
 
-impl Default for ChatCompletionParameters {
+impl Default for ChatMessageContent {
     fn default() -> Self {
-        ChatCompletionParameters {
-            messages: vec![],
-            model: String::new(),
-            frequency_penalty: None,
-            logit_bias: None,
-            logprobs: None,
-            top_logprobs: None,
-            max_tokens: None,
-            n: None,
-            presence_penalty: None,
-            response_format: None,
-            seed: None,
-            stop: None,
-            stream: None,
-            temperature: None,
-            top_p: None,
-            tools: None,
-            tool_choice: None,
-            user: None,
-        }
-    }
-}
-
-impl Default for ChatMessage {
-    fn default() -> Self {
-        ChatMessage {
-            role: Role::User,
-            content: ChatMessageContent::Text(String::new()),
-            tool_calls: None,
-            name: None,
-            tool_call_id: None,
-        }
+        ChatMessageContent::Text("".to_string())
     }
 }
 
