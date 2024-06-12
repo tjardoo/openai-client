@@ -46,7 +46,6 @@ More information: [set API key](#set-api-key), [add proxy](#add-proxy), [add org
   - [Create moderation](#create-moderation)
 - [Fine-tuning](#fine-tuning)
 - [Batches](#batches)
-- [Assistants (beta)](#assistants-beta)
 
 ## Models
 
@@ -763,20 +762,6 @@ For more information see the examples in the [examples/batches](https://github.c
 - Cancel batch
 
 More information [Batch](https://platform.openai.com/docs/api-reference/batch)
-
-## Assistants (beta)
-
-Build assistants that can call models and use tools to perform tasks.
-
-For more information see the examples in the [examples/assistants](https://github.com/tjardoo/openai-client/tree/master/examples/assistants) directory.
-
-- Assistants
-- Files
-- Threads
-- Messages
-- Runs
-
-More information [Assistants](https://platform.openai.com/docs/api-reference/assistants)
 
 ## General
 
