@@ -2,33 +2,35 @@ use futures::StreamExt;
 use openai_dive::v1::api::Client;
 use openai_dive::v1::models::Gpt4Engine;
 use openai_dive::v1::resources::chat::{
-    ChatCompletionParameters, ChatMessage, ChatMessageContent, Role,
+    ChatCompletionParametersBuilder, ChatCompletionResponseFormat,
+    ChatCompletionResponseFormatType, ChatMessageBuilder, ChatMessageContent, Role,
 };
 use std::env;
 
 #[tokio::main]
-async fn main() {
+async fn main() -> Result<(), Box<dyn std::error::Error>> {
     let api_key = env::var("OPENAI_API_KEY").expect("$OPENAI_API_KEY is not set");
 
     let client = Client::new(api_key);
 
-    let parameters = ChatCompletionParameters {
-        model: Gpt4Engine::Gpt4O.to_string(),
-        messages: vec![
-            ChatMessage {
-                role: Role::User,
-                content: ChatMessageContent::Text("Hello!".to_string()),
-                ..Default::default()
-            },
-            ChatMessage {
-                role: Role::User,
-                content: ChatMessageContent::Text("What is the capital of Vietnam?".to_string()),
-                ..Default::default()
-            },
-        ],
-        max_tokens: Some(12),
-        ..Default::default()
-    };
+    let parameters = ChatCompletionParametersBuilder::default()
+        .model(Gpt4Engine::Gpt4O.to_string())
+        .messages(vec![
+            ChatMessageBuilder::default()
+                .role(Role::User)
+                .content(ChatMessageContent::Text("Hello!".to_string()))
+                .build()?,
+            ChatMessageBuilder::default()
+                .role(Role::User)
+                .content(ChatMessageContent::Text(
+                    "What is the capital of Vietnam?".to_string(),
+                ))
+                .build()?,
+        ])
+        .response_format(ChatCompletionResponseFormat {
+            r#type: ChatCompletionResponseFormatType::Text,
+        })
+        .build()?;
 
     let mut stream = client.chat().create_stream(parameters).await.unwrap();
 
@@ -42,4 +44,6 @@ async fn main() {
             Err(e) => eprintln!("{}", e),
         }
     }
+
+    Ok(())
 }

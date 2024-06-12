@@ -125,36 +125,42 @@
 //! ```rust
 //! use openai_dive::v1::api::Client;
 //! use openai_dive::v1::models::Gpt4Engine;
-//! use openai_dive::v1::resources::chat::{ChatCompletionParameters, ChatMessage, Role};
+//! use openai_dive::v1::resources::chat::{
+//!     ChatCompletionParametersBuilder, ChatCompletionResponseFormat,
+//!     ChatCompletionResponseFormatType, ChatMessageBuilder, ChatMessageContent, Role,
+//! };
 //! use std::env;
 //!
 //! #[tokio::main]
-//! async fn main() {
+//! async fn main() -> Result<(), Box<dyn std::error::Error>> {
 //!     let api_key = env::var("OPENAI_API_KEY").expect("$OPENAI_API_KEY is not set");
 //!
 //!     let client = Client::new(api_key);
 //!
-//!     let parameters = ChatCompletionParameters {
-//!         model: Gpt4Engine::Gpt4O.to_string(),
-//!         messages: vec![
-//!             ChatMessage {
-//!                 role: Role::User,
-//!                 content: ChatMessageContent::Text("Hello!".to_string()),
-//!                 ..Default::default()
-//!             },
-//!             ChatMessage {
-//!                 role: Role::User,
-//!                 content: ChatMessageContent::Text("What is the capital of Vietnam?".to_string()),
-//!                 ..Default::default()
-//!             },
-//!         ],
-//!         max_tokens: Some(12),
-//!         ..Default::default()
-//!     };
+//!     let parameters = ChatCompletionParametersBuilder::default()
+//!         .model(Gpt4Engine::Gpt4O.to_string())
+//!         .messages(vec![
+//!             ChatMessageBuilder::default()
+//!                 .role(Role::User)
+//!                 .content(ChatMessageContent::Text("Hello!".to_string()))
+//!                 .build()?,
+//!             ChatMessageBuilder::default()
+//!                 .role(Role::User)
+//!                 .content(ChatMessageContent::Text(
+//!                     "What is the capital of Vietnam?".to_string(),
+//!                 ))
+//!                 .build()?,
+//!         ])
+//!         .response_format(ChatCompletionResponseFormat {
+//!             r#type: ChatCompletionResponseFormatType::Text,
+//!         })
+//!         .build()?;
 //!
 //!     let result = client.chat().create(parameters).await.unwrap();
 //!
 //!     println!("{:#?}", result);
+//!
+//!     Ok(())
 //! }
 //! ```
 //!
@@ -167,43 +173,48 @@
 //! ```rust
 //! use openai_dive::v1::api::Client;
 //! use openai_dive::v1::models::Gpt4Engine;
-//! use openai_dive::v1::resources::chat::{ChatCompletionParameters, ChatMessage, Role};
+//! use openai_dive::v1::resources::chat::{
+//!     ChatCompletionParametersBuilder, ChatMessageBuilder, ChatMessageContent, ImageUrl,
+//!     ImageUrlType, Role,
+//! };
 //! use std::env;
 //!
 //! #[tokio::main]
-//! async fn main() {
+//! async fn main() -> Result<(), Box<dyn std::error::Error>> {
 //!     let api_key = env::var("OPENAI_API_KEY").expect("$OPENAI_API_KEY is not set");
 //!
 //!     let client = Client::new(api_key);
 //!
-//!     let parameters = ChatCompletionParameters {
-//!         model: Gpt4Engine::Gpt4O.to_string(),
-//!         messages: vec![
-//!             ChatMessage {
-//!                 role: Role::User,
-//!                 content: ChatMessageContent::Text("What is in this image?".to_string()),
-//!                 ..Default::default()
-//!             },
-//!             ChatMessage {
-//!                 role: Role::User,
-//!                 content: ChatMessageContent::ImageUrl(vec![ImageUrl {
+//!     let parameters = ChatCompletionParametersBuilder::default()
+//!         .model(Gpt4Engine::Gpt4O.to_string())
+//!         .messages(vec![
+//!             ChatMessageBuilder::default()
+//!                 .role(Role::User)
+//!                 .content(ChatMessageContent::Text(
+//!                     "What is in this image?".to_string(),
+//!                 ))
+//!                 .build()?,
+//!             ChatMessageBuilder::default()
+//!                 .role(Role::User)
+//!                 .content(ChatMessageContent::ImageUrl(vec![ImageUrl {
 //!                     r#type: "image_url".to_string(),
 //!                     text: None,
 //!                     image_url: ImageUrlType {
-//!                         url: "https://images.unsplash.com/photo-1526682847805-721837c3f83b?w=640".to_string(),
+//!                         url: "https://images.unsplash.com/photo-1526682847805-721837c3f83b?w=640"
+//!                             .to_string(),
 //!                         detail: None,
 //!                     },
-//!                 }]),
-//!                 ..Default::default()
-//!             },
-//!         ],
-//!         max_tokens: Some(50),
-//!         ..Default::default()
-//!     };
+//!                 }]))
+//!                 .build()?,
+//!         ])
+//!         .max_tokens(50u32)
+//!         .build()?;
 //!
 //!     let result = client.chat().create(parameters).await.unwrap();
 //!
 //!     println!("{:#?}", result);
+//!
+//!     Ok(())
 //! }
 //! ```
 //!
@@ -219,28 +230,29 @@
 //! use openai_dive::v1::api::Client;
 //! use openai_dive::v1::models::Gpt4Engine;
 //! use openai_dive::v1::resources::chat::{
-//!     ChatCompletionFunction, ChatCompletionParameters, ChatCompletionTool, ChatCompletionToolType, ChatMessage,
-//!     ChatMessageContent,
+//!     ChatCompletionFunction, ChatCompletionParametersBuilder, ChatCompletionTool,
+//!     ChatCompletionToolType, ChatMessageBuilder, ChatMessageContent,
 //! };
 //! use rand::Rng;
 //! use serde::{Deserialize, Serialize};
 //! use serde_json::{json, Value};
 //!
 //! #[tokio::main]
-//! async fn main() {
+//! async fn main() -> Result<(), Box<dyn std::error::Error>> {
 //!     let api_key = std::env::var("OPENAI_API_KEY").expect("$OPENAI_API_KEY is not set");
 //!
 //!     let client = Client::new(api_key);
 //!
-//!     let messages = vec![ChatMessage {
-//!         content: ChatMessageContent::Text("Give me a random number between 100 and no more than 150?".to_string()),
-//!         ..Default::default()
-//!     }];
+//!     let messages = vec![ChatMessageBuilder::default()
+//!         .content(ChatMessageContent::Text(
+//!             "Give me a random number between 100 and no more than 150?".to_string(),
+//!         ))
+//!         .build()?];
 //!
-//!     let parameters = ChatCompletionParameters {
-//!         model: Gpt4Engine::Gpt4O.to_string(),
-//!         messages: messages.clone(),
-//!         tools: Some(vec![ChatCompletionTool {
+//!     let parameters = ChatCompletionParametersBuilder::default()
+//!         .model(Gpt4Engine::Gpt4O.to_string())
+//!         .messages(messages)
+//!         .tools(vec![ChatCompletionTool {
 //!             r#type: ChatCompletionToolType::Function,
 //!             function: ChatCompletionFunction {
 //!                 name: "get_random_number".to_string(),
@@ -254,9 +266,8 @@
 //!                     "required": ["min", "max"],
 //!                 }),
 //!             },
-//!         }]),
-//!         ..Default::default()
-//!     };
+//!         }])
+//!         .build()?;
 //!
 //!     let result = client.chat().create(parameters).await.unwrap();
 //!
@@ -275,10 +286,15 @@
 //!
 //!                 let random_number_result = get_random_number(random_numbers);
 //!
-//!                 println!("Random number between those numbers: {:?}", random_number_result.clone());
+//!                 println!(
+//!                     "Random number between those numbers: {:?}",
+//!                     random_number_result.clone()
+//!                 );
 //!             }
 //!         }
 //!     }
+//!
+//!     Ok(())
 //! }
 //!
 //! #[derive(Serialize, Deserialize)]

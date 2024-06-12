@@ -2,8 +2,8 @@ use futures::StreamExt;
 use openai_dive::v1::api::Client;
 use openai_dive::v1::models::Gpt4Engine;
 use openai_dive::v1::resources::chat::{
-    ChatCompletionFunction, ChatCompletionParameters, ChatCompletionTool, ChatCompletionToolType,
-    ChatMessage, ChatMessageContent, DeltaFunction,
+    ChatCompletionFunction, ChatCompletionParametersBuilder, ChatCompletionTool,
+    ChatCompletionToolType, ChatMessageBuilder, ChatMessageContent, DeltaFunction,
 };
 use openai_dive::v1::resources::shared::FinishReason;
 use rand::Rng;
@@ -11,22 +11,21 @@ use serde::{Deserialize, Serialize};
 use serde_json::{json, Value};
 
 #[tokio::main]
-async fn main() {
+async fn main() -> Result<(), Box<dyn std::error::Error>> {
     let api_key = std::env::var("OPENAI_API_KEY").expect("$OPENAI_API_KEY is not set");
 
     let client = Client::new(api_key);
 
-    let messages = vec![ChatMessage {
-        content: ChatMessageContent::Text(
+    let messages = vec![ChatMessageBuilder::default()
+        .content(ChatMessageContent::Text(
             "Give me a random number higher than 100 but less than 2*150?".to_string(),
-        ),
-        ..Default::default()
-    }];
+        ))
+        .build()?];
 
-    let parameters = ChatCompletionParameters {
-        model: Gpt4Engine::Gpt4O.to_string(),
-        messages: messages.clone(),
-        tools: Some(vec![ChatCompletionTool {
+    let parameters = ChatCompletionParametersBuilder::default()
+        .model(Gpt4Engine::Gpt4O.to_string())
+        .messages(messages)
+        .tools(vec![ChatCompletionTool {
             r#type: ChatCompletionToolType::Function,
             function: ChatCompletionFunction {
                 name: "get_random_number".to_string(),
@@ -40,9 +39,8 @@ async fn main() {
                     "required": ["min", "max"],
                 }),
             },
-        }]),
-        ..Default::default()
-    };
+        }])
+        .build()?;
 
     let mut stream = client.chat().create_stream(parameters).await.unwrap();
 
@@ -83,6 +81,8 @@ async fn main() {
             Err(e) => eprintln!("{}", e),
         }
     }
+
+    Ok(())
 }
 
 #[derive(Serialize, Deserialize)]

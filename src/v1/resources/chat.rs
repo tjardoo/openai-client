@@ -1,6 +1,6 @@
-use crate::v1::models::Gpt4Engine;
 use crate::v1::resources::shared::StopToken;
 use crate::v1::resources::shared::{FinishReason, Usage};
+use derive_builder::Builder;
 use serde::{Deserialize, Serialize};
 use std::collections::HashMap;
 use std::fmt::Display;
@@ -45,7 +45,9 @@ pub struct ChatCompletionChunkResponse {
     pub object: String,
 }
 
-#[derive(Serialize, Deserialize, Debug, Clone, PartialEq)]
+#[derive(Serialize, Deserialize, Debug, Builder, Clone, PartialEq)]
+#[builder(name = "ChatCompletionParametersBuilder")]
+#[builder(setter(into, strip_option), default)]
 pub struct ChatCompletionParameters {
     /// A list of messages comprising the conversation so far.
     pub messages: Vec<ChatMessage>,
@@ -156,7 +158,9 @@ pub struct ChatCompletionTool {
     pub function: ChatCompletionFunction,
 }
 
-#[derive(Serialize, Deserialize, Debug, Clone, PartialEq)]
+#[derive(Serialize, Deserialize, Debug, Builder, Clone, PartialEq)]
+#[builder(name = "ChatMessageBuilder")]
+#[builder(setter(into, strip_option), default)]
 pub struct ChatMessage {
     /// The role of the author of this message.
     pub role: Role,
@@ -330,14 +334,8 @@ pub enum Role {
 impl Default for ChatCompletionParameters {
     fn default() -> Self {
         ChatCompletionParameters {
-            messages: vec![ChatMessage {
-                role: Role::User,
-                content: ChatMessageContent::Text("Hello, World!".to_string()),
-                tool_calls: None,
-                name: None,
-                tool_call_id: None,
-            }],
-            model: Gpt4Engine::Gpt4.to_string(),
+            messages: vec![],
+            model: String::new(),
             frequency_penalty: None,
             logit_bias: None,
             logprobs: None,
@@ -362,7 +360,7 @@ impl Default for ChatMessage {
     fn default() -> Self {
         ChatMessage {
             role: Role::User,
-            content: ChatMessageContent::Text("Hello, World!".to_string()),
+            content: ChatMessageContent::Text(String::new()),
             tool_calls: None,
             name: None,
             tool_call_id: None,

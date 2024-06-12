@@ -1,27 +1,29 @@
 use openai_dive::v1::api::Client;
 use openai_dive::v1::models::Gpt4Engine;
 use openai_dive::v1::resources::chat::{
-    ChatCompletionParameters, ChatMessage, ChatMessageContent, ImageUrl, ImageUrlType, Role,
+    ChatCompletionParametersBuilder, ChatMessageBuilder, ChatMessageContent, ImageUrl,
+    ImageUrlType, Role,
 };
 use std::env;
 
 #[tokio::main]
-async fn main() {
+async fn main() -> Result<(), Box<dyn std::error::Error>> {
     let api_key = env::var("OPENAI_API_KEY").expect("$OPENAI_API_KEY is not set");
 
     let client = Client::new(api_key);
 
-    let parameters = ChatCompletionParameters {
-        model: Gpt4Engine::Gpt4O.to_string(),
-        messages: vec![
-            ChatMessage {
-                role: Role::User,
-                content: ChatMessageContent::Text("What is in this image?".to_string()),
-                ..Default::default()
-            },
-            ChatMessage {
-                role: Role::User,
-                content: ChatMessageContent::ImageUrl(vec![ImageUrl {
+    let parameters = ChatCompletionParametersBuilder::default()
+        .model(Gpt4Engine::Gpt4O.to_string())
+        .messages(vec![
+            ChatMessageBuilder::default()
+                .role(Role::User)
+                .content(ChatMessageContent::Text(
+                    "What is in this image?".to_string(),
+                ))
+                .build()?,
+            ChatMessageBuilder::default()
+                .role(Role::User)
+                .content(ChatMessageContent::ImageUrl(vec![ImageUrl {
                     r#type: "image_url".to_string(),
                     text: None,
                     image_url: ImageUrlType {
@@ -29,15 +31,15 @@ async fn main() {
                             .to_string(),
                         detail: None,
                     },
-                }]),
-                ..Default::default()
-            },
-        ],
-        max_tokens: Some(50),
-        ..Default::default()
-    };
+                }]))
+                .build()?,
+        ])
+        .max_tokens(50u32)
+        .build()?;
 
     let result = client.chat().create(parameters).await.unwrap();
 
     println!("{:#?}", result);
+
+    Ok(())
 }
