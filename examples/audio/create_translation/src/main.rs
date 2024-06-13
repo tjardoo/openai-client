@@ -3,7 +3,7 @@ use openai_dive::v1::models::WhisperEngine;
 use openai_dive::v1::resources::audio::{AudioOutputFormat, AudioTranslationParametersBuilder};
 
 #[tokio::main]
-async fn main() -> Result<(), Box<dyn std::error::Error>> {
+async fn main() {
     let api_key = std::env::var("OPENAI_API_KEY").expect("$OPENAI_API_KEY is not set");
 
     let client = Client::new(api_key);
@@ -18,6 +18,4 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
     let result = client.audio().create_translation(parameters).await.unwrap();
 
     println!("{:#?}", result);
-
-    Ok(())
 }

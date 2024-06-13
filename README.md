@@ -134,7 +134,7 @@ use openai_dive::v1::resources::chat::{
 };
 
 #[tokio::main]
-async fn main() -> Result<(), Box<dyn std::error::Error>> {
+async fn main() {
     let api_key = std::env::var("OPENAI_API_KEY").expect("$OPENAI_API_KEY is not set");
 
     let client = Client::new(api_key);
@@ -145,24 +145,25 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
             ChatMessageBuilder::default()
                 .role(Role::User)
                 .content(ChatMessageContent::Text("Hello!".to_string()))
-                .build()?,
+                .build()
+                .unwrap(),
             ChatMessageBuilder::default()
                 .role(Role::User)
                 .content(ChatMessageContent::Text(
                     "What is the capital of Vietnam?".to_string(),
                 ))
-                .build()?,
+                .build()
+                .unwrap(),
         ])
         .response_format(ChatCompletionResponseFormat {
             r#type: ChatCompletionResponseFormatType::Text,
         })
-        .build()?;
+        .build()
+        .unwrap();
 
     let result = client.chat().create(parameters).await.unwrap();
 
     println!("{:#?}", result);
-
-    Ok(())
 }
 ```
 
@@ -181,7 +182,7 @@ use openai_dive::v1::resources::chat::{
 };
 
 #[tokio::main]
-async fn main() -> Result<(), Box<dyn std::error::Error>> {
+async fn main() {
     let api_key = std::env::var("OPENAI_API_KEY").expect("$OPENAI_API_KEY is not set");
 
     let client = Client::new(api_key);
@@ -194,7 +195,8 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
                 .content(ChatMessageContent::Text(
                     "What is in this image?".to_string(),
                 ))
-                .build()?,
+                .build()
+                .unwrap(),
             ChatMessageBuilder::default()
                 .role(Role::User)
                 .content(ChatMessageContent::ImageUrl(vec![ImageUrl {
@@ -206,16 +208,16 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
                         detail: None,
                     },
                 }]))
-                .build()?,
+                .build()
+                .unwrap(),
         ])
         .max_tokens(50u32)
-        .build()?;
+        .build()
+        .unwrap();
 
     let result = client.chat().create(parameters).await.unwrap();
 
     println!("{:#?}", result);
-
-    Ok(())
 }
 ```
 
@@ -240,7 +242,7 @@ use serde::{Deserialize, Serialize};
 use serde_json::{json, Value};
 
 #[tokio::main]
-async fn main() -> Result<(), Box<dyn std::error::Error>> {
+async fn main() {
     let api_key = std::env::var("OPENAI_API_KEY").expect("$OPENAI_API_KEY is not set");
 
     let client = Client::new(api_key);
@@ -249,7 +251,8 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
         .content(ChatMessageContent::Text(
             "Give me a random number between 100 and no more than 150?".to_string(),
         ))
-        .build()?];
+        .build()
+        .unwrap()];
 
     let parameters = ChatCompletionParametersBuilder::default()
         .model(Gpt4Engine::Gpt4O.to_string())
@@ -269,7 +272,8 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
                 }),
             },
         }])
-        .build()?;
+        .build()
+        .unwrap();
 
     let result = client.chat().create(parameters).await.unwrap();
 
@@ -295,8 +299,6 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
             }
         }
     }
-
-    Ok(())
 }
 
 #[derive(Serialize, Deserialize)]
@@ -330,7 +332,7 @@ use openai_dive::v1::resources::image::{
 };
 
 #[tokio::main]
-async fn main() -> Result<(), Box<dyn std::error::Error>> {
+async fn main() {
     let api_key = std::env::var("OPENAI_API_KEY").expect("$OPENAI_API_KEY is not set");
 
     let client = Client::new(api_key);
@@ -343,7 +345,8 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
         .response_format(ResponseFormat::Url)
         .size(ImageSize::Size1024X1024)
         .style(ImageStyle::Natural)
-        .build()?;
+        .build()
+        .unwrap();
 
     let result = client.images().create(parameters).await.unwrap();
 
@@ -352,8 +355,6 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
     println!("{:?}", paths);
 
     println!("{:#?}", result);
-
-    Ok(())
 }
 ```
 
@@ -368,7 +369,7 @@ use openai_dive::v1::api::Client;
 use openai_dive::v1::resources::image::{EditImageParametersBuilder, ImageSize};
 
 #[tokio::main]
-async fn main() -> Result<(), Box<dyn std::error::Error>> {
+async fn main() {
     let api_key = std::env::var("OPENAI_API_KEY").expect("$OPENAI_API_KEY is not set");
 
     let client = Client::new(api_key);
@@ -379,13 +380,12 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
         .mask("./images/image_edit_mask.png")
         .n(1u32)
         .size(ImageSize::Size512X512)
-        .build()?;
+        .build()
+        .unwrap();
 
     let result = client.images().edit(parameters).await.unwrap();
 
     println!("{:#?}", result);
-
-    Ok(())
 }
 ```
 
@@ -400,7 +400,7 @@ use openai_dive::v1::api::Client;
 use openai_dive::v1::resources::image::{CreateImageVariationParametersBuilder, ImageSize};
 
 #[tokio::main]
-async fn main() -> Result<(), Box<dyn std::error::Error>> {
+async fn main() {
     let api_key = std::env::var("OPENAI_API_KEY").expect("$OPENAI_API_KEY is not set");
 
     let client = Client::new(api_key);
@@ -409,13 +409,12 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
         .image("./images/image_edit_original.png")
         .n(1u32)
         .size(ImageSize::Size256X256)
-        .build()?;
+        .build()
+        .unwrap();
 
     let result = client.images().variation(parameters).await.unwrap();
 
     println!("{:#?}", result);
-
-    Ok(())
 }
 ```
 
@@ -440,7 +439,7 @@ use openai_dive::v1::resources::audio::{
 };
 
 #[tokio::main]
-async fn main() -> Result<(), Box<dyn std::error::Error>> {
+async fn main() {
     let api_key = std::env::var("OPENAI_API_KEY").expect("$OPENAI_API_KEY is not set");
 
     let client = Client::new(api_key);
@@ -450,13 +449,12 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
         .input("Hallo, this is a test from OpenAI Dive.")
         .voice(AudioVoice::Alloy)
         .response_format(AudioSpeechResponseFormat::Mp3)
-        .build()?;
+        .build()
+        .unwrap();
 
     let response = client.audio().create_speech(parameters).await.unwrap();
 
     response.save("files/example.mp3").await.unwrap();
-
-    Ok(())
 }
 ```
 
@@ -474,7 +472,7 @@ use openai_dive::v1::resources::audio::{
 };
 
 #[tokio::main]
-async fn main() -> Result<(), Box<dyn std::error::Error>> {
+async fn main() {
     let api_key = std::env::var("OPENAI_API_KEY").expect("$OPENAI_API_KEY is not set");
 
     let client = Client::new(api_key);
@@ -485,7 +483,8 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
         ))
         .model(WhisperEngine::Whisper1.to_string())
         .response_format(AudioOutputFormat::VerboseJson)
-        .build()?;
+        .build()
+        .unwrap();
 
     let result = client
         .audio()
@@ -494,8 +493,6 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
         .unwrap();
 
     println!("{:#?}", result);
-
-    Ok(())
 }
 ```
 
@@ -511,7 +508,7 @@ use openai_dive::v1::models::WhisperEngine;
 use openai_dive::v1::resources::audio::{AudioOutputFormat, AudioTranslationParametersBuilder};
 
 #[tokio::main]
-async fn main() -> Result<(), Box<dyn std::error::Error>> {
+async fn main() {
     let api_key = std::env::var("OPENAI_API_KEY").expect("$OPENAI_API_KEY is not set");
 
     let client = Client::new(api_key);
@@ -526,8 +523,6 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
     let result = client.audio().create_translation(parameters).await.unwrap();
 
     println!("{:#?}", result);
-
-    Ok(())
 }
 ```
 
@@ -549,7 +544,7 @@ use openai_dive::v1::resources::embedding::{
 };
 
 #[tokio::main]
-async fn main() -> Result<(), Box<dyn std::error::Error>> {
+async fn main() {
     let api_key = std::env::var("OPENAI_API_KEY").expect("$OPENAI_API_KEY is not set");
 
     let client = Client::new(api_key);
@@ -560,13 +555,12 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
             "The food was delicious and the waiter...".to_string(),
         ))
         .encoding_format(EmbeddingEncodingFormat::Float)
-        .build()?;
+        .build()
+        .unwrap();
 
     let result = client.embeddings().create(parameters).await.unwrap();
 
-    println!("{:#?}", result);
-
-    Ok(())
+    println!("{:#?}", result)
 }
 ```
 
@@ -611,7 +605,7 @@ Upload a file that can be used across various endpoints.
 ```rust
 use openai_dive::v1::{
     api::Client,
-    resources::file::{FilePurpose, UploadFileParameters},
+    resources::file::{FilePurpose, UploadFileParametersBuilder},
 };
 
 #[tokio::main]
@@ -620,10 +614,11 @@ async fn main() {
 
     let client = Client::new(api_key);
 
-    let parameters = UploadFileParameters {
-        file: "./files/FineTuningJobSample2.jsonl".to_string(),
-        purpose: FilePurpose::FineTune,
-    };
+    let parameters = UploadFileParametersBuilder::default()
+        .file("./files/DummyUsers.json")
+        .purpose(FilePurpose::Assistants)
+        .build()
+        .unwrap();
 
     let result = client.files().upload(parameters).await.unwrap();
 
@@ -722,7 +717,7 @@ use openai_dive::v1::models::ModerationsEngine;
 use openai_dive::v1::resources::moderation::ModerationParametersBuilder;
 
 #[tokio::main]
-async fn main() -> Result<(), Box<dyn std::error::Error>> {
+async fn main() {
     let api_key = std::env::var("OPENAI_API_KEY").expect("$OPENAI_API_KEY is not set");
 
     let client = Client::new(api_key);
@@ -730,13 +725,12 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
     let parameters = ModerationParametersBuilder::default()
         .model(ModerationsEngine::TextModerationLatest.to_string())
         .input("I want to kill them.".to_string())
-        .build()?;
+        .build()
+        .unwrap();
 
     let result = client.moderations().create(parameters).await.unwrap();
 
     println!("{:#?}", result);
-
-    Ok(())
 }
 ```
 
@@ -827,7 +821,6 @@ If you don't set the organization and/or project ID, the client will use the def
 ```rust
 #[tokio::main]
 use openai_dive::v1::api::Client;
-
 
 async fn main() {
     let api_key = std::env::var("OPENAI_API_KEY").expect("$OPENAI_API_KEY is not set");

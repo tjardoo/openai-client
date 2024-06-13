@@ -5,7 +5,7 @@ use openai_dive::v1::resources::image::{
 };
 
 #[tokio::main]
-async fn main() -> Result<(), Box<dyn std::error::Error>> {
+async fn main() {
     let api_key = std::env::var("OPENAI_API_KEY").expect("$OPENAI_API_KEY is not set");
 
     let client = Client::new(api_key);
@@ -18,7 +18,8 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
         .response_format(ResponseFormat::Url)
         .size(ImageSize::Size1024X1024)
         .style(ImageStyle::Natural)
-        .build()?;
+        .build()
+        .unwrap();
 
     let result = client.images().create(parameters).await.unwrap();
 
@@ -27,6 +28,4 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
     println!("{:?}", paths);
 
     println!("{:#?}", result);
-
-    Ok(())
 }

@@ -9,7 +9,7 @@ use std::fs::File;
 use std::io::Write;
 
 #[tokio::main]
-async fn main() -> Result<(), Box<dyn std::error::Error>> {
+async fn main() {
     let api_key = std::env::var("OPENAI_API_KEY").expect("$OPENAI_API_KEY is not set");
 
     let client = Client::new(api_key);
@@ -19,7 +19,8 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
         .input("The quick brown fox jumped over the lazy dog.")
         .voice(AudioVoice::Alloy)
         .response_format(AudioSpeechResponseFormat::Mp3)
-        .build()?;
+        .build()
+        .unwrap();
 
     let mut file = File::create("./files/example-stream.mp3").unwrap();
 
@@ -43,6 +44,4 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
             future::ready(())
         })
         .await;
-
-    Ok(())
 }

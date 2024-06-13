@@ -5,7 +5,7 @@ use openai_dive::v1::resources::embedding::{
 };
 
 #[tokio::main]
-async fn main() -> Result<(), Box<dyn std::error::Error>> {
+async fn main() {
     let api_key = std::env::var("OPENAI_API_KEY").expect("$OPENAI_API_KEY is not set");
 
     let client = Client::new(api_key);
@@ -16,11 +16,10 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
             "The food was delicious and the waiter...".to_string(),
         ))
         .encoding_format(EmbeddingEncodingFormat::Float)
-        .build()?;
+        .build()
+        .unwrap();
 
     let result = client.embeddings().create(parameters).await.unwrap();
 
     println!("{:#?}", result);
-
-    Ok(())
 }

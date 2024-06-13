@@ -6,7 +6,7 @@ use openai_dive::v1::resources::chat::{
 };
 
 #[tokio::main]
-async fn main() -> Result<(), Box<dyn std::error::Error>> {
+async fn main() {
     let api_key = std::env::var("OPENAI_API_KEY").expect("$OPENAI_API_KEY is not set");
 
     let client = Client::new(api_key);
@@ -17,22 +17,23 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
             ChatMessageBuilder::default()
                 .role(Role::User)
                 .content(ChatMessageContent::Text("Hello!".to_string()))
-                .build()?,
+                .build()
+                .unwrap(),
             ChatMessageBuilder::default()
                 .role(Role::User)
                 .content(ChatMessageContent::Text(
                     "What is the capital of Vietnam?".to_string(),
                 ))
-                .build()?,
+                .build()
+                .unwrap(),
         ])
         .response_format(ChatCompletionResponseFormat {
             r#type: ChatCompletionResponseFormatType::Text,
         })
-        .build()?;
+        .build()
+        .unwrap();
 
     let result = client.chat().create(parameters).await.unwrap();
 
     println!("{:#?}", result);
-
-    Ok(())
 }

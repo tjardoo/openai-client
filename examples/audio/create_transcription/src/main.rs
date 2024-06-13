@@ -5,7 +5,7 @@ use openai_dive::v1::resources::audio::{
 };
 
 #[tokio::main]
-async fn main() -> Result<(), Box<dyn std::error::Error>> {
+async fn main() {
     let api_key = std::env::var("OPENAI_API_KEY").expect("$OPENAI_API_KEY is not set");
 
     let client = Client::new(api_key);
@@ -16,7 +16,8 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
         ))
         .model(WhisperEngine::Whisper1.to_string())
         .response_format(AudioOutputFormat::VerboseJson)
-        .build()?;
+        .build()
+        .unwrap();
 
     let result = client
         .audio()
@@ -25,6 +26,4 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
         .unwrap();
 
     println!("{:#?}", result);
-
-    Ok(())
 }

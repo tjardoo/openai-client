@@ -1,5 +1,5 @@
 use openai_dive::v1::api::Client;
-use openai_dive::v1::resources::batch::{BatchCompletionWindow, CreateBatchParameters};
+use openai_dive::v1::resources::batch::{BatchCompletionWindow, CreateBatchParametersBuilder};
 use openai_dive::v1::resources::file::{FilePurpose, UploadFileParameters};
 
 #[tokio::main]
@@ -20,12 +20,12 @@ async fn main() {
 
     println!("{:#?}", &file);
 
-    let parameters = CreateBatchParameters {
-        input_file_id: file.id,
-        endpoint: "/v1/chat/completions".to_string(),
-        completion_window: BatchCompletionWindow::H24,
-        metadata: None,
-    };
+    let parameters = CreateBatchParametersBuilder::default()
+        .input_file_id(file.id)
+        .endpoint("/v1/chat/completions".to_string())
+        .completion_window(BatchCompletionWindow::H24)
+        .build()
+        .unwrap();
 
     let result = client.batches().create(parameters).await.unwrap();
 

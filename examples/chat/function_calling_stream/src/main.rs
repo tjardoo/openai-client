@@ -11,7 +11,7 @@ use serde::{Deserialize, Serialize};
 use serde_json::{json, Value};
 
 #[tokio::main]
-async fn main() -> Result<(), Box<dyn std::error::Error>> {
+async fn main() {
     let api_key = std::env::var("OPENAI_API_KEY").expect("$OPENAI_API_KEY is not set");
 
     let client = Client::new(api_key);
@@ -20,7 +20,8 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
         .content(ChatMessageContent::Text(
             "Give me a random number higher than 100 but less than 2*150?".to_string(),
         ))
-        .build()?];
+        .build()
+        .unwrap()];
 
     let parameters = ChatCompletionParametersBuilder::default()
         .model(Gpt4Engine::Gpt4O.to_string())
@@ -40,7 +41,8 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
                 }),
             },
         }])
-        .build()?;
+        .build()
+        .unwrap();
 
     let mut stream = client.chat().create_stream(parameters).await.unwrap();
 
@@ -81,8 +83,6 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
             Err(e) => eprintln!("{}", e),
         }
     }
-
-    Ok(())
 }
 
 #[derive(Serialize, Deserialize)]

@@ -7,7 +7,7 @@ use openai_dive::v1::resources::chat::{
 use openai_dive::v1::resources::shared::ResponseWrapper;
 
 #[tokio::main]
-async fn main() -> Result<(), Box<dyn std::error::Error>> {
+async fn main() {
     let api_key = std::env::var("OPENAI_API_KEY").expect("$OPENAI_API_KEY is not set");
 
     let client = Client::new(api_key);
@@ -20,9 +20,11 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
                 "Which 2 country has the largest population? Just give the name: population."
                     .to_string(),
             ))
-            .build()?])
+            .build()
+            .unwrap()])
         .max_tokens(50u32)
-        .build()?;
+        .build()
+        .unwrap();
 
     let result: ResponseWrapper<ChatCompletionResponse> =
         client.chat().create_wrapped(parameters).await.unwrap();
@@ -30,6 +32,4 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
     println!("{:#?}", result.headers);
 
     println!("{:#?}", result.data);
-
-    Ok(())
 }
