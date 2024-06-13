@@ -1,7 +1,10 @@
 use crate::v1::resources::shared::Usage;
+use derive_builder::Builder;
 use serde::{Deserialize, Serialize};
 
-#[derive(Serialize, Deserialize, Debug, Clone, PartialEq)]
+#[derive(Serialize, Deserialize, Debug, Default, Builder, Clone, PartialEq)]
+#[builder(name = "EmbeddingParametersBuilder")]
+#[builder(setter(into, strip_option), default)]
 pub struct EmbeddingParameters {
     /// Input text to embed, encoded as a string or array of tokens.
     /// To embed multiple inputs in a single request, pass an array of strings or array of token arrays.
@@ -67,4 +70,10 @@ pub struct Embedding {
 pub enum EmbeddingEncodingFormat {
     Float,
     Base64,
+}
+
+impl Default for EmbeddingInput {
+    fn default() -> Self {
+        EmbeddingInput::String(String::new())
+    }
 }

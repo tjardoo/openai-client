@@ -544,25 +544,29 @@ Creates an embedding vector representing the input text.
 ```rust
 use openai_dive::v1::api::Client;
 use openai_dive::v1::models::EmbeddingsEngine;
-use openai_dive::v1::resources::embedding::{EmbeddingInput, EmbeddingParameters};
+use openai_dive::v1::resources::embedding::{
+    EmbeddingEncodingFormat, EmbeddingInput, EmbeddingParametersBuilder,
+};
 
 #[tokio::main]
-async fn main() {
+async fn main() -> Result<(), Box<dyn std::error::Error>> {
     let api_key = std::env::var("OPENAI_API_KEY").expect("$OPENAI_API_KEY is not set");
 
     let client = Client::new(api_key);
 
-    let parameters = EmbeddingParameters {
-        model: EmbeddingsEngine::TextEmbedding3Small.to_string(),
-        input: EmbeddingInput::String("The food was delicious and the waiter...".to_string()),
-        encoding_format: None,
-        dimensions: None,
-        user: None,
-    };
+    let parameters = EmbeddingParametersBuilder::default()
+        .model(EmbeddingsEngine::TextEmbedding3Small.to_string())
+        .input(EmbeddingInput::String(
+            "The food was delicious and the waiter...".to_string(),
+        ))
+        .encoding_format(EmbeddingEncodingFormat::Float)
+        .build()?;
 
     let result = client.embeddings().create(parameters).await.unwrap();
 
     println!("{:#?}", result);
+
+    Ok(())
 }
 ```
 
@@ -715,22 +719,24 @@ Classifies if text is potentially harmful.
 ```rust
 use openai_dive::v1::api::Client;
 use openai_dive::v1::models::ModerationsEngine;
-use openai_dive::v1::resources::moderation::ModerationParameters;
+use openai_dive::v1::resources::moderation::ModerationParametersBuilder;
 
 #[tokio::main]
-async fn main() {
+async fn main() -> Result<(), Box<dyn std::error::Error>> {
     let api_key = std::env::var("OPENAI_API_KEY").expect("$OPENAI_API_KEY is not set");
 
     let client = Client::new(api_key);
 
-    let parameters = ModerationParameters {
-        input: "I want to kill them.".to_string(),
-        model: ModerationsEngine::TextModerationLatest.to_string(),
-    };
+    let parameters = ModerationParametersBuilder::default()
+        .model(ModerationsEngine::TextModerationLatest.to_string())
+        .input("I want to kill them.".to_string())
+        .build()?;
 
     let result = client.moderations().create(parameters).await.unwrap();
 
     println!("{:#?}", result);
+
+    Ok(())
 }
 ```
 
