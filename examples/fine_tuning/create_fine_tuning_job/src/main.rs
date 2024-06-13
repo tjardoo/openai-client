@@ -1,5 +1,6 @@
+use openai_dive::v1::api::Client;
 use openai_dive::v1::models::Gpt35Engine;
-use openai_dive::v1::{api::Client, resources::fine_tuning::CreateFineTuningJobParameters};
+use openai_dive::v1::resources::fine_tuning::CreateFineTuningJobParametersBuilder;
 
 #[tokio::main]
 async fn main() {
@@ -11,15 +12,11 @@ async fn main() {
 
     let file_id = std::env::var("FILE_ID").expect("FILE_ID is not set in the .env file.");
 
-    let parameters = CreateFineTuningJobParameters {
-        model: Gpt35Engine::Gpt35Turbo.to_string(),
-        training_file: file_id,
-        hyperparameters: None,
-        suffix: None,
-        validation_file: None,
-        integrations: None,
-        seed: None,
-    };
+    let parameters = CreateFineTuningJobParametersBuilder::default()
+        .model(Gpt35Engine::Gpt35Turbo.to_string())
+        .training_file(file_id)
+        .build()
+        .unwrap();
 
     let result = client.fine_tuning().create(parameters).await.unwrap();
 

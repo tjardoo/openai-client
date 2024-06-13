@@ -1,3 +1,4 @@
+use derive_builder::Builder;
 use serde::{Deserialize, Serialize};
 
 #[derive(Serialize, Deserialize, Debug, Clone, PartialEq)]
@@ -47,7 +48,9 @@ pub struct FineTuningJob {
     pub estimated_finish: Option<u32>,
 }
 
-#[derive(Serialize, Deserialize, Debug, Clone, PartialEq)]
+#[derive(Serialize, Deserialize, Debug, Default, Builder, Clone, PartialEq)]
+#[builder(name = "CreateFineTuningJobParametersBuilder")]
+#[builder(setter(into, strip_option), default)]
 pub struct CreateFineTuningJobParameters {
     /// The name of the model to fine-tune.
     pub model: String,
