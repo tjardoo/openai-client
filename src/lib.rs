@@ -52,11 +52,10 @@
 //!
 //! ```rust
 //! use openai_dive::v1::api::Client;
-//! use std::env;
 //!
 //! #[tokio::main]
 //! async fn main() {
-//!     let api_key = env::var("OPENAI_API_KEY").expect("$OPENAI_API_KEY is not set");
+//!     let api_key = std::env::var("OPENAI_API_KEY").expect("$OPENAI_API_KEY is not set");
 //!
 //!     let client = Client::new(api_key);
 //!
@@ -74,11 +73,10 @@
 //!
 //! ```rust
 //! use openai_dive::v1::api::Client;
-//! use std::env;
 //!
 //! #[tokio::main]
 //! async fn main() {
-//!     let api_key = env::var("OPENAI_API_KEY").expect("$OPENAI_API_KEY is not set");
+//!     let api_key = std::env::var("OPENAI_API_KEY").expect("$OPENAI_API_KEY is not set");
 //!
 //!     let client = Client::new(api_key);
 //!
@@ -96,11 +94,10 @@
 //!
 //! ```rust
 //! use openai_dive::v1::api::Client;
-//! use std::env;
 //!
 //! #[tokio::main]
 //! async fn main() {
-//!     let api_key = env::var("OPENAI_API_KEY").expect("$OPENAI_API_KEY is not set");
+//!     let api_key = std::env::var("OPENAI_API_KEY").expect("$OPENAI_API_KEY is not set");
 //!
 //!     let client = Client::new(api_key);
 //!
@@ -129,11 +126,10 @@
 //!     ChatCompletionParametersBuilder, ChatCompletionResponseFormat,
 //!     ChatCompletionResponseFormatType, ChatMessageBuilder, ChatMessageContent, Role,
 //! };
-//! use std::env;
 //!
 //! #[tokio::main]
 //! async fn main() -> Result<(), Box<dyn std::error::Error>> {
-//!     let api_key = env::var("OPENAI_API_KEY").expect("$OPENAI_API_KEY is not set");
+//!     let api_key = std::env::var("OPENAI_API_KEY").expect("$OPENAI_API_KEY is not set");
 //!
 //!     let client = Client::new(api_key);
 //!
@@ -177,11 +173,10 @@
 //!     ChatCompletionParametersBuilder, ChatMessageBuilder, ChatMessageContent, ImageUrl,
 //!     ImageUrlType, Role,
 //! };
-//! use std::env;
 //!
 //! #[tokio::main]
 //! async fn main() -> Result<(), Box<dyn std::error::Error>> {
-//!     let api_key = env::var("OPENAI_API_KEY").expect("$OPENAI_API_KEY is not set");
+//!     let api_key = std::env::var("OPENAI_API_KEY").expect("$OPENAI_API_KEY is not set");
 //!
 //!     let client = Client::new(api_key);
 //!
@@ -326,11 +321,10 @@
 //! use openai_dive::v1::resources::image::{
 //!     CreateImageParametersBuilder, ImageQuality, ImageSize, ImageStyle, ResponseFormat,
 //! };
-//! use std::env;
 //!
 //! #[tokio::main]
 //! async fn main() -> Result<(), Box<dyn std::error::Error>> {
-//!     let api_key = env::var("OPENAI_API_KEY").expect("$OPENAI_API_KEY is not set");
+//!     let api_key = std::env::var("OPENAI_API_KEY").expect("$OPENAI_API_KEY is not set");
 //!
 //!     let client = Client::new(api_key);
 //!
@@ -365,11 +359,10 @@
 //! ```rust
 //! use openai_dive::v1::api::Client;
 //! use openai_dive::v1::resources::image::{EditImageParametersBuilder, ImageSize};
-//! use std::env;
 //!
 //! #[tokio::main]
 //! async fn main() -> Result<(), Box<dyn std::error::Error>> {
-//!     let api_key = env::var("OPENAI_API_KEY").expect("$OPENAI_API_KEY is not set");
+//!     let api_key = std::env::var("OPENAI_API_KEY").expect("$OPENAI_API_KEY is not set");
 //!
 //!     let client = Client::new(api_key);
 //!
@@ -398,11 +391,10 @@
 //! ```rust
 //! use openai_dive::v1::api::Client;
 //! use openai_dive::v1::resources::image::{CreateImageVariationParametersBuilder, ImageSize};
-//! use std::env;
 //!
 //! #[tokio::main]
 //! async fn main() -> Result<(), Box<dyn std::error::Error>> {
-//!     let api_key = env::var("OPENAI_API_KEY").expect("$OPENAI_API_KEY is not set");
+//!     let api_key = std::env::var("OPENAI_API_KEY").expect("$OPENAI_API_KEY is not set");
 //!
 //!     let client = Client::new(api_key);
 //!
@@ -437,27 +429,27 @@
 //! use openai_dive::v1::api::Client;
 //! use openai_dive::v1::models::TTSEngine;
 //! use openai_dive::v1::resources::audio::{
-//!     AudioSpeechParameters, AudioSpeechResponseFormat, AudioVoice,
+//!     AudioSpeechParametersBuilder, AudioSpeechResponseFormat, AudioVoice,
 //! };
-//! use std::env;
 //!
 //! #[tokio::main]
-//! async fn main() {
-//!     let api_key = env::var("OPENAI_API_KEY").expect("$OPENAI_API_KEY is not set");
+//! async fn main() -> Result<(), Box<dyn std::error::Error>> {
+//!     let api_key = std::env::var("OPENAI_API_KEY").expect("$OPENAI_API_KEY is not set");
 //!
 //!     let client = Client::new(api_key);
 //!
-//!     let parameters = AudioSpeechParameters {
-//!         model: TTSEngine::Tts1.to_string(),
-//!         input: "Hallo, this is a test from OpenAI Dive.".to_string(),
-//!         voice: AudioVoice::Alloy,
-//!         response_format: Some(AudioSpeechResponseFormat::Mp3),
-//!         speed: Some(1.0),
-//!     };
+//!     let parameters = AudioSpeechParametersBuilder::default()
+//!         .model(TTSEngine::Tts1.to_string())
+//!         .input("Hallo, this is a test from OpenAI Dive.")
+//!         .voice(AudioVoice::Alloy)
+//!         .response_format(AudioSpeechResponseFormat::Mp3)
+//!         .build()?;
 //!
 //!     let response = client.audio().create_speech(parameters).await.unwrap();
 //!
 //!     response.save("files/example.mp3").await.unwrap();
+//!
+//!     Ok(())
 //! }
 //! ```
 //!
@@ -470,24 +462,23 @@
 //! ```rust
 //! use openai_dive::v1::api::Client;
 //! use openai_dive::v1::models::WhisperEngine;
-//! use openai_dive::v1::resources::audio::{AudioOutputFormat, AudioTranscriptionFile, AudioTranscriptionParameters};
-//! use std::env;
+//! use openai_dive::v1::resources::audio::{
+//!     AudioOutputFormat, AudioTranscriptionFile, AudioTranscriptionParametersBuilder,
+//! };
 //!
 //! #[tokio::main]
-//! async fn main() {
-//!     let api_key = env::var("OPENAI_API_KEY").expect("$OPENAI_API_KEY is not set");
+//! async fn main() -> Result<(), Box<dyn std::error::Error>> {
+//!     let api_key = std::env::var("OPENAI_API_KEY").expect("$OPENAI_API_KEY is not set");
 //!
 //!     let client = Client::new(api_key);
 //!
-//!     let parameters = AudioTranscriptionParameters {
-//!         file: AudioTranscriptionFile::File("./audio/micro-machines.mp3".to_string()),
-//!         model: WhisperEngine::Whisper1.to_string(),
-//!         language: None,
-//!         prompt: None,
-//!         response_format: Some(AudioOutputFormat::Text),
-//!         temperature: None,
-//!         timestamp_granularities: None,
-//!     };
+//!     let parameters = AudioTranscriptionParametersBuilder::default()
+//!         .file(AudioTranscriptionFile::File(
+//!             "./audio/micro-machines.mp3".to_string(),
+//!         ))
+//!         .model(WhisperEngine::Whisper1.to_string())
+//!         .response_format(AudioOutputFormat::VerboseJson)
+//!         .build()?;
 //!
 //!     let result = client
 //!         .audio()
@@ -496,6 +487,8 @@
 //!         .unwrap();
 //!
 //!     println!("{:#?}", result);
+//!
+//!     Ok(())
 //! }
 //! ```
 //!
@@ -508,26 +501,26 @@
 //! ```rust
 //! use openai_dive::v1::api::Client;
 //! use openai_dive::v1::models::WhisperEngine;
-//! use openai_dive::v1::resources::audio::{AudioOutputFormat, AudioTranslationParameters};
-//! use std::env;
+//! use openai_dive::v1::resources::audio::{AudioOutputFormat, AudioTranslationParametersBuilder};
 //!
 //! #[tokio::main]
-//! async fn main() {
-//!     let api_key = env::var("OPENAI_API_KEY").expect("$OPENAI_API_KEY is not set");
+//! async fn main() -> Result<(), Box<dyn std::error::Error>> {
+//!     let api_key = std::env::var("OPENAI_API_KEY").expect("$OPENAI_API_KEY is not set");
 //!
 //!     let client = Client::new(api_key);
 //!
-//!     let parameters = AudioTranslationParameters {
-//!         file: "./audio/multilingual.mp3".to_string(),
-//!         model: WhisperEngine::Whisper1.to_string(),
-//!         prompt: None,
-//!         response_format: Some(AudioOutputFormat::Srt),
-//!         temperature: None,
-//!     };
+//!     let parameters = AudioTranslationParametersBuilder::default()
+//!         .file("./audio/multilingual.mp3")
+//!         .model(WhisperEngine::Whisper1.to_string())
+//!         .response_format(AudioOutputFormat::Srt)
+//!         .build()
+//!         .unwrap();
 //!
 //!     let result = client.audio().create_translation(parameters).await.unwrap();
 //!
 //!     println!("{:#?}", result);
+//!
+//!     Ok(())
 //! }
 //! ```
 //!
@@ -545,11 +538,10 @@
 //! use openai_dive::v1::api::Client;
 //! use openai_dive::v1::models::EmbeddingsEngine;
 //! use openai_dive::v1::resources::embedding::{EmbeddingInput, EmbeddingParameters};
-//! use std::env;
 //!
 //! #[tokio::main]
 //! async fn main() {
-//!     let api_key = env::var("OPENAI_API_KEY").expect("$OPENAI_API_KEY is not set");
+//!     let api_key = std::env::var("OPENAI_API_KEY").expect("$OPENAI_API_KEY is not set");
 //!
 //!     let client = Client::new(api_key);
 //!
@@ -582,11 +574,10 @@
 //!     api::Client,
 //!     resources::file::{FilePurpose, ListFilesParameters},
 //! };
-//! use std::env;
 //!
 //! #[tokio::main]
 //! async fn main() {
-//!     let api_key = env::var("OPENAI_API_KEY").expect("$OPENAI_API_KEY is not set");
+//!     let api_key = std::env::var("OPENAI_API_KEY").expect("$OPENAI_API_KEY is not set");
 //!
 //!     let client = Client::new(api_key);
 //!
@@ -611,11 +602,10 @@
 //!     api::Client,
 //!     resources::file::{FilePurpose, UploadFileParameters},
 //! };
-//! use std::env;
 //!
 //! #[tokio::main]
 //! async fn main() {
-//!     let api_key = env::var("OPENAI_API_KEY").expect("$OPENAI_API_KEY is not set");
+//!     let api_key = std::env::var("OPENAI_API_KEY").expect("$OPENAI_API_KEY is not set");
 //!
 //!     let client = Client::new(api_key);
 //!
@@ -637,15 +627,13 @@
 //! Delete a file.
 //!
 //! ```rust
-//! use dotenv::dotenv;
 //! use openai_dive::v1::api::Client;
-//! use std::env;
 //!
 //! #[tokio::main]
 //! async fn main() {
-//!     dotenv().ok();
+//!     dotenv::dotenv().ok();
 //!
-//!     let api_key = env::var("OPENAI_API_KEY").expect("$OPENAI_API_KEY is not set");
+//!     let api_key = std::env::var("OPENAI_API_KEY").expect("$OPENAI_API_KEY is not set");
 //!
 //!     let client = Client::new(api_key);
 //!
@@ -664,15 +652,13 @@
 //! Returns information about a specific file.
 //!
 //! ```rust
-//! use dotenv::dotenv;
 //! use openai_dive::v1::api::Client;
-//! use std::env;
 //!
 //! #[tokio::main]
 //! async fn main() {
-//!     dotenv().ok();
+//!     dotenv::dotenv().ok();
 //!
-//!     let api_key = env::var("OPENAI_API_KEY").expect("$OPENAI_API_KEY is not set");
+//!     let api_key = std::env::var("OPENAI_API_KEY").expect("$OPENAI_API_KEY is not set");
 //!
 //!     let client = Client::new(api_key);
 //!
@@ -691,15 +677,13 @@
 //! Returns the contents of the specified file.
 //!
 //! ```rust
-//! use dotenv::dotenv;
 //! use openai_dive::v1::api::Client;
-//! use std::env;
 //!
 //! #[tokio::main]
 //! async fn main() {
-//!     dotenv().ok();
+//!     dotenv::dotenv().ok();
 //!
-//!     let api_key = env::var("OPENAI_API_KEY").expect("$OPENAI_API_KEY is not set");
+//!     let api_key = std::env::var("OPENAI_API_KEY").expect("$OPENAI_API_KEY is not set");
 //!
 //!     let client = Client::new(api_key);
 //!
@@ -725,11 +709,10 @@
 //! use openai_dive::v1::api::Client;
 //! use openai_dive::v1::models::ModerationsEngine;
 //! use openai_dive::v1::resources::moderation::ModerationParameters;
-//! use std::env;
 //!
 //! #[tokio::main]
 //! async fn main() {
-//!     let api_key = env::var("OPENAI_API_KEY").expect("$OPENAI_API_KEY is not set");
+//!     let api_key = std::env::var("OPENAI_API_KEY").expect("$OPENAI_API_KEY is not set");
 //!
 //!     let client = Client::new(api_key);
 //!
@@ -831,10 +814,9 @@
 //! ```rust
 //! #[tokio::main]
 //! use openai_dive::v1::api::Client;
-//! use std::env;
 //!
 //! async fn main() {
-//!     let api_key = env::var("OPENAI_API_KEY").expect("$OPENAI_API_KEY is not set");
+//!     let api_key = std::env::var("OPENAI_API_KEY").expect("$OPENAI_API_KEY is not set");
 //!
 //!     let mut client = Client::new(api_key);
 //!

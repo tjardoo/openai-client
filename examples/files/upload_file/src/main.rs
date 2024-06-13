@@ -2,11 +2,10 @@ use openai_dive::v1::{
     api::Client,
     resources::file::{FilePurpose, UploadFileParameters},
 };
-use std::env;
 
 #[tokio::main]
 async fn main() {
-    let api_key = env::var("OPENAI_API_KEY").expect("$OPENAI_API_KEY is not set");
+    let api_key = std::env::var("OPENAI_API_KEY").expect("$OPENAI_API_KEY is not set");
 
     let client = Client::new(api_key);
 

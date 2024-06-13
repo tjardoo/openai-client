@@ -3,11 +3,10 @@ use openai_dive::v1::models::DallEEngine;
 use openai_dive::v1::resources::image::{
     CreateImageParametersBuilder, ImageQuality, ImageSize, ImageStyle, ResponseFormat,
 };
-use std::env;
 
 #[tokio::main]
 async fn main() -> Result<(), Box<dyn std::error::Error>> {
-    let api_key = env::var("OPENAI_API_KEY").expect("$OPENAI_API_KEY is not set");
+    let api_key = std::env::var("OPENAI_API_KEY").expect("$OPENAI_API_KEY is not set");
 
     let client = Client::new(api_key);
 

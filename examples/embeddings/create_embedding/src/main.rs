@@ -3,11 +3,10 @@ use openai_dive::v1::models::EmbeddingsEngine;
 use openai_dive::v1::resources::embedding::{
     EmbeddingEncodingFormat, EmbeddingInput, EmbeddingParameters,
 };
-use std::env;
 
 #[tokio::main]
 async fn main() {
-    let api_key = env::var("OPENAI_API_KEY").expect("$OPENAI_API_KEY is not set");
+    let api_key = std::env::var("OPENAI_API_KEY").expect("$OPENAI_API_KEY is not set");
 
     let client = Client::new(api_key);
 
