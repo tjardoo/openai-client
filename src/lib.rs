@@ -322,25 +322,27 @@
 //!
 //! ```rust
 //! use openai_dive::v1::api::Client;
-//! use openai_dive::v1::resources::image::{CreateImageParameters, ImageSize, ResponseFormat};
+//! use openai_dive::v1::models::DallEEngine;
+//! use openai_dive::v1::resources::image::{
+//!     CreateImageParametersBuilder, ImageQuality, ImageSize, ImageStyle, ResponseFormat,
+//! };
 //! use std::env;
 //!
 //! #[tokio::main]
-//! async fn main() {
+//! async fn main() -> Result<(), Box<dyn std::error::Error>> {
 //!     let api_key = env::var("OPENAI_API_KEY").expect("$OPENAI_API_KEY is not set");
 //!
 //!     let client = Client::new(api_key);
 //!
-//!     let parameters = CreateImageParameters {
-//!         prompt: "A cute baby dog".to_string(),
-//!         model: None,
-//!         n: Some(1),
-//!         quality: None,
-//!         response_format: Some(ResponseFormat::Url),
-//!         size: Some(ImageSize::Size256X256),
-//!         style: None,
-//!         user: None,
-//!     };
+//!     let parameters = CreateImageParametersBuilder::default()
+//!         .prompt("A cute dog in the park")
+//!         .model(DallEEngine::DallE3.to_string())
+//!         .n(1u32)
+//!         .quality(ImageQuality::Standard)
+//!         .response_format(ResponseFormat::Url)
+//!         .size(ImageSize::Size1024X1024)
+//!         .style(ImageStyle::Natural)
+//!         .build()?;
 //!
 //!     let result = client.images().create(parameters).await.unwrap();
 //!
@@ -349,6 +351,8 @@
 //!     println!("{:?}", paths);
 //!
 //!     println!("{:#?}", result);
+//!
+//!     Ok(())
 //! }
 //! ```
 //!
@@ -360,29 +364,28 @@
 //!
 //! ```rust
 //! use openai_dive::v1::api::Client;
-//! use openai_dive::v1::resources::image::{EditImageParameters, ImageSize};
+//! use openai_dive::v1::resources::image::{EditImageParametersBuilder, ImageSize};
 //! use std::env;
 //!
 //! #[tokio::main]
-//! async fn main() {
+//! async fn main() -> Result<(), Box<dyn std::error::Error>> {
 //!     let api_key = env::var("OPENAI_API_KEY").expect("$OPENAI_API_KEY is not set");
 //!
 //!     let client = Client::new(api_key);
 //!
-//!     let parameters = EditImageParameters {
-//!         image: "./images/image_edit_original.png".to_string(),
-//!         prompt: "A cute baby sea otter".to_string(),
-//!         mask: Some("./images/image_edit_mask.png".to_string()),
-//!         model: None,
-//!         n: Some(1),
-//!         size: Some(ImageSize::Size256X256),
-//!         response_format: None,
-//!         user: None,
-//!     };
+//!     let parameters = EditImageParametersBuilder::default()
+//!         .image("./images/image_edit_original.png")
+//!         .prompt("A cute baby sea otter")
+//!         .mask("./images/image_edit_mask.png")
+//!         .n(1u32)
+//!         .size(ImageSize::Size512X512)
+//!         .build()?;
 //!
 //!     let result = client.images().edit(parameters).await.unwrap();
 //!
 //!     println!("{:#?}", result);
+//!
+//!     Ok(())
 //! }
 //! ```
 //!
@@ -394,27 +397,26 @@
 //!
 //! ```rust
 //! use openai_dive::v1::api::Client;
-//! use openai_dive::v1::resources::image::{CreateImageVariationParameters, ImageSize};
+//! use openai_dive::v1::resources::image::{CreateImageVariationParametersBuilder, ImageSize};
 //! use std::env;
 //!
 //! #[tokio::main]
-//! async fn main() {
+//! async fn main() -> Result<(), Box<dyn std::error::Error>> {
 //!     let api_key = env::var("OPENAI_API_KEY").expect("$OPENAI_API_KEY is not set");
 //!
 //!     let client = Client::new(api_key);
 //!
-//!     let parameters = CreateImageVariationParameters {
-//!         image: "./images/image_edit_original.png".to_string(),
-//!         model: None,
-//!         n: Some(1),
-//!         response_format: None,
-//!         size: Some(ImageSize::Size256X256),
-//!         user: None,
-//!     };
+//!     let parameters = CreateImageVariationParametersBuilder::default()
+//!         .image("./images/image_edit_original.png")
+//!         .n(1u32)
+//!         .size(ImageSize::Size256X256)
+//!         .build()?;
 //!
 //!     let result = client.images().variation(parameters).await.unwrap();
 //!
 //!     println!("{:#?}", result);
+//!
+//!     Ok(())
 //! }
 //! ```
 //!
