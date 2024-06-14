@@ -71,7 +71,7 @@ impl Client {
         }
 
         if is_beta_feature(path) {
-            request = request.header("OpenAI-Beta", "assistants=v1");
+            request = request.header("OpenAI-Beta", "assistants=v2");
         }
 
         request

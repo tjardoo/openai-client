@@ -1,0 +1,13 @@
+[workspace]
+resolver = "2"
+members = [
+    "create_assistant",
+    "retrieve_assistant",
+    "modify_assistant",
+    "delete_assistant",
+    "list_assistants",
+    "files",
+    "threads",
+    "messages",
+    "runs",
+]
