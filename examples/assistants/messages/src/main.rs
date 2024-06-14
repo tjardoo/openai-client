@@ -1,4 +1,3 @@
-use dotenv::dotenv;
 use openai_dive::v1::{
     api::Client,
     resources::assistant::message::{
@@ -9,7 +8,7 @@ use std::{collections::HashMap, env};
 
 #[tokio::main]
 async fn main() {
-    dotenv().ok();
+    dotenv::dotenv().ok();
 
     let api_key = env::var("OPENAI_API_KEY").expect("$OPENAI_API_KEY is not set");
 

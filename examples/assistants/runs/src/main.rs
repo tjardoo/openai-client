@@ -1,21 +1,20 @@
-use dotenv::dotenv;
 use openai_dive::v1::{
     api::Client,
     resources::assistant::run::{CreateRunParameters, Run},
 };
-use std::env;
 
 #[tokio::main]
 async fn main() {
-    dotenv().ok();
+    dotenv::dotenv().ok();
 
-    let api_key = env::var("OPENAI_API_KEY").expect("$OPENAI_API_KEY is not set");
+    let api_key = std::env::var("OPENAI_API_KEY").expect("$OPENAI_API_KEY is not set");
 
     let client = Client::new(api_key);
 
-    let thread_id = env::var("THREAD_ID").expect("THREAD_ID is not set in the .env file.");
+    let thread_id = std::env::var("THREAD_ID").expect("THREAD_ID is not set in the .env file.");
 
-    let assistant_id = env::var("ASSISTANT_ID").expect("ASSISTANT_ID is not set in the .env file.");
+    let assistant_id =
+        std::env::var("ASSISTANT_ID").expect("ASSISTANT_ID is not set in the .env file.");
 
     let run = create_run(&client, &thread_id, &assistant_id).await;
 

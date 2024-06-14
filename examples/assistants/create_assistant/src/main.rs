@@ -4,12 +4,11 @@ use openai_dive::v1::resources::assistant::assistant::AssistantCodeInterpreterTo
 use openai_dive::v1::resources::assistant::assistant::AssistantParametersBuilder;
 use openai_dive::v1::resources::assistant::assistant::AssistantResponseFormat;
 use openai_dive::v1::resources::assistant::assistant::AssistantTools;
-use std::env;
 use std::vec;
 
 #[tokio::main]
 async fn main() {
-    let api_key = env::var("OPENAI_API_KEY").expect("$OPENAI_API_KEY is not set");
+    let api_key = std::env::var("OPENAI_API_KEY").expect("$OPENAI_API_KEY is not set");
 
     let client = Client::new(api_key);
 
