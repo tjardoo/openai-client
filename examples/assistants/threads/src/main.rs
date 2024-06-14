@@ -1,14 +1,17 @@
 use openai_dive::v1::{
     api::Client,
     resources::assistant::thread::{
-        CreateThreadParameters, ModifyThreadParameters, Thread, ThreadMessage, ThreadMessageRole,
+        CreateThreadParametersBuilder, ModifyThreadParametersBuilder, Thread,
+        ThreadMessageAttachmentBuilder, ThreadMessageBuilder, ThreadMessageRole, ThreadMessageTool,
     },
 };
-use std::{collections::HashMap, env};
+use std::collections::HashMap;
 
 #[tokio::main]
 async fn main() {
-    let api_key = env::var("OPENAI_API_KEY").expect("$OPENAI_API_KEY is not set");
+    dotenv::dotenv().ok();
+
+    let api_key = std::env::var("OPENAI_API_KEY").expect("$OPENAI_API_KEY is not set");
 
     let client = Client::new(api_key);
 
@@ -22,15 +25,23 @@ async fn main() {
 }
 
 pub async fn create_thread(client: &Client) -> Thread {
-    let parameters = CreateThreadParameters {
-        messages: Some(vec![ThreadMessage {
-            role: ThreadMessageRole::User,
-            content: "None".to_string(),
-            file_ids: None,
-            metadata: None,
-        }]),
-        metadata: None,
-    };
+    let example_file = std::env::var("FILE_ID").expect("FILE_ID is not set in the .env file.");
+
+    let parameters = CreateThreadParametersBuilder::default()
+        .messages(vec![ThreadMessageBuilder::default()
+            .content("Hello, world!".to_string())
+            .role(ThreadMessageRole::User)
+            .attachments(vec![ThreadMessageAttachmentBuilder::default()
+                .file_id(example_file)
+                .tools(vec![ThreadMessageTool::FileSearch {
+                    r#type: "file_search".to_string(),
+                }])
+                .build()
+                .unwrap()])
+            .build()
+            .unwrap()])
+        .build()
+        .unwrap();
 
     let thread = client
         .assistants()
@@ -48,9 +59,10 @@ pub async fn modify_thread(client: &Client, thread_id: &str) {
     metadata.insert("modified".to_string(), "true".to_string());
     metadata.insert("user".to_string(), "abc123".to_string());
 
-    let parameters = ModifyThreadParameters {
-        metadata: Some(metadata),
-    };
+    let parameters = ModifyThreadParametersBuilder::default()
+        .metadata(metadata)
+        .build()
+        .unwrap();
 
     client
         .assistants()
