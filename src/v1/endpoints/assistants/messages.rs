@@ -36,6 +36,8 @@ impl Messages<'_> {
             )
             .await?;
 
+        dbg!(response.data.clone());
+
         let message_response: Message = format_response(response.data)?;
 
         Ok(message_response)

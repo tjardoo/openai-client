@@ -2,6 +2,8 @@ use derive_builder::Builder;
 use serde::{Deserialize, Serialize};
 use std::collections::HashMap;
 
+use super::message::MessageAttachment;
+
 #[derive(Serialize, Deserialize, Debug, Clone, PartialEq)]
 pub struct Thread {
     /// The identifier, which can be referenced in API endpoints.
@@ -60,22 +62,10 @@ pub struct ThreadMessage {
     pub content: String,
     /// A list of files attached to the message, and the tools they should be added to.
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub attachments: Option<Vec<ThreadMessageAttachment>>,
+    pub attachments: Option<Vec<MessageAttachment>>,
     /// Set of 16 key-value pairs that can be attached to an object.
     #[serde(skip_serializing_if = "Option::is_none")]
     pub metadata: Option<HashMap<String, String>>,
-}
-
-#[derive(Serialize, Deserialize, Debug, Default, Builder, Clone, PartialEq)]
-#[builder(name = "ThreadMessageAttachmentBuilder")]
-#[builder(setter(into, strip_option), default)]
-pub struct ThreadMessageAttachment {
-    /// The ID of the file to attach to the message.
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub file_id: Option<String>,
-    /// The tools to add this file to.
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub tools: Option<Vec<ThreadMessageTool>>,
 }
 
 #[derive(Serialize, Deserialize, Debug, Clone, PartialEq)]
@@ -105,18 +95,4 @@ pub enum ThreadMessageRole {
     #[default]
     User,
     Assistant,
-}
-
-#[derive(Serialize, Deserialize, Debug, Clone, PartialEq)]
-#[serde(rename_all = "snake_case")]
-#[serde(untagged)]
-pub enum ThreadMessageTool {
-    CodeInterpreter {
-        /// The type of tool being defined: 'code_interpreter'.
-        r#type: String,
-    },
-    FileSearch {
-        /// The type of tool being defined: 'file_search'.
-        r#type: String,
-    },
 }

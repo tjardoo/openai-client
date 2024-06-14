@@ -1,8 +1,11 @@
 use openai_dive::v1::{
     api::Client,
-    resources::assistant::thread::{
-        CreateThreadParametersBuilder, ModifyThreadParametersBuilder, Thread,
-        ThreadMessageAttachmentBuilder, ThreadMessageBuilder, ThreadMessageRole, ThreadMessageTool,
+    resources::assistant::{
+        message::{MessageAttachmentBuilder, MessageTool},
+        thread::{
+            CreateThreadParametersBuilder, ModifyThreadParametersBuilder, Thread,
+            ThreadMessageBuilder, ThreadMessageRole,
+        },
     },
 };
 use std::collections::HashMap;
@@ -31,9 +34,9 @@ pub async fn create_thread(client: &Client) -> Thread {
         .messages(vec![ThreadMessageBuilder::default()
             .content("Hello, world!".to_string())
             .role(ThreadMessageRole::User)
-            .attachments(vec![ThreadMessageAttachmentBuilder::default()
+            .attachments(vec![MessageAttachmentBuilder::default()
                 .file_id(example_file)
-                .tools(vec![ThreadMessageTool::FileSearch {
+                .tools(vec![MessageTool::FileSearch {
                     r#type: "file_search".to_string(),
                 }])
                 .build()
