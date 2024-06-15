@@ -1,6 +1,10 @@
+use std::collections::HashMap;
+
 use openai_dive::v1::{
     api::Client,
-    resources::assistant::run::{CreateRunParameters, Run},
+    resources::assistant::run::{
+        CreateRunParametersBuilder, ModifyRunParametersBuilder, Run, RunStatus,
+    },
 };
 
 #[tokio::main]
@@ -18,26 +22,46 @@ async fn main() {
 
     let run = create_run(&client, &thread_id, &assistant_id).await;
 
+    if run.status == RunStatus::Completed {
+        modify_run(&client, &thread_id, &run.id).await;
+    }
+
     retrieve_run(&client, &thread_id, &run.id).await;
 
     list_runs(&client, &thread_id).await;
 }
 
 pub async fn create_run(client: &Client, thread_id: &str, assistant_id: &str) -> Run {
-    let parameters = CreateRunParameters {
-        assistant_id: assistant_id.to_string(),
-        model: None,
-        instructions: None,
-        additional_instructions: None,
-        tools: None,
-        metadata: None,
-        temperature: None,
-    };
+    let parameters = CreateRunParametersBuilder::default()
+        .assistant_id(assistant_id.to_string())
+        .build()
+        .unwrap();
 
     let run = client
         .assistants()
         .runs()
         .create(thread_id, parameters)
+        .await
+        .unwrap();
+
+    run
+}
+
+pub async fn modify_run(client: &Client, thread_id: &str, run_id: &str) -> Run {
+    let mut metadata = HashMap::new();
+
+    metadata.insert("modified".to_string(), "true".to_string());
+    metadata.insert("user".to_string(), "abc123".to_string());
+
+    let parameters = ModifyRunParametersBuilder::default()
+        .metadata(metadata)
+        .build()
+        .unwrap();
+
+    let run = client
+        .assistants()
+        .runs()
+        .modify(thread_id, run_id, parameters)
         .await
         .unwrap();
 
