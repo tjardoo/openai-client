@@ -772,7 +772,6 @@ Build assistants that can call models and use tools to perform tasks.
 For more information see the examples in the [examples/assistants](https://github.com/tjardoo/openai-client/tree/master/examples/assistants) directory.
 
 - Assistants
-- Files
 - Threads
 - Messages
 - Runs

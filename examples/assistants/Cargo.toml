@@ -6,7 +6,6 @@ members = [
     "modify_assistant",
     "delete_assistant",
     "list_assistants",
-    "files",
     "threads",
     "messages",
     "runs",

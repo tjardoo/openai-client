@@ -767,7 +767,6 @@
 //! For more information see the examples in the [examples/assistants](https://github.com/tjardoo/openai-client/tree/master/examples/assistants) directory.
 //!
 //! - Assistants
-//! - Files
 //! - Threads
 //! - Messages
 //! - Runs
