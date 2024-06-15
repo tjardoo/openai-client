@@ -39,6 +39,7 @@ members = [
     "assistants/modify_assistant",
     "assistants/delete_assistant",
     "assistants/list_assistants",
+    "assistants/create_thread_run",
     "assistants/threads",
     "assistants/messages",
     "assistants/runs",

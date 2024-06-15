@@ -3,6 +3,8 @@ use derive_builder::Builder;
 use serde::{Deserialize, Serialize};
 use std::collections::HashMap;
 
+use super::thread::CreateThreadParameters;
+
 #[derive(Serialize, Deserialize, Debug, Clone, PartialEq)]
 pub struct Run {
     /// The identifier, which can be referenced in API endpoints.
@@ -110,6 +112,15 @@ pub struct RunToolCallFunction {
     pub name: String,
     /// The arguments that the model expects you to pass to the function.
     pub arguments: String,
+}
+
+#[derive(Serialize, Deserialize, Debug, Default, Builder, Clone, PartialEq)]
+#[builder(name = "CreateThreadAndRunParametersBuilder")]
+#[builder(setter(into, strip_option), default)]
+pub struct CreateThreadAndRunParameters {
+    #[serde(flatten)]
+    pub run: CreateRunParameters,
+    pub thread: CreateThreadParameters,
 }
 
 #[derive(Serialize, Deserialize, Debug, Default, Builder, Clone, PartialEq)]

@@ -1,11 +1,10 @@
-use std::collections::HashMap;
-
 use openai_dive::v1::{
     api::Client,
     resources::assistant::run::{
         CreateRunParametersBuilder, ModifyRunParametersBuilder, Run, RunStatus,
     },
 };
+use std::collections::HashMap;
 
 #[tokio::main]
 async fn main() {

@@ -3,6 +3,7 @@ use crate::v1::error::APIError;
 use crate::v1::helpers::format_response;
 use crate::v1::resources::assistant::assistant::ToolOutputsParameters;
 use crate::v1::resources::assistant::run::CreateRunParameters;
+use crate::v1::resources::assistant::run::CreateThreadAndRunParameters;
 use crate::v1::resources::assistant::run::ListRunsResponse;
 use crate::v1::resources::assistant::run::ModifyRunParameters;
 use crate::v1::resources::assistant::run::Run;
@@ -30,6 +31,22 @@ impl Runs<'_> {
             .assistant
             .client
             .post(format!("/threads/{thread_id}/runs").as_str(), &parameters)
+            .await?;
+
+        let run_response: Run = format_response(response.data)?;
+
+        Ok(run_response)
+    }
+
+    /// Create a thread and run it in one request.
+    pub async fn create_thread_and_run(
+        &self,
+        parameters: CreateThreadAndRunParameters,
+    ) -> Result<Run, APIError> {
+        let response = self
+            .assistant
+            .client
+            .post(format!("/threads/runs").as_str(), &parameters)
             .await?;
 
         let run_response: Run = format_response(response.data)?;
