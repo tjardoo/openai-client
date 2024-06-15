@@ -248,7 +248,27 @@ pub struct ChatCompletionChoice {
     /// The reason the model stopped generating tokens.
     #[serde(skip_serializing_if = "Option::is_none")]
     pub finish_reason: Option<FinishReason>,
-    // @todo add logprobs
+    /// Log probability information for the choice.
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub logprobs: Option<LogProps>,
+}
+
+#[derive(Serialize, Deserialize, Debug, Clone, PartialEq)]
+pub struct LogProps {
+    /// A list of message content tokens with log probability information.
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub content: Option<Vec<LogPropsContent>>,
+}
+
+#[derive(Serialize, Deserialize, Debug, Clone, PartialEq)]
+pub struct LogPropsContent {
+    /// The token.
+    pub token: String,
+    /// The log probability of this token, if it is within the top 20 most likely tokens.
+    /// Otherwise, the value -9999.0 is used to signify that the token is very unlikely.
+    pub logprob: f32,
+    /// A list of integers representing the UTF-8 bytes representation of the token.
+    pub bytes: Option<Vec<u8>>,
 }
 
 #[cfg(feature = "stream")]

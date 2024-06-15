@@ -97,9 +97,7 @@ pub enum AssistantToolResource {
     FileSearch {
         /// The vector store attached to this assistant.
         /// There can be a maximum of 1 vector store attached to the assistant
-        #[serde(skip_serializing_if = "Option::is_none")]
-        vector_store_ids: Option<Vec<String>>,
-        // @todo vector_stores
+        vector_store_ids: Vec<String>,
     },
 }
 
