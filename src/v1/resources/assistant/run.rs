@@ -3,7 +3,7 @@ use derive_builder::Builder;
 use serde::{Deserialize, Serialize};
 use std::collections::HashMap;
 
-use super::thread::CreateThreadParameters;
+use crate::v1::resources::assistant::thread::CreateThreadParameters;
 
 #[derive(Serialize, Deserialize, Debug, Clone, PartialEq)]
 pub struct Run {

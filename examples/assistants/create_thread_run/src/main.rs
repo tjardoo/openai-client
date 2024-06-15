@@ -57,5 +57,5 @@ async fn main() {
         .await
         .unwrap();
 
-    println!("{:?}", run);
+    println!("{:#?}", run);
 }

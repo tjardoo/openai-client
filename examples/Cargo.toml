@@ -43,4 +43,5 @@ members = [
     "assistants/threads",
     "assistants/messages",
     "assistants/runs",
+    "assistants/run_steps",
 ]

@@ -2,7 +2,7 @@ use derive_builder::Builder;
 use serde::{Deserialize, Serialize};
 use std::collections::HashMap;
 
-use super::message::MessageAttachment;
+use crate::v1::resources::assistant::message::MessageAttachment;
 
 #[derive(Serialize, Deserialize, Debug, Clone, PartialEq)]
 pub struct Thread {

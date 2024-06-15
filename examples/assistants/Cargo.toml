@@ -10,4 +10,5 @@ members = [
     "threads",
     "messages",
     "runs",
+    "run_steps",
 ]
