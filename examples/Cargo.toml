@@ -44,4 +44,5 @@ members = [
     "assistants/messages",
     "assistants/runs",
     "assistants/run_steps",
+    "assistants/currency_converter_assistant",
 ]

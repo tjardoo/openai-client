@@ -1,10 +1,10 @@
 use openai_dive::v1::{
     api::Client,
     resources::assistant::{
-        message::{MessageAttachmentBuilder, MessageTool},
+        message::{MessageAttachmentBuilder, MessageRole, MessageTool},
         thread::{
             CreateThreadParametersBuilder, ModifyThreadParametersBuilder, Thread,
-            ThreadMessageBuilder, ThreadMessageRole,
+            ThreadMessageBuilder,
         },
     },
 };
@@ -33,7 +33,7 @@ pub async fn create_thread(client: &Client) -> Thread {
     let parameters = CreateThreadParametersBuilder::default()
         .messages(vec![ThreadMessageBuilder::default()
             .content("Hello, world!".to_string())
-            .role(ThreadMessageRole::User)
+            .role(MessageRole::User)
             .attachments(vec![MessageAttachmentBuilder::default()
                 .file_id(example_file)
                 .tools(vec![MessageTool::FileSearch {

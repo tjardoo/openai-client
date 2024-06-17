@@ -87,18 +87,23 @@ pub struct AssistantParameters {
 }
 
 #[derive(Serialize, Deserialize, Debug, Clone, PartialEq)]
-#[serde(rename_all = "snake_case")]
-pub enum AssistantToolResource {
-    CodeInterpreter {
-        /// A list of file IDs made available to the code_interpreter tool.
-        /// There can be a maximum of 20 files associated with the tool.
-        file_ids: Vec<String>,
-    },
-    FileSearch {
-        /// The vector store attached to this assistant.
-        /// There can be a maximum of 1 vector store attached to the assistant
-        vector_store_ids: Vec<String>,
-    },
+pub struct AssistantToolResource {
+    #[serde(skip_serializing_if = "Option::is_none")]
+    code_interpreter: Option<AssistantToolResourceCodeInterpreter>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    file_search: Option<AssistantToolResourceFileSearch>,
+}
+
+#[derive(Serialize, Deserialize, Debug, Clone, PartialEq)]
+pub struct AssistantToolResourceCodeInterpreter {
+    /// A list of file IDs made available to the `code_interpreter`` tool. There can be a maximum of 20 files associated with the tool.
+    file_ids: Vec<String>,
+}
+
+#[derive(Serialize, Deserialize, Debug, Clone, PartialEq)]
+pub struct AssistantToolResourceFileSearch {
+    /// The ID of the vector store attached to this assistant. There can be a maximum of 1 vector store attached to the assistant.
+    vector_store_ids: Vec<String>,
 }
 
 #[derive(Serialize, Deserialize, Debug, Clone, PartialEq)]
@@ -201,7 +206,9 @@ pub struct ListAssistantFilesResponse {
     pub has_more: bool,
 }
 
-#[derive(Serialize, Deserialize, Debug, Clone, PartialEq)]
+#[derive(Serialize, Deserialize, Debug, Default, Builder, Clone, PartialEq)]
+#[builder(name = "ToolOutputsParametersBuilder")]
+#[builder(setter(into, strip_option), default)]
 pub struct ToolOutputsParameters {
     /// A list of tools for which the outputs are being submitted.
     pub tool_outputs: Vec<ToolOutput>,

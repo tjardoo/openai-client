@@ -47,15 +47,13 @@ pub struct Message {
 #[builder(name = "CreateMessageParametersBuilder")]
 #[builder(setter(into, strip_option), default)]
 pub struct CreateMessageParameters {
-    /// The role of the entity that is creating the message. Currently 'only' user is supported.
+    /// The role of the entity that is creating the message.
     pub role: MessageRole,
     /// The content of the message.
     pub content: String,
-    /// A list of File IDs that the message should use.
-    /// There can be a maximum of 10 files attached to a message.
-    /// Useful for tools like retrieval and code_interpreter that can access and use files.
+    /// A list of files attached to the message, and the tools they should be added to.
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub file_ids: Option<Vec<String>>,
+    pub attachments: Option<Vec<MessageAttachment>>,
     /// Set of 16 key-value pairs that can be attached to an object.
     #[serde(skip_serializing_if = "Option::is_none")]
     pub metadata: Option<HashMap<String, String>>,

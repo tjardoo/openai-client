@@ -11,4 +11,5 @@ members = [
     "messages",
     "runs",
     "run_steps",
+    "currency_converter_assistant",
 ]

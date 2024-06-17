@@ -772,6 +772,8 @@
 //! - Runs
 //! - Run Steps
 //!
+//! The [`Currency Converter Assistant`](https://github.com/tjardoo/openai-client/tree/master/examples/assistants) example demonstrates how to build an assistant that uses tool calls to convert currency via an external API.
+//!
 //! More information [Assistants](https://platform.openai.com/docs/api-reference/assistants)
 //!
 //! ## General

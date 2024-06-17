@@ -2,7 +2,7 @@ use derive_builder::Builder;
 use serde::{Deserialize, Serialize};
 use std::collections::HashMap;
 
-use crate::v1::resources::assistant::message::MessageAttachment;
+use crate::v1::resources::assistant::message::{MessageAttachment, MessageRole};
 
 #[derive(Serialize, Deserialize, Debug, Clone, PartialEq)]
 pub struct Thread {
@@ -57,7 +57,7 @@ pub struct ModifyThreadParameters {
 #[builder(setter(into, strip_option), default)]
 pub struct ThreadMessage {
     /// The role of the entity that is creating the message. Currently only user is supported.
-    pub role: ThreadMessageRole,
+    pub role: MessageRole,
     /// The content of the message.
     pub content: String,
     /// A list of files attached to the message, and the tools they should be added to.
@@ -87,12 +87,4 @@ pub struct CodeInterpreter {
 pub struct FileSearch {
     /// The vector store attached to this thread. There can be a maximum of 1 vector store attached to the thread.
     pub vector_store_ids: Vec<String>,
-}
-
-#[derive(Serialize, Deserialize, Debug, Default, Clone, PartialEq)]
-#[serde(rename_all = "lowercase")]
-pub enum ThreadMessageRole {
-    #[default]
-    User,
-    Assistant,
 }
