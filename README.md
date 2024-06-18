@@ -22,12 +22,16 @@ use openai_dive::v1::api::Client;
 let api_key = std::env::var("OPENAI_API_KEY").expect("$OPENAI_API_KEY is not set");
 
 let client = Client::new(api_key);
+
+let result = client
+    .models()
+    .list()
+    .await?;
 ```
 
 - [Set API key](#set-api-key)
+- [Set organization/project id](#set-organizationproject-id)
 - [Add proxy](#add-proxy)
-- [Add organization/project header](#add-organizationproject-header)
-- [Rate limit headers](#rate-limit-headers)
 - [Available models](#available-models)
 
 ## Endpoints
@@ -394,7 +398,10 @@ let parameters = AudioTranslationParametersBuilder::default()
     .response_format(AudioOutputFormat::Srt)
     .build()?;
 
-let result = client.audio().create_translation(parameters).await?;
+let result = client
+    .audio()
+    .create_translation(parameters)
+    .await?;
 ```
 
 More information: [Create translation](https://platform.openai.com/docs/api-reference/audio/createTranslation)
@@ -416,7 +423,10 @@ let parameters = EmbeddingParametersBuilder::default()
     .encoding_format(EmbeddingEncodingFormat::Float)
     .build()?;
 
-let result = client.embeddings().create(parameters).await?;
+let result = client
+    .embeddings()
+    .create(parameters)
+    .await?;
 ```
 
 More information: [Create embeddings](https://platform.openai.com/docs/api-reference/embeddings/create)
@@ -590,6 +600,20 @@ set OPENAI_API_KEY=sk-...
 export OPENAI_API_KEY='sk-...'
 ```
 
+### Set organization/project ID
+
+You can create multiple organizations and projects in the OpenAI platform. This allows you to group files, fine-tuned models and other resources.
+
+You can set the organization ID and/or project ID on the client via the `set_organization` and `set_project` methods. If you don't set the organization and/or project ID, the client will use the default organization and default project.
+
+```rust
+let mut client = Client::new(api_key);
+
+client
+    .set_organization("org-XXX")
+    .set_project("proj_XXX");
+```
+
 ### Add proxy
 
 This crate uses `reqwest` as HTTP Client. Reqwest has proxies enabled by default. You can set the proxy via the system environment variable or by overriding the default client.
@@ -621,56 +645,7 @@ let client = Client {
 };
 ```
 
-### Add organization/project header
-
-You can add the organization and/or project header to your requests by creating a client and setting the organization and/or project ID.
-
-If you don't set the organization and/or project ID, the client will use the default organization and project.
-
-```rust
-#[tokio::main]
-use openai_dive::v1::api::Client;
-
-async fn main() {
-    let api_key = std::env::var("OPENAI_API_KEY").expect("$OPENAI_API_KEY is not set");
-
-    let mut client = Client::new(api_key);
-
-    client
-        .set_organization("org-XXX")
-        .set_project("proj_XXX");
-
-    // your code
-}
-```
-
-## Rate limit headers
-
-In addition to seeing your rate limit on your account page, you can also view important information about your rate limits such as the remaining requests, tokens, and other metadata in the headers of the HTTP response.
-
-The following endpoints have rate limit headers support:
-
-- [Create chat completion](#create-chat-completion)
-- [Create embeddings](#create-embeddings)
-
-```rust
-use openai_dive::v1::api::Client;
-
-let result = client
-    .chat()
-    .create_wrapped(parameters)
-    .await?;
-
-// the chat completion response
-println!("{:#?}", result.data);
-
-// the rate limit headers
-println!("{:#?}", result.headers);
-```
-
-More information: [Rate limit headers](https://platform.openai.com/docs/guides/rate-limits/rate-limits-in-headers)
-
-## Available Models
+### Available Models
 
 You can use these predefined constants to set the model in the parameters or use any string representation (ie. for your custom models).
 
