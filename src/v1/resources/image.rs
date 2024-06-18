@@ -9,7 +9,6 @@ use derive_builder::Builder;
 use futures::future;
 use serde::{Deserialize, Serialize};
 use std::fmt::Display;
-use strum_macros::EnumString;
 
 #[derive(Serialize, Debug, Default, Builder, Clone, PartialEq)]
 #[builder(name = "CreateImageParametersBuilder")]
@@ -106,7 +105,7 @@ pub struct ImageResponse {
     pub data: Vec<ImageData>,
 }
 
-#[derive(Serialize, Deserialize, Debug, Clone, EnumString, PartialEq)]
+#[derive(Serialize, Deserialize, Debug, Clone, PartialEq)]
 pub enum ImageSize {
     #[serde(rename = "256x256")]
     Size256X256,
@@ -120,28 +119,28 @@ pub enum ImageSize {
     Size1024X1792,
 }
 
-#[derive(Serialize, Deserialize, Debug, Clone, EnumString, PartialEq)]
+#[derive(Serialize, Deserialize, Debug, Clone, PartialEq)]
 #[serde(rename_all = "lowercase")]
 pub enum ImageQuality {
     Standard,
     Hd,
 }
 
-#[derive(Serialize, Deserialize, Debug, Clone, EnumString, PartialEq)]
+#[derive(Serialize, Deserialize, Debug, Clone, PartialEq)]
 #[serde(rename_all = "lowercase")]
 pub enum ImageStyle {
     Vivid,
     Natural,
 }
 
-#[derive(Serialize, Deserialize, Debug, Clone, EnumString, PartialEq)]
+#[derive(Serialize, Deserialize, Debug, Clone, PartialEq)]
 #[serde(rename_all = "snake_case")]
 pub enum ResponseFormat {
     Url,
     B64Json,
 }
 
-#[derive(Serialize, Deserialize, Debug, Clone, EnumString, PartialEq)]
+#[derive(Serialize, Deserialize, Debug, Clone, PartialEq)]
 #[serde(untagged)]
 pub enum ImageData {
     Url {
@@ -201,7 +200,7 @@ impl ImageData {
             .await
             .map_err(|error| APIError::FileError(error.to_string()))?;
 
-        let full_path = generate_file_name(path, 12, "png");
+        let full_path = generate_file_name(path, 16, "png");
 
         tokio::fs::write(
             &full_path,
@@ -222,7 +221,7 @@ impl ImageData {
         b64_json: &str,
         path: &str,
     ) -> Result<String, APIError> {
-        let full_path = generate_file_name(path, 12, "png");
+        let full_path = generate_file_name(path, 16, "png");
 
         let bytes = general_purpose::STANDARD.decode(b64_json).unwrap();
 
