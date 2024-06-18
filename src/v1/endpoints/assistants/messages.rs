@@ -2,12 +2,11 @@ use crate::v1::endpoints::assistants::assistants::Assistants;
 use crate::v1::error::APIError;
 use crate::v1::helpers::format_response;
 use crate::v1::resources::assistant::message::CreateMessageParameters;
-use crate::v1::resources::assistant::message::ListMessageFilesResponse;
-use crate::v1::resources::assistant::message::ListMessagesResponse;
 use crate::v1::resources::assistant::message::Message;
 use crate::v1::resources::assistant::message::MessageFile;
 use crate::v1::resources::assistant::message::ModifyMessageParameters;
 use crate::v1::resources::shared::ListParameters;
+use crate::v1::resources::shared::ListResponse;
 
 pub struct Messages<'a> {
     pub assistant: &'a Assistants<'a>,
@@ -80,14 +79,14 @@ impl Messages<'_> {
         &self,
         thread_id: &str,
         query: Option<ListParameters>,
-    ) -> Result<ListMessagesResponse, APIError> {
+    ) -> Result<ListResponse<Message>, APIError> {
         let response = self
             .assistant
             .client
             .get_with_query(format!("/threads/{thread_id}/messages").as_str(), &query)
             .await?;
 
-        let list_messages_response: ListMessagesResponse = format_response(response)?;
+        let list_messages_response: ListResponse<Message> = format_response(response)?;
 
         Ok(list_messages_response)
     }
@@ -116,7 +115,7 @@ impl Messages<'_> {
         thread_id: &str,
         message_id: &str,
         query: Option<ListParameters>,
-    ) -> Result<ListMessageFilesResponse, APIError> {
+    ) -> Result<ListResponse<MessageFile>, APIError> {
         let response = self
             .assistant
             .client
@@ -126,7 +125,7 @@ impl Messages<'_> {
             )
             .await?;
 
-        let list_message_files_response: ListMessageFilesResponse = format_response(response)?;
+        let list_message_files_response: ListResponse<MessageFile> = format_response(response)?;
 
         Ok(list_message_files_response)
     }

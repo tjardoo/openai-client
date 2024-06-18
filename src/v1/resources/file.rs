@@ -1,3 +1,4 @@
+use derive_builder::Builder;
 use serde::{Deserialize, Serialize};
 use std::fmt::Display;
 
@@ -31,7 +32,9 @@ pub struct ListFilesResponse {
     pub object: String,
 }
 
-#[derive(Serialize, Deserialize, Debug, Clone, PartialEq)]
+#[derive(Serialize, Deserialize, Debug, Default, Builder, Clone, PartialEq)]
+#[builder(name = "UploadFileParametersBuilder")]
+#[builder(setter(into, strip_option), default)]
 pub struct UploadFileParameters {
     /// The File object (not file name) to be uploaded.
     pub file: String,
@@ -41,13 +44,14 @@ pub struct UploadFileParameters {
     pub purpose: FilePurpose,
 }
 
-#[derive(Serialize, Deserialize, Debug, Clone, PartialEq)]
+#[derive(Serialize, Deserialize, Debug, Default, Clone, PartialEq)]
 #[serde(rename_all = "snake_case")]
 pub enum FilePurpose {
     Assistants,
     AssistantsOutput,
     Batch,
     BatchOutput,
+    #[default]
     #[serde(rename = "fine-tune")]
     FineTune,
     #[serde(rename = "fine-tune-results")]

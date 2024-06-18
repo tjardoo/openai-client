@@ -3,10 +3,11 @@ use crate::v1::error::APIError;
 use crate::v1::helpers::format_response;
 use crate::v1::resources::assistant::assistant::ToolOutputsParameters;
 use crate::v1::resources::assistant::run::CreateRunParameters;
-use crate::v1::resources::assistant::run::ListRunsResponse;
+use crate::v1::resources::assistant::run::CreateThreadAndRunParameters;
 use crate::v1::resources::assistant::run::ModifyRunParameters;
 use crate::v1::resources::assistant::run::Run;
 use crate::v1::resources::shared::ListParameters;
+use crate::v1::resources::shared::ListResponse;
 
 pub struct Runs<'a> {
     pub assistant: &'a Assistants<'a>,
@@ -30,6 +31,22 @@ impl Runs<'_> {
             .assistant
             .client
             .post(format!("/threads/{thread_id}/runs").as_str(), &parameters)
+            .await?;
+
+        let run_response: Run = format_response(response.data)?;
+
+        Ok(run_response)
+    }
+
+    /// Create a thread and run it in one request.
+    pub async fn create_thread_and_run(
+        &self,
+        parameters: CreateThreadAndRunParameters,
+    ) -> Result<Run, APIError> {
+        let response = self
+            .assistant
+            .client
+            .post("/threads/runs", &parameters)
             .await?;
 
         let run_response: Run = format_response(response.data)?;
@@ -76,14 +93,14 @@ impl Runs<'_> {
         &self,
         thread_id: &str,
         query: Option<ListParameters>,
-    ) -> Result<ListRunsResponse, APIError> {
+    ) -> Result<ListResponse<Run>, APIError> {
         let response = self
             .assistant
             .client
             .get_with_query(format!("/threads/{thread_id}/runs").as_str(), &query)
             .await?;
 
-        let list_runs_response: ListRunsResponse = format_response(response)?;
+        let list_runs_response: ListResponse<Run> = format_response(response)?;
 
         Ok(list_runs_response)
     }

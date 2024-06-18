@@ -9,39 +9,58 @@
 //! openai_dive = "0.4"
 //! ```
 //!
-//! More information: [set API key](#set-api-key), [add proxy](#add-proxy), [add organization/project header](#add-organizationproject-header), [rate limit headers](#rate-limit-headers), [use model names](#use-model-names)
+//! ## Get started
+//!
+//! ```rust
+//! use openai_dive::v1::api::Client;
+//!
+//! let api_key = std::env::var("OPENAI_API_KEY").expect("$OPENAI_API_KEY is not set");
+//!
+//! let client = Client::new(api_key);
+//!
+//! let result = client
+//!     .models()
+//!     .list()
+//!     .await?;
+//! ```
+//!
+//! - [Set API key](#set-api-key)
+//! - [Set organization/project id](#set-organizationproject-id)
+//! - [Add proxy](#add-proxy)
+//! - [Available models](#available-models)
 //!
 //! ## Endpoints
 //!
-//! - Models
+//! - [Models](#models)
 //!   - [List models](#list-models)
 //!   - [Retrieve model](#retrieve-model)
 //!   - [Delete fine-tune model](#delete-fine-tune-model)
-//! - Chat
+//! - [Chat](#chat)
 //!   - [Create chat completion](#create-chat-completion)
 //!   - [Create chat completion with image](#create-chat-completion-with-image)
 //!   - [Function calling](#function-calling)
-//! - Images
+//! - [Images](#images)
 //!   - [Create image](#create-image)
 //!   - [Create image edit](#create-image-edit)
 //!   - [Create image variation](#create-image-variation)
-//! - Audio
+//! - [Audio](#audio)
 //!   - [Create speech](#create-speech)
 //!   - [Create transcription](#create-transcription)
 //!   - [Create translation](#create-translation)
-//! - Embeddings
+//! - [Embeddings](#embeddings)
 //!   - [Create embeddings](#create-embeddings)
-//! - Files
+//! - [Files](#files)
 //!   - [List files](#list-files)
 //!   - [Upload file](#upload-file)
 //!   - [Delete file](#delete-file)
 //!   - [Retrieve file](#retrieve-file)
 //!   - [Retrieve file content](#retrieve-file-content)
-//! - Moderation
+//! - [Moderation](#moderation)
 //!   - [Create moderation](#create-moderation)
 //! - [Fine-tuning](#fine-tuning)
 //! - [Batches](#batches)
-//! - [Assistants (beta)](#assistants-beta)
+//! - [Assistants](#assistants)
+//!   - [Currency Converter Assistant Example](#currency-converter-assistant-example)
 //!
 //! ## Models
 //!
@@ -52,19 +71,10 @@
 //! Lists the currently available models, and provides basic information about each one such as the owner and availability.
 //!
 //! ```rust
-//! use openai_dive::v1::api::Client;
-//! use std::env;
-//!
-//! #[tokio::main]
-//! async fn main() {
-//!     let api_key = env::var("OPENAI_API_KEY").expect("$OPENAI_API_KEY is not set");
-//!
-//!     let client = Client::new(api_key);
-//!
-//!     let result = client.models().list().await.unwrap();
-//!
-//!     println!("{:#?}", result);
-//! }
+//! let result = client
+//!     .models()
+//!     .list()
+//!     .await?;
 //! ```
 //!
 //! More information: [List models](https://platform.openai.com/docs/api-reference/models/list)
@@ -74,19 +84,10 @@
 //! Retrieves a model instance, providing basic information about the model such as the owner and permissioning.
 //!
 //! ```rust
-//! use openai_dive::v1::api::Client;
-//! use std::env;
-//!
-//! #[tokio::main]
-//! async fn main() {
-//!     let api_key = env::var("OPENAI_API_KEY").expect("$OPENAI_API_KEY is not set");
-//!
-//!     let client = Client::new(api_key);
-//!
-//!     let result = client.models().get("gpt-4o").await.unwrap();
-//!
-//!     println!("{:#?}", result);
-//! }
+//! let result = client
+//!     .models()
+//!     .get("gpt-4o")
+//!     .await?;
 //! ```
 //!
 //! More information: [Retrieve model](https://platform.openai.com/docs/api-reference/models/retrieve)
@@ -96,19 +97,10 @@
 //! Delete a fine-tuned model. You must have the Owner role in your organization to delete a model.
 //!
 //! ```rust
-//! use openai_dive::v1::api::Client;
-//! use std::env;
-//!
-//! #[tokio::main]
-//! async fn main() {
-//!     let api_key = env::var("OPENAI_API_KEY").expect("$OPENAI_API_KEY is not set");
-//!
-//!     let client = Client::new(api_key);
-//!
-//!     let result = client.models().delete("my-custom-model").await.unwrap();
-//!
-//!     println!("{:#?}", result);
-//! }
+//! let result = client
+//!     .models()
+//!     .delete("my-custom-model")
+//!     .await?;
 //! ```
 //!
 //! More information: [Delete fine-tune model](https://platform.openai.com/docs/api-reference/models/delete)
@@ -121,43 +113,34 @@
 //!
 //! Creates a model response for the given chat conversation.
 //!
-//! > This endpoint also has `stream` support. See the `examples/chat/create_chat_completion_stream` example.
-//!
 //! ```rust
-//! use openai_dive::v1::api::Client;
-//! use openai_dive::v1::models::Gpt4Engine;
-//! use openai_dive::v1::resources::chat::{ChatCompletionParameters, ChatMessage, Role};
-//! use std::env;
+//! let parameters = ChatCompletionParametersBuilder::default()
+//!     .model(Gpt4Engine::Gpt4O.to_string())
+//!     .messages(vec![
+//!         ChatMessageBuilder::default()
+//!             .role(Role::User)
+//!             .content(ChatMessageContent::Text("Hello!".to_string()))
+//!             .build()?,
+//!         ChatMessageBuilder::default()
+//!             .role(Role::User)
+//!             .content(ChatMessageContent::Text(
+//!                 "What is the capital of Vietnam?".to_string(),
+//!             ))
+//!             .build()?,
+//!     ])
+//!     .response_format(ChatCompletionResponseFormat {
+//!         r#type: ChatCompletionResponseFormatType::Text,
+//!     })
+//!     .build()?;
 //!
-//! #[tokio::main]
-//! async fn main() {
-//!     let api_key = env::var("OPENAI_API_KEY").expect("$OPENAI_API_KEY is not set");
-//!
-//!     let client = Client::new(api_key);
-//!
-//!     let parameters = ChatCompletionParameters {
-//!         model: Gpt4Engine::Gpt4O.to_string(),
-//!         messages: vec![
-//!             ChatMessage {
-//!                 role: Role::User,
-//!                 content: ChatMessageContent::Text("Hello!".to_string()),
-//!                 ..Default::default()
-//!             },
-//!             ChatMessage {
-//!                 role: Role::User,
-//!                 content: ChatMessageContent::Text("What is the capital of Vietnam?".to_string()),
-//!                 ..Default::default()
-//!             },
-//!         ],
-//!         max_tokens: Some(12),
-//!         ..Default::default()
-//!     };
-//!
-//!     let result = client.chat().create(parameters).await.unwrap();
-//!
-//!     println!("{:#?}", result);
-//! }
+//! let result = client
+//!     .chat()
+//!     .create(parameters)
+//!     .await?;
 //! ```
+//!
+//! > [!NOTE]
+//! > This endpoint also has `stream` support. See the [examples/chat/create_chat_completion_stream](https://github.com/tjardoo/openai-client/tree/master/examples/chat/create_chat_completion_stream) example.
 //!
 //! More information: [Create chat completion](https://platform.openai.com/docs/api-reference/chat/create)
 //!
@@ -166,46 +149,35 @@
 //! Creates a model response for the given chat conversation.
 //!
 //! ```rust
-//! use openai_dive::v1::api::Client;
-//! use openai_dive::v1::models::Gpt4Engine;
-//! use openai_dive::v1::resources::chat::{ChatCompletionParameters, ChatMessage, Role};
-//! use std::env;
+//! let parameters = ChatCompletionParametersBuilder::default()
+//!     .model(Gpt4Engine::Gpt4O.to_string())
+//!     .messages(vec![
+//!         ChatMessageBuilder::default()
+//!             .role(Role::User)
+//!             .content(ChatMessageContent::Text(
+//!                 "What is in this image?".to_string(),
+//!             ))
+//!             .build()?,
+//!         ChatMessageBuilder::default()
+//!             .role(Role::User)
+//!             .content(ChatMessageContent::ImageUrl(vec![ImageUrl {
+//!                 r#type: "image_url".to_string(),
+//!                 text: None,
+//!                 image_url: ImageUrlType {
+//!                     url: "https://images.unsplash.com/photo-1526682847805-721837c3f83b?w=640"
+//!                         .to_string(),
+//!                     detail: None,
+//!                 },
+//!             }]))
+//!             .build()?,
+//!     ])
+//!     .max_tokens(50u32)
+//!     .build()?;
 //!
-//! #[tokio::main]
-//! async fn main() {
-//!     let api_key = env::var("OPENAI_API_KEY").expect("$OPENAI_API_KEY is not set");
-//!
-//!     let client = Client::new(api_key);
-//!
-//!     let parameters = ChatCompletionParameters {
-//!         model: Gpt4Engine::Gpt4O.to_string(),
-//!         messages: vec![
-//!             ChatMessage {
-//!                 role: Role::User,
-//!                 content: ChatMessageContent::Text("What is in this image?".to_string()),
-//!                 ..Default::default()
-//!             },
-//!             ChatMessage {
-//!                 role: Role::User,
-//!                 content: ChatMessageContent::ImageUrl(vec![ImageUrl {
-//!                     r#type: "image_url".to_string(),
-//!                     text: None,
-//!                     image_url: ImageUrlType {
-//!                         url: "https://images.unsplash.com/photo-1526682847805-721837c3f83b?w=640".to_string(),
-//!                         detail: None,
-//!                     },
-//!                 }]),
-//!                 ..Default::default()
-//!             },
-//!         ],
-//!         max_tokens: Some(50),
-//!         ..Default::default()
-//!     };
-//!
-//!     let result = client.chat().create(parameters).await.unwrap();
-//!
-//!     println!("{:#?}", result);
-//! }
+//! let result = client
+//!     .chat()
+//!     .create(parameters)
+//!     .await?;
 //! ```
 //!
 //! More information: [Create chat completion](https://platform.openai.com/docs/api-reference/chat/create)
@@ -214,70 +186,57 @@
 //!
 //! In an API call, you can describe functions and have the model intelligently choose to output a JSON object containing arguments to call one or many functions. The Chat Completions API does not call the function; instead, the model generates JSON that you can use to call the function in your code.
 //!
-//! > This endpoint also has `stream` support. See the `examples/chat/function_calling_stream` example.
-//!
 //! ```rust
-//! use openai_dive::v1::api::Client;
-//! use openai_dive::v1::models::Gpt4Engine;
-//! use openai_dive::v1::resources::chat::{
-//!     ChatCompletionFunction, ChatCompletionParameters, ChatCompletionTool, ChatCompletionToolType, ChatMessage,
-//!     ChatMessageContent,
-//! };
-//! use rand::Rng;
-//! use serde::{Deserialize, Serialize};
-//! use serde_json::{json, Value};
+//! let messages = vec![ChatMessageBuilder::default()
+//!     .content(ChatMessageContent::Text(
+//!         "Give me a random number between 100 and no more than 150?".to_string(),
+//!     ))
+//!     .build()?];
 //!
-//! #[tokio::main]
-//! async fn main() {
-//!     let api_key = std::env::var("OPENAI_API_KEY").expect("$OPENAI_API_KEY is not set");
+//! let parameters = ChatCompletionParametersBuilder::default()
+//!     .model(Gpt4Engine::Gpt4O.to_string())
+//!     .messages(messages)
+//!     .tools(vec![ChatCompletionTool {
+//!         r#type: ChatCompletionToolType::Function,
+//!         function: ChatCompletionFunction {
+//!             name: "get_random_number".to_string(),
+//!             description: Some("Get a random number between two values".to_string()),
+//!             parameters: json!({
+//!                 "type": "object",
+//!                 "properties": {
+//!                     "min": {"type": "integer", "description": "Minimum value of the random number."},
+//!                     "max": {"type": "integer", "description": "Maximum value of the random number."},
+//!                 },
+//!                 "required": ["min", "max"],
+//!             }),
+//!         },
+//!     }])
+//!     .build()?;
 //!
-//!     let client = Client::new(api_key);
+//! let result = client
+//!     .chat()
+//!     .create(parameters)
+//!     .await?;
 //!
-//!     let messages = vec![ChatMessage {
-//!         content: ChatMessageContent::Text("Give me a random number between 100 and no more than 150?".to_string()),
-//!         ..Default::default()
-//!     }];
+//! let message = result.choices[0].message.clone();
 //!
-//!     let parameters = ChatCompletionParameters {
-//!         model: Gpt4Engine::Gpt4O.to_string(),
-//!         messages: messages.clone(),
-//!         tools: Some(vec![ChatCompletionTool {
-//!             r#type: ChatCompletionToolType::Function,
-//!             function: ChatCompletionFunction {
-//!                 name: "get_random_number".to_string(),
-//!                 description: Some("Get a random number between two values".to_string()),
-//!                 parameters: json!({
-//!                     "type": "object",
-//!                     "properties": {
-//!                         "min": {"type": "integer", "description": "Minimum value of the random number."},
-//!                         "max": {"type": "integer", "description": "Maximum value of the random number."},
-//!                     },
-//!                     "required": ["min", "max"],
-//!                 }),
-//!             },
-//!         }]),
-//!         ..Default::default()
-//!     };
+//! if let Some(tool_calls) = message.tool_calls {
+//!     for tool_call in tool_calls {
+//!         let name = tool_call.function.name;
+//!         let arguments = tool_call.function.arguments;
 //!
-//!     let result = client.chat().create(parameters).await.unwrap();
+//!         if name == "get_random_number" {
+//!             let random_numbers: RandomNumber = serde_json::from_str(&arguments)?;
 //!
-//!     let message = result.choices[0].message.clone();
+//!             println!("Min: {:?}", &random_numbers.min);
+//!             println!("Max: {:?}", &random_numbers.max);
 //!
-//!     if let Some(tool_calls) = message.tool_calls {
-//!         for tool_call in tool_calls {
-//!             let name = tool_call.function.name;
-//!             let arguments = tool_call.function.arguments;
+//!             let random_number_result = get_random_number(random_numbers);
 //!
-//!             if name == "get_random_number" {
-//!                 let random_numbers: RandomNumber = serde_json::from_str(&arguments).unwrap();
-//!
-//!                 println!("Min: {:?}", &random_numbers.min);
-//!                 println!("Max: {:?}", &random_numbers.max);
-//!
-//!                 let random_number_result = get_random_number(random_numbers);
-//!
-//!                 println!("Random number between those numbers: {:?}", random_number_result.clone());
-//!             }
+//!             println!(
+//!                 "Random number between those numbers: {:?}",
+//!                 random_number_result.clone()
+//!             );
 //!         }
 //!     }
 //! }
@@ -295,6 +254,9 @@
 //! }
 //! ```
 //!
+//! > [!NOTE]
+//! > This endpoint also has `stream` support. See the [examples/chat/function_calling_stream](https://github.com/tjardoo/openai-client/tree/master/examples/chat/function_calling_stream) example.
+//!
 //! More information: [Function calling](https://platform.openai.com/docs/guides/function-calling)
 //!
 //! ## Images
@@ -306,35 +268,24 @@
 //! Creates an image given a prompt.
 //!
 //! ```rust
-//! use openai_dive::v1::api::Client;
-//! use openai_dive::v1::resources::image::{CreateImageParameters, ImageSize, ResponseFormat};
-//! use std::env;
+//! let parameters = CreateImageParametersBuilder::default()
+//!     .prompt("A cute dog in the park")
+//!     .model(DallEEngine::DallE3.to_string())
+//!     .n(1u32)
+//!     .quality(ImageQuality::Standard)
+//!     .response_format(ResponseFormat::Url)
+//!     .size(ImageSize::Size1024X1024)
+//!     .style(ImageStyle::Natural)
+//!     .build()?;
 //!
-//! #[tokio::main]
-//! async fn main() {
-//!     let api_key = env::var("OPENAI_API_KEY").expect("$OPENAI_API_KEY is not set");
+//! let result = client
+//!     .images()
+//!     .create(parameters)
+//!     .await?;
 //!
-//!     let client = Client::new(api_key);
-//!
-//!     let parameters = CreateImageParameters {
-//!         prompt: "A cute baby dog".to_string(),
-//!         model: None,
-//!         n: Some(1),
-//!         quality: None,
-//!         response_format: Some(ResponseFormat::Url),
-//!         size: Some(ImageSize::Size256X256),
-//!         style: None,
-//!         user: None,
-//!     };
-//!
-//!     let result = client.images().create(parameters).await.unwrap();
-//!
-//!     let paths = result.save("./images").await.unwrap();
-//!
-//!     println!("{:?}", paths);
-//!
-//!     println!("{:#?}", result);
-//! }
+//! let paths = result
+//!     .save("./images")
+//!     .await?;
 //! ```
 //!
 //! More information: [Create image](https://platform.openai.com/docs/api-reference/images/create)
@@ -344,31 +295,18 @@
 //! Creates an edited or extended image given an original image and a prompt.
 //!
 //! ```rust
-//! use openai_dive::v1::api::Client;
-//! use openai_dive::v1::resources::image::{EditImageParameters, ImageSize};
-//! use std::env;
+//! let parameters = EditImageParametersBuilder::default()
+//!     .image("./images/image_edit_original.png")
+//!     .prompt("A cute baby sea otter")
+//!     .mask("./images/image_edit_mask.png")
+//!     .n(1u32)
+//!     .size(ImageSize::Size512X512)
+//!     .build()?;
 //!
-//! #[tokio::main]
-//! async fn main() {
-//!     let api_key = env::var("OPENAI_API_KEY").expect("$OPENAI_API_KEY is not set");
-//!
-//!     let client = Client::new(api_key);
-//!
-//!     let parameters = EditImageParameters {
-//!         image: "./images/image_edit_original.png".to_string(),
-//!         prompt: "A cute baby sea otter".to_string(),
-//!         mask: Some("./images/image_edit_mask.png".to_string()),
-//!         model: None,
-//!         n: Some(1),
-//!         size: Some(ImageSize::Size256X256),
-//!         response_format: None,
-//!         user: None,
-//!     };
-//!
-//!     let result = client.images().edit(parameters).await.unwrap();
-//!
-//!     println!("{:#?}", result);
-//! }
+//! let result = client
+//!     .images()
+//!     .edit(parameters)
+//!     .await?;
 //! ```
 //!
 //! More information: [Create image edit](https://platform.openai.com/docs/api-reference/images/createEdit)
@@ -378,29 +316,16 @@
 //! Creates a variation of a given image.
 //!
 //! ```rust
-//! use openai_dive::v1::api::Client;
-//! use openai_dive::v1::resources::image::{CreateImageVariationParameters, ImageSize};
-//! use std::env;
+//! let parameters = CreateImageVariationParametersBuilder::default()
+//!     .image("./images/image_edit_original.png")
+//!     .n(1u32)
+//!     .size(ImageSize::Size256X256)
+//!     .build()?;
 //!
-//! #[tokio::main]
-//! async fn main() {
-//!     let api_key = env::var("OPENAI_API_KEY").expect("$OPENAI_API_KEY is not set");
-//!
-//!     let client = Client::new(api_key);
-//!
-//!     let parameters = CreateImageVariationParameters {
-//!         image: "./images/image_edit_original.png".to_string(),
-//!         model: None,
-//!         n: Some(1),
-//!         response_format: None,
-//!         size: Some(ImageSize::Size256X256),
-//!         user: None,
-//!     };
-//!
-//!     let result = client.images().variation(parameters).await.unwrap();
-//!
-//!     println!("{:#?}", result);
-//! }
+//! let result = client
+//!     .images()
+//!     .variation(parameters)
+//!     .await?;
 //! ```
 //!
 //! More information: [Create image variation](https://platform.openai.com/docs/api-reference/images/createVariation)
@@ -413,36 +338,26 @@
 //!
 //! Generates audio from the input text.
 //!
+//! ```rust
+//! let parameters = AudioSpeechParametersBuilder::default()
+//!     .model(TTSEngine::Tts1.to_string())
+//!     .input("Hallo, this is a test from OpenAI Dive.")
+//!     .voice(AudioVoice::Alloy)
+//!     .response_format(AudioSpeechResponseFormat::Mp3)
+//!     .build()?;
+//!
+//! let response = client
+//!     .audio()
+//!     .create_speech(parameters)
+//!     .await?;
+//!
+//! response
+//!     .save("files/example.mp3")
+//!     .await?;
+//! ```
+//!
 //! > [!NOTE]
 //! > This endpoint also has `stream` support. See the [examples/audio/create_speech_stream](https://github.com/tjardoo/openai-client/tree/master/examples/audio/create_speech_stream) example.
-//!
-//! ```rust
-//! use openai_dive::v1::api::Client;
-//! use openai_dive::v1::models::TTSEngine;
-//! use openai_dive::v1::resources::audio::{
-//!     AudioSpeechParameters, AudioSpeechResponseFormat, AudioVoice,
-//! };
-//! use std::env;
-//!
-//! #[tokio::main]
-//! async fn main() {
-//!     let api_key = env::var("OPENAI_API_KEY").expect("$OPENAI_API_KEY is not set");
-//!
-//!     let client = Client::new(api_key);
-//!
-//!     let parameters = AudioSpeechParameters {
-//!         model: TTSEngine::Tts1.to_string(),
-//!         input: "Hallo, this is a test from OpenAI Dive.".to_string(),
-//!         voice: AudioVoice::Alloy,
-//!         response_format: Some(AudioSpeechResponseFormat::Mp3),
-//!         speed: Some(1.0),
-//!     };
-//!
-//!     let response = client.audio().create_speech(parameters).await.unwrap();
-//!
-//!     response.save("files/example.mp3").await.unwrap();
-//! }
-//! ```
 //!
 //! More information: [Create speech](https://platform.openai.com/docs/api-reference/audio/createSpeech)
 //!
@@ -451,35 +366,18 @@
 //! Transcribes audio into the input language.
 //!
 //! ```rust
-//! use openai_dive::v1::api::Client;
-//! use openai_dive::v1::models::WhisperEngine;
-//! use openai_dive::v1::resources::audio::{AudioOutputFormat, AudioTranscriptionFile, AudioTranscriptionParameters};
-//! use std::env;
+//! let parameters = AudioTranscriptionParametersBuilder::default()
+//!     .file(AudioTranscriptionFile::File(
+//!         "./audio/micro-machines.mp3".to_string(),
+//!     ))
+//!     .model(WhisperEngine::Whisper1.to_string())
+//!     .response_format(AudioOutputFormat::VerboseJson)
+//!     .build()?;
 //!
-//! #[tokio::main]
-//! async fn main() {
-//!     let api_key = env::var("OPENAI_API_KEY").expect("$OPENAI_API_KEY is not set");
-//!
-//!     let client = Client::new(api_key);
-//!
-//!     let parameters = AudioTranscriptionParameters {
-//!         file: AudioTranscriptionFile::File("./audio/micro-machines.mp3".to_string()),
-//!         model: WhisperEngine::Whisper1.to_string(),
-//!         language: None,
-//!         prompt: None,
-//!         response_format: Some(AudioOutputFormat::Text),
-//!         temperature: None,
-//!         timestamp_granularities: None,
-//!     };
-//!
-//!     let result = client
-//!         .audio()
-//!         .create_transcription(parameters)
-//!         .await
-//!         .unwrap();
-//!
-//!     println!("{:#?}", result);
-//! }
+//! let result = client
+//!     .audio()
+//!     .create_transcription(parameters)
+//!     .await?;
 //! ```
 //!
 //! More information: [Create transcription](https://platform.openai.com/docs/api-reference/audio/createTranscription)
@@ -489,29 +387,16 @@
 //! Translates audio into English.
 //!
 //! ```rust
-//! use openai_dive::v1::api::Client;
-//! use openai_dive::v1::models::WhisperEngine;
-//! use openai_dive::v1::resources::audio::{AudioOutputFormat, AudioTranslationParameters};
-//! use std::env;
+//! let parameters = AudioTranslationParametersBuilder::default()
+//!     .file("./audio/multilingual.mp3")
+//!     .model(WhisperEngine::Whisper1.to_string())
+//!     .response_format(AudioOutputFormat::Srt)
+//!     .build()?;
 //!
-//! #[tokio::main]
-//! async fn main() {
-//!     let api_key = env::var("OPENAI_API_KEY").expect("$OPENAI_API_KEY is not set");
-//!
-//!     let client = Client::new(api_key);
-//!
-//!     let parameters = AudioTranslationParameters {
-//!         file: "./audio/multilingual.mp3".to_string(),
-//!         model: WhisperEngine::Whisper1.to_string(),
-//!         prompt: None,
-//!         response_format: Some(AudioOutputFormat::Srt),
-//!         temperature: None,
-//!     };
-//!
-//!     let result = client.audio().create_translation(parameters).await.unwrap();
-//!
-//!     println!("{:#?}", result);
-//! }
+//! let result = client
+//!     .audio()
+//!     .create_translation(parameters)
+//!     .await?;
 //! ```
 //!
 //! More information: [Create translation](https://platform.openai.com/docs/api-reference/audio/createTranslation)
@@ -525,29 +410,18 @@
 //! Creates an embedding vector representing the input text.
 //!
 //! ```rust
-//! use openai_dive::v1::api::Client;
-//! use openai_dive::v1::models::EmbeddingsEngine;
-//! use openai_dive::v1::resources::embedding::{EmbeddingInput, EmbeddingParameters};
-//! use std::env;
+//! let parameters = EmbeddingParametersBuilder::default()
+//!     .model(EmbeddingsEngine::TextEmbedding3Small.to_string())
+//!     .input(EmbeddingInput::String(
+//!         "The food was delicious and the waiter...".to_string(),
+//!     ))
+//!     .encoding_format(EmbeddingEncodingFormat::Float)
+//!     .build()?;
 //!
-//! #[tokio::main]
-//! async fn main() {
-//!     let api_key = env::var("OPENAI_API_KEY").expect("$OPENAI_API_KEY is not set");
-//!
-//!     let client = Client::new(api_key);
-//!
-//!     let parameters = EmbeddingParameters {
-//!         model: EmbeddingsEngine::TextEmbedding3Small.to_string(),
-//!         input: EmbeddingInput::String("The food was delicious and the waiter...".to_string()),
-//!         encoding_format: None,
-//!         dimensions: None,
-//!         user: None,
-//!     };
-//!
-//!     let result = client.embeddings().create(parameters).await.unwrap();
-//!
-//!     println!("{:#?}", result);
-//! }
+//! let result = client
+//!     .embeddings()
+//!     .create(parameters)
+//!     .await?;
 //! ```
 //!
 //! More information: [Create embeddings](https://platform.openai.com/docs/api-reference/embeddings/create)
@@ -561,26 +435,14 @@
 //! Returns a list of files that belong to the user's organization.
 //!
 //! ```rust
-//! use openai_dive::v1::{
-//!     api::Client,
-//!     resources::file::{FilePurpose, ListFilesParameters},
+//! let query = ListFilesParameters {
+//!     purpose: Some(FilePurpose::FineTune),
 //! };
-//! use std::env;
 //!
-//! #[tokio::main]
-//! async fn main() {
-//!     let api_key = env::var("OPENAI_API_KEY").expect("$OPENAI_API_KEY is not set");
-//!
-//!     let client = Client::new(api_key);
-//!
-//!     let query = ListFilesParameters {
-//!         purpose: Some(FilePurpose::FineTune),
-//!     };
-//!
-//!     let result = client.files().list(Some(query)).await.unwrap();
-//!
-//!     println!("{:#?}", result);
-//! }
+//! let result = client
+//!     .files()
+//!     .list(Some(query))
+//!     .await?;
 //! ```
 //!
 //! More information: [List files](https://platform.openai.com/docs/api-reference/files/list)
@@ -590,27 +452,15 @@
 //! Upload a file that can be used across various endpoints.
 //!
 //! ```rust
-//! use openai_dive::v1::{
-//!     api::Client,
-//!     resources::file::{FilePurpose, UploadFileParameters},
-//! };
-//! use std::env;
+//! let parameters = UploadFileParametersBuilder::default()
+//!     .file("./files/DummyUsers.json")
+//!     .purpose(FilePurpose::Assistants)
+//!     .build()?;
 //!
-//! #[tokio::main]
-//! async fn main() {
-//!     let api_key = env::var("OPENAI_API_KEY").expect("$OPENAI_API_KEY is not set");
-//!
-//!     let client = Client::new(api_key);
-//!
-//!     let parameters = UploadFileParameters {
-//!         file: "./files/FineTuningJobSample2.jsonl".to_string(),
-//!         purpose: FilePurpose::FineTune,
-//!     };
-//!
-//!     let result = client.files().upload(parameters).await.unwrap();
-//!
-//!     println!("{:#?}", result);
-//! }
+//! let result = client
+//!     .files()
+//!     .upload(parameters)
+//!     .await?;
 //! ```
 //!
 //! More information [Upload file](https://platform.openai.com/docs/api-reference/files/create)
@@ -620,24 +470,12 @@
 //! Delete a file.
 //!
 //! ```rust
-//! use dotenv::dotenv;
-//! use openai_dive::v1::api::Client;
-//! use std::env;
+//!     let file_id = "file-XXX";
 //!
-//! #[tokio::main]
-//! async fn main() {
-//!     dotenv().ok();
-//!
-//!     let api_key = env::var("OPENAI_API_KEY").expect("$OPENAI_API_KEY is not set");
-//!
-//!     let client = Client::new(api_key);
-//!
-//!     let file_id = env::var("FILE_ID").expect("FILE_ID is not set in the .env file.");
-//!
-//!     let result = client.files().delete(&file_id).await.unwrap();
-//!
-//!     println!("{:#?}", result);
-//! }
+//!     let result = client
+//!         .files()
+//!         .delete(&file_id)
+//!         .await?;
 //! ```
 //!
 //! More information [Delete file](https://platform.openai.com/docs/api-reference/files/delete)
@@ -647,24 +485,12 @@
 //! Returns information about a specific file.
 //!
 //! ```rust
-//! use dotenv::dotenv;
-//! use openai_dive::v1::api::Client;
-//! use std::env;
+//! let file_id = "file-XXX";
 //!
-//! #[tokio::main]
-//! async fn main() {
-//!     dotenv().ok();
-//!
-//!     let api_key = env::var("OPENAI_API_KEY").expect("$OPENAI_API_KEY is not set");
-//!
-//!     let client = Client::new(api_key);
-//!
-//!     let file_id = env::var("FILE_ID").expect("FILE_ID is not set in the .env file.");
-//!
-//!     let result = client.files().retrieve(&file_id).await.unwrap();
-//!
-//!     println!("{:#?}", result);
-//! }
+//! let result = client
+//!     .files()
+//!     .retrieve(&file_id)
+//!     .await?;
 //! ```
 //!
 //! More information [Retrieve file](https://platform.openai.com/docs/api-reference/files/retrieve)
@@ -674,24 +500,12 @@
 //! Returns the contents of the specified file.
 //!
 //! ```rust
-//! use dotenv::dotenv;
-//! use openai_dive::v1::api::Client;
-//! use std::env;
+//! let file_id = "file-XXX";
 //!
-//! #[tokio::main]
-//! async fn main() {
-//!     dotenv().ok();
-//!
-//!     let api_key = env::var("OPENAI_API_KEY").expect("$OPENAI_API_KEY is not set");
-//!
-//!     let client = Client::new(api_key);
-//!
-//!     let file_id = env::var("FILE_ID").expect("FILE_ID is not set in the .env file.");
-//!
-//!     let result = client.files().retrieve_content(&file_id).await.unwrap();
-//!
-//!     println!("{:#?}", result);
-//! }
+//! let result = client
+//!     .files()
+//!     .retrieve_content(&file_id)
+//!     .await?;
 //! ```
 //!
 //! More information [Retrieve file content](https://platform.openai.com/docs/api-reference/files/retrieve-contents)
@@ -705,26 +519,15 @@
 //! Classifies if text is potentially harmful.
 //!
 //! ```rust
-//! use openai_dive::v1::api::Client;
-//! use openai_dive::v1::models::ModerationsEngine;
-//! use openai_dive::v1::resources::moderation::ModerationParameters;
-//! use std::env;
+//! let parameters = ModerationParametersBuilder::default()
+//!     .model(ModerationsEngine::TextModerationLatest.to_string())
+//!     .input("I want to kill them.".to_string())
+//!     .build()?;
 //!
-//! #[tokio::main]
-//! async fn main() {
-//!     let api_key = env::var("OPENAI_API_KEY").expect("$OPENAI_API_KEY is not set");
-//!
-//!     let client = Client::new(api_key);
-//!
-//!     let parameters = ModerationParameters {
-//!         input: "I want to kill them.".to_string(),
-//!         model: ModerationsEngine::TextModerationLatest.to_string(),
-//!     };
-//!
-//!     let result = client.moderations().create(parameters).await.unwrap();
-//!
-//!     println!("{:#?}", result);
-//! }
+//! let result = client
+//!     .moderations()
+//!     .create(parameters)
+//!     .await?;
 //! ```
 //!
 //! More information [Create moderation](https://platform.openai.com/docs/api-reference/moderations/create)
@@ -757,21 +560,25 @@
 //!
 //! More information [Batch](https://platform.openai.com/docs/api-reference/batch)
 //!
-//! ## Assistants (beta)
+//! ## Assistants
 //!
 //! Build assistants that can call models and use tools to perform tasks.
 //!
 //! For more information see the examples in the [examples/assistants](https://github.com/tjardoo/openai-client/tree/master/examples/assistants) directory.
 //!
 //! - Assistants
-//! - Files
 //! - Threads
 //! - Messages
 //! - Runs
+//! - Run Steps
 //!
 //! More information [Assistants](https://platform.openai.com/docs/api-reference/assistants)
 //!
-//! ## General
+//! ### Currency Converter Assistant Example
+//!
+//! The [`Currency Converter Assistant`](https://github.com/tjardoo/openai-client/tree/master/examples/assistants) processes conversion queries. It integrates a function `"get_currency_conversion"` to fetch real-time conversion rates with EUR as the base. The assistant is set up by creating a thread and run via the `create_thread_and_run` endpoint, checking the run's status, and handling tool outputs when required. Finally, it retrieves the assistant's responses using the `list_messages` endpoint to display the conversion results.
+//!
+//! ## Configuration
 //!
 //! ### Set API key
 //!
@@ -786,6 +593,20 @@
 //!
 //! # Linux/macOS
 //! export OPENAI_API_KEY='sk-...'
+//! ```
+//!
+//! ### Set organization/project ID
+//!
+//! You can create multiple organizations and projects in the OpenAI platform. This allows you to group files, fine-tuned models and other resources.
+//!
+//! You can set the organization ID and/or project ID on the client via the `set_organization` and `set_project` methods. If you don't set the organization and/or project ID, the client will use the default organization and default project.
+//!
+//! ```rust
+//! let mut client = Client::new(api_key);
+//!
+//! client
+//!     .set_organization("org-XXX")
+//!     .set_project("proj_XXX");
 //! ```
 //!
 //! ### Add proxy
@@ -819,56 +640,9 @@
 //! };
 //! ```
 //!
-//! ### Add organization/project header
+//! ### Available Models
 //!
-//! You can add the organization and/or project header to your requests by creating a new client and setting the organization and/or project ID.
-//!
-//! If you don't set the organization and/or project ID, the client will use the default organization and default project.
-//!
-//! ```rust
-//! #[tokio::main]
-//! use openai_dive::v1::api::Client;
-//! use std::env;
-//!
-//! async fn main() {
-//!     let api_key = env::var("OPENAI_API_KEY").expect("$OPENAI_API_KEY is not set");
-//!
-//!     let mut client = Client::new(api_key);
-//!
-//!     client
-//!         .set_organization("org-XXX")
-//!         .set_project("proj_XXX");
-//!
-//!     // your code
-//! }
-//! ```
-//!
-//! ## Rate limit headers
-//!
-//! In addition to seeing your rate limit on your account page, you can also view important information about your rate limits such as the remaining requests, tokens, and other metadata in the headers of the HTTP response.
-//!
-//! The following endpoints have rate limit headers support:
-//!
-//! - [Create chat completion](#create-chat-completion)
-//! - [Create embeddings](#create-embeddings)
-//!
-//! You can access them by calling the `create_wrapped` method instead of the `create` method. The `create_wrapped` method returns a `Result<WrappedResponse<T>, Error>`.
-//!
-//! ```rust
-//! use openai_dive::v1::api::Client;
-//!
-//! let result = client.chat().create_wrapped(parameters).await.unwrap();
-//!
-//! // the chat completion response
-//! println!("{:#?}", result.data);
-//!
-//! // the rate limit headers
-//! println!("{:#?}", result.headers);
-//! ```
-//!
-//! More information: [Rate limit headers](https://platform.openai.com/docs/guides/rate-limits/rate-limits-in-headers)
-//!
-//! ## Use model names
+//! You can use these predefined constants to set the model in the parameters or use any string representation (ie. for your custom models).
 //!
 //! - Gpt4Engine
 //!   - Gpt4O `gpt-4o` (alias)

@@ -1,6 +1,6 @@
-use crate::v1::models::Gpt4Engine;
 use crate::v1::resources::shared::StopToken;
 use crate::v1::resources::shared::{FinishReason, Usage};
+use derive_builder::Builder;
 use serde::{Deserialize, Serialize};
 use std::collections::HashMap;
 use std::fmt::Display;
@@ -45,7 +45,9 @@ pub struct ChatCompletionChunkResponse {
     pub object: String,
 }
 
-#[derive(Serialize, Deserialize, Debug, Clone, PartialEq)]
+#[derive(Serialize, Deserialize, Debug, Default, Builder, Clone, PartialEq)]
+#[builder(name = "ChatCompletionParametersBuilder")]
+#[builder(setter(into, strip_option), default)]
 pub struct ChatCompletionParameters {
     /// A list of messages comprising the conversation so far.
     pub messages: Vec<ChatMessage>,
@@ -156,7 +158,9 @@ pub struct ChatCompletionTool {
     pub function: ChatCompletionFunction,
 }
 
-#[derive(Serialize, Deserialize, Debug, Clone, PartialEq)]
+#[derive(Serialize, Deserialize, Debug, Default, Builder, Clone, PartialEq)]
+#[builder(name = "ChatMessageBuilder")]
+#[builder(setter(into, strip_option), default)]
 pub struct ChatMessage {
     /// The role of the author of this message.
     pub role: Role,
@@ -244,7 +248,27 @@ pub struct ChatCompletionChoice {
     /// The reason the model stopped generating tokens.
     #[serde(skip_serializing_if = "Option::is_none")]
     pub finish_reason: Option<FinishReason>,
-    // @todo add logprobs
+    /// Log probability information for the choice.
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub logprobs: Option<LogProps>,
+}
+
+#[derive(Serialize, Deserialize, Debug, Clone, PartialEq)]
+pub struct LogProps {
+    /// A list of message content tokens with log probability information.
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub content: Option<Vec<LogPropsContent>>,
+}
+
+#[derive(Serialize, Deserialize, Debug, Clone, PartialEq)]
+pub struct LogPropsContent {
+    /// The token.
+    pub token: String,
+    /// The log probability of this token, if it is within the top 20 most likely tokens.
+    /// Otherwise, the value -9999.0 is used to signify that the token is very unlikely.
+    pub logprob: f32,
+    /// A list of integers representing the UTF-8 bytes representation of the token.
+    pub bytes: Option<Vec<u8>>,
 }
 
 #[cfg(feature = "stream")]
@@ -317,56 +341,20 @@ pub enum ChatCompletionToolChoice {
     ChatCompletionToolChoiceFunction(ChatCompletionToolChoiceFunction),
 }
 
-#[derive(Serialize, Deserialize, Debug, Clone, PartialEq)]
+#[derive(Serialize, Deserialize, Default, Debug, Clone, PartialEq)]
 #[serde(rename_all = "lowercase")]
 pub enum Role {
     System,
+    #[default]
     User,
     Assistant,
     Function,
     Tool,
 }
 
-impl Default for ChatCompletionParameters {
+impl Default for ChatMessageContent {
     fn default() -> Self {
-        ChatCompletionParameters {
-            messages: vec![ChatMessage {
-                role: Role::User,
-                content: ChatMessageContent::Text("Hello, World!".to_string()),
-                tool_calls: None,
-                name: None,
-                tool_call_id: None,
-            }],
-            model: Gpt4Engine::Gpt4.to_string(),
-            frequency_penalty: None,
-            logit_bias: None,
-            logprobs: None,
-            top_logprobs: None,
-            max_tokens: None,
-            n: None,
-            presence_penalty: None,
-            response_format: None,
-            seed: None,
-            stop: None,
-            stream: None,
-            temperature: None,
-            top_p: None,
-            tools: None,
-            tool_choice: None,
-            user: None,
-        }
-    }
-}
-
-impl Default for ChatMessage {
-    fn default() -> Self {
-        ChatMessage {
-            role: Role::User,
-            content: ChatMessageContent::Text("Hello, World!".to_string()),
-            tool_calls: None,
-            name: None,
-            tool_call_id: None,
-        }
+        ChatMessageContent::Text("".to_string())
     }
 }
 

@@ -3,25 +3,24 @@ use futures::stream::StreamExt;
 use openai_dive::v1::api::Client;
 use openai_dive::v1::models::TTSEngine;
 use openai_dive::v1::resources::audio::{
-    AudioSpeechParameters, AudioSpeechResponseFormat, AudioVoice,
+    AudioSpeechParametersBuilder, AudioSpeechResponseFormat, AudioVoice,
 };
-use std::env;
 use std::fs::File;
 use std::io::Write;
 
 #[tokio::main]
 async fn main() {
-    let api_key = env::var("OPENAI_API_KEY").expect("$OPENAI_API_KEY is not set");
+    let api_key = std::env::var("OPENAI_API_KEY").expect("$OPENAI_API_KEY is not set");
 
     let client = Client::new(api_key);
 
-    let parameters = AudioSpeechParameters {
-        model: TTSEngine::Tts1.to_string(),
-        input: "The quick brown fox jumped over the lazy dog.".to_string(),
-        voice: AudioVoice::Alloy,
-        response_format: Some(AudioSpeechResponseFormat::Mp3),
-        speed: Some(1.0),
-    };
+    let parameters = AudioSpeechParametersBuilder::default()
+        .model(TTSEngine::Tts1.to_string())
+        .input("The quick brown fox jumped over the lazy dog.")
+        .voice(AudioVoice::Alloy)
+        .response_format(AudioSpeechResponseFormat::Mp3)
+        .build()
+        .unwrap();
 
     let mut file = File::create("./files/example-stream.mp3").unwrap();
 

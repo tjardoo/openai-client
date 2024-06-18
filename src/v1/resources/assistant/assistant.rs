@@ -1,3 +1,4 @@
+use derive_builder::Builder;
 use serde::{Deserialize, Serialize};
 use std::collections::HashMap;
 
@@ -17,21 +18,37 @@ pub struct Assistant {
     pub description: Option<String>,
     /// ID of the model to use.
     pub model: String,
-    /// The system instructions that the assistant uses. The maximum length is 32768 characters.
+    /// The system instructions that the assistant uses. The maximum length is 256,000 characters.
     #[serde(skip_serializing_if = "Option::is_none")]
     pub instructions: Option<String>,
     /// A list of tool enabled on the assistant. There can be a maximum of 128 tools per assistant.
-    /// Tools can be of types 'code_interpreter', 'retrieval', or 'function'.
-    pub tools: Vec<AssistantTools>,
-    /// A list of file IDs attached to this assistant. There can be a maximum of 20 files attached to the assistant.
-    /// Files are ordered by their creation date in ascending order.
-    pub file_ids: Vec<String>,
+    /// Tools can be of types code_interpreter, file_search, or function.
+    pub tools: Option<Vec<AssistantTools>>,
+    /// A set of resources that are used by the assistant's tools.
+    /// The resources are specific to the type of tool.
+    /// For example, the code_interpreter tool requires a list of file IDs, while the file_search tool requires a list of vector store IDs.
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub tool_resources: Option<AssistantToolResource>,
     /// Set of 16 key-value pairs that can be attached to an object.
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub metadata: Option<HashMap<String, String>>,
+    /// What sampling temperature to use, between 0 and 2. Higher values like 0.8 will make the output more random,
+    /// while lower values like 0.2 will make it more focused and deterministic.
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub temperature: Option<f32>,
+    /// An alternative to sampling with temperature, called nucleus sampling,
+    /// where the model considers the results of the tokens with top_p probability mass.
+    /// So 0.1 means only the tokens comprising the top 10% probability mass are considered.
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub top_p: Option<f32>,
+    /// Specifies the format that the model must output.
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub response_format: Option<AssistantResponseFormat>,
 }
 
-#[derive(Serialize, Deserialize, Debug, Clone, PartialEq)]
-
+#[derive(Serialize, Deserialize, Debug, Default, Builder, Clone, PartialEq)]
+#[builder(name = "AssistantParametersBuilder")]
+#[builder(setter(into, strip_option), default)]
 pub struct AssistantParameters {
     /// ID of the model to use.
     pub model: String,
@@ -41,18 +58,52 @@ pub struct AssistantParameters {
     /// The description of the assistant. The maximum length is 512 characters.
     #[serde(skip_serializing_if = "Option::is_none")]
     pub description: Option<String>,
-    /// The system instructions that the assistant uses. The maximum length is 32768 characters.
+    /// The system instructions that the assistant uses. The maximum length is 256,000 characters.
     #[serde(skip_serializing_if = "Option::is_none")]
     pub instructions: Option<String>,
     /// A list of tool enabled on the assistant. There can be a maximum of 128 tools per assistant.
-    /// Tools can be of types 'code_interpreter', 'retrieval', or 'function'.
+    /// Tools can be of types code_interpreter, file_search, or function.
     pub tools: Option<Vec<AssistantTools>>,
-    /// A list of file IDs attached to this assistant. There can be a maximum of 20 files attached to the assistant.
-    /// Files are ordered by their creation date in ascending order.
-    pub file_ids: Vec<String>,
+    /// A set of resources that are used by the assistant's tools.
+    /// The resources are specific to the type of tool.
+    /// For example, the code_interpreter tool requires a list of file IDs, while the file_search tool requires a list of vector store IDs.
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub tool_resources: Option<AssistantToolResource>,
     /// Set of 16 key-value pairs that can be attached to an object.
     #[serde(skip_serializing_if = "Option::is_none")]
     pub metadata: Option<HashMap<String, String>>,
+    /// What sampling temperature to use, between 0 and 2. Higher values like 0.8 will make the output more random,
+    /// while lower values like 0.2 will make it more focused and deterministic.
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub temperature: Option<f32>,
+    /// An alternative to sampling with temperature, called nucleus sampling,
+    /// where the model considers the results of the tokens with top_p probability mass.
+    /// So 0.1 means only the tokens comprising the top 10% probability mass are considered.
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub top_p: Option<f32>,
+    /// Specifies the format that the model must output.
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub response_format: Option<AssistantResponseFormat>,
+}
+
+#[derive(Serialize, Deserialize, Debug, Clone, PartialEq)]
+pub struct AssistantToolResource {
+    #[serde(skip_serializing_if = "Option::is_none")]
+    code_interpreter: Option<AssistantToolResourceCodeInterpreter>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    file_search: Option<AssistantToolResourceFileSearch>,
+}
+
+#[derive(Serialize, Deserialize, Debug, Clone, PartialEq)]
+pub struct AssistantToolResourceCodeInterpreter {
+    /// A list of file IDs made available to the `code_interpreter`` tool. There can be a maximum of 20 files associated with the tool.
+    file_ids: Vec<String>,
+}
+
+#[derive(Serialize, Deserialize, Debug, Clone, PartialEq)]
+pub struct AssistantToolResourceFileSearch {
+    /// The ID of the vector store attached to this assistant. There can be a maximum of 1 vector store attached to the assistant.
+    vector_store_ids: Vec<String>,
 }
 
 #[derive(Serialize, Deserialize, Debug, Clone, PartialEq)]
@@ -62,9 +113,11 @@ pub struct AssistantCodeInterpreterTool {
 }
 
 #[derive(Serialize, Deserialize, Debug, Clone, PartialEq)]
-pub struct AssistantRetrievalTool {
-    /// The type of tool being defined: 'retrieval'.
+pub struct AssistantFileSearchTool {
+    /// The type of tool being defined: 'file_search'.
     pub r#type: String,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub file_search: Option<AssistantFileSearch>,
 }
 
 #[derive(Serialize, Deserialize, Debug, Clone, PartialEq)]
@@ -86,19 +139,22 @@ pub struct AssistantFunction {
 }
 
 #[derive(Serialize, Deserialize, Debug, Clone, PartialEq)]
-pub struct ListAssistantsResponse {
-    /// The object type, which is always 'list'.
-    pub object: String,
-    /// The list of assistants.
-    pub data: Vec<Assistant>,
-    /// ID of the first object in the list.
+pub struct AssistantFileSearch {
+    /// The maximum number of results the file search tool should output.
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub first_id: Option<String>,
-    /// ID of the last object in the list.
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub last_id: Option<String>,
-    /// Indicates whether there are more assistants to retrieve.
-    pub has_more: bool,
+    pub max_num_results: Option<u32>,
+}
+
+#[derive(Serialize, Deserialize, Debug, Clone, PartialEq)]
+#[serde(rename_all = "snake_case")]
+pub enum AssistantResponseFormat {
+    Auto,
+    #[serde(untagged)]
+    JsonObject {
+        /// Must be one of text or json_object.
+        #[serde(rename = "type")]
+        r#type: String,
+    },
 }
 
 #[derive(Serialize, Deserialize, Debug, Clone, PartialEq)]
@@ -113,28 +169,9 @@ pub struct AssistantFile {
     pub assistant_id: String,
 }
 
-#[derive(Serialize, Deserialize, Debug, Clone, PartialEq)]
-pub struct CreateAssistantFileParameters {
-    /// A File ID (with purpose="assistants") that the assistant should use.
-    /// Useful for tools like 'retrieval' and 'code_interpreter' that can access files.
-    pub file_id: String,
-}
-
-#[derive(Serialize, Deserialize, Debug, Clone, PartialEq)]
-pub struct ListAssistantFilesResponse {
-    /// The object type, which is always 'list'.
-    pub object: String,
-    /// The list of assistant files.
-    pub data: Vec<AssistantFile>,
-    /// ID of the first object in the list.
-    pub first_id: String,
-    /// ID of the last object in the list.
-    pub last_id: String,
-    /// Indicates whether there are more assistant files to retrieve.
-    pub has_more: bool,
-}
-
-#[derive(Serialize, Deserialize, Debug, Clone, PartialEq)]
+#[derive(Serialize, Deserialize, Debug, Default, Builder, Clone, PartialEq)]
+#[builder(name = "ToolOutputsParametersBuilder")]
+#[builder(setter(into, strip_option), default)]
 pub struct ToolOutputsParameters {
     /// A list of tools for which the outputs are being submitted.
     pub tool_outputs: Vec<ToolOutput>,
@@ -154,6 +191,6 @@ pub struct ToolOutput {
 #[serde(untagged)]
 pub enum AssistantTools {
     CodeInterpreter(AssistantCodeInterpreterTool),
-    Retrieval(AssistantRetrievalTool),
+    FileSearch(AssistantFileSearchTool),
     Function(AssistantFunctionTool),
 }

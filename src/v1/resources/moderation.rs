@@ -1,6 +1,9 @@
+use derive_builder::Builder;
 use serde::{Deserialize, Serialize};
 
-#[derive(Serialize, Deserialize, Debug, Clone, PartialEq)]
+#[derive(Serialize, Deserialize, Debug, Default, Builder, Clone, PartialEq)]
+#[builder(name = "ModerationParametersBuilder")]
+#[builder(setter(into, strip_option), default)]
 pub struct ModerationParameters {
     /// Input text to moderate, encoded as a string.
     pub input: String,

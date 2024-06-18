@@ -6,8 +6,10 @@ members = [
     "modify_assistant",
     "delete_assistant",
     "list_assistants",
-    "files",
+    "create_thread_run",
     "threads",
     "messages",
     "runs",
+    "run_steps",
+    "currency_converter_assistant",
 ]

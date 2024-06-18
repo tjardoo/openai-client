@@ -1,10 +1,13 @@
 use crate::v1::error::APIError;
 use bytes::Bytes;
+use derive_builder::Builder;
 use serde::{Deserialize, Serialize};
 use std::{fmt::Display, path::Path};
 use strum_macros::EnumString;
 
-#[derive(Serialize, Deserialize, Debug, Clone, PartialEq)]
+#[derive(Serialize, Deserialize, Debug, Default, Builder, Clone, PartialEq)]
+#[builder(name = "AudioSpeechParametersBuilder")]
+#[builder(setter(into, strip_option), default)]
 pub struct AudioSpeechParameters {
     /// One of the available TTS models: tts-1 or tts-1-hd.
     pub model: String,
@@ -20,7 +23,9 @@ pub struct AudioSpeechParameters {
     pub speed: Option<f32>,
 }
 
-#[derive(Serialize, Deserialize, Debug, Clone, PartialEq)]
+#[derive(Serialize, Deserialize, Debug, Default, Builder, Clone, PartialEq)]
+#[builder(name = "AudioTranscriptionParametersBuilder")]
+#[builder(setter(into, strip_option), default)]
 pub struct AudioTranscriptionParameters {
     /// The audio file object (not file name) to transcribe, in one of these formats: flac, mp3, mp4, mpeg, mpga, m4a, ogg, wav, or webm.
     #[serde(skip)]
@@ -47,7 +52,9 @@ pub struct AudioTranscriptionParameters {
     pub timestamp_granularities: Option<Vec<TimestampGranularity>>,
 }
 
-#[derive(Serialize, Deserialize, Debug, Clone, PartialEq)]
+#[derive(Serialize, Deserialize, Debug, Default, Builder, Clone, PartialEq)]
+#[builder(name = "AudioTranslationParametersBuilder")]
+#[builder(setter(into, strip_option), default)]
 pub struct AudioTranslationParameters {
     /// The audio file object (not file name) translate, in one of these formats: flac, mp3, mp4, mpeg, mpga, m4a, ogg, wav, or webm.
     pub file: String,
@@ -128,9 +135,10 @@ pub enum AudioTranscriptionFile {
     File(String),
 }
 
-#[derive(Serialize, Deserialize, Debug, Clone, EnumString, PartialEq)]
+#[derive(Serialize, Deserialize, Debug, Default, Clone, EnumString, PartialEq)]
 #[serde(rename_all = "lowercase")]
 pub enum AudioVoice {
+    #[default]
     Alloy,
     Echo,
     Fable,

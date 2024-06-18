@@ -4,13 +4,16 @@ use crate::v1::error::APIError;
 use crate::v1::helpers::generate_file_name;
 #[cfg(feature = "download")]
 use base64::{engine::general_purpose, Engine as _};
+use derive_builder::Builder;
 #[cfg(feature = "download")]
 use futures::future;
 use serde::{Deserialize, Serialize};
 use std::fmt::Display;
 use strum_macros::EnumString;
 
-#[derive(Serialize, Debug, Clone)]
+#[derive(Serialize, Debug, Default, Builder, Clone, PartialEq)]
+#[builder(name = "CreateImageParametersBuilder")]
+#[builder(setter(into, strip_option), default)]
 pub struct CreateImageParameters {
     /// A text description of the desired image(s). The maximum length is 1000 characters for dall-e-2 and 4000 characters for dall-e-3.
     pub prompt: String,
@@ -42,7 +45,9 @@ pub struct CreateImageParameters {
     pub user: Option<String>,
 }
 
-#[derive(Serialize, Deserialize, Debug, Clone, PartialEq)]
+#[derive(Serialize, Deserialize, Debug, Default, Builder, Clone, PartialEq)]
+#[builder(name = "EditImageParametersBuilder")]
+#[builder(setter(into, strip_option), default)]
 pub struct EditImageParameters {
     /// The image to edit. Must be a valid PNG file, less than 4MB, and square. If mask is not provided, image must have transparency, which will be used as the mask.
     pub image: String,
@@ -69,7 +74,9 @@ pub struct EditImageParameters {
     pub user: Option<String>,
 }
 
-#[derive(Serialize, Deserialize, Debug, Clone, PartialEq)]
+#[derive(Serialize, Deserialize, Debug, Default, Builder, Clone, PartialEq)]
+#[builder(name = "CreateImageVariationParametersBuilder")]
+#[builder(setter(into, strip_option), default)]
 pub struct CreateImageVariationParameters {
     /// The image to use as the basis for the variation(s). Must be a valid PNG file, less than 4MB, and square.
     pub image: String,

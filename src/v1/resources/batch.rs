@@ -1,6 +1,6 @@
-use std::collections::HashMap;
-
+use derive_builder::Builder;
 use serde::{Deserialize, Serialize};
+use std::collections::HashMap;
 
 #[derive(Serialize, Deserialize, Debug, Clone, PartialEq)]
 pub struct Batch {
@@ -58,7 +58,9 @@ pub struct Batch {
     pub metadata: Option<HashMap<String, String>>,
 }
 
-#[derive(Serialize, Deserialize, Debug, Clone, PartialEq)]
+#[derive(Serialize, Deserialize, Debug, Default, Builder, Clone, PartialEq)]
+#[builder(name = "CreateBatchParametersBuilder")]
+#[builder(setter(into, strip_option), default)]
 pub struct CreateBatchParameters {
     /// The ID of an uploaded file that contains requests for the new batch.
     pub input_file_id: String,
@@ -69,20 +71,6 @@ pub struct CreateBatchParameters {
     pub completion_window: BatchCompletionWindow,
     /// Optional custom metadata for the batch.
     pub metadata: Option<HashMap<String, String>>,
-}
-
-#[derive(Serialize, Deserialize, Debug, Clone, PartialEq)]
-pub struct ListBatchesResponse {
-    // The object type, which is always "list".
-    pub object: String,
-    /// The list of batches.
-    pub data: Vec<Batch>,
-    /// The ID of the first batch in the list.
-    pub first_id: Option<String>,
-    /// The ID of the last batch in the list.
-    pub last_id: Option<String>,
-    /// Indicates whether there are more batches to retrieve.
-    pub has_more: bool,
 }
 
 #[derive(Serialize, Deserialize, Debug, Clone, PartialEq)]
@@ -129,8 +117,9 @@ pub enum BatchStatus {
     Cancelled,
 }
 
-#[derive(Serialize, Deserialize, Debug, Clone, PartialEq)]
+#[derive(Serialize, Deserialize, Debug, Default, Clone, PartialEq)]
 pub enum BatchCompletionWindow {
+    #[default]
     #[serde(rename = "24h")]
     H24,
 }

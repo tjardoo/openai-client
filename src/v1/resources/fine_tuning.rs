@@ -1,3 +1,4 @@
+use derive_builder::Builder;
 use serde::{Deserialize, Serialize};
 
 #[derive(Serialize, Deserialize, Debug, Clone, PartialEq)]
@@ -47,7 +48,9 @@ pub struct FineTuningJob {
     pub estimated_finish: Option<u32>,
 }
 
-#[derive(Serialize, Deserialize, Debug, Clone, PartialEq)]
+#[derive(Serialize, Deserialize, Debug, Default, Builder, Clone, PartialEq)]
+#[builder(name = "CreateFineTuningJobParametersBuilder")]
+#[builder(setter(into, strip_option), default)]
 pub struct CreateFineTuningJobParameters {
     /// The name of the model to fine-tune.
     pub model: String,
@@ -117,40 +120,6 @@ pub struct FineTuningJobCheckpointMetrics {
     pub full_valid_loss: Option<f32>,
     #[serde(skip_serializing_if = "Option::is_none")]
     pub full_valid_mean_token_accuracy: Option<f32>,
-}
-
-#[derive(Serialize, Deserialize, Debug, Clone, PartialEq)]
-pub struct ListFineTuningJobsResponse {
-    /// The object type, which is always "fine_tuning.job.event".
-    pub object: String,
-    /// The list of fine-tuning jobs.
-    pub data: Vec<FineTuningJob>,
-    /// Indicates whether there are more fine-tuning jobs to retrieve.
-    pub has_more: bool,
-}
-
-#[derive(Serialize, Deserialize, Debug, Clone, PartialEq)]
-pub struct ListFineTuningJobEventsResponse {
-    /// The object type, which is always "fine_tuning.job.event".
-    pub object: String,
-    /// The list of fine-tuning job events.
-    pub data: Vec<FineTuningJobEvent>,
-    /// Indicates whether there are more fine-tuning job events to retrieve.
-    pub has_more: bool,
-}
-
-#[derive(Serialize, Deserialize, Debug, Clone, PartialEq)]
-pub struct ListFineTuningCheckpointsResponse {
-    /// The object type, which is always "list".
-    pub object: String,
-    /// The list of fine-tuning checkpoints.
-    pub data: Vec<FineTuningJobCheckpoint>,
-    /// The ID of the first checkpoint in the list.
-    pub first_id: Option<String>,
-    /// The ID of the last checkpoint in the list.
-    pub last_id: Option<String>,
-    /// Indicates whether there are more fine-tuning checkpoints to retrieve.
-    pub has_more: bool,
 }
 
 #[derive(Serialize, Deserialize, Debug, Clone, PartialEq)]

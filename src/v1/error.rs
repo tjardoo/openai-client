@@ -24,6 +24,8 @@ impl APIError {
     }
 }
 
+impl std::error::Error for APIError {}
+
 #[derive(Serialize, Deserialize, Debug, Clone, PartialEq)]
 pub struct InvalidRequestError {
     pub code: String,

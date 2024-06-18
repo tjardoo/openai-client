@@ -1,23 +1,20 @@
 use openai_dive::v1::api::Client;
-use openai_dive::v1::resources::image::{EditImageParameters, ImageSize};
-use std::env;
+use openai_dive::v1::resources::image::{EditImageParametersBuilder, ImageSize};
 
 #[tokio::main]
 async fn main() {
-    let api_key = env::var("OPENAI_API_KEY").expect("$OPENAI_API_KEY is not set");
+    let api_key = std::env::var("OPENAI_API_KEY").expect("$OPENAI_API_KEY is not set");
 
     let client = Client::new(api_key);
 
-    let parameters = EditImageParameters {
-        image: "./images/image_edit_original.png".to_string(),
-        prompt: "A cute baby sea otter".to_string(),
-        mask: Some("./images/image_edit_mask.png".to_string()),
-        model: None,
-        n: Some(1),
-        size: Some(ImageSize::Size512X512),
-        response_format: None,
-        user: None,
-    };
+    let parameters = EditImageParametersBuilder::default()
+        .image("./images/image_edit_original.png")
+        .prompt("A cute baby sea otter")
+        .mask("./images/image_edit_mask.png")
+        .n(1u32)
+        .size(ImageSize::Size512X512)
+        .build()
+        .unwrap();
 
     let result = client.images().edit(parameters).await.unwrap();
 
