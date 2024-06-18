@@ -123,40 +123,6 @@ pub struct FineTuningJobCheckpointMetrics {
 }
 
 #[derive(Serialize, Deserialize, Debug, Clone, PartialEq)]
-pub struct ListFineTuningJobsResponse {
-    /// The object type, which is always "fine_tuning.job.event".
-    pub object: String,
-    /// The list of fine-tuning jobs.
-    pub data: Vec<FineTuningJob>,
-    /// Indicates whether there are more fine-tuning jobs to retrieve.
-    pub has_more: bool,
-}
-
-#[derive(Serialize, Deserialize, Debug, Clone, PartialEq)]
-pub struct ListFineTuningJobEventsResponse {
-    /// The object type, which is always "fine_tuning.job.event".
-    pub object: String,
-    /// The list of fine-tuning job events.
-    pub data: Vec<FineTuningJobEvent>,
-    /// Indicates whether there are more fine-tuning job events to retrieve.
-    pub has_more: bool,
-}
-
-#[derive(Serialize, Deserialize, Debug, Clone, PartialEq)]
-pub struct ListFineTuningCheckpointsResponse {
-    /// The object type, which is always "list".
-    pub object: String,
-    /// The list of fine-tuning checkpoints.
-    pub data: Vec<FineTuningJobCheckpoint>,
-    /// The ID of the first checkpoint in the list.
-    pub first_id: Option<String>,
-    /// The ID of the last checkpoint in the list.
-    pub last_id: Option<String>,
-    /// Indicates whether there are more fine-tuning checkpoints to retrieve.
-    pub has_more: bool,
-}
-
-#[derive(Serialize, Deserialize, Debug, Clone, PartialEq)]
 pub struct FineTuningJobError {
     /// The error code.
     #[serde(skip_serializing_if = "Option::is_none")]

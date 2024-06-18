@@ -3,8 +3,8 @@ use crate::v1::{
     error::APIError,
     helpers::format_response,
     resources::{
-        batch::{Batch, CreateBatchParameters, ListBatchesResponse},
-        shared::SimpleListParameters,
+        batch::{Batch, CreateBatchParameters},
+        shared::{ListResponse, SimpleListParameters},
     },
 };
 
@@ -54,10 +54,10 @@ impl Batches<'_> {
     pub async fn list(
         &self,
         query: Option<SimpleListParameters>,
-    ) -> Result<ListBatchesResponse, APIError> {
+    ) -> Result<ListResponse<Batch>, APIError> {
         let response = self.client.get_with_query("/batches", &query).await?;
 
-        let list_batches_response: ListBatchesResponse = format_response(response)?;
+        let list_batches_response: ListResponse<Batch> = format_response(response)?;
 
         Ok(list_batches_response)
     }

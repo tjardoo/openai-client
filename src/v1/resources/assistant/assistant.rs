@@ -158,22 +158,6 @@ pub enum AssistantResponseFormat {
 }
 
 #[derive(Serialize, Deserialize, Debug, Clone, PartialEq)]
-pub struct ListAssistantsResponse {
-    /// The object type, which is always 'list'.
-    pub object: String,
-    /// The list of assistants.
-    pub data: Vec<Assistant>,
-    /// ID of the first object in the list.
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub first_id: Option<String>,
-    /// ID of the last object in the list.
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub last_id: Option<String>,
-    /// Indicates whether there are more assistants to retrieve.
-    pub has_more: bool,
-}
-
-#[derive(Serialize, Deserialize, Debug, Clone, PartialEq)]
 pub struct AssistantFile {
     /// The identifier, which can be referenced in API endpoints.
     pub id: String,
@@ -183,27 +167,6 @@ pub struct AssistantFile {
     pub created_at: u32,
     /// The assistant ID that the file is attached to.
     pub assistant_id: String,
-}
-
-#[derive(Serialize, Deserialize, Debug, Clone, PartialEq)]
-pub struct CreateAssistantFileParameters {
-    /// A File ID (with purpose="assistants") that the assistant should use.
-    /// Useful for tools like 'retrieval' and 'code_interpreter' that can access files.
-    pub file_id: String,
-}
-
-#[derive(Serialize, Deserialize, Debug, Clone, PartialEq)]
-pub struct ListAssistantFilesResponse {
-    /// The object type, which is always 'list'.
-    pub object: String,
-    /// The list of assistant files.
-    pub data: Vec<AssistantFile>,
-    /// ID of the first object in the list.
-    pub first_id: String,
-    /// ID of the last object in the list.
-    pub last_id: String,
-    /// Indicates whether there are more assistant files to retrieve.
-    pub has_more: bool,
 }
 
 #[derive(Serialize, Deserialize, Debug, Default, Builder, Clone, PartialEq)]

@@ -77,7 +77,7 @@ pub async fn retrieve_message(client: &Client, thread_id: &str, message_id: &str
 }
 
 pub async fn list_messages(client: &Client, thread_id: &str) {
-    let result: openai_dive::v1::resources::assistant::message::ListMessagesResponse = client
+    let result = client
         .assistants()
         .messages()
         .list(thread_id, None)

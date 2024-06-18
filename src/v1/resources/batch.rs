@@ -74,20 +74,6 @@ pub struct CreateBatchParameters {
 }
 
 #[derive(Serialize, Deserialize, Debug, Clone, PartialEq)]
-pub struct ListBatchesResponse {
-    // The object type, which is always "list".
-    pub object: String,
-    /// The list of batches.
-    pub data: Vec<Batch>,
-    /// The ID of the first batch in the list.
-    pub first_id: Option<String>,
-    /// The ID of the last batch in the list.
-    pub last_id: Option<String>,
-    /// Indicates whether there are more batches to retrieve.
-    pub has_more: bool,
-}
-
-#[derive(Serialize, Deserialize, Debug, Clone, PartialEq)]
 pub struct BatchErrors {
     /// The object type, which is always "list".
     pub object: String,

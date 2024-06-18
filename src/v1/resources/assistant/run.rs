@@ -192,20 +192,6 @@ pub struct ModifyRunParameters {
 }
 
 #[derive(Serialize, Deserialize, Debug, Clone, PartialEq)]
-pub struct ListRunsResponse {
-    /// The object type, which is always 'list'.
-    pub object: String,
-    /// The list of runs.
-    pub data: Vec<Run>,
-    /// ID of the first object in the list.
-    pub first_id: String,
-    /// ID of the last object in the list.
-    pub last_id: String,
-    /// Indicates whether there are more runs to retrieve.
-    pub has_more: bool,
-}
-
-#[derive(Serialize, Deserialize, Debug, Clone, PartialEq)]
 #[serde(rename_all = "snake_case")]
 pub enum RunStatus {
     Queued,

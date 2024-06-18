@@ -45,20 +45,6 @@ pub struct RunStep {
 }
 
 #[derive(Serialize, Deserialize, Debug, Clone, PartialEq)]
-pub struct ListRunStepResponse {
-    /// The object type, which is always 'list'.
-    pub object: String,
-    /// The list of run steps.
-    pub data: Vec<RunStep>,
-    /// ID of the first object in the list.
-    pub first_id: String,
-    /// ID of the last object in the list.
-    pub last_id: String,
-    /// Indicates whether there are more runs to retrieve.
-    pub has_more: bool,
-}
-
-#[derive(Serialize, Deserialize, Debug, Clone, PartialEq)]
 #[serde(untagged)]
 pub enum RunStepDetails {
     MessageCreation(MessageCreationDetails),

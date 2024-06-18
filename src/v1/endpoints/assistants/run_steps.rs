@@ -1,11 +1,9 @@
 use crate::v1::endpoints::assistants::assistants::Assistants;
+use crate::v1::resources::shared::ListResponse;
 use crate::v1::{
     error::APIError,
     helpers::format_response,
-    resources::{
-        assistant::run_step::{ListRunStepResponse, RunStep},
-        shared::ListParameters,
-    },
+    resources::{assistant::run_step::RunStep, shared::ListParameters},
 };
 
 pub struct RunSteps<'a> {
@@ -26,7 +24,7 @@ impl RunSteps<'_> {
         thread_id: &str,
         run_id: &str,
         query: Option<ListParameters>,
-    ) -> Result<ListRunStepResponse, APIError> {
+    ) -> Result<ListResponse<RunStep>, APIError> {
         let response = self
             .assistant
             .client
@@ -36,7 +34,7 @@ impl RunSteps<'_> {
             )
             .await?;
 
-        let list_run_steps_response: ListRunStepResponse = format_response(response)?;
+        let list_run_steps_response: ListResponse<RunStep> = format_response(response)?;
 
         Ok(list_run_steps_response)
     }

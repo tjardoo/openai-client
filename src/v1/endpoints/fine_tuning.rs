@@ -3,9 +3,9 @@ use crate::v1::error::APIError;
 use crate::v1::helpers::format_response;
 use crate::v1::resources::fine_tuning::CreateFineTuningJobParameters;
 use crate::v1::resources::fine_tuning::FineTuningJob;
-use crate::v1::resources::fine_tuning::ListFineTuningCheckpointsResponse;
-use crate::v1::resources::fine_tuning::ListFineTuningJobEventsResponse;
-use crate::v1::resources::fine_tuning::ListFineTuningJobsResponse;
+use crate::v1::resources::fine_tuning::FineTuningJobCheckpoint;
+use crate::v1::resources::fine_tuning::FineTuningJobEvent;
+use crate::v1::resources::shared::ListResponse;
 use crate::v1::resources::shared::SimpleListParameters;
 use serde_json::Value;
 
@@ -37,13 +37,14 @@ impl FineTuning<'_> {
     pub async fn list(
         &self,
         query: Option<SimpleListParameters>,
-    ) -> Result<ListFineTuningJobsResponse, APIError> {
+    ) -> Result<ListResponse<FineTuningJob>, APIError> {
         let response = self
             .client
             .get_with_query("/fine_tuning/jobs", &query)
             .await?;
 
-        let list_fine_tuning_jobs_response: ListFineTuningJobsResponse = format_response(response)?;
+        let list_fine_tuning_jobs_response: ListResponse<FineTuningJob> =
+            format_response(response)?;
 
         Ok(list_fine_tuning_jobs_response)
     }
@@ -80,13 +81,13 @@ impl FineTuning<'_> {
         &self,
         id: &str,
         query: Option<SimpleListParameters>,
-    ) -> Result<ListFineTuningJobEventsResponse, APIError> {
+    ) -> Result<ListResponse<FineTuningJobEvent>, APIError> {
         let response = self
             .client
             .get_with_query(format!("/fine_tuning/jobs/{id}/events").as_str(), &query)
             .await?;
 
-        let list_fine_tuning_job_events_response: ListFineTuningJobEventsResponse =
+        let list_fine_tuning_job_events_response: ListResponse<FineTuningJobEvent> =
             format_response(response)?;
 
         Ok(list_fine_tuning_job_events_response)
@@ -97,7 +98,7 @@ impl FineTuning<'_> {
         &self,
         id: &str,
         query: Option<SimpleListParameters>,
-    ) -> Result<ListFineTuningCheckpointsResponse, APIError> {
+    ) -> Result<ListResponse<FineTuningJobCheckpoint>, APIError> {
         let response = self
             .client
             .get_with_query(
@@ -106,7 +107,7 @@ impl FineTuning<'_> {
             )
             .await?;
 
-        let list_fine_tuning_checkpoints_response: ListFineTuningCheckpointsResponse =
+        let list_fine_tuning_checkpoints_response: ListResponse<FineTuningJobCheckpoint> =
             format_response(response)?;
 
         Ok(list_fine_tuning_checkpoints_response)

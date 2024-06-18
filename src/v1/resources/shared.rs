@@ -70,6 +70,20 @@ pub struct ListParameters {
 }
 
 #[derive(Serialize, Deserialize, Debug, Clone, PartialEq)]
+pub struct ListResponse<T> {
+    // The object type, which is always "list".
+    pub object: String,
+    /// The list ob objects.
+    pub data: Vec<T>,
+    /// The ID of the first objects in the list.
+    pub first_id: Option<String>,
+    /// The ID of the last objects in the list.
+    pub last_id: Option<String>,
+    /// Indicates whether there are more objects to retrieve.
+    pub has_more: bool,
+}
+
+#[derive(Serialize, Deserialize, Debug, Clone, PartialEq)]
 pub struct DeletedObject {
     /// ID of the deleted object.
     pub id: String,

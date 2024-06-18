@@ -68,20 +68,6 @@ pub struct ModifyMessageParameters {
     pub metadata: Option<HashMap<String, String>>,
 }
 
-#[derive(Serialize, Deserialize, Debug, Clone, PartialEq)]
-pub struct ListMessagesResponse {
-    /// The object type, which is always 'list'.
-    pub object: String,
-    /// The list of assistant files.
-    pub data: Vec<Message>,
-    /// ID of the first object in the list.
-    pub first_id: Option<String>,
-    /// ID of the last object in the list.
-    pub last_id: Option<String>,
-    /// Indicates whether there are more assistant files to retrieve.
-    pub has_more: bool,
-}
-
 #[derive(Serialize, Deserialize, Debug, Default, Builder, Clone, PartialEq)]
 #[builder(name = "MessageAttachmentBuilder")]
 #[builder(setter(into, strip_option), default)]
@@ -191,20 +177,6 @@ pub struct MessageFile {
 pub struct IncompleteMessage {
     /// The reason the message is incomplete.
     pub reason: String,
-}
-
-#[derive(Serialize, Deserialize, Debug, Clone, PartialEq)]
-pub struct ListMessageFilesResponse {
-    /// The object type, which is always 'list'.
-    pub object: String,
-    /// The list of assistant files.
-    pub data: Vec<MessageFile>,
-    /// ID of the first object in the list.
-    pub first_id: String,
-    /// ID of the last object in the list.
-    pub last_id: String,
-    /// Indicates whether there are more assistant files to retrieve.
-    pub has_more: bool,
 }
 
 #[derive(Serialize, Deserialize, Debug, Default, Clone, PartialEq)]
