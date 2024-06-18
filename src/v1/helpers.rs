@@ -1,10 +1,10 @@
 use crate::v1::error::APIError;
 use crate::v1::resources::audio::AudioTranscriptionBytes;
-#[cfg(feature = "download")]
-use rand::{distributions::Alphanumeric, Rng};
 use reqwest::{multipart::Part, Response};
 use serde::de::DeserializeOwned;
 use serde_json::Value;
+#[cfg(feature = "download")]
+use std::time::{SystemTime, UNIX_EPOCH};
 use tokio::fs::File;
 use tokio_util::codec::{BytesCodec, FramedRead};
 
@@ -71,11 +71,21 @@ pub async fn file_from_disk_to_form_part(path: String) -> Result<Part, APIError>
 
 #[cfg(feature = "download")]
 pub fn generate_file_name(path: &str, length: u32, file_type: &str) -> String {
-    let random_file_name: String = rand::thread_rng()
-        .sample_iter(&Alphanumeric)
-        .take(length as usize)
-        .map(char::from)
-        .collect();
+    const ALPHABET: &[u8] = b"ABCDEFGHIJKLMNOPQRSTUVWXYZ";
 
-    format!("{}/{}.{}", path, random_file_name, file_type)
+    let alphabet_len = ALPHABET.len();
+
+    let start = SystemTime::now();
+    let since_the_epoch = start.duration_since(UNIX_EPOCH).unwrap();
+    let mut seed = since_the_epoch.as_nanos();
+
+    let mut random_str = String::with_capacity(length as usize);
+
+    for _ in 0..length {
+        let index = (seed % alphabet_len as u128) as usize;
+        random_str.push(ALPHABET[index] as char);
+        seed /= alphabet_len as u128;
+    }
+
+    format!("{}/{}.{}", path, random_str, file_type)
 }

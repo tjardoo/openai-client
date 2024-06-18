@@ -3,7 +3,6 @@ use bytes::Bytes;
 use derive_builder::Builder;
 use serde::{Deserialize, Serialize};
 use std::{fmt::Display, path::Path};
-use strum_macros::EnumString;
 
 #[derive(Serialize, Deserialize, Debug, Default, Builder, Clone, PartialEq)]
 #[builder(name = "AudioSpeechParametersBuilder")]
@@ -102,7 +101,7 @@ pub struct AudioSpeechResponseChunkResponse {
     pub bytes: Bytes,
 }
 
-#[derive(Serialize, Deserialize, Debug, Clone, EnumString, PartialEq)]
+#[derive(Serialize, Deserialize, Debug, Clone, PartialEq)]
 #[serde(rename_all = "snake_case")]
 pub enum AudioOutputFormat {
     Json,
@@ -112,7 +111,7 @@ pub enum AudioOutputFormat {
     Vtt,
 }
 
-#[derive(Serialize, Deserialize, Debug, Clone, EnumString, PartialEq)]
+#[derive(Serialize, Deserialize, Debug, Clone, PartialEq)]
 #[serde(rename_all = "lowercase")]
 pub enum AudioSpeechResponseFormat {
     Mp3,
@@ -135,7 +134,7 @@ pub enum AudioTranscriptionFile {
     File(String),
 }
 
-#[derive(Serialize, Deserialize, Debug, Default, Clone, EnumString, PartialEq)]
+#[derive(Serialize, Deserialize, Debug, Default, Clone, PartialEq)]
 #[serde(rename_all = "lowercase")]
 pub enum AudioVoice {
     #[default]
@@ -147,7 +146,7 @@ pub enum AudioVoice {
     Shimmer,
 }
 
-#[derive(Serialize, Deserialize, Debug, Clone, EnumString, PartialEq)]
+#[derive(Serialize, Deserialize, Debug, Clone, PartialEq)]
 #[serde(rename_all = "lowercase")]
 pub enum TimestampGranularity {
     Word,
