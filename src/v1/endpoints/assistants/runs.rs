@@ -46,7 +46,7 @@ impl Runs<'_> {
         let response = self
             .assistant
             .client
-            .post(format!("/threads/runs").as_str(), &parameters)
+            .post("/threads/runs", &parameters)
             .await?;
 
         let run_response: Run = format_response(response.data)?;

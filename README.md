@@ -65,7 +65,7 @@ let result = client
 - [Fine-tuning](#fine-tuning)
 - [Batches](#batches)
 - [Assistants](#assistants)
-  - [Currency Converter Assistant](#currency-converter-assistant)
+  - [Currency Converter Assistant Example](#currency-converter-assistant-example)
 
 ## Models
 
@@ -118,9 +118,6 @@ Given a list of messages comprising a conversation, the model will return a resp
 
 Creates a model response for the given chat conversation.
 
-> [!NOTE]
-> This endpoint also has `stream` support. See the [examples/chat/create_chat_completion_stream](https://github.com/tjardoo/openai-client/tree/master/examples/chat/create_chat_completion_stream) example.
-
 ```rust
 let parameters = ChatCompletionParametersBuilder::default()
     .model(Gpt4Engine::Gpt4O.to_string())
@@ -146,6 +143,9 @@ let result = client
     .create(parameters)
     .await?;
 ```
+
+> [!NOTE]
+> This endpoint also has `stream` support. See the [examples/chat/create_chat_completion_stream](https://github.com/tjardoo/openai-client/tree/master/examples/chat/create_chat_completion_stream) example.
 
 More information: [Create chat completion](https://platform.openai.com/docs/api-reference/chat/create)
 
@@ -190,9 +190,6 @@ More information: [Create chat completion](https://platform.openai.com/docs/api-
 ### Function calling
 
 In an API call, you can describe functions and have the model intelligently choose to output a JSON object containing arguments to call one or many functions. The Chat Completions API does not call the function; instead, the model generates JSON that you can use to call the function in your code.
-
-> [!NOTE]
-> This endpoint also has `stream` support. See the [examples/chat/function_calling_stream](https://github.com/tjardoo/openai-client/tree/master/examples/chat/function_calling_stream) example.
 
 ```rust
 let messages = vec![ChatMessageBuilder::default()
@@ -261,6 +258,9 @@ fn get_random_number(params: RandomNumber) -> Value {
     random_number.into()
 }
 ```
+
+> [!NOTE]
+> This endpoint also has `stream` support. See the [examples/chat/function_calling_stream](https://github.com/tjardoo/openai-client/tree/master/examples/chat/function_calling_stream) example.
 
 More information: [Function calling](https://platform.openai.com/docs/guides/function-calling)
 
@@ -343,9 +343,6 @@ Learn how to turn audio into text or text into audio.
 
 Generates audio from the input text.
 
-> [!NOTE]
-> This endpoint also has `stream` support. See the [examples/audio/create_speech_stream](https://github.com/tjardoo/openai-client/tree/master/examples/audio/create_speech_stream) example.
-
 ```rust
 let parameters = AudioSpeechParametersBuilder::default()
     .model(TTSEngine::Tts1.to_string())
@@ -363,6 +360,9 @@ response
     .save("files/example.mp3")
     .await?;
 ```
+
+> [!NOTE]
+> This endpoint also has `stream` support. See the [examples/audio/create_speech_stream](https://github.com/tjardoo/openai-client/tree/master/examples/audio/create_speech_stream) example.
 
 More information: [Create speech](https://platform.openai.com/docs/api-reference/audio/createSpeech)
 
@@ -579,11 +579,11 @@ For more information see the examples in the [examples/assistants](https://githu
 
 More information [Assistants](https://platform.openai.com/docs/api-reference/assistants)
 
-### Currency Converter Assistant
+### Currency Converter Assistant Example
 
-The [`Currency Converter Assistant`](https://github.com/tjardoo/openai-client/tree/master/examples/assistants) processes conversion queries. It integrates a function `"get_currency_conversion"` that calls an external API endpoint to fetch real-time conversion rates with EUR as the base. The assistant is set up by creating a thread and run via the `create_thread_and_run` endpoint, checking the run's status, and handling tool outputs when required. Finally, it retrieves the assistant's responses using the `list_messages` endpoint to display the conversion results.
+The [`Currency Converter Assistant`](https://github.com/tjardoo/openai-client/tree/master/examples/assistants) processes conversion queries. It integrates a function `"get_currency_conversion"` to fetch real-time conversion rates with EUR as the base. The assistant is set up by creating a thread and run via the `create_thread_and_run` endpoint, checking the run's status, and handling tool outputs when required. Finally, it retrieves the assistant's responses using the `list_messages` endpoint to display the conversion results.
 
-## General
+## Configuration
 
 ### Set API key
 

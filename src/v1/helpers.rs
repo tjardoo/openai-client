@@ -11,7 +11,7 @@ use tokio_util::codec::{BytesCodec, FramedRead};
 pub async fn check_status_code(result: reqwest::Result<Response>) -> Result<Response, APIError> {
     match result {
         Ok(response) => {
-            if response.status().is_success() == false {
+            if !response.status().is_success() {
                 return Err(APIError::EndpointError(response.text().await.unwrap()));
             }
 
