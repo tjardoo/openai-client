@@ -8,8 +8,8 @@ use openai_dive::v1::{
             AssistantFunction, AssistantFunctionTool, AssistantParametersBuilder, AssistantTools,
             ToolOutput, ToolOutputsParametersBuilder,
         },
-        message::{CreateMessageParametersBuilder, MessageContent, MessageRole},
-        run::{CreateRunParametersBuilder, RunStatus},
+        message::{MessageContent, MessageRole},
+        run::{CreateRunParametersBuilder, CreateThreadAndRunParametersBuilder, RunStatus},
         thread::{CreateThreadParametersBuilder, ThreadMessageBuilder},
     },
 };
@@ -18,7 +18,7 @@ use serde_json::json;
 
 #[tokio::main]
 async fn main() -> Result<(), Box<dyn std::error::Error>> {
-    let question = "What is the conversion rate for 5000 SGD?";
+    let question = "What is the conversion rate for 5000 SGD? And 1000 JPY?";
 
     // get the OpenAI API key and project ID
     let api_key = std::env::var("OPENAI_API_KEY").expect("$OPENAI_API_KEY is not set");
@@ -60,48 +60,42 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
 
     println!("Assistant created: {:?}", &assistant.id);
 
-    // create a thread
-    let parameters = CreateThreadParametersBuilder::default()
-        .messages(vec![ThreadMessageBuilder::default()
-            .content("Hello, my name is Judy.".to_string())
-            .role(MessageRole::User)
-            .build()?])
-        .build()?;
-
-    let thread = client.assistants().threads().create(parameters).await?;
-
-    println!("Thread created: {:?}", &thread.id);
-
-    // add a message with the currency conversion question
-    let parameters = CreateMessageParametersBuilder::default()
-        .content(question)
-        .role(MessageRole::User)
-        .build()?;
-
-    let message = client
-        .assistants()
-        .messages()
-        .create(&thread.id, parameters)
-        .await?;
-
-    println!("Message added to thread: {:?}", &message.id);
-
-    // create a run
-    let parameters = CreateRunParametersBuilder::default()
-        .assistant_id(&assistant.id)
+    // create a thread and run
+    let parameters = CreateThreadAndRunParametersBuilder::default()
+        .thread(
+            CreateThreadParametersBuilder::default()
+                .messages(vec![
+                    ThreadMessageBuilder::default()
+                        .content("Hello, my name is Judy.".to_string())
+                        .build()?,
+                    ThreadMessageBuilder::default().content(question).build()?,
+                ])
+                .build()?,
+        )
+        .run(
+            CreateRunParametersBuilder::default()
+                .assistant_id(assistant.id)
+                .build()?,
+        )
         .build()?;
 
     let run = client
         .assistants()
         .runs()
-        .create(&thread.id, parameters)
+        .create_thread_and_run(parameters)
         .await?;
 
-    println!("Run created: {:?}", &run.id);
+    println!("Thread and run created: {:?}", &run.id);
+
+    let mut tool_outputs = Vec::<ToolOutput>::new();
 
     // loop until the run is completed
     loop {
-        let runs = client.assistants().runs().list(&thread.id, None).await?;
+        let runs = client
+            .assistants()
+            .runs()
+            .list(&run.thread_id, None)
+            .await?;
 
         let run = runs.data.first();
 
@@ -109,16 +103,16 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
             return Ok(());
         }
 
-        match run.unwrap().status {
+        let run = run.unwrap();
+
+        match run.status {
             RunStatus::Queued | RunStatus::InProgress => {
-                println!("Run status: {:?}", run.unwrap().status);
+                println!("Run status: {:?}", run.status);
 
                 sleep(Duration::from_secs(2));
             }
             RunStatus::RequiresAction => {
-                println!("Run status: {:?}", run.unwrap().status);
-
-                let run = run.unwrap();
+                println!("Run status: {:?}", run.status);
 
                 if run.required_action.as_ref().is_none() {
                     break;
@@ -126,50 +120,50 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
 
                 let required_action = run.required_action.as_ref().unwrap();
 
-                // add support for multiple tool calls
-                let tool_call = required_action.submit_tool_outputs.tool_calls.first();
+                for tool_call in &required_action.submit_tool_outputs.tool_calls {
+                    if tool_call.function.name == "get_currency_conversion" {
+                        let formatted_arguments: CurrencyConversionInput =
+                            serde_json::from_str(&tool_call.function.arguments)?;
 
-                if tool_call.is_none() {
-                    break;
-                }
+                        let conversion = get_currency_conversion(formatted_arguments).await?;
 
-                let tool_call = tool_call.unwrap();
-
-                if tool_call.function.name == "get_currency_conversion" {
-                    let formatted_arguments: CurrencyConversionInput =
-                        serde_json::from_str(&tool_call.function.arguments)?;
-
-                    let conversion = get_currency_conversion(formatted_arguments).await?;
-
-                    let parameters = ToolOutputsParametersBuilder::default()
-                        .tool_outputs(vec![ToolOutput {
+                        tool_outputs.push(ToolOutput {
                             tool_call_id: Some(tool_call.id.clone()),
                             output: Some(conversion.to_string()),
-                        }])
-                        .build()?;
-
-                    let _run = client
-                        .assistants()
-                        .runs()
-                        .submit_tool_outputs(&thread.id, &run.id, parameters)
-                        .await?;
-
-                    println!("Tool output submitted: {:?}", &tool_call.id);
+                        });
+                    }
                 }
+
+                break;
             }
             _ => {
-                println!("Run status: {:?}", run.unwrap().status);
+                println!("Run status: {:?}", run.status);
 
                 break;
             }
         }
     }
 
+    let parameters = ToolOutputsParametersBuilder::default()
+        .tool_outputs(tool_outputs)
+        .build()?;
+
+    let run = client
+        .assistants()
+        .runs()
+        .submit_tool_outputs(&run.thread_id, &run.id, parameters)
+        .await?;
+
+    println!("Tool output submitted: {:?}", &run.id);
+
+    // wait for the messages to be processed
+    sleep(Duration::from_secs(5));
+
     // retrieve the messages
     let messages = client
         .assistants()
         .messages()
-        .list(&thread.id, None)
+        .list(&run.thread_id, None)
         .await?;
 
     for message in messages.data.into_iter().rev() {
