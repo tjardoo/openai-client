@@ -20,17 +20,14 @@ use serde_json::json;
 async fn main() -> Result<(), Box<dyn std::error::Error>> {
     let question = "What is the conversion rate for 5000 SGD? And 1000 JPY?";
 
-    // get the OpenAI API key and project ID
     let api_key = std::env::var("OPENAI_API_KEY").expect("$OPENAI_API_KEY is not set");
     let project_id = std::env::var("OPENAI_PROJECT_ID");
 
-    // create the client and set the project ID if set
     let mut client = Client::new(api_key);
     if project_id.is_ok() {
         client.set_project(&project_id.unwrap());
     }
 
-    // create the assistant
     let parameters = AssistantParametersBuilder::default()
         .model(Gpt4Engine::Gpt4O.to_string())
         .name("Currency Converter Assistant")
@@ -60,7 +57,6 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
 
     println!("Assistant created: {:?}", &assistant.id);
 
-    // create a thread and run
     let parameters = CreateThreadAndRunParametersBuilder::default()
         .thread(
             CreateThreadParametersBuilder::default()
@@ -89,7 +85,6 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
 
     let mut tool_outputs = Vec::<ToolOutput>::new();
 
-    // loop until the run is completed
     loop {
         let runs = client
             .assistants()
@@ -159,7 +154,6 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
     // wait for the messages to be processed
     sleep(Duration::from_secs(5));
 
-    // retrieve the messages
     let messages = client
         .assistants()
         .messages()
