@@ -11,7 +11,7 @@ Sign up for an account on [https://platform.openai.com/overview](https://platfor
 
 ```ini
 [dependencies]
-openai_dive = "0.4"
+openai_dive = "0.5"
 ```
 
 ## Get started
