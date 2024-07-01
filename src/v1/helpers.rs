@@ -12,7 +12,10 @@ pub async fn check_status_code(result: reqwest::Result<Response>) -> Result<Resp
     match result {
         Ok(response) => {
             if !response.status().is_success() {
-                return Err(APIError::EndpointError(response.text().await.unwrap()));
+                return Err(APIError::EndpointError(
+                    response.status().as_u16(),
+                    response.text().await.unwrap(),
+                ));
             }
 
             Ok(response)

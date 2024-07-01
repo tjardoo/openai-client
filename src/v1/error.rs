@@ -3,7 +3,7 @@ use std::fmt::{Display, Formatter, Result};
 
 #[derive(Debug, Deserialize, Serialize)]
 pub enum APIError {
-    EndpointError(String),
+    EndpointError(u16, String),
     ServerError(String),
     InvalidRequestError(String),
     ParseError(String),
@@ -12,14 +12,16 @@ pub enum APIError {
 }
 
 impl APIError {
-    fn message(&self) -> &str {
+    fn message(&self) -> String {
         match self {
-            APIError::EndpointError(message)
-            | APIError::ServerError(message)
+            APIError::EndpointError(status_code, message) => {
+                format!("{}: {}", status_code, message)
+            }
+            APIError::ServerError(message)
             | APIError::InvalidRequestError(message)
             | APIError::ParseError(message)
             | APIError::FileError(message)
-            | APIError::StreamError(message) => message,
+            | APIError::StreamError(message) => message.to_string(),
         }
     }
 }
