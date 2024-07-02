@@ -3,25 +3,29 @@ use std::fmt::{Display, Formatter, Result};
 
 #[derive(Debug, Deserialize, Serialize)]
 pub enum APIError {
-    EndpointError(u16, String),
+    AuthenticationError(String),
     ServerError(String),
     InvalidRequestError(String),
+    RateLimitError(String),
     ParseError(String),
     FileError(String),
     StreamError(String),
+    UnknownError(u16, String),
 }
 
 impl APIError {
     fn message(&self) -> String {
         match self {
-            APIError::EndpointError(status_code, message) => {
-                format!("{}: {}", status_code, message)
-            }
-            APIError::ServerError(message)
+            APIError::AuthenticationError(message)
+            | APIError::ServerError(message)
             | APIError::InvalidRequestError(message)
+            | APIError::RateLimitError(message)
             | APIError::ParseError(message)
             | APIError::FileError(message)
             | APIError::StreamError(message) => message.to_string(),
+            APIError::UnknownError(status_code, message) => {
+                format!("{}: {}", status_code, message)
+            }
         }
     }
 }

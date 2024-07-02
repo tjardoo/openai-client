@@ -1,6 +1,6 @@
 use crate::v1::error::APIError;
 use crate::v1::resources::audio::AudioTranscriptionBytes;
-use reqwest::{multipart::Part, Response};
+use reqwest::{multipart::Part, Response, StatusCode};
 use serde::de::DeserializeOwned;
 use serde_json::Value;
 #[cfg(feature = "download")]
@@ -11,11 +11,21 @@ use tokio_util::codec::{BytesCodec, FramedRead};
 pub async fn check_status_code(result: reqwest::Result<Response>) -> Result<Response, APIError> {
     match result {
         Ok(response) => {
-            if !response.status().is_success() {
-                return Err(APIError::EndpointError(
-                    response.status().as_u16(),
-                    response.text().await.unwrap(),
-                ));
+            if response.status().is_client_error() {
+                let status = response.status();
+                let text = response.text().await.unwrap();
+
+                match status {
+                    StatusCode::UNAUTHORIZED => {
+                        return Err(APIError::AuthenticationError(text));
+                    }
+                    StatusCode::TOO_MANY_REQUESTS => {
+                        return Err(APIError::RateLimitError(text));
+                    }
+                    _ => {
+                        return Err(APIError::UnknownError(status.as_u16(), text));
+                    }
+                }
             }
 
             Ok(response)
