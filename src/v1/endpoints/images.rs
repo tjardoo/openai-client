@@ -1,6 +1,6 @@
 use crate::v1::api::Client;
 use crate::v1::error::APIError;
-use crate::v1::helpers::{file_from_disk_to_form_part, format_response};
+use crate::v1::helpers::format_response;
 use crate::v1::resources::image::{
     CreateImageParameters, CreateImageVariationParameters, EditImageParameters, ImageResponse,
 };
@@ -33,13 +33,13 @@ impl Images<'_> {
     pub async fn edit(&self, parameters: EditImageParameters) -> Result<ImageResponse, APIError> {
         let mut form = reqwest::multipart::Form::new();
 
-        let image = file_from_disk_to_form_part(parameters.image).await?;
+        let image = parameters.image.into_part().await?;
         form = form.part("image", image);
 
         form = form.text("prompt", parameters.prompt);
 
         if let Some(mask) = parameters.mask {
-            let image = file_from_disk_to_form_part(mask).await?;
+            let image = mask.into_part().await?;
             form = form.part("mask", image);
         }
 
@@ -77,7 +77,7 @@ impl Images<'_> {
     ) -> Result<ImageResponse, APIError> {
         let mut form = reqwest::multipart::Form::new();
 
-        let image = file_from_disk_to_form_part(parameters.image).await?;
+        let image = parameters.image.into_part().await?;
         form = form.part("image", image);
 
         if let Some(model) = parameters.model {

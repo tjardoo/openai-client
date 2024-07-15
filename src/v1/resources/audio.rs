@@ -1,8 +1,12 @@
+#[cfg(feature = "tokio")]
 use crate::v1::error::APIError;
+use crate::v1::resources::shared::FileUpload;
 use bytes::Bytes;
 use derive_builder::Builder;
 use serde::{Deserialize, Serialize};
-use std::{fmt::Display, path::Path};
+use std::fmt::Display;
+#[cfg(feature = "tokio")]
+use std::path::Path;
 
 #[derive(Serialize, Deserialize, Debug, Default, Builder, Clone, PartialEq)]
 #[builder(name = "AudioSpeechParametersBuilder")]
@@ -27,8 +31,7 @@ pub struct AudioSpeechParameters {
 #[builder(setter(into, strip_option), default)]
 pub struct AudioTranscriptionParameters {
     /// The audio file object (not file name) to transcribe, in one of these formats: flac, mp3, mp4, mpeg, mpga, m4a, ogg, wav, or webm.
-    #[serde(skip)]
-    pub file: AudioTranscriptionFile,
+    pub file: FileUpload,
     /// ID of the model to use. Only whisper-1 is currently available.
     pub model: String,
     /// The language of the input audio. Supplying the input language in ISO-639-1 format will improve accuracy and latency.
@@ -55,8 +58,8 @@ pub struct AudioTranscriptionParameters {
 #[builder(name = "AudioTranslationParametersBuilder")]
 #[builder(setter(into, strip_option), default)]
 pub struct AudioTranslationParameters {
-    /// The audio file object (not file name) translate, in one of these formats: flac, mp3, mp4, mpeg, mpga, m4a, ogg, wav, or webm.
-    pub file: String,
+    /// The audio file object to translate, in one of these formats: flac, mp3, mp4, mpeg, mpga, m4a, ogg, wav, or webm.
+    pub file: FileUpload,
     /// ID of the model to use. Only whisper-1 is currently available.
     pub model: String,
     /// An optional text to guide the model's style or continue a previous audio segment. The prompt should be in English.
@@ -120,18 +123,6 @@ pub enum AudioSpeechResponseFormat {
     Flac,
     Wav,
     Pcm,
-}
-
-#[derive(Clone, Debug, PartialEq)]
-pub struct AudioTranscriptionBytes {
-    pub bytes: Bytes,
-    pub filename: String,
-}
-
-#[derive(Clone, Debug, PartialEq)]
-pub enum AudioTranscriptionFile {
-    Bytes(AudioTranscriptionBytes),
-    File(String),
 }
 
 #[derive(Serialize, Deserialize, Debug, Default, Clone, PartialEq)]
@@ -204,11 +195,5 @@ impl AudioSpeechResponse {
             .map_err(|error| APIError::FileError(error.to_string()))?;
 
         Ok(())
-    }
-}
-
-impl Default for AudioTranscriptionFile {
-    fn default() -> Self {
-        Self::File(String::new())
     }
 }
