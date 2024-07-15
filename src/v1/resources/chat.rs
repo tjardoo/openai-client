@@ -107,10 +107,10 @@ pub struct ChatCompletionParameters {
     /// Use this to provide a list of functions the model may generate JSON inputs for.
     #[serde(skip_serializing_if = "Option::is_none")]
     pub tools: Option<Vec<ChatCompletionTool>>,
-    /// Controls which (if any) function is called by the model. none means the model will not call a function and instead generates a message.
-    /// 'auto' means the model can pick between generating a message or calling a function.
-    /// Specifying a particular function via {"type: "function", "function": {"name": "my_function"}} forces the model to call that function.
-    /// 'none' is the default when no functions are present. 'auto' is the default if functions are present.
+    /// Controls which (if any) tool is called by the model. none means the model will not call any tool and instead generates a message.
+    /// auto means the model can pick between generating a message or calling one or more tools.
+    /// required means the model must call one or more tools.
+    /// Specifying a particular tool via {"type": "function", "function": {"name": "my_function"}} forces the model to call that tool.
     #[serde(skip_serializing_if = "Option::is_none")]
     pub tool_choice: Option<ChatCompletionToolChoice>,
     /// A unique identifier representing your end-user, which can help OpenAI to monitor and detect abuse.
@@ -338,6 +338,7 @@ pub enum ChatCompletionToolType {
 pub enum ChatCompletionToolChoice {
     None,
     Auto,
+    Required,
     ChatCompletionToolChoiceFunction(ChatCompletionToolChoiceFunction),
 }
 
