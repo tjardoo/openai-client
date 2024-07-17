@@ -1,6 +1,9 @@
 use openai_dive::v1::{
     api::Client,
-    resources::file::{FilePurpose, UploadFileParametersBuilder},
+    resources::{
+        file::{FilePurpose, UploadFileParametersBuilder},
+        shared::FileUpload,
+    },
 };
 
 #[tokio::main]
@@ -10,7 +13,7 @@ async fn main() {
     let client = Client::new(api_key);
 
     let parameters = UploadFileParametersBuilder::default()
-        .file("./files/DummyUsers.json")
+        .file(FileUpload::File("./files/DummyUsers.json".to_string()))
         .purpose(FilePurpose::Assistants)
         .build()
         .unwrap();

@@ -1,6 +1,7 @@
 use openai_dive::v1::api::Client;
 use openai_dive::v1::models::WhisperEngine;
 use openai_dive::v1::resources::audio::{AudioOutputFormat, AudioTranslationParametersBuilder};
+use openai_dive::v1::resources::shared::FileUpload;
 
 #[tokio::main]
 async fn main() {
@@ -9,7 +10,7 @@ async fn main() {
     let client = Client::new(api_key);
 
     let parameters = AudioTranslationParametersBuilder::default()
-        .file("./audio/multilingual.mp3")
+        .file(FileUpload::File("./audio/multilingual.mp3".to_string()))
         .model(WhisperEngine::Whisper1.to_string())
         .response_format(AudioOutputFormat::Srt)
         .build()
