@@ -296,9 +296,11 @@
 //!
 //! ```rust
 //! let parameters = EditImageParametersBuilder::default()
-//!     .image("./images/image_edit_original.png")
+//!     .image(FileUpload::File(
+//!         "./images/image_edit_original.png".to_string(),
+//!     ))
 //!     .prompt("A cute baby sea otter")
-//!     .mask("./images/image_edit_mask.png")
+//!     .mask(FileUpload::File("./images/image_edit_mask.png".to_string()))
 //!     .n(1u32)
 //!     .size(ImageSize::Size512X512)
 //!     .build()?;
@@ -317,7 +319,9 @@
 //!
 //! ```rust
 //! let parameters = CreateImageVariationParametersBuilder::default()
-//!     .image("./images/image_edit_original.png")
+//!     .image(FileUpload::File(
+//!         "./images/image_edit_original.png".to_string(),
+//!     ))
 //!     .n(1u32)
 //!     .size(ImageSize::Size256X256)
 //!     .build()?;
@@ -367,9 +371,7 @@
 //!
 //! ```rust
 //! let parameters = AudioTranscriptionParametersBuilder::default()
-//!     .file(AudioTranscriptionFile::File(
-//!         "./audio/micro-machines.mp3".to_string(),
-//!     ))
+//!     .file(FileUpload::File("./audio/micro-machines.mp3".to_string()))
 //!     .model(WhisperEngine::Whisper1.to_string())
 //!     .response_format(AudioOutputFormat::VerboseJson)
 //!     .build()?;
@@ -388,7 +390,7 @@
 //!
 //! ```rust
 //! let parameters = AudioTranslationParametersBuilder::default()
-//!     .file("./audio/multilingual.mp3")
+//!     .file(FileUpload::File("./audio/multilingual.mp3".to_string()))
 //!     .model(WhisperEngine::Whisper1.to_string())
 //!     .response_format(AudioOutputFormat::Srt)
 //!     .build()?;
@@ -453,7 +455,7 @@
 //!
 //! ```rust
 //! let parameters = UploadFileParametersBuilder::default()
-//!     .file("./files/DummyUsers.json")
+//!     .file(FileUpload::File("./files/DummyUsers.json".to_string()))
 //!     .purpose(FilePurpose::Assistants)
 //!     .build()?;
 //!
