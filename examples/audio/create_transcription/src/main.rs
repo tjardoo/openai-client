@@ -1,8 +1,7 @@
 use openai_dive::v1::api::Client;
 use openai_dive::v1::models::WhisperEngine;
-use openai_dive::v1::resources::audio::{
-    AudioOutputFormat, AudioTranscriptionFile, AudioTranscriptionParametersBuilder,
-};
+use openai_dive::v1::resources::audio::{AudioOutputFormat, AudioTranscriptionParametersBuilder};
+use openai_dive::v1::resources::shared::FileUpload;
 
 #[tokio::main]
 async fn main() {
@@ -11,9 +10,7 @@ async fn main() {
     let client = Client::new(api_key);
 
     let parameters = AudioTranscriptionParametersBuilder::default()
-        .file(AudioTranscriptionFile::File(
-            "./audio/micro-machines.mp3".to_string(),
-        ))
+        .file(FileUpload::File("./audio/micro-machines.mp3".to_string()))
         .model(WhisperEngine::Whisper1.to_string())
         .response_format(AudioOutputFormat::VerboseJson)
         .build()

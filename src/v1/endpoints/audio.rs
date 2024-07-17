@@ -1,13 +1,10 @@
 use crate::v1::api::Client;
 use crate::v1::error::APIError;
-use crate::v1::helpers::{file_from_bytes_to_form_part, file_from_disk_to_form_part};
 use crate::v1::resources::audio::AudioSpeechParameters;
 use crate::v1::resources::audio::AudioSpeechResponse;
 #[cfg(feature = "stream")]
 use crate::v1::resources::audio::AudioSpeechResponseChunkResponse;
-use crate::v1::resources::audio::{
-    AudioTranscriptionFile, AudioTranscriptionParameters, AudioTranslationParameters,
-};
+use crate::v1::resources::audio::{AudioTranscriptionParameters, AudioTranslationParameters};
 #[cfg(feature = "stream")]
 use futures::Stream;
 #[cfg(feature = "stream")]
@@ -44,10 +41,7 @@ impl Audio<'_> {
     ) -> Result<String, APIError> {
         let mut form = reqwest::multipart::Form::new();
 
-        let file = match parameters.file {
-            AudioTranscriptionFile::Bytes(b) => file_from_bytes_to_form_part(b)?,
-            AudioTranscriptionFile::File(f) => file_from_disk_to_form_part(f).await?,
-        };
+        let file = parameters.file.into_part().await?;
 
         form = form.part("file", file);
 
@@ -95,7 +89,7 @@ impl Audio<'_> {
     ) -> Result<String, APIError> {
         let mut form = reqwest::multipart::Form::new();
 
-        let file = file_from_disk_to_form_part(parameters.file).await?;
+        let file = parameters.file.into_part().await?;
         form = form.part("file", file);
 
         form = form.text("model", parameters.model);

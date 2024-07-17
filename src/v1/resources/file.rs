@@ -1,3 +1,4 @@
+use crate::v1::resources::shared::FileUpload;
 use derive_builder::Builder;
 use serde::{Deserialize, Serialize};
 use std::fmt::Display;
@@ -36,8 +37,8 @@ pub struct ListFilesResponse {
 #[builder(name = "UploadFileParametersBuilder")]
 #[builder(setter(into, strip_option), default)]
 pub struct UploadFileParameters {
-    /// The File object (not file name) to be uploaded.
-    pub file: String,
+    /// The File object to be uploaded.
+    pub file: FileUpload,
     /// The intended purpose of the uploaded file.
     /// Use "assistants" for Assistants and Message files, "vision" for Assistants image file inputs,
     /// "batch" for Batch API, and "fine-tune" for Fine-tuning.

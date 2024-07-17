@@ -2,6 +2,7 @@
 use crate::v1::error::APIError;
 #[cfg(feature = "download")]
 use crate::v1::helpers::generate_file_name;
+use crate::v1::resources::shared::FileUpload;
 #[cfg(feature = "download")]
 use base64::{engine::general_purpose, Engine as _};
 use derive_builder::Builder;
@@ -49,13 +50,13 @@ pub struct CreateImageParameters {
 #[builder(setter(into, strip_option), default)]
 pub struct EditImageParameters {
     /// The image to edit. Must be a valid PNG file, less than 4MB, and square. If mask is not provided, image must have transparency, which will be used as the mask.
-    pub image: String,
+    pub image: FileUpload,
     /// A text description of the desired image(s). The maximum length is 1000 characters.
     pub prompt: String,
     /// An additional image whose fully transparent areas (e.g. where alpha is zero) indicate where image should be edited.
     /// Must be a valid PNG file, less than 4MB, and have the same dimensions as image.
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub mask: Option<String>,
+    pub mask: Option<FileUpload>,
     /// The model to use for image generation. Only dall-e-2 is supported at this time.
     #[serde(skip_serializing_if = "Option::is_none")]
     pub model: Option<String>,
@@ -78,7 +79,7 @@ pub struct EditImageParameters {
 #[builder(setter(into, strip_option), default)]
 pub struct CreateImageVariationParameters {
     /// The image to use as the basis for the variation(s). Must be a valid PNG file, less than 4MB, and square.
-    pub image: String,
+    pub image: FileUpload,
     /// The model to use for image generation. Only dall-e-2 is supported at this time.
     #[serde(skip_serializing_if = "Option::is_none")]
     pub model: Option<String>,

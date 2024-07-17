@@ -1,6 +1,7 @@
 use openai_dive::v1::api::Client;
 use openai_dive::v1::resources::batch::{BatchCompletionWindow, CreateBatchParametersBuilder};
 use openai_dive::v1::resources::file::{FilePurpose, UploadFileParameters};
+use openai_dive::v1::resources::shared::FileUpload;
 
 #[tokio::main]
 async fn main() {
@@ -12,7 +13,7 @@ async fn main() {
 
     // We upload a file with requests for the new batch using the files endpoint.
     let parameters = UploadFileParameters {
-        file: "./files/demo-batch-request.jsonl".to_string(),
+        file: FileUpload::File("./files/demo-batch-request.jsonl".to_string()),
         purpose: FilePurpose::Batch,
     };
 

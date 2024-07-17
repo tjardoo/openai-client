@@ -1,6 +1,5 @@
 use crate::v1::api::Client;
 use crate::v1::error::APIError;
-use crate::v1::helpers::file_from_disk_to_form_part;
 use crate::v1::helpers::format_response;
 use crate::v1::resources::file::ListFilesParameters;
 use crate::v1::resources::file::ListFilesResponse;
@@ -35,7 +34,7 @@ impl Files<'_> {
     pub async fn upload(&self, parameters: UploadFileParameters) -> Result<File, APIError> {
         let mut form = reqwest::multipart::Form::new();
 
-        let file = file_from_disk_to_form_part(parameters.file).await?;
+        let file = parameters.file.into_part().await?;
         form = form.part("file", file);
 
         form = form.text("purpose", parameters.purpose.to_string());
