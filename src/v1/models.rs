@@ -7,6 +7,9 @@ pub enum Gpt4Engine {
     #[serde(rename = "gpt-4o")]
     Gpt4O,
     /// Alias
+    #[serde(rename = "gpt-4o-mini")]
+    Gpt4OMini,
+    /// Alias
     #[serde(rename = "gpt-4")]
     Gpt4,
     /// Alias
@@ -74,6 +77,7 @@ impl Display for Gpt4Engine {
     fn fmt(&self, f: &mut Formatter<'_>) -> Result {
         match self {
             Gpt4Engine::Gpt4O => write!(f, "gpt-4o"),
+            Gpt4Engine::Gpt4OMini => write!(f, "gpt-4o-mini"),
             Gpt4Engine::Gpt4 => write!(f, "gpt-4"),
             Gpt4Engine::Gpt4Turbo => write!(f, "gpt-4-turbo"),
             Gpt4Engine::Gpt4TurboPreview => write!(f, "gpt-4-turbo-preview"),
