@@ -9,3 +9,4 @@ pub mod image;
 pub mod model;
 pub mod moderation;
 pub mod shared;
+pub mod upload;

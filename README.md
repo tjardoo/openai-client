@@ -62,6 +62,7 @@ let result = client
   - [Retrieve file content](#retrieve-file-content)
 - [Moderation](#moderation)
   - [Create moderation](#create-moderation)
+- [Uploads](#uploads)
 - [Fine-tuning](#fine-tuning)
 - [Batches](#batches)
 - [Assistants](#assistants)
@@ -538,6 +539,21 @@ let result = client
 ```
 
 More information [Create moderation](https://platform.openai.com/docs/api-reference/moderations/create)
+
+### Uploads
+
+Creates an intermediate Upload object that you can add Parts to. Currently, an Upload can accept at most 8 GB in total and expires after an hour after you create it.
+
+Once you complete the Upload, we will create a File object that contains all the parts you uploaded. This File is usable in the rest of our platform as a regular File object.
+
+For more information see the examples in the [examples/uploads](https://github.com/tjardoo/openai-client/tree/master/examples/uploads) directory.
+
+- Create upload
+- Add upload part
+- Complete upload
+- Cancel upload
+
+More information [Uploads](https://platform.openai.com/docs/api-reference/uploads)
 
 ### Fine-tuning
 

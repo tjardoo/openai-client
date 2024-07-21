@@ -204,7 +204,7 @@ pub struct FileUploadBytes {
     pub filename: String,
 }
 impl FileUploadBytes {
-    fn new(bytes: impl Into<Bytes>, filename: impl Into<String>) -> Self {
+    pub fn new(bytes: impl Into<Bytes>, filename: impl Into<String>) -> Self {
         Self {
             bytes: bytes.into(),
             filename: filename.into(),
