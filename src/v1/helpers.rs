@@ -13,8 +13,14 @@ pub async fn check_status_code(result: reqwest::Result<Response>) -> Result<Resp
                 let text = response.text().await.unwrap();
 
                 match status {
+                    StatusCode::BAD_REQUEST => {
+                        return Err(APIError::BadRequestError(text));
+                    }
                     StatusCode::UNAUTHORIZED => {
                         return Err(APIError::AuthenticationError(text));
+                    }
+                    StatusCode::GONE => {
+                        return Err(APIError::GoneError(text));
                     }
                     StatusCode::TOO_MANY_REQUESTS => {
                         return Err(APIError::RateLimitError(text));

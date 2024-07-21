@@ -45,4 +45,5 @@ members = [
     "assistants/runs",
     "assistants/run_steps",
     "assistants/currency_converter_assistant",
+    "uploads/create_file_from_upload",
 ]

@@ -4,6 +4,8 @@ use std::fmt::{Display, Formatter, Result};
 #[derive(Debug, Deserialize, Serialize)]
 pub enum APIError {
     AuthenticationError(String),
+    BadRequestError(String),
+    GoneError(String),
     ServerError(String),
     InvalidRequestError(String),
     RateLimitError(String),
@@ -17,6 +19,8 @@ impl APIError {
     fn message(&self) -> String {
         match self {
             APIError::AuthenticationError(message)
+            | APIError::BadRequestError(message)
+            | APIError::GoneError(message)
             | APIError::ServerError(message)
             | APIError::InvalidRequestError(message)
             | APIError::RateLimitError(message)
