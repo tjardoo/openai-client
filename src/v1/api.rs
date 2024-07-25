@@ -181,12 +181,13 @@ impl Client {
     }
 
     pub async fn post_with_form(&self, path: &str, form: Form) -> Result<String, APIError> {
+        #[cfg(not(target_arch = "wasm32"))]
+        let content_type = format!("multipart/form-data; boundary={}", form.boundary());
+        #[cfg(target_arch = "wasm32")]
+        let content_type = format!("multipart/form-data");
+
         let result = self
-            .build_request(
-                Method::POST,
-                path,
-                format!("multipart/form-data; boundary={}", form.boundary()).as_str(),
-            )
+            .build_request(Method::POST, path, &content_type)
             .multipart(form)
             .send()
             .await;
