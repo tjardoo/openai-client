@@ -9,6 +9,7 @@ use reqwest_eventsource::{Event, EventSource, RequestBuilderExt};
 #[cfg(feature = "stream")]
 use serde::de::DeserializeOwned;
 use serde::Serialize;
+use std::collections::HashMap;
 #[cfg(feature = "stream")]
 use std::pin::Pin;
 
@@ -21,6 +22,7 @@ pub struct Client {
     pub http_client: reqwest::Client,
     pub base_url: String,
     pub api_key: String,
+    pub headers: Option<HashMap<String, String>>,
     pub organization: Option<String>,
     pub project: Option<String>,
 }
@@ -31,6 +33,7 @@ impl Client {
             http_client: reqwest::Client::new(),
             base_url: OPENAI_API_V1_ENDPOINT.to_string(),
             api_key,
+            headers: None,
             organization: None,
             project: None,
         }
@@ -48,6 +51,14 @@ impl Client {
         self
     }
 
+    pub fn add_header(&mut self, key: &str, value: &str) -> &mut Self {
+        self.headers
+            .get_or_insert_with(HashMap::new)
+            .insert(key.to_string(), value.to_string());
+
+        self
+    }
+
     pub fn build_request(
         &self,
         method: reqwest::Method,
@@ -61,6 +72,12 @@ impl Client {
             .request(method, url)
             .header(reqwest::header::CONTENT_TYPE, content_type)
             .bearer_auth(&self.api_key);
+
+        if let Some(headers) = &self.headers {
+            for (key, value) in headers {
+                request = request.header(key, value);
+            }
+        }
 
         if let Some(organization) = &self.organization {
             request = request.header("OpenAI-Organization", organization);

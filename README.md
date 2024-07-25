@@ -659,7 +659,9 @@ let client = Client {
     http_client,
     base_url: "https://api.openai.com/v1".to_string(),
     api_key,
+    headers: None,
     organization: None,
+    project: None,
 };
 ```
 
