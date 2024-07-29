@@ -39,6 +39,18 @@ impl Client {
         }
     }
 
+    pub fn new_with_base(base_url: &str, api_key: String) -> Self {
+        // for the third openai v1 api compatible services
+        Self {
+            http_client: reqwest::Client::new(),
+            base_url: base_url.to_string(),
+            api_key,
+            headers: None,
+            organization: None,
+            project: None,
+        }
+    }
+
     pub fn set_organization(&mut self, organization: &str) -> &mut Self {
         self.organization = Some(organization.to_string());
 
