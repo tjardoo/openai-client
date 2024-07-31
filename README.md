@@ -21,7 +21,7 @@ use openai_dive::v1::api::Client;
 
 let api_key = std::env::var("OPENAI_API_KEY").expect("$OPENAI_API_KEY is not set");
 
-let client = Client::new(api_key);
+let client = Client::new(api_key); // or Client::new_from_env()
 
 let result = client
     .models()
@@ -66,7 +66,6 @@ let result = client
 - [Fine-tuning](#fine-tuning)
 - [Batches](#batches)
 - [Assistants](#assistants)
-  - [Currency Converter Assistant Example](#currency-converter-assistant-example)
 
 ## Models
 
@@ -596,10 +595,6 @@ For more information see the examples in the [examples/assistants](https://githu
 - Run Steps
 
 More information [Assistants](https://platform.openai.com/docs/api-reference/assistants)
-
-### Currency Converter Assistant Example
-
-The [`Currency Converter Assistant`](https://github.com/tjardoo/openai-client/tree/master/examples/assistants) processes conversion queries. It integrates a function `"get_currency_conversion"` to fetch real-time conversion rates with EUR as the base. The assistant is set up by creating a thread and run via the `create_thread_and_run` endpoint, checking the run's status, and handling tool outputs when required. Finally, it retrieves the assistant's responses using the `list_messages` endpoint to display the conversion results.
 
 ## Configuration
 

@@ -28,41 +28,48 @@ pub struct Client {
 }
 
 impl Client {
+    /// Create a new instance of the OpenAI client and set the API key.
     pub fn new(api_key: String) -> Self {
         Self {
-            http_client: reqwest::Client::new(),
-            base_url: OPENAI_API_V1_ENDPOINT.to_string(),
             api_key,
-            headers: None,
-            organization: None,
-            project: None,
+            ..Default::default()
         }
     }
 
+    /// Create a new instance of the OpenAI client with a custom base URL and set the API key.
     pub fn new_with_base(base_url: &str, api_key: String) -> Self {
-        // for the third openai v1 api compatible services
         Self {
-            http_client: reqwest::Client::new(),
             base_url: base_url.to_string(),
             api_key,
-            headers: None,
-            organization: None,
-            project: None,
+            ..Default::default()
         }
     }
 
+    /// Create a new instance of the OpenAI client and set the API key from the environment variable `OPENAI_API_KEY`.
+    pub fn new_from_env() -> Self {
+        let api_key = std::env::var("OPENAI_API_KEY").expect("OPENAI_API_KEY is not set");
+
+        Self {
+            api_key,
+            ..Default::default()
+        }
+    }
+
+    /// Set the organization header for the OpenAI client.
     pub fn set_organization(&mut self, organization: &str) -> &mut Self {
         self.organization = Some(organization.to_string());
 
         self
     }
 
+    /// Set the project header for the OpenAI client.
     pub fn set_project(&mut self, project: &str) -> &mut Self {
         self.project = Some(project.to_string());
 
         self
     }
 
+    /// Add a custom header to the OpenAI client.
     pub fn add_header(&mut self, key: &str, value: &str) -> &mut Self {
         self.headers
             .get_or_insert_with(HashMap::new)
@@ -71,7 +78,7 @@ impl Client {
         self
     }
 
-    pub fn build_request(
+    fn build_request(
         &self,
         method: reqwest::Method,
         path: &str,
@@ -106,7 +113,7 @@ impl Client {
         request
     }
 
-    pub async fn get(&self, path: &str) -> Result<String, APIError> {
+    pub(crate) async fn get(&self, path: &str) -> Result<String, APIError> {
         let result = self
             .build_request(Method::GET, path, "application/json")
             .send()
@@ -125,7 +132,7 @@ impl Client {
         Ok(response_text)
     }
 
-    pub async fn get_with_query<Q>(&self, path: &str, query: &Q) -> Result<String, APIError>
+    pub(crate) async fn get_with_query<Q>(&self, path: &str, query: &Q) -> Result<String, APIError>
     where
         Q: Serialize,
     {
@@ -148,7 +155,7 @@ impl Client {
         Ok(response_text)
     }
 
-    pub async fn post<T: Serialize>(
+    pub(crate) async fn post<T: Serialize>(
         &self,
         path: &str,
         parameters: &T,
@@ -178,7 +185,7 @@ impl Client {
         })
     }
 
-    pub async fn delete(&self, path: &str) -> Result<String, APIError> {
+    pub(crate) async fn delete(&self, path: &str) -> Result<String, APIError> {
         let result = self
             .build_request(Method::DELETE, path, "application/json")
             .send()
@@ -192,7 +199,7 @@ impl Client {
         Ok(response.text().await.unwrap())
     }
 
-    pub async fn post_with_form(&self, path: &str, form: Form) -> Result<String, APIError> {
+    pub(crate) async fn post_with_form(&self, path: &str, form: Form) -> Result<String, APIError> {
         #[cfg(not(target_arch = "wasm32"))]
         let content_type = format!("multipart/form-data; boundary={}", form.boundary());
         #[cfg(target_arch = "wasm32")]
@@ -212,7 +219,7 @@ impl Client {
         Ok(response.text().await.unwrap())
     }
 
-    pub async fn post_raw<T: Serialize>(
+    pub(crate) async fn post_raw<T: Serialize>(
         &self,
         path: &str,
         parameters: &T,
@@ -232,7 +239,7 @@ impl Client {
     }
 
     #[cfg(feature = "stream")]
-    pub async fn post_stream<I, O>(
+    pub(crate) async fn post_stream<I, O>(
         &self,
         path: &str,
         parameters: &I,
@@ -251,7 +258,7 @@ impl Client {
     }
 
     #[cfg(feature = "stream")]
-    pub async fn post_stream_raw<I>(
+    pub(crate) async fn post_stream_raw<I>(
         &self,
         path: &str,
         parameters: &I,
@@ -275,7 +282,7 @@ impl Client {
     }
 
     #[cfg(feature = "stream")]
-    pub async fn process_stream<O>(
+    pub(crate) async fn process_stream<O>(
         mut event_soure: EventSource,
     ) -> Pin<Box<dyn Stream<Item = Result<O, APIError>> + Send>>
     where
@@ -330,5 +337,18 @@ impl Client {
         });
 
         Box::pin(tokio_stream::wrappers::UnboundedReceiverStream::new(rx))
+    }
+}
+
+impl Default for Client {
+    fn default() -> Self {
+        Client {
+            http_client: reqwest::Client::new(),
+            base_url: OPENAI_API_V1_ENDPOINT.to_string(),
+            api_key: "".to_string(),
+            headers: None,
+            organization: None,
+            project: None,
+        }
     }
 }
