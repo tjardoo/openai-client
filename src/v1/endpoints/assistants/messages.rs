@@ -29,10 +29,7 @@ impl Messages<'_> {
         let response = self
             .assistant
             .client
-            .post(
-                format!("/threads/{thread_id}/messages").as_str(),
-                &parameters,
-            )
+            .post(&format!("/threads/{thread_id}/messages"), &parameters)
             .await?;
 
         let message_response: Message = format_response(response.data)?;
@@ -45,7 +42,7 @@ impl Messages<'_> {
         let response = self
             .assistant
             .client
-            .get(format!("/threads/{thread_id}/messages/{message_id}").as_str())
+            .get(&format!("/threads/{thread_id}/messages/{message_id}"))
             .await?;
 
         let message_response: Message = format_response(response)?;
@@ -64,7 +61,7 @@ impl Messages<'_> {
             .assistant
             .client
             .post(
-                format!("/threads/{thread_id}/messages/{message_id}").as_str(),
+                &format!("/threads/{thread_id}/messages/{message_id}"),
                 &parameters,
             )
             .await?;
@@ -83,7 +80,7 @@ impl Messages<'_> {
         let response = self
             .assistant
             .client
-            .get_with_query(format!("/threads/{thread_id}/messages").as_str(), &query)
+            .get_with_query(&format!("/threads/{thread_id}/messages"), &query)
             .await?;
 
         let list_messages_response: ListResponse<Message> = format_response(response)?;
@@ -101,7 +98,9 @@ impl Messages<'_> {
         let response = self
             .assistant
             .client
-            .get(format!("/threads/{thread_id}/messages/{message_id}/files/{file_id}").as_str())
+            .get(&format!(
+                "/threads/{thread_id}/messages/{message_id}/files/{file_id}"
+            ))
             .await?;
 
         let message_file_response: MessageFile = format_response(response)?;
@@ -120,7 +119,7 @@ impl Messages<'_> {
             .assistant
             .client
             .get_with_query(
-                format!("/threads/{thread_id}/messages/{message_id}/files").as_str(),
+                &format!("/threads/{thread_id}/messages/{message_id}/files"),
                 &query,
             )
             .await?;

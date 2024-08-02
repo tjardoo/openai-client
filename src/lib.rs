@@ -61,6 +61,7 @@
 //! - [Fine-tuning](#fine-tuning)
 //! - [Batches](#batches)
 //! - [Assistants](#assistants)
+//! - [Administration](#administration)
 //!
 //! ## Models
 //!
@@ -590,6 +591,20 @@
 //! - Run Steps
 //!
 //! More information [Assistants](https://platform.openai.com/docs/api-reference/assistants)
+//!
+//! ### Administration
+//!
+//! Programmatically manage your organization.
+//!
+//! For more information see the examples in the [examples/administration](https://github.com/tjardoo/openai-client/tree/master/examples/administration) directory.
+//!
+//! - Users
+//! - Invites
+//! - Projects
+//! - Project Users
+//! - Project Service Accounts
+//! - Project API Keys
+//! - Audit Logs
 //!
 //! ## Configuration
 //!

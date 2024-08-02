@@ -30,10 +30,7 @@ impl Assistants<'_> {
 
     /// Retrieves an assistant.
     pub async fn retrieve(&self, id: &str) -> Result<Assistant, APIError> {
-        let response = self
-            .client
-            .get(format!("/assistants/{id}").as_str())
-            .await?;
+        let response = self.client.get(&format!("/assistants/{id}")).await?;
 
         let assistant_response: Assistant = format_response(response)?;
 
@@ -48,7 +45,7 @@ impl Assistants<'_> {
     ) -> Result<Assistant, APIError> {
         let response = self
             .client
-            .post(format!("/assistants/{id}").as_str(), &parameters)
+            .post(&format!("/assistants/{id}"), &parameters)
             .await?;
 
         let assistant_response: Assistant = format_response(response.data)?;
@@ -58,10 +55,7 @@ impl Assistants<'_> {
 
     /// Delete an assistant.
     pub async fn delete(&self, id: &str) -> Result<DeletedObject, APIError> {
-        let response = self
-            .client
-            .delete(format!("/assistants/{id}").as_str())
-            .await?;
+        let response = self.client.delete(&format!("/assistants/{id}")).await?;
 
         let deleted_object: DeletedObject = format_response(response)?;
 

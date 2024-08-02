@@ -48,7 +48,7 @@ impl Files<'_> {
 
     /// Delete a file.
     pub async fn delete(&self, id: &str) -> Result<DeletedObject, APIError> {
-        let response = self.client.delete(format!("/files/{id}").as_str()).await?;
+        let response = self.client.delete(&format!("/files/{id}")).await?;
 
         let deleted_object: DeletedObject = format_response(response)?;
 
@@ -57,7 +57,7 @@ impl Files<'_> {
 
     /// Returns information about a specific file.
     pub async fn retrieve(&self, id: &str) -> Result<File, APIError> {
-        let response = self.client.get(format!("/files/{id}").as_str()).await?;
+        let response = self.client.get(&format!("/files/{id}")).await?;
 
         let file_response: File = format_response(response)?;
 
@@ -66,10 +66,7 @@ impl Files<'_> {
 
     /// Returns the contents of the specified file.
     pub async fn retrieve_content(&self, id: &str) -> Result<String, APIError> {
-        let response = self
-            .client
-            .get(format!("/files/{id}/content").as_str())
-            .await?;
+        let response = self.client.get(&format!("/files/{id}/content")).await?;
 
         Ok(response)
     }

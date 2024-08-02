@@ -28,10 +28,7 @@ impl RunSteps<'_> {
         let response = self
             .assistant
             .client
-            .get_with_query(
-                format!("/threads/{thread_id}/runs/{run_id}/steps").as_str(),
-                &query,
-            )
+            .get_with_query(&format!("/threads/{thread_id}/runs/{run_id}/steps"), &query)
             .await?;
 
         let list_run_steps_response: ListResponse<RunStep> = format_response(response)?;
@@ -49,7 +46,9 @@ impl RunSteps<'_> {
         let response = self
             .assistant
             .client
-            .get(format!("/threads/{thread_id}/runs/{run_id}/steps/{run_step_id}").as_str())
+            .get(&format!(
+                "/threads/{thread_id}/runs/{run_id}/steps/{run_step_id}"
+            ))
             .await?;
 
         let run_step_response: RunStep = format_response(response)?;

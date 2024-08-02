@@ -51,10 +51,7 @@ impl FineTuning<'_> {
 
     /// Get info about a fine-tuning job.
     pub async fn retrieve(&self, id: &str) -> Result<FineTuningJob, APIError> {
-        let response = self
-            .client
-            .get(format!("/fine_tuning/jobs/{id}").as_str())
-            .await?;
+        let response = self.client.get(&format!("/fine_tuning/jobs/{id}")).await?;
 
         let fine_tuning_job_response: FineTuningJob = format_response(response)?;
 
@@ -65,10 +62,7 @@ impl FineTuning<'_> {
     pub async fn cancel(&self, id: &str) -> Result<FineTuningJob, APIError> {
         let response = self
             .client
-            .post(
-                format!("/fine_tuning/jobs/{id}/cancel").as_str(),
-                &Value::Null,
-            )
+            .post(&format!("/fine_tuning/jobs/{id}/cancel"), &Value::Null)
             .await?;
 
         let fine_tuning_job_response: FineTuningJob = format_response(response.data)?;
@@ -84,7 +78,7 @@ impl FineTuning<'_> {
     ) -> Result<ListResponse<FineTuningJobEvent>, APIError> {
         let response = self
             .client
-            .get_with_query(format!("/fine_tuning/jobs/{id}/events").as_str(), &query)
+            .get_with_query(&format!("/fine_tuning/jobs/{id}/events"), &query)
             .await?;
 
         let list_fine_tuning_job_events_response: ListResponse<FineTuningJobEvent> =
@@ -101,10 +95,7 @@ impl FineTuning<'_> {
     ) -> Result<ListResponse<FineTuningJobCheckpoint>, APIError> {
         let response = self
             .client
-            .get_with_query(
-                format!("/fine_tuning/jobs/{id}/checkpoints").as_str(),
-                &query,
-            )
+            .get_with_query(&format!("/fine_tuning/jobs/{id}/checkpoints"), &query)
             .await?;
 
         let list_fine_tuning_checkpoints_response: ListResponse<FineTuningJobCheckpoint> =

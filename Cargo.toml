@@ -34,6 +34,3 @@ rustls-tls = ["reqwest/rustls-tls"]
 
 [lib]
 doctest = false
-
-[workspace]
-resolver = "2"

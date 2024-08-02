@@ -5,6 +5,8 @@ use std::fmt::{Display, Formatter, Result};
 pub enum APIError {
     AuthenticationError(String),
     BadRequestError(String),
+    PermissionError(String),
+    NotFoundError(String),
     GoneError(String),
     ServerError(String),
     InvalidRequestError(String),
@@ -20,6 +22,8 @@ impl APIError {
         match self {
             APIError::AuthenticationError(message)
             | APIError::BadRequestError(message)
+            | APIError::PermissionError(message)
+            | APIError::NotFoundError(message)
             | APIError::GoneError(message)
             | APIError::ServerError(message)
             | APIError::InvalidRequestError(message)
