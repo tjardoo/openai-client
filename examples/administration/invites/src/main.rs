@@ -15,7 +15,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
         role: UserRole::Reader,
     };
 
-    let invite = client.administration().invites().create(parameters).await?;
+    let _invite = client.administration().invites().create(parameters).await?;
 
     let invite = client
         .administration()

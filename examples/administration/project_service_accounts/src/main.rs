@@ -19,7 +19,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
         name: "Test Project Service Account A".to_string(),
     };
 
-    let project_service_account = client
+    let _project_service_account = client
         .administration()
         .project_service_accounts()
         .create(project_id, parameters)

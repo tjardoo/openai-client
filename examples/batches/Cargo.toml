@@ -1,3 +1,0 @@
-[workspace]
-resolver = "2"
-members = ["cancel_batch", "create_batch", "list_batches", "retrieve_batch"]
