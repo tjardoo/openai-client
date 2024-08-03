@@ -31,7 +31,7 @@ impl Batches<'_> {
 
     /// Retrieves a batch.
     pub async fn retrieve(&self, id: &str) -> Result<Batch, APIError> {
-        let response = self.client.get(format!("/batches/{id}").as_str()).await?;
+        let response = self.client.get(&format!("/batches/{id}")).await?;
 
         let batch_response: Batch = format_response(response)?;
 
@@ -42,7 +42,7 @@ impl Batches<'_> {
     pub async fn cancel(&self, id: &str) -> Result<Batch, APIError> {
         let response = self
             .client
-            .post(format!("/batches/{id}/cancel").as_str(), &())
+            .post(&format!("/batches/{id}/cancel"), &())
             .await?;
 
         let batch_response: Batch = format_response(response.data)?;

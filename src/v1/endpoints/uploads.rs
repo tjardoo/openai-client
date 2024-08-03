@@ -43,7 +43,7 @@ impl Uploads<'_> {
 
         let response = self
             .client
-            .post_with_form(format!("/uploads/{id}/parts").as_str(), form)
+            .post_with_form(&format!("/uploads/{id}/parts"), form)
             .await?;
 
         let upload_part_response: UploadPart = format_response(response)?;
@@ -59,7 +59,7 @@ impl Uploads<'_> {
     ) -> Result<Upload, APIError> {
         let response = self
             .client
-            .post(format!("/uploads/{id}/complete").as_str(), &parameters)
+            .post(&format!("/uploads/{id}/complete"), &parameters)
             .await?;
 
         let upload_response: Upload = format_response(response.data)?;
@@ -71,7 +71,7 @@ impl Uploads<'_> {
     pub async fn cancel(&self, id: &str) -> Result<Upload, APIError> {
         let response = self
             .client
-            .post(format!("/uploads/{id}/cancel").as_str(), &Value::Null)
+            .post(&format!("/uploads/{id}/cancel"), &Value::Null)
             .await?;
 
         let upload_response: Upload = format_response(response.data)?;

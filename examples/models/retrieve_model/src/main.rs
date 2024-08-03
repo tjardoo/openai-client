@@ -8,7 +8,7 @@ async fn main() {
 
     let result = client
         .models()
-        .get(Gpt4Engine::Gpt4O.to_string().as_str())
+        .get(&Gpt4Engine::Gpt4O.to_string())
         .await
         .unwrap();
 

@@ -32,7 +32,7 @@ impl Threads<'_> {
         let response = self
             .assistant
             .client
-            .get(format!("/threads/{thread_id}").as_str())
+            .get(&format!("/threads/{thread_id}"))
             .await?;
 
         let thread_response: Thread = format_response(response)?;
@@ -49,7 +49,7 @@ impl Threads<'_> {
         let response = self
             .assistant
             .client
-            .post(format!("/threads/{thread_id}").as_str(), &parameters)
+            .post(&format!("/threads/{thread_id}"), &parameters)
             .await?;
 
         let thread_response: Thread = format_response(response.data)?;
@@ -62,7 +62,7 @@ impl Threads<'_> {
         let response = self
             .assistant
             .client
-            .delete(format!("/threads/{thread_id}").as_str())
+            .delete(&format!("/threads/{thread_id}"))
             .await?;
 
         let deleted_object: DeletedObject = format_response(response)?;

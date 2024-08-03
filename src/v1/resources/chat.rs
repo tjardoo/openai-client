@@ -393,7 +393,7 @@ impl FromStr for Role {
 impl DeltaFunction {
     pub fn merge(&mut self, other: &Self) {
         if self.name.is_none() && other.name.is_some() {
-            self.name = other.name.clone();
+            self.name.clone_from(&other.name);
         }
 
         if let Some(arguments) = &other.arguments {

@@ -66,6 +66,7 @@ let result = client
 - [Fine-tuning](#fine-tuning)
 - [Batches](#batches)
 - [Assistants](#assistants)
+- [Administration](#administration)
 
 ## Models
 
@@ -595,6 +596,19 @@ For more information see the examples in the [examples/assistants](https://githu
 - Run Steps
 
 More information [Assistants](https://platform.openai.com/docs/api-reference/assistants)
+
+### Administration
+
+Programmatically manage your organization.
+
+For more information see the examples in the [examples/administration](https://github.com/tjardoo/openai-client/tree/master/examples/administration) directory.
+
+- Users
+- Invites
+- Projects
+- Project Users
+- Project Service Accounts
+- Project API Keys
 
 ## Configuration
 

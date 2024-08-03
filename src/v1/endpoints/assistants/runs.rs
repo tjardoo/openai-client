@@ -30,7 +30,7 @@ impl Runs<'_> {
         let response = self
             .assistant
             .client
-            .post(format!("/threads/{thread_id}/runs").as_str(), &parameters)
+            .post(&format!("/threads/{thread_id}/runs"), &parameters)
             .await?;
 
         let run_response: Run = format_response(response.data)?;
@@ -59,7 +59,7 @@ impl Runs<'_> {
         let response = self
             .assistant
             .client
-            .get(format!("/threads/{thread_id}/runs/{run_id}").as_str())
+            .get(&format!("/threads/{thread_id}/runs/{run_id}"))
             .await?;
 
         let run_response: Run = format_response(response)?;
@@ -77,10 +77,7 @@ impl Runs<'_> {
         let response = self
             .assistant
             .client
-            .post(
-                format!("/threads/{thread_id}/runs/{run_id}").as_str(),
-                &parameters,
-            )
+            .post(&format!("/threads/{thread_id}/runs/{run_id}"), &parameters)
             .await?;
 
         let run_response: Run = format_response(response.data)?;
@@ -97,7 +94,7 @@ impl Runs<'_> {
         let response = self
             .assistant
             .client
-            .get_with_query(format!("/threads/{thread_id}/runs").as_str(), &query)
+            .get_with_query(&format!("/threads/{thread_id}/runs"), &query)
             .await?;
 
         let list_runs_response: ListResponse<Run> = format_response(response)?;
@@ -111,7 +108,7 @@ impl Runs<'_> {
             .assistant
             .client
             .post(
-                format!("/threads/{thread_id}/runs/{run_id}/cancel").as_str(),
+                &format!("/threads/{thread_id}/runs/{run_id}/cancel"),
                 &serde_json::json!({}),
             )
             .await?;
@@ -134,7 +131,7 @@ impl Runs<'_> {
             .assistant
             .client
             .post(
-                format!("/threads/{thread_id}/runs/{run_id}/submit_tool_outputs").as_str(),
+                &format!("/threads/{thread_id}/runs/{run_id}/submit_tool_outputs"),
                 &parameters,
             )
             .await?;

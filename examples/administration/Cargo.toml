@@ -1,0 +1,10 @@
+[workspace]
+resolver = "2"
+members = [
+    "invites",
+    "project_api_keys",
+    "project_service_accounts",
+    "project_users",
+    "projects",
+    "users",
+]

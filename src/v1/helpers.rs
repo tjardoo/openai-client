@@ -19,6 +19,12 @@ pub async fn check_status_code(result: reqwest::Result<Response>) -> Result<Resp
                     StatusCode::UNAUTHORIZED => {
                         return Err(APIError::AuthenticationError(text));
                     }
+                    StatusCode::FORBIDDEN => {
+                        return Err(APIError::PermissionError(text));
+                    }
+                    StatusCode::NOT_FOUND => {
+                        return Err(APIError::NotFoundError(text));
+                    }
                     StatusCode::GONE => {
                         return Err(APIError::GoneError(text));
                     }
