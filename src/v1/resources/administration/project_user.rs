@@ -2,8 +2,8 @@ use derive_builder::Builder;
 use serde::{Deserialize, Serialize};
 
 #[derive(Serialize, Deserialize, Debug, Clone, PartialEq)]
-pub struct User {
-    /// The object type, which is always organization.user.
+pub struct ProjectUser {
+    /// The object type, which is always organization.project.user.
     pub object: String,
     /// The identifier, which can be referenced in API endpoints.
     pub id: String,
@@ -12,22 +12,32 @@ pub struct User {
     /// The email address of the user.
     pub email: String,
     /// The role of the user.
-    pub role: UserRole,
+    pub role: ProjectUserRole,
     /// The Unix timestamp (in seconds) of when the user was added.
     pub added_at: u32,
 }
 
 #[derive(Serialize, Deserialize, Debug, Clone, PartialEq)]
 #[serde(rename_all = "lowercase")]
-pub enum UserRole {
+pub enum ProjectUserRole {
     Owner,
-    Reader,
+    Member,
 }
 
 #[derive(Serialize, Deserialize, Debug, Builder, Clone, PartialEq)]
-#[builder(name = "ModifyUserParametersBuilder")]
+#[builder(name = "CreateProjectUserParametersBuilder")]
 #[builder(setter(into, strip_option))]
-pub struct ModifyUserParameters {
-    /// The new role for the user.
-    pub role: UserRole,
+pub struct CreateProjectUserParameters {
+    /// The ID of the user.
+    pub user: String,
+    /// The role of the user.
+    pub role: ProjectUserRole,
+}
+
+#[derive(Serialize, Deserialize, Debug, Builder, Clone, PartialEq)]
+#[builder(name = "ModifyProjectUserParametersBuilder")]
+#[builder(setter(into, strip_option))]
+pub struct ModifyProjectUserParameters {
+    /// The new role of the user.
+    pub role: ProjectUserRole,
 }

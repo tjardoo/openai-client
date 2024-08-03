@@ -5,11 +5,11 @@ use super::user::UserRole;
 
 #[derive(Serialize, Deserialize, Debug, Clone, PartialEq)]
 pub struct Invite {
-    /// The object type, which is always organization.invite
+    /// The object type, which is always organization.invite.
     pub object: String,
-    /// The identifier, which can be referenced in API endpoints
+    /// The identifier, which can be referenced in API endpoints.
     pub id: String,
-    /// The email address of the individual to whom the invite was sent
+    /// The email address of the individual to whom the invite was sent.
     pub email: String,
     /// The user role.
     pub role: UserRole,
