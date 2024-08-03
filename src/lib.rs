@@ -604,7 +604,6 @@
 //! - Project Users
 //! - Project Service Accounts
 //! - Project API Keys
-//! - Audit Logs
 //!
 //! ## Configuration
 //!

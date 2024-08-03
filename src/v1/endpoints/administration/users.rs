@@ -13,7 +13,7 @@ pub struct Users<'a> {
 }
 
 impl Administration<'_> {
-    /// Manage users and their role in an organization. Users will be automatically added to the Default project.
+    /// Manage users and their role in an organization.
     pub fn users(&self) -> Users {
         Users {
             administration: self,

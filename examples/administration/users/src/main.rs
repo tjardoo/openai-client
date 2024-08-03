@@ -9,11 +9,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
 
     println!("{:#?}", users);
 
-    let user = client
-        .administration()
-        .users()
-        .retrieve("user-YJwXXKAE5uAXMQ2uxyz8YEq3")
-        .await?;
+    let user = client.administration().users().retrieve("user-XXX").await?;
 
     println!("{:#?}", user);
 
@@ -24,7 +20,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
     let modified_user = client
         .administration()
         .users()
-        .modify("user-YJwXXKAE5uAXMQ2uxyz8YEq3", parameters)
+        .modify("user-XXX", parameters)
         .await?;
 
     println!("{:#?}", modified_user);

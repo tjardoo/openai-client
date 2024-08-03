@@ -13,7 +13,7 @@ pub struct Invites<'a> {
 }
 
 impl Administration<'_> {
-    /// Invite and manage invitations for an organization. Invited users are automatically added to the Default project.
+    /// Invite and manage invitations for an organization.
     pub fn invites(&self) -> Invites {
         Invites {
             administration: self,
@@ -64,7 +64,7 @@ impl Invites<'_> {
         Ok(invite)
     }
 
-    /// Delete an invite. If the invite has already been accepted, it cannot be deleted.
+    /// Delete an invite.
     pub async fn delete(&self, invite_id: &str) -> Result<DeletedObject, APIError> {
         let response = self
             .administration

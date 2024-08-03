@@ -609,7 +609,6 @@ For more information see the examples in the [examples/administration](https://g
 - Project Users
 - Project Service Accounts
 - Project API Keys
-- Audit Logs
 
 ## Configuration
 
