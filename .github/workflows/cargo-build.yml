@@ -17,7 +17,9 @@ jobs:
     steps:
     - uses: actions/checkout@v3
     - name: Build
-      run: cargo build --verbose
+      run:
+        cd openai_dive
+        cargo build --verbose
 
   cargo-build-without-default-features:
 
@@ -26,7 +28,9 @@ jobs:
     steps:
     - uses: actions/checkout@v3
     - name: Build
-      run: cargo build --verbose --no-default-features
+      run: |
+        cd openai_dive
+        cargo build --verbose --no-default-features
 
   cargo-build-without-default-features-with-reqwest:
 
@@ -35,7 +39,9 @@ jobs:
     steps:
     - uses: actions/checkout@v3
     - name: Build
-      run: cargo build --verbose --no-default-features --features reqwest
+      run: |
+        cd openai_dive
+        cargo build --verbose --no-default-features --features reqwest
 
   cargo-build-without-default-features-with-reqwest-on-wasm32:
 
@@ -46,4 +52,6 @@ jobs:
     - name: Install wasm32 target
       run: rustup target add wasm32-unknown-unknown
     - name: Build
-      run: cargo build --verbose --target wasm32-unknown-unknown --no-default-features --features reqwest
+      run: |
+        cd openai_dive
+        cargo build --verbose --target wasm32-unknown-unknown --no-default-features --features reqwest
