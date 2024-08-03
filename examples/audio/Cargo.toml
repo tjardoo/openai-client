@@ -1,8 +1,0 @@
-[workspace]
-resolver = "2"
-members = [
-    "create_transcription",
-    "create_translation",
-    "create_speech",
-    "create_speech_stream",
-]

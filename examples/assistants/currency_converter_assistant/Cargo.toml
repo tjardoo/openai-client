@@ -5,7 +5,7 @@ edition = "2021"
 publish = false
 
 [dependencies]
-openai_dive = { path = "./../../../../openai-client" }
+openai_dive = { path = "./../../../openai_dive" }
 tokio = { version = "1.0", features = ["full"] }
 reqwest = "0.12"
 serde = { version = "1.0", features = ["derive"] }

@@ -1,9 +1,0 @@
-[workspace]
-resolver = "2"
-members = [
-    "delete_file",
-    "list_files",
-    "retrieve_file",
-    "retrieve_file_content",
-    "upload_file",
-]
