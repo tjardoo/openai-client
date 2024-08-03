@@ -2,3 +2,5 @@
 Cargo.lock
 .env
 .vscode
+/examples/*/target
+/examples/*/Cargo.lock
