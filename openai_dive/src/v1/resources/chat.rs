@@ -1,7 +1,8 @@
 use crate::v1::resources::shared::StopToken;
 use crate::v1::resources::shared::{FinishReason, Usage};
 use derive_builder::Builder;
-use serde::{Deserialize, Serialize};
+use serde::ser::SerializeStruct;
+use serde::{Deserialize, Serialize, Serializer};
 use std::collections::HashMap;
 use std::fmt::Display;
 use std::str::FromStr;
@@ -144,10 +145,55 @@ pub struct ChatCompletionFunction {
     pub parameters: serde_json::Value,
 }
 
-#[derive(Serialize, Deserialize, Debug, Clone, PartialEq)]
-pub struct ChatCompletionResponseFormat {
-    /// The type of response format. Currently, only 'json_object' and 'text' are supported.
-    pub r#type: ChatCompletionResponseFormatType,
+#[derive(Deserialize, Debug, Clone, PartialEq)]
+#[serde(rename_all = "snake_case")]
+pub enum ChatCompletionResponseFormat {
+    Text,
+    JsonObject,
+    JsonSchema(JsonSchema),
+}
+
+impl Serialize for ChatCompletionResponseFormat {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: Serializer,
+    {
+        match self {
+            ChatCompletionResponseFormat::Text => {
+                let mut state = serializer.serialize_struct("ChatCompletionResponseFormat", 1)?;
+                state.serialize_field("type", "text")?;
+                state.end()
+            }
+            ChatCompletionResponseFormat::JsonObject => {
+                let mut state = serializer.serialize_struct("ChatCompletionResponseFormat", 1)?;
+                state.serialize_field("type", "json_object")?;
+                state.end()
+            }
+            ChatCompletionResponseFormat::JsonSchema(json_schema) => {
+                let mut state = serializer.serialize_struct("ChatCompletionResponseFormat", 2)?;
+                state.serialize_field("type", "json_schema")?;
+                state.serialize_field("json_schema", json_schema)?;
+                state.end()
+            }
+        }
+    }
+}
+
+#[derive(Serialize, Deserialize, Debug, Default, Builder, Clone, PartialEq)]
+#[builder(name = "JsonSchemaBuilder")]
+#[builder(setter(into, strip_option), default)]
+pub struct JsonSchema {
+    /// A description of what the response format is for, used by the model to determine how to respond in the format.
+    #[serde(skip_serializing_if = "Option::is_none")]
+    description: Option<String>,
+    /// The name of the response format. Must be a-z, A-Z, 0-9, or contain underscores and dashes, with a maximum length of 64.
+    name: String,
+    /// The schema for the response format, described as a JSON Schema object.
+    #[serde(skip_serializing_if = "Option::is_none")]
+    schema: Option<serde_json::Value>,
+    /// Whether to enable strict schema adherence when generating the output.
+    #[serde(skip_serializing_if = "Option::is_none")]
+    strict: Option<bool>,
 }
 
 #[derive(Serialize, Deserialize, Debug, Clone, PartialEq)]
@@ -317,13 +363,6 @@ pub enum ChatMessageContent {
     Text(String),
     ImageUrl(Vec<ImageUrl>),
     None,
-}
-
-#[derive(Serialize, Deserialize, Debug, Clone, PartialEq)]
-#[serde(rename_all = "snake_case")]
-pub enum ChatCompletionResponseFormatType {
-    Text,
-    JsonObject,
 }
 
 #[derive(Serialize, Deserialize, Debug, Clone, PartialEq)]
