@@ -86,9 +86,6 @@
 //!     .await?;
 //! ```
 //!
-//! > [!NOTE]
-//! > This endpoint also has `stream` support. See the [examples/chat/create_chat_completion_stream](https://github.com/tjardoo/openai-client/tree/master/examples/chat/create_chat_completion_stream) example.
-//!
 //! More information: [Create chat completion](https://platform.openai.com/docs/api-reference/chat/create)
 //!
 //! ### Create chat completion with image
@@ -201,9 +198,6 @@
 //! }
 //! ```
 //!
-//! > [!NOTE]
-//! > This endpoint also has `stream` support. See the [examples/chat/function_calling_stream](https://github.com/tjardoo/openai-client/tree/master/examples/chat/function_calling_stream) example.
-//!
 //! More information: [Function calling](https://platform.openai.com/docs/guides/function-calling)
 //!
 //! ### Structured outputs
@@ -228,13 +222,13 @@
 //!     .response_format(ChatCompletionResponseFormat::JsonSchema(JsonSchemaBuilder::default()
 //!         .name("math_reasoning")
 //!         .schema(serde_json::json!({
-//!                 "type": "object",
-//!                 "properties": {
-//!                     "steps": {
-//!                         "type": "array",
-//!                         "items": {
-//!                             "type": "object",
-//!                             "properties": {
+//!             "type": "object",
+//!             "properties": {
+//!                 "steps": {
+//!                     "type": "array",
+//!                     "items": {
+//!                         "type": "object",
+//!                         "properties": {
 //!                             "explanation": { "type": "string" },
 //!                             "output": { "type": "string" }
 //!                         },
@@ -359,9 +353,6 @@
 //!     .save("files/example.mp3")
 //!     .await?;
 //! ```
-//!
-//! > [!NOTE]
-//! > This endpoint also has `stream` support. See the [examples/audio/create_speech_stream](https://github.com/tjardoo/openai-client/tree/master/examples/audio/create_speech_stream) example.
 //!
 //! More information: [Create speech](https://platform.openai.com/docs/api-reference/audio/createSpeech)
 //!

@@ -25,13 +25,13 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
         .response_format(ChatCompletionResponseFormat::JsonSchema(JsonSchemaBuilder::default()
             .name("math_reasoning")
             .schema(serde_json::json!({
-                    "type": "object",
-                    "properties": {
-                        "steps": {
-                            "type": "array",
-                            "items": {
-                                "type": "object",
-                                "properties": {
+                "type": "object",
+                "properties": {
+                    "steps": {
+                        "type": "array",
+                        "items": {
+                            "type": "object",
+                            "properties": {
                                 "explanation": { "type": "string" },
                                 "output": { "type": "string" }
                             },
