@@ -252,8 +252,6 @@ let parameters = ChatCompletionParametersBuilder::default()
     .build()?;
 
 let result = client.chat().create(parameters).await?;
-
-println!("{:#?}", result);
 ```
 
 More information: [Structured outputs](https://platform.openai.com/docs/guides/structured-outputs)
