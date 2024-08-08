@@ -1,8 +1,8 @@
 use openai_dive::v1::api::Client;
 use openai_dive::v1::models::Gpt4Engine;
 use openai_dive::v1::resources::chat::{
-    ChatCompletionParametersBuilder, ChatCompletionResponseFormat,
-    ChatCompletionResponseFormatType, ChatMessageBuilder, ChatMessageContent, Role,
+    ChatCompletionParametersBuilder, ChatCompletionResponseFormat, ChatMessageBuilder,
+    ChatMessageContent, Role,
 };
 
 #[tokio::main]
@@ -25,9 +25,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
                 ))
                 .build()?,
         ])
-        .response_format(ChatCompletionResponseFormat {
-            r#type: ChatCompletionResponseFormatType::Text,
-        })
+        .response_format(ChatCompletionResponseFormat::Text)
         .build()?;
 
     let result = client.chat().create(parameters).await?;

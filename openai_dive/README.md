@@ -36,14 +36,11 @@ let result = client
 
 ## Endpoints
 
-- [Models](#models)
-  - [List models](#list-models)
-  - [Retrieve model](#retrieve-model)
-  - [Delete fine-tune model](#delete-fine-tune-model)
 - [Chat](#chat)
   - [Create chat completion](#create-chat-completion)
   - [Create chat completion with image](#create-chat-completion-with-image)
   - [Function calling](#function-calling)
+  - [Structured outputs](#structured-outputs)
 - [Images](#images)
   - [Create image](#create-image)
   - [Create image edit](#create-image-edit)
@@ -52,64 +49,15 @@ let result = client
   - [Create speech](#create-speech)
   - [Create transcription](#create-transcription)
   - [Create translation](#create-translation)
-- [Embeddings](#embeddings)
-  - [Create embeddings](#create-embeddings)
+- [Models](#models)
 - [Files](#files)
-  - [List files](#list-files)
-  - [Upload file](#upload-file)
-  - [Delete file](#delete-file)
-  - [Retrieve file](#retrieve-file)
-  - [Retrieve file content](#retrieve-file-content)
+- [Embeddings](#embeddings)
 - [Moderation](#moderation)
-  - [Create moderation](#create-moderation)
 - [Uploads](#uploads)
 - [Fine-tuning](#fine-tuning)
 - [Batches](#batches)
 - [Assistants](#assistants)
 - [Administration](#administration)
-
-## Models
-
-List and describe the various models available in the API.
-
-### List models
-
-Lists the currently available models, and provides basic information about each one such as the owner and availability.
-
-```rust
-let result = client
-    .models()
-    .list()
-    .await?;
-```
-
-More information: [List models](https://platform.openai.com/docs/api-reference/models/list)
-
-### Retrieve model
-
-Retrieves a model instance, providing basic information about the model such as the owner and permissioning.
-
-```rust
-let result = client
-    .models()
-    .get("gpt-4o")
-    .await?;
-```
-
-More information: [Retrieve model](https://platform.openai.com/docs/api-reference/models/retrieve)
-
-### Delete fine-tune model
-
-Delete a fine-tuned model. You must have the Owner role in your organization to delete a model.
-
-```rust
-let result = client
-    .models()
-    .delete("my-custom-model")
-    .await?;
-```
-
-More information: [Delete fine-tune model](https://platform.openai.com/docs/api-reference/models/delete)
 
 ## Chat
 
@@ -134,9 +82,7 @@ let parameters = ChatCompletionParametersBuilder::default()
             ))
             .build()?,
     ])
-    .response_format(ChatCompletionResponseFormat {
-        r#type: ChatCompletionResponseFormatType::Text,
-    })
+    .response_format(ChatCompletionResponseFormat::Text)
     .build()?;
 
 let result = client
@@ -144,9 +90,6 @@ let result = client
     .create(parameters)
     .await?;
 ```
-
-> [!NOTE]
-> This endpoint also has `stream` support. See the [examples/chat/create_chat_completion_stream](https://github.com/tjardoo/openai-client/tree/master/examples/chat/create_chat_completion_stream) example.
 
 More information: [Create chat completion](https://platform.openai.com/docs/api-reference/chat/create)
 
@@ -260,10 +203,60 @@ fn get_random_number(params: RandomNumber) -> Value {
 }
 ```
 
-> [!NOTE]
-> This endpoint also has `stream` support. See the [examples/chat/function_calling_stream](https://github.com/tjardoo/openai-client/tree/master/examples/chat/function_calling_stream) example.
-
 More information: [Function calling](https://platform.openai.com/docs/guides/function-calling)
+
+### Structured outputs
+
+Structured Outputs is a feature that guarantees the model will always generate responses that adhere to your supplied JSON Schema, so you don't need to worry about the model omitting a required key, or hallucinating an invalid enum value.
+
+```rust
+let parameters = ChatCompletionParametersBuilder::default()
+    .model("gpt-4o-2024-08-06")
+    .messages(vec![
+        ChatMessageBuilder::default()
+            .role(Role::System)
+            .content(ChatMessageContent::Text("You are a helpful math tutor. Guide the user through the solution step by step.".to_string()))
+            .build()?,
+        ChatMessageBuilder::default()
+            .role(Role::User)
+            .content(ChatMessageContent::Text(
+                "how can I solve 8x + 7 = -23".to_string(),
+            ))
+            .build()?,
+    ])
+    .response_format(ChatCompletionResponseFormat::JsonSchema(JsonSchemaBuilder::default()
+        .name("math_reasoning")
+        .schema(serde_json::json!({
+            "type": "object",
+            "properties": {
+                "steps": {
+                    "type": "array",
+                    "items": {
+                        "type": "object",
+                        "properties": {
+                            "explanation": { "type": "string" },
+                            "output": { "type": "string" }
+                        },
+                        "required": ["explanation", "output"],
+                        "additionalProperties": false
+                    }
+                },
+                "final_answer": { "type": "string" }
+            },
+            "required": ["steps", "final_answer"],
+            "additionalProperties": false
+        }))
+        .strict(true)
+        .build()?
+    ))
+    .build()?;
+
+let result = client.chat().create(parameters).await?;
+
+println!("{:#?}", result);
+```
+
+More information: [Structured outputs](https://platform.openai.com/docs/guides/structured-outputs)
 
 ## Images
 
@@ -366,9 +359,6 @@ response
     .await?;
 ```
 
-> [!NOTE]
-> This endpoint also has `stream` support. See the [examples/audio/create_speech_stream](https://github.com/tjardoo/openai-client/tree/master/examples/audio/create_speech_stream) example.
-
 More information: [Create speech](https://platform.openai.com/docs/api-reference/audio/createSpeech)
 
 ### Create transcription
@@ -409,136 +399,51 @@ let result = client
 
 More information: [Create translation](https://platform.openai.com/docs/api-reference/audio/createTranslation)
 
-## Embeddings
+## Models
 
-Get a vector representation of a given input that can be easily consumed by machine learning models and algorithms.
+List and describe the various models available in the API.
 
-### Create embeddings
+For more information see the examples in the [examples/models](https://github.com/tjardoo/openai-client/tree/master/examples/models) directory.
 
-Creates an embedding vector representing the input text.
+- List models
+- Retrieve model
+- Delete fine-tune model
 
-```rust
-let parameters = EmbeddingParametersBuilder::default()
-    .model(EmbeddingsEngine::TextEmbedding3Small.to_string())
-    .input(EmbeddingInput::String(
-        "The food was delicious and the waiter...".to_string(),
-    ))
-    .encoding_format(EmbeddingEncodingFormat::Float)
-    .build()?;
-
-let result = client
-    .embeddings()
-    .create(parameters)
-    .await?;
-```
-
-More information: [Create embeddings](https://platform.openai.com/docs/api-reference/embeddings/create)
+More information [Models](https://platform.openai.com/docs/api-reference/models)
 
 ## Files
 
 Files are used to upload documents that can be used with features like Assistants, Fine-tuning, and Batch API.
 
-### List files
+For more information see the examples in the [examples/files](https://github.com/tjardoo/openai-client/tree/master/examples/files) directory.
 
-Returns a list of files that belong to the user's organization.
+- List files
+- Upload file
+- Delete file
+- Retrieve file
+- Retrieve file content
 
-```rust
-let query = ListFilesParameters {
-    purpose: Some(FilePurpose::FineTune),
-};
+More information [Files](https://platform.openai.com/docs/api-reference/files)
 
-let result = client
-    .files()
-    .list(Some(query))
-    .await?;
-```
+## Embeddings
 
-More information: [List files](https://platform.openai.com/docs/api-reference/files/list)
+Get a vector representation of a given input that can be easily consumed by machine learning models and algorithms.
 
-### Upload file
+For more information see the examples in the [examples/embeddings](https://github.com/tjardoo/openai-client/tree/master/examples/embeddings) directory.
 
-Upload a file that can be used across various endpoints.
+- Create embeddings
 
-```rust
-let parameters = UploadFileParametersBuilder::default()
-    .file(FileUpload::File("./files/DummyUsers.json".to_string()))
-    .purpose(FilePurpose::Assistants)
-    .build()?;
-
-let result = client
-    .files()
-    .upload(parameters)
-    .await?;
-```
-
-More information [Upload file](https://platform.openai.com/docs/api-reference/files/create)
-
-### Delete file
-
-Delete a file.
-
-```rust
-    let file_id = "file-XXX";
-
-    let result = client
-        .files()
-        .delete(&file_id)
-        .await?;
-```
-
-More information [Delete file](https://platform.openai.com/docs/api-reference/files/delete)
-
-### Retrieve file
-
-Returns information about a specific file.
-
-```rust
-let file_id = "file-XXX";
-
-let result = client
-    .files()
-    .retrieve(&file_id)
-    .await?;
-```
-
-More information [Retrieve file](https://platform.openai.com/docs/api-reference/files/retrieve)
-
-### Retrieve file content
-
-Returns the contents of the specified file.
-
-```rust
-let file_id = "file-XXX";
-
-let result = client
-    .files()
-    .retrieve_content(&file_id)
-    .await?;
-```
-
-More information [Retrieve file content](https://platform.openai.com/docs/api-reference/files/retrieve-contents)
+More information: [Embeddings](https://platform.openai.com/docs/api-reference/embeddings)
 
 ## Moderation
 
 Given some input text, outputs if the model classifies it as potentially harmful across several categories.
 
-### Create moderation
+For more information see the examples in the [examples/moderation](https://github.com/tjardoo/openai-client/tree/master/examples/moderation) directory.
 
-Classifies if text is potentially harmful.
+- Create moderation
 
-```rust
-let parameters = ModerationParametersBuilder::default()
-    .model(ModerationsEngine::TextModerationLatest.to_string())
-    .input("I want to kill them.".to_string())
-    .build()?;
-
-let result = client
-    .moderations()
-    .create(parameters)
-    .await?;
-```
-
-More information [Create moderation](https://platform.openai.com/docs/api-reference/moderations/create)
+More information [Moderation](https://platform.openai.com/docs/api-reference/moderations)
 
 ### Uploads
 
@@ -680,6 +585,7 @@ You can use these predefined constants to set the model in the parameters or use
 
 - Gpt4Engine
   - Gpt4O `gpt-4o` (alias)
+  - Gpt4OMini `gpt-4o-mini` (alias)
   - Gpt4 `gpt-4` (alias)
   - Gpt4Turbo `gpt-4-turbo` (alias)
   - Gpt4TurboPreview `gpt-4-turbo-preview` (alias)

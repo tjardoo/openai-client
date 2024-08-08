@@ -2,8 +2,8 @@ use futures::StreamExt;
 use openai_dive::v1::api::Client;
 use openai_dive::v1::models::Gpt4Engine;
 use openai_dive::v1::resources::chat::{
-    ChatCompletionParametersBuilder, ChatCompletionResponseFormat,
-    ChatCompletionResponseFormatType, ChatMessageBuilder, ChatMessageContent, Role,
+    ChatCompletionParametersBuilder, ChatCompletionResponseFormat, ChatMessageBuilder,
+    ChatMessageContent, Role,
 };
 
 #[tokio::main]
@@ -28,9 +28,7 @@ async fn main() {
                 .build()
                 .unwrap(),
         ])
-        .response_format(ChatCompletionResponseFormat {
-            r#type: ChatCompletionResponseFormatType::Text,
-        })
+        .response_format(ChatCompletionResponseFormat::Text)
         .build()
         .unwrap();
 
