@@ -97,6 +97,21 @@ pub struct DeletedObject {
 }
 
 #[derive(Serialize, Deserialize, Debug, Clone, PartialEq)]
+pub struct LastError {
+    /// One of 'server_error' or 'rate_limit_exceeded'.
+    pub code: LastErrorCode,
+    /// A human-readable description of the error.
+    pub message: String,
+}
+
+#[derive(Serialize, Deserialize, Debug, Clone, PartialEq)]
+#[serde(rename_all = "snake_case")]
+pub enum LastErrorCode {
+    ServerError,
+    RateLimitExceeded,
+}
+
+#[derive(Serialize, Deserialize, Debug, Clone, PartialEq)]
 #[serde(rename_all = "snake_case")]
 pub enum FinishReason {
     /// API returned complete message, or a message terminated by one of the stop sequences provided via the stop parameter.

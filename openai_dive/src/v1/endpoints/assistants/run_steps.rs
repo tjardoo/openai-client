@@ -31,9 +31,9 @@ impl RunSteps<'_> {
             .get_with_query(&format!("/threads/{thread_id}/runs/{run_id}/steps"), &query)
             .await?;
 
-        let list_run_steps_response: ListResponse<RunStep> = format_response(response)?;
+        let response: ListResponse<RunStep> = format_response(response)?;
 
-        Ok(list_run_steps_response)
+        Ok(response)
     }
 
     /// Retrieves a run step.
@@ -51,8 +51,8 @@ impl RunSteps<'_> {
             ))
             .await?;
 
-        let run_step_response: RunStep = format_response(response)?;
+        let response: RunStep = format_response(response)?;
 
-        Ok(run_step_response)
+        Ok(response)
     }
 }

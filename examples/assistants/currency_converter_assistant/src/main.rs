@@ -5,8 +5,8 @@ use openai_dive::v1::{
     models::Gpt4Engine,
     resources::assistant::{
         assistant::{
-            AssistantFunction, AssistantFunctionTool, AssistantParametersBuilder, AssistantTools,
-            ToolOutput, ToolOutputsParametersBuilder,
+            AssistantFunction, AssistantParametersBuilder, AssistantTool, ToolOutput,
+            ToolOutputsParametersBuilder,
         },
         message::{MessageContent, MessageRole},
         run::{CreateRunParametersBuilder, CreateThreadAndRunParametersBuilder, RunStatus},
@@ -28,29 +28,32 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
         client.set_project(&project_id.unwrap());
     }
 
+    let get_currency_conversation_function = AssistantFunction {
+        name: "get_currency_conversion".to_string(),
+        description: Some("Get the currency conversion rate.".to_string()),
+        parameters: json!({
+            "type": "object",
+            "properties": {
+                "amount": {"type": "number", "description": "Amount to convert."},
+                "currency": {"type": "string", "description": "Currency to convert to."},
+            },
+            "required": ["amount", "currency"],
+            "additionalProperties": false,
+        }),
+        strict: Some(true),
+    };
+
+    let tools = vec![AssistantTool::Function {
+        function: Some(get_currency_conversation_function),
+    }];
+
     let parameters = AssistantParametersBuilder::default()
         .model(Gpt4Engine::Gpt4O.to_string())
         .name("Currency Converter Assistant")
         .instructions(
             "You are a currency converter assistant. If you're asked about currency conversion us the provided get_currency_conversion function to get the conversion with the base currency being EUR. Then use that data to answer the user's question. Always mention what the equivalent in that currency of 1 EUR. And write the full name of the currency between brackets for only the first occurrences.".to_string(),
         )
-        .tools(vec![AssistantTools::Function(
-            AssistantFunctionTool {
-                r#type: "function".to_string(),
-                function: AssistantFunction {
-                    name: "get_currency_conversion".to_string(),
-                    description: Some("Get the currency conversion rate.".to_string()),
-                    parameters: json!({
-                        "type": "object",
-                        "properties": {
-                            "amount": {"type": "number", "description": "Amount to convert."},
-                            "currency": {"type": "string", "description": "Currency to convert to."},
-                        },
-                        "required": ["currency"],
-                    }),
-                },
-            }
-        )])
+        .tools(tools)
         .build()?;
 
     let assistant = client.assistants().create(parameters).await?;

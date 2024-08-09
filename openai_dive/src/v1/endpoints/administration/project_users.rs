@@ -1,3 +1,4 @@
+use crate::v1::endpoints::administration::Administration;
 use crate::v1::error::APIError;
 use crate::v1::helpers::format_response;
 use crate::v1::resources::administration::project_user::CreateProjectUserParameters;
@@ -6,8 +7,6 @@ use crate::v1::resources::administration::project_user::ProjectUser;
 use crate::v1::resources::shared::DeletedObject;
 use crate::v1::resources::shared::ListResponse;
 use crate::v1::resources::shared::SimpleListParameters;
-
-use super::Administration;
 
 pub struct ProjectUsers<'a> {
     pub administration: &'a Administration<'a>,
@@ -38,9 +37,9 @@ impl ProjectUsers<'_> {
             )
             .await?;
 
-        let list_project_users_response: ListResponse<ProjectUser> = format_response(response)?;
+        let response: ListResponse<ProjectUser> = format_response(response)?;
 
-        Ok(list_project_users_response)
+        Ok(response)
     }
 
     /// Retrieves a user in the project.
@@ -54,9 +53,9 @@ impl ProjectUsers<'_> {
             ))
             .await?;
 
-        let project_user: ProjectUser = format_response(response)?;
+        let response: ProjectUser = format_response(response)?;
 
-        Ok(project_user)
+        Ok(response)
     }
 
     /// Adds a user to the project.
@@ -74,9 +73,9 @@ impl ProjectUsers<'_> {
             )
             .await?;
 
-        let project_user: ProjectUser = format_response(response.data)?;
+        let response: ProjectUser = format_response(response.data)?;
 
-        Ok(project_user)
+        Ok(response)
     }
 
     /// Modifies a user's role in the project.
@@ -95,9 +94,9 @@ impl ProjectUsers<'_> {
             )
             .await?;
 
-        let project_user: ProjectUser = format_response(response.data)?;
+        let response: ProjectUser = format_response(response.data)?;
 
-        Ok(project_user)
+        Ok(response)
     }
 
     /// Deletes a user from the project.
@@ -111,8 +110,8 @@ impl ProjectUsers<'_> {
             ))
             .await?;
 
-        let deleted_object: DeletedObject = format_response(response)?;
+        let response: DeletedObject = format_response(response)?;
 
-        Ok(deleted_object)
+        Ok(response)
     }
 }

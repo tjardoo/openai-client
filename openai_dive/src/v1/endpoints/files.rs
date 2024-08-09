@@ -25,9 +25,9 @@ impl Files<'_> {
     ) -> Result<ListFilesResponse, APIError> {
         let response = self.client.get_with_query("/files", &query).await?;
 
-        let list_files_response: ListFilesResponse = format_response(response)?;
+        let response: ListFilesResponse = format_response(response)?;
 
-        Ok(list_files_response)
+        Ok(response)
     }
 
     /// Upload a file that can be used across various endpoints.
@@ -41,27 +41,27 @@ impl Files<'_> {
 
         let response = self.client.post_with_form("/files", form).await?;
 
-        let file_response: File = format_response(response)?;
+        let response: File = format_response(response)?;
 
-        Ok(file_response)
+        Ok(response)
     }
 
     /// Delete a file.
     pub async fn delete(&self, id: &str) -> Result<DeletedObject, APIError> {
         let response = self.client.delete(&format!("/files/{id}")).await?;
 
-        let deleted_object: DeletedObject = format_response(response)?;
+        let response: DeletedObject = format_response(response)?;
 
-        Ok(deleted_object)
+        Ok(response)
     }
 
     /// Returns information about a specific file.
     pub async fn retrieve(&self, id: &str) -> Result<File, APIError> {
         let response = self.client.get(&format!("/files/{id}")).await?;
 
-        let file_response: File = format_response(response)?;
+        let response: File = format_response(response)?;
 
-        Ok(file_response)
+        Ok(response)
     }
 
     /// Returns the contents of the specified file.

@@ -2,8 +2,8 @@ use openai_dive::v1::{
     api::Client,
     models::Gpt4Engine,
     resources::assistant::assistant::{
-        AssistantCodeInterpreterTool, AssistantParametersBuilder, AssistantResponseFormat,
-        AssistantTools,
+        AssistantParametersBuilder, AssistantResponseFormat, AssistantResponseFormatType,
+        AssistantResponseFormatTypeDefinition, AssistantTool,
     },
 };
 
@@ -25,12 +25,10 @@ async fn main() {
             "You are a personal math tutor. When asked a question, write and run Rust code to answer the question."
                 .to_string(),
         )
-        .tools(vec![AssistantTools::CodeInterpreter(
-            AssistantCodeInterpreterTool {
-                r#type: "code_interpreter".to_string(),
-            }
-        )])
-        .response_format(AssistantResponseFormat::JsonObject { r#type: "text".to_string() })
+        .tools(vec![AssistantTool::CodeInterpreter])
+        .response_format(AssistantResponseFormat::Format(AssistantResponseFormatType {
+            r#type: AssistantResponseFormatTypeDefinition::JsonObject,
+        }))
         .build()
         .unwrap();
 

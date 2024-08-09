@@ -1,3 +1,4 @@
+use crate::v1::endpoints::administration::Administration;
 use crate::v1::error::APIError;
 use crate::v1::helpers::format_response;
 use crate::v1::resources::administration::user::ModifyUserParameters;
@@ -5,8 +6,6 @@ use crate::v1::resources::administration::user::User;
 use crate::v1::resources::shared::DeletedObject;
 use crate::v1::resources::shared::ListResponse;
 use crate::v1::resources::shared::SimpleListParameters;
-
-use super::Administration;
 
 pub struct Users<'a> {
     pub administration: &'a Administration<'a>,
@@ -33,9 +32,9 @@ impl Users<'_> {
             .get_with_query("/organization/users", &query)
             .await?;
 
-        let list_users_response: ListResponse<User> = format_response(response)?;
+        let response: ListResponse<User> = format_response(response)?;
 
-        Ok(list_users_response)
+        Ok(response)
     }
 
     /// Retrieves a user by their identifier.
@@ -46,9 +45,9 @@ impl Users<'_> {
             .get(&format!("/organization/users/{}", user_id))
             .await?;
 
-        let user: User = format_response(response)?;
+        let response: User = format_response(response)?;
 
-        Ok(user)
+        Ok(response)
     }
 
     /// Modifies a user's role in the organization.
@@ -63,9 +62,9 @@ impl Users<'_> {
             .post(&format!("/organization/users/{}", user_id), &parameters)
             .await?;
 
-        let user: User = format_response(response.data)?;
+        let response: User = format_response(response.data)?;
 
-        Ok(user)
+        Ok(response)
     }
 
     /// Deletes a user from the organization.
@@ -76,8 +75,8 @@ impl Users<'_> {
             .delete(&format!("/organization/users/{}", user_id))
             .await?;
 
-        let deleted_object: DeletedObject = format_response(response)?;
+        let response: DeletedObject = format_response(response)?;
 
-        Ok(deleted_object)
+        Ok(response)
     }
 }

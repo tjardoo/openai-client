@@ -32,9 +32,9 @@ impl Messages<'_> {
             .post(&format!("/threads/{thread_id}/messages"), &parameters)
             .await?;
 
-        let message_response: Message = format_response(response.data)?;
+        let response: Message = format_response(response.data)?;
 
-        Ok(message_response)
+        Ok(response)
     }
 
     /// Retrieve a message.
@@ -45,9 +45,9 @@ impl Messages<'_> {
             .get(&format!("/threads/{thread_id}/messages/{message_id}"))
             .await?;
 
-        let message_response: Message = format_response(response)?;
+        let response: Message = format_response(response)?;
 
-        Ok(message_response)
+        Ok(response)
     }
 
     /// Modifies a message.
@@ -66,9 +66,9 @@ impl Messages<'_> {
             )
             .await?;
 
-        let message_response: Message = format_response(response.data)?;
+        let response: Message = format_response(response.data)?;
 
-        Ok(message_response)
+        Ok(response)
     }
 
     /// Returns a list of messages for a given thread.
@@ -83,9 +83,9 @@ impl Messages<'_> {
             .get_with_query(&format!("/threads/{thread_id}/messages"), &query)
             .await?;
 
-        let list_messages_response: ListResponse<Message> = format_response(response)?;
+        let response: ListResponse<Message> = format_response(response)?;
 
-        Ok(list_messages_response)
+        Ok(response)
     }
 
     /// Retrieves a message file.
@@ -103,9 +103,9 @@ impl Messages<'_> {
             ))
             .await?;
 
-        let message_file_response: MessageFile = format_response(response)?;
+        let response: MessageFile = format_response(response)?;
 
-        Ok(message_file_response)
+        Ok(response)
     }
 
     /// Returns a list of message files.
@@ -124,8 +124,8 @@ impl Messages<'_> {
             )
             .await?;
 
-        let list_message_files_response: ListResponse<MessageFile> = format_response(response)?;
+        let response: ListResponse<MessageFile> = format_response(response)?;
 
-        Ok(list_message_files_response)
+        Ok(response)
     }
 }
