@@ -7,6 +7,9 @@ use openai_dive::v1::{
                 AssistantFileSearch, AssistantParametersBuilder, AssistantTool,
                 AssistantToolResource, FileSearchDetails,
             },
+            message::MessageRole,
+            run::{CreateRunParametersBuilder, CreateThreadAndRunParametersBuilder},
+            thread::{CreateThreadParametersBuilder, ThreadMessageBuilder},
             vector_store::CreateVectorStoreParametersBuilder,
             vector_store_file::CreateVectorStoreFileParametersBuilder,
         },
@@ -84,6 +87,42 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
     let assistant = client.assistants().create(parameters).await?;
 
     println!("{:#?}", assistant);
+
+    let parameters = CreateThreadAndRunParametersBuilder::default()
+        .thread(
+            CreateThreadParametersBuilder::default()
+                .messages(vec![ThreadMessageBuilder::default()
+                    .role(MessageRole::User)
+                    .content("How can I set the correct project ID on the client?".to_string())
+                    .build()?])
+                .build()
+                .unwrap(),
+        )
+        .run(
+            CreateRunParametersBuilder::default()
+                .assistant_id(assistant.id)
+                .build()?,
+        )
+        .build()?;
+
+    let run = client
+        .assistants()
+        .runs()
+        .create_thread_and_run(parameters)
+        .await?;
+
+    println!("{:#?}", run);
+
+    // sleep for a bit
+    tokio::time::sleep(std::time::Duration::from_secs(5)).await;
+
+    let messages = client
+        .assistants()
+        .messages()
+        .list(&run.thread_id, None)
+        .await?;
+
+    println!("{:#?}", messages);
 
     Ok(())
 }
