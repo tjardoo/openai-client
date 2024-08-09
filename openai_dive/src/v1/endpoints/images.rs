@@ -24,9 +24,9 @@ impl Images<'_> {
     ) -> Result<ImageResponse, APIError> {
         let response = self.client.post("/images/generations", &parameters).await?;
 
-        let image_response: ImageResponse = format_response(response.data)?;
+        let response: ImageResponse = format_response(response.data)?;
 
-        Ok(image_response)
+        Ok(response)
     }
 
     /// Creates an edited or extended image given an original image and a prompt.
@@ -65,9 +65,9 @@ impl Images<'_> {
 
         let response = self.client.post_with_form("/images/edits", form).await?;
 
-        let image_response: ImageResponse = format_response(response)?;
+        let response: ImageResponse = format_response(response)?;
 
-        Ok(image_response)
+        Ok(response)
     }
 
     /// Creates a variation of a given image.
@@ -105,8 +105,8 @@ impl Images<'_> {
             .post_with_form("/images/variations", form)
             .await?;
 
-        let image_response: ImageResponse = format_response(response)?;
+        let response: ImageResponse = format_response(response)?;
 
-        Ok(image_response)
+        Ok(response)
     }
 }

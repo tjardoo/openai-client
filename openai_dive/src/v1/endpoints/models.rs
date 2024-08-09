@@ -20,9 +20,9 @@ impl Models<'_> {
     pub async fn list(&self) -> Result<ListModelResponse, APIError> {
         let response = self.client.get("/models").await?;
 
-        let list_model_response: ListModelResponse = format_response(response)?;
+        let response: ListModelResponse = format_response(response)?;
 
-        Ok(list_model_response)
+        Ok(response)
     }
 
     /// Retrieves a model instance, providing basic information about the model such as the owner and permissioning.
@@ -31,9 +31,9 @@ impl Models<'_> {
 
         let response = self.client.get(&path).await?;
 
-        let model_response: Model = format_response(response)?;
+        let response: Model = format_response(response)?;
 
-        Ok(model_response)
+        Ok(response)
     }
 
     /// Delete a fine-tuned model. You must have the Owner role in your organization to delete a model.
@@ -42,8 +42,8 @@ impl Models<'_> {
 
         let response = self.client.delete(&path).await?;
 
-        let deleted_object: DeletedObject = format_response(response)?;
+        let response: DeletedObject = format_response(response)?;
 
-        Ok(deleted_object)
+        Ok(response)
     }
 }

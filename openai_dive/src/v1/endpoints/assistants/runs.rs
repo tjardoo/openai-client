@@ -33,9 +33,9 @@ impl Runs<'_> {
             .post(&format!("/threads/{thread_id}/runs"), &parameters)
             .await?;
 
-        let run_response: Run = format_response(response.data)?;
+        let response: Run = format_response(response.data)?;
 
-        Ok(run_response)
+        Ok(response)
     }
 
     /// Create a thread and run it in one request.
@@ -49,9 +49,9 @@ impl Runs<'_> {
             .post("/threads/runs", &parameters)
             .await?;
 
-        let run_response: Run = format_response(response.data)?;
+        let response: Run = format_response(response.data)?;
 
-        Ok(run_response)
+        Ok(response)
     }
 
     /// Retrieves a run.
@@ -62,9 +62,9 @@ impl Runs<'_> {
             .get(&format!("/threads/{thread_id}/runs/{run_id}"))
             .await?;
 
-        let run_response: Run = format_response(response)?;
+        let response: Run = format_response(response)?;
 
-        Ok(run_response)
+        Ok(response)
     }
 
     /// Modifies a run.
@@ -80,9 +80,9 @@ impl Runs<'_> {
             .post(&format!("/threads/{thread_id}/runs/{run_id}"), &parameters)
             .await?;
 
-        let run_response: Run = format_response(response.data)?;
+        let response: Run = format_response(response.data)?;
 
-        Ok(run_response)
+        Ok(response)
     }
 
     /// Returns a list of runs belonging to a thread.
@@ -97,9 +97,9 @@ impl Runs<'_> {
             .get_with_query(&format!("/threads/{thread_id}/runs"), &query)
             .await?;
 
-        let list_runs_response: ListResponse<Run> = format_response(response)?;
+        let response: ListResponse<Run> = format_response(response)?;
 
-        Ok(list_runs_response)
+        Ok(response)
     }
 
     /// Cancels a run that is 'in_progress'.
@@ -113,9 +113,9 @@ impl Runs<'_> {
             )
             .await?;
 
-        let run_response: Run = format_response(response.data)?;
+        let response: Run = format_response(response.data)?;
 
-        Ok(run_response)
+        Ok(response)
     }
 
     /// When a run has the status: 'requires_action' and required_action.type is 'submit_tool_outputs',
@@ -136,8 +136,8 @@ impl Runs<'_> {
             )
             .await?;
 
-        let run_response: Run = format_response(response.data)?;
+        let response: Run = format_response(response.data)?;
 
-        Ok(run_response)
+        Ok(response)
     }
 }

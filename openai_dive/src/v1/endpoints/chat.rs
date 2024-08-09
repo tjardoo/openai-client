@@ -26,9 +26,9 @@ impl Chat<'_> {
         &self,
         parameters: ChatCompletionParameters,
     ) -> Result<ChatCompletionResponse, APIError> {
-        let chat_completion_response = self.create_wrapped(parameters).await?;
+        let wrapped_response = self.create_wrapped(parameters).await?;
 
-        Ok(chat_completion_response.data)
+        Ok(wrapped_response.data)
     }
 
     /// Creates a model response for the given chat conversation.
@@ -38,10 +38,10 @@ impl Chat<'_> {
     ) -> Result<ResponseWrapper<ChatCompletionResponse>, APIError> {
         let response = self.client.post("/chat/completions", &parameters).await?;
 
-        let chat_completion_response: ChatCompletionResponse = format_response(response.data)?;
+        let data: ChatCompletionResponse = format_response(response.data)?;
 
         Ok(ResponseWrapper {
-            data: chat_completion_response,
+            data,
             headers: response.headers,
         })
     }

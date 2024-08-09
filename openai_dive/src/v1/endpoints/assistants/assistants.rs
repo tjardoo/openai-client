@@ -23,18 +23,18 @@ impl Assistants<'_> {
     pub async fn create(&self, parameters: AssistantParameters) -> Result<Assistant, APIError> {
         let response = self.client.post("/assistants", &parameters).await?;
 
-        let assistant_response: Assistant = format_response(response.data)?;
+        let response: Assistant = format_response(response.data)?;
 
-        Ok(assistant_response)
+        Ok(response)
     }
 
     /// Retrieves an assistant.
     pub async fn retrieve(&self, id: &str) -> Result<Assistant, APIError> {
         let response = self.client.get(&format!("/assistants/{id}")).await?;
 
-        let assistant_response: Assistant = format_response(response)?;
+        let response: Assistant = format_response(response)?;
 
-        Ok(assistant_response)
+        Ok(response)
     }
 
     /// Modifies an assistant.
@@ -48,18 +48,18 @@ impl Assistants<'_> {
             .post(&format!("/assistants/{id}"), &parameters)
             .await?;
 
-        let assistant_response: Assistant = format_response(response.data)?;
+        let response: Assistant = format_response(response.data)?;
 
-        Ok(assistant_response)
+        Ok(response)
     }
 
     /// Delete an assistant.
     pub async fn delete(&self, id: &str) -> Result<DeletedObject, APIError> {
         let response = self.client.delete(&format!("/assistants/{id}")).await?;
 
-        let deleted_object: DeletedObject = format_response(response)?;
+        let response: DeletedObject = format_response(response)?;
 
-        Ok(deleted_object)
+        Ok(response)
     }
 
     /// Returns a list of assistants.
@@ -69,8 +69,8 @@ impl Assistants<'_> {
     ) -> Result<ListResponse<Assistant>, APIError> {
         let response = self.client.get_with_query("/assistants", &query).await?;
 
-        let list_assistants_response: ListResponse<Assistant> = format_response(response)?;
+        let response: ListResponse<Assistant> = format_response(response)?;
 
-        Ok(list_assistants_response)
+        Ok(response)
     }
 }

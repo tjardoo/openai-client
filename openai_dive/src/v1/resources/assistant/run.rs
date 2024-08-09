@@ -1,9 +1,10 @@
-use crate::v1::resources::{assistant::assistant::AssistantTools, shared::Usage};
+use crate::v1::resources::assistant::thread::CreateThreadParameters;
+use crate::v1::resources::shared::{LastError, Usage};
 use derive_builder::Builder;
 use serde::{Deserialize, Serialize};
 use std::collections::HashMap;
 
-use crate::v1::resources::assistant::thread::CreateThreadParameters;
+use super::assistant::AssistantTool;
 
 #[derive(Serialize, Deserialize, Debug, Clone, PartialEq)]
 pub struct Run {
@@ -25,7 +26,7 @@ pub struct Run {
     pub required_action: Option<RunAction>,
     /// The last error associated with this run. Will be null if there are no errors.
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub last_error: Option<RunError>,
+    pub last_error: Option<LastError>,
     /// The Unix timestamp (in seconds) for when the run will expire.
     #[serde(skip_serializing_if = "Option::is_none")]
     pub expires_at: Option<u32>,
@@ -49,7 +50,7 @@ pub struct Run {
     /// The instructions that the assistant used for this run.
     pub instructions: String,
     /// The list of tools that the assistant used for this run.
-    pub tools: Vec<AssistantTools>,
+    pub tools: Vec<AssistantTool>,
     /// Set of 16 key-value pairs that can be attached to an object.
     #[serde(skip_serializing_if = "Option::is_none")]
     pub metadata: Option<HashMap<String, String>>,
@@ -143,7 +144,7 @@ pub struct CreateRunParameters {
     pub additional_instructions: Option<String>,
     /// Override the tools the assistant can use for this run. This is useful for modifying the behavior on a per-run basis.
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub tools: Option<Vec<AssistantTools>>,
+    pub tools: Option<Vec<AssistantTool>>,
     /// Set of 16 key-value pairs that can be attached to an object.
     /// This can be useful for storing additional information about the object in a structured format.
     /// Keys can be a maximum of 64 characters long and values can be a maxium of 512 characters long.
@@ -202,21 +203,6 @@ pub enum RunStatus {
     Failed,
     Completed,
     Expired,
-}
-
-#[derive(Serialize, Deserialize, Debug, Clone, PartialEq)]
-#[serde(rename_all = "snake_case")]
-pub enum RunErrorCode {
-    ServerError,
-    RateLimitExceeded,
-}
-
-#[derive(Serialize, Deserialize, Debug, Clone, PartialEq)]
-pub struct RunError {
-    /// One of 'server_error' or 'rate_limit_exceeded'.
-    pub code: RunErrorCode,
-    /// A human-readable description of the error.
-    pub message: String,
 }
 
 #[derive(Serialize, Deserialize, Debug, Clone, PartialEq)]

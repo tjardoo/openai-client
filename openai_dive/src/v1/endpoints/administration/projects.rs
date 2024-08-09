@@ -1,3 +1,4 @@
+use crate::v1::endpoints::administration::Administration;
 use crate::v1::error::APIError;
 use crate::v1::helpers::format_response;
 use crate::v1::resources::administration::project::CreateProjectParameters;
@@ -5,8 +6,6 @@ use crate::v1::resources::administration::project::ModifyProjectParameters;
 use crate::v1::resources::administration::project::Project;
 use crate::v1::resources::shared::ListResponse;
 use crate::v1::resources::shared::SimpleListParameters;
-
-use super::Administration;
 
 pub struct Projects<'a> {
     pub administration: &'a Administration<'a>,
@@ -33,9 +32,9 @@ impl Projects<'_> {
             .get_with_query("/organization/projects", &query)
             .await?;
 
-        let list_projects_response: ListResponse<Project> = format_response(response)?;
+        let response: ListResponse<Project> = format_response(response)?;
 
-        Ok(list_projects_response)
+        Ok(response)
     }
 
     /// Retrieves a project by their identifier.
@@ -46,9 +45,9 @@ impl Projects<'_> {
             .get(&format!("/organization/projects/{}", project_id))
             .await?;
 
-        let project: Project = format_response(response)?;
+        let response: Project = format_response(response)?;
 
-        Ok(project)
+        Ok(response)
     }
 
     /// Create a new project in the organization.
@@ -59,9 +58,9 @@ impl Projects<'_> {
             .post("/organization/projects", &parameters)
             .await?;
 
-        let project: Project = format_response(response.data)?;
+        let response: Project = format_response(response.data)?;
 
-        Ok(project)
+        Ok(response)
     }
 
     /// Modifies a project in the organization.
@@ -79,9 +78,9 @@ impl Projects<'_> {
             )
             .await?;
 
-        let project: Project = format_response(response.data)?;
+        let response: Project = format_response(response.data)?;
 
-        Ok(project)
+        Ok(response)
     }
 
     /// Archives a project in the organization.
@@ -95,8 +94,8 @@ impl Projects<'_> {
             )
             .await?;
 
-        let project: Project = format_response(response.data)?;
+        let response: Project = format_response(response.data)?;
 
-        Ok(project)
+        Ok(response)
     }
 }

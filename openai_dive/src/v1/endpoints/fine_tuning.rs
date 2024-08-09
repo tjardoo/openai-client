@@ -28,9 +28,9 @@ impl FineTuning<'_> {
     ) -> Result<FineTuningJob, APIError> {
         let response = self.client.post("/fine_tuning/jobs", &parameters).await?;
 
-        let fine_tuning_job_response: FineTuningJob = format_response(response.data)?;
+        let response: FineTuningJob = format_response(response.data)?;
 
-        Ok(fine_tuning_job_response)
+        Ok(response)
     }
 
     /// List your organization's fine-tuning jobs.
@@ -43,19 +43,18 @@ impl FineTuning<'_> {
             .get_with_query("/fine_tuning/jobs", &query)
             .await?;
 
-        let list_fine_tuning_jobs_response: ListResponse<FineTuningJob> =
-            format_response(response)?;
+        let response: ListResponse<FineTuningJob> = format_response(response)?;
 
-        Ok(list_fine_tuning_jobs_response)
+        Ok(response)
     }
 
     /// Get info about a fine-tuning job.
     pub async fn retrieve(&self, id: &str) -> Result<FineTuningJob, APIError> {
         let response = self.client.get(&format!("/fine_tuning/jobs/{id}")).await?;
 
-        let fine_tuning_job_response: FineTuningJob = format_response(response)?;
+        let response: FineTuningJob = format_response(response)?;
 
-        Ok(fine_tuning_job_response)
+        Ok(response)
     }
 
     /// Immediately cancel a fine-tune job.
@@ -65,9 +64,9 @@ impl FineTuning<'_> {
             .post(&format!("/fine_tuning/jobs/{id}/cancel"), &Value::Null)
             .await?;
 
-        let fine_tuning_job_response: FineTuningJob = format_response(response.data)?;
+        let response: FineTuningJob = format_response(response.data)?;
 
-        Ok(fine_tuning_job_response)
+        Ok(response)
     }
 
     /// Get status updates for a fine-tuning job.
@@ -81,10 +80,9 @@ impl FineTuning<'_> {
             .get_with_query(&format!("/fine_tuning/jobs/{id}/events"), &query)
             .await?;
 
-        let list_fine_tuning_job_events_response: ListResponse<FineTuningJobEvent> =
-            format_response(response)?;
+        let response: ListResponse<FineTuningJobEvent> = format_response(response)?;
 
-        Ok(list_fine_tuning_job_events_response)
+        Ok(response)
     }
 
     /// List checkpoints for a fine-tuning job.
@@ -98,9 +96,8 @@ impl FineTuning<'_> {
             .get_with_query(&format!("/fine_tuning/jobs/{id}/checkpoints"), &query)
             .await?;
 
-        let list_fine_tuning_checkpoints_response: ListResponse<FineTuningJobCheckpoint> =
-            format_response(response)?;
+        let response: ListResponse<FineTuningJobCheckpoint> = format_response(response)?;
 
-        Ok(list_fine_tuning_checkpoints_response)
+        Ok(response)
     }
 }
