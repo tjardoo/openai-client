@@ -124,7 +124,10 @@ impl Client {
             Err(error) => return Err(error),
         };
 
-        let response_text = response.text().await.unwrap();
+        let response_text = response
+            .text()
+            .await
+            .map_err(|error| APIError::ParseError(error.to_string()))?;
 
         #[cfg(feature = "log")]
         log::trace!("{}", response_text);
@@ -147,7 +150,10 @@ impl Client {
             Err(error) => return Err(error),
         };
 
-        let response_text = response.text().await.unwrap();
+        let response_text = response
+            .text()
+            .await
+            .map_err(|error| APIError::ParseError(error.to_string()))?;
 
         #[cfg(feature = "log")]
         log::trace!("{}", response_text);
@@ -173,7 +179,10 @@ impl Client {
 
         let header_map = response.headers().clone();
 
-        let response_text = response.text().await.unwrap();
+        let response_text = response
+            .text()
+            .await
+            .map_err(|error| APIError::ParseError(error.to_string()))?;
         let response_headers: Headers = header_map.into();
 
         #[cfg(feature = "log")]
@@ -196,7 +205,10 @@ impl Client {
             Err(error) => return Err(error),
         };
 
-        Ok(response.text().await.unwrap())
+        Ok(response
+            .text()
+            .await
+            .map_err(|error| APIError::ParseError(error.to_string()))?)
     }
 
     pub(crate) async fn post_with_form(&self, path: &str, form: Form) -> Result<String, APIError> {
@@ -216,7 +228,10 @@ impl Client {
             Err(error) => return Err(error),
         };
 
-        Ok(response.text().await.unwrap())
+        Ok(response
+            .text()
+            .await
+            .map_err(|error| APIError::ParseError(error.to_string()))?)
     }
 
     pub(crate) async fn post_raw<T: Serialize>(
@@ -235,7 +250,10 @@ impl Client {
             Err(error) => return Err(error),
         };
 
-        Ok(response.bytes().await.unwrap())
+        Ok(response
+            .bytes()
+            .await
+            .map_err(|error| APIError::ParseError(error.to_string()))?)
     }
 
     #[cfg(feature = "stream")]

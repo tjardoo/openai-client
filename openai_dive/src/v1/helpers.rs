@@ -12,7 +12,10 @@ pub(crate) async fn check_status_code(
         Ok(response) => {
             if response.status().is_client_error() {
                 let status = response.status();
-                let text = response.text().await.unwrap();
+                let text = response
+                    .text()
+                    .await
+                    .map_err(|error| APIError::ParseError(error.to_string()))?;
 
                 match status {
                     StatusCode::BAD_REQUEST => {
