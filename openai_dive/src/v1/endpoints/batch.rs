@@ -24,18 +24,18 @@ impl Batches<'_> {
     pub async fn create(&self, parameters: CreateBatchParameters) -> Result<Batch, APIError> {
         let response = self.client.post("/batches", &parameters).await?;
 
-        let batch_response: Batch = format_response(response.data)?;
+        let response: Batch = format_response(response.data)?;
 
-        Ok(batch_response)
+        Ok(response)
     }
 
     /// Retrieves a batch.
     pub async fn retrieve(&self, id: &str) -> Result<Batch, APIError> {
         let response = self.client.get(&format!("/batches/{id}")).await?;
 
-        let batch_response: Batch = format_response(response)?;
+        let response: Batch = format_response(response)?;
 
-        Ok(batch_response)
+        Ok(response)
     }
 
     /// Cancels an in-progress batch.
@@ -45,9 +45,9 @@ impl Batches<'_> {
             .post(&format!("/batches/{id}/cancel"), &())
             .await?;
 
-        let batch_response: Batch = format_response(response.data)?;
+        let response: Batch = format_response(response.data)?;
 
-        Ok(batch_response)
+        Ok(response)
     }
 
     /// List your organization's batches.
@@ -57,8 +57,8 @@ impl Batches<'_> {
     ) -> Result<ListResponse<Batch>, APIError> {
         let response = self.client.get_with_query("/batches", &query).await?;
 
-        let list_batches_response: ListResponse<Batch> = format_response(response)?;
+        let response: ListResponse<Batch> = format_response(response)?;
 
-        Ok(list_batches_response)
+        Ok(response)
     }
 }

@@ -21,9 +21,9 @@ impl Embeddings<'_> {
         &self,
         parameters: EmbeddingParameters,
     ) -> Result<EmbeddingResponse, APIError> {
-        let embedding_response = self.create_wrapped(parameters).await?;
+        let wrapped_response = self.create_wrapped(parameters).await?;
 
-        Ok(embedding_response.data)
+        Ok(wrapped_response.data)
     }
 
     /// Creates an embedding vector representing the input text.
@@ -33,10 +33,10 @@ impl Embeddings<'_> {
     ) -> Result<ResponseWrapper<EmbeddingResponse>, APIError> {
         let response = self.client.post("/embeddings", &parameters).await?;
 
-        let embedding_response: EmbeddingResponse = format_response(response.data)?;
+        let data: EmbeddingResponse = format_response(response.data)?;
 
         Ok(ResponseWrapper {
-            data: embedding_response,
+            data,
             headers: response.headers,
         })
     }

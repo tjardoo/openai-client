@@ -1,7 +1,7 @@
 use serde::{Deserialize, Serialize};
 use std::collections::HashMap;
 
-use crate::v1::resources::shared::Usage;
+use crate::v1::resources::shared::{LastError, Usage};
 
 #[derive(Serialize, Deserialize, Debug, Clone, PartialEq)]
 pub struct RunStep {
@@ -23,7 +23,7 @@ pub struct RunStep {
     pub step_details: RunStepDetails,
     /// The last error associated with this run step. Will be null if there are no errors.
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub last_error: Option<RunStepError>,
+    pub last_error: Option<LastError>,
     /// The Unix timestamp (in seconds) for when the run step expired. A step is considered expired if the parent run is expired.
     #[serde(skip_serializing_if = "Option::is_none")]
     pub expired_at: Option<u32>,
@@ -72,14 +72,6 @@ pub struct ToolCallsDetails {
 }
 
 #[derive(Serialize, Deserialize, Debug, Clone, PartialEq)]
-pub struct RunStepError {
-    /// One of server_error or rate_limit_exceeded.
-    pub code: RunStepErrorCode,
-    /// A human-readable description of the error.
-    pub message: String,
-}
-
-#[derive(Serialize, Deserialize, Debug, Clone, PartialEq)]
 #[serde(rename_all = "snake_case")]
 pub enum RunStepType {
     MessageCreation,
@@ -94,13 +86,6 @@ pub enum RunStepStatus {
     Failed,
     Completed,
     Expired,
-}
-
-#[derive(Serialize, Deserialize, Debug, Clone, PartialEq)]
-#[serde(rename_all = "snake_case")]
-pub enum RunStepErrorCode {
-    ServerError,
-    RateLimitExceeded,
 }
 
 #[derive(Serialize, Deserialize, Debug, Clone, PartialEq)]

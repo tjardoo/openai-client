@@ -1,3 +1,4 @@
+use crate::v1::endpoints::administration::Administration;
 use crate::v1::error::APIError;
 use crate::v1::helpers::format_response;
 use crate::v1::resources::administration::project_service_account::CreateProjectServiceAccountParameters;
@@ -5,8 +6,6 @@ use crate::v1::resources::administration::project_service_account::ProjectServic
 use crate::v1::resources::shared::DeletedObject;
 use crate::v1::resources::shared::ListResponse;
 use crate::v1::resources::shared::SimpleListParameters;
-
-use super::Administration;
 
 pub struct ProjectServiceAccounts<'a> {
     pub administration: &'a Administration<'a>,
@@ -37,10 +36,9 @@ impl ProjectServiceAccounts<'_> {
             )
             .await?;
 
-        let list_project_service_accounts_response: ListResponse<ProjectServiceAccount> =
-            format_response(response)?;
+        let response: ListResponse<ProjectServiceAccount> = format_response(response)?;
 
-        Ok(list_project_service_accounts_response)
+        Ok(response)
     }
 
     /// Retrieves a service account in the project.
@@ -58,9 +56,9 @@ impl ProjectServiceAccounts<'_> {
             ))
             .await?;
 
-        let project_service_account: ProjectServiceAccount = format_response(response)?;
+        let response: ProjectServiceAccount = format_response(response)?;
 
-        Ok(project_service_account)
+        Ok(response)
     }
 
     /// Creates a new service account in the project.
@@ -78,9 +76,9 @@ impl ProjectServiceAccounts<'_> {
             )
             .await?;
 
-        let project_service_account: ProjectServiceAccount = format_response(response.data)?;
+        let response: ProjectServiceAccount = format_response(response.data)?;
 
-        Ok(project_service_account)
+        Ok(response)
     }
 
     /// Deletes a service account from the project.
@@ -98,8 +96,8 @@ impl ProjectServiceAccounts<'_> {
             ))
             .await?;
 
-        let deleted_object: DeletedObject = format_response(response)?;
+        let response: DeletedObject = format_response(response)?;
 
-        Ok(deleted_object)
+        Ok(response)
     }
 }

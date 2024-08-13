@@ -25,9 +25,9 @@ impl Uploads<'_> {
     pub async fn create(&self, parameters: CreateUploadParameters) -> Result<Upload, APIError> {
         let response = self.client.post("/uploads", &parameters).await?;
 
-        let upload_response: Upload = format_response(response.data)?;
+        let response: Upload = format_response(response.data)?;
 
-        Ok(upload_response)
+        Ok(response)
     }
 
     /// Adds a Part to an Upload object. A Part represents a chunk of bytes from the file you are trying to upload.
@@ -46,9 +46,9 @@ impl Uploads<'_> {
             .post_with_form(&format!("/uploads/{id}/parts"), form)
             .await?;
 
-        let upload_part_response: UploadPart = format_response(response)?;
+        let response: UploadPart = format_response(response)?;
 
-        Ok(upload_part_response)
+        Ok(response)
     }
 
     /// Completes the Upload.
@@ -62,9 +62,9 @@ impl Uploads<'_> {
             .post(&format!("/uploads/{id}/complete"), &parameters)
             .await?;
 
-        let upload_response: Upload = format_response(response.data)?;
+        let response: Upload = format_response(response.data)?;
 
-        Ok(upload_response)
+        Ok(response)
     }
 
     /// Cancels the Upload.
@@ -74,8 +74,8 @@ impl Uploads<'_> {
             .post(&format!("/uploads/{id}/cancel"), &Value::Null)
             .await?;
 
-        let upload_response: Upload = format_response(response.data)?;
+        let response: Upload = format_response(response.data)?;
 
-        Ok(upload_response)
+        Ok(response)
     }
 }

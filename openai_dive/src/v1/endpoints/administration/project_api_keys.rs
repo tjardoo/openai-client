@@ -1,11 +1,10 @@
+use crate::v1::endpoints::administration::Administration;
 use crate::v1::error::APIError;
 use crate::v1::helpers::format_response;
 use crate::v1::resources::administration::project_api_key::ProjectApiKey;
 use crate::v1::resources::shared::DeletedObject;
 use crate::v1::resources::shared::ListResponse;
 use crate::v1::resources::shared::SimpleListParameters;
-
-use super::Administration;
 
 pub struct ProjectApiKeys<'a> {
     pub administration: &'a Administration<'a>,
@@ -36,10 +35,9 @@ impl ProjectApiKeys<'_> {
             )
             .await?;
 
-        let list_project_api_keys_response: ListResponse<ProjectApiKey> =
-            format_response(response)?;
+        let response: ListResponse<ProjectApiKey> = format_response(response)?;
 
-        Ok(list_project_api_keys_response)
+        Ok(response)
     }
 
     /// Retrieves an API key in the project.
@@ -57,9 +55,9 @@ impl ProjectApiKeys<'_> {
             ))
             .await?;
 
-        let project_api_key: ProjectApiKey = format_response(response)?;
+        let response: ProjectApiKey = format_response(response)?;
 
-        Ok(project_api_key)
+        Ok(response)
     }
 
     /// Deletes an API key from the project.
@@ -77,8 +75,8 @@ impl ProjectApiKeys<'_> {
             ))
             .await?;
 
-        let deleted_object: DeletedObject = format_response(response)?;
+        let response: DeletedObject = format_response(response)?;
 
-        Ok(deleted_object)
+        Ok(response)
     }
 }

@@ -2,6 +2,8 @@ use derive_builder::Builder;
 use serde::{Deserialize, Serialize};
 use std::collections::HashMap;
 
+use crate::v1::resources::chat::JsonSchema;
+
 #[derive(Serialize, Deserialize, Debug, Clone, PartialEq)]
 pub struct Assistant {
     /// The identifier, which can be referenced in API endpoints.
@@ -23,7 +25,8 @@ pub struct Assistant {
     pub instructions: Option<String>,
     /// A list of tool enabled on the assistant. There can be a maximum of 128 tools per assistant.
     /// Tools can be of types code_interpreter, file_search, or function.
-    pub tools: Option<Vec<AssistantTools>>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub tools: Option<Vec<AssistantTool>>,
     /// A set of resources that are used by the assistant's tools.
     /// The resources are specific to the type of tool.
     /// For example, the code_interpreter tool requires a list of file IDs, while the file_search tool requires a list of vector store IDs.
@@ -63,7 +66,7 @@ pub struct AssistantParameters {
     pub instructions: Option<String>,
     /// A list of tool enabled on the assistant. There can be a maximum of 128 tools per assistant.
     /// Tools can be of types code_interpreter, file_search, or function.
-    pub tools: Option<Vec<AssistantTools>>,
+    pub tools: Option<Vec<AssistantTool>>,
     /// A set of resources that are used by the assistant's tools.
     /// The resources are specific to the type of tool.
     /// For example, the code_interpreter tool requires a list of file IDs, while the file_search tool requires a list of vector store IDs.
@@ -89,42 +92,19 @@ pub struct AssistantParameters {
 #[derive(Serialize, Deserialize, Debug, Clone, PartialEq)]
 pub struct AssistantToolResource {
     #[serde(skip_serializing_if = "Option::is_none")]
-    code_interpreter: Option<AssistantToolResourceCodeInterpreter>,
+    pub code_interpreter: Option<CodeInterpreterDetails>,
     #[serde(skip_serializing_if = "Option::is_none")]
-    file_search: Option<AssistantToolResourceFileSearch>,
+    pub file_search: Option<FileSearchDetails>,
 }
 
 #[derive(Serialize, Deserialize, Debug, Clone, PartialEq)]
-pub struct AssistantToolResourceCodeInterpreter {
-    /// A list of file IDs made available to the `code_interpreter`` tool. There can be a maximum of 20 files associated with the tool.
-    file_ids: Vec<String>,
+pub struct CodeInterpreterDetails {
+    pub file_ids: Vec<String>,
 }
 
 #[derive(Serialize, Deserialize, Debug, Clone, PartialEq)]
-pub struct AssistantToolResourceFileSearch {
-    /// The ID of the vector store attached to this assistant. There can be a maximum of 1 vector store attached to the assistant.
-    vector_store_ids: Vec<String>,
-}
-
-#[derive(Serialize, Deserialize, Debug, Clone, PartialEq)]
-pub struct AssistantCodeInterpreterTool {
-    /// The type of tool being defined: 'code_interpreter'.
-    pub r#type: String,
-}
-
-#[derive(Serialize, Deserialize, Debug, Clone, PartialEq)]
-pub struct AssistantFileSearchTool {
-    /// The type of tool being defined: 'file_search'.
-    pub r#type: String,
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub file_search: Option<AssistantFileSearch>,
-}
-
-#[derive(Serialize, Deserialize, Debug, Clone, PartialEq)]
-pub struct AssistantFunctionTool {
-    /// The type of tool being defined: 'function'.
-    pub r#type: String,
-    pub function: AssistantFunction,
+pub struct FileSearchDetails {
+    pub vector_store_ids: Vec<String>,
 }
 
 #[derive(Serialize, Deserialize, Debug, Clone, PartialEq)]
@@ -136,6 +116,9 @@ pub struct AssistantFunction {
     pub description: Option<String>,
     /// The parameters the functions accepts, described as a JSON Schema object.
     pub parameters: serde_json::Value,
+    /// Whether to enable strict schema adherence when generating the function call.
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub strict: Option<bool>,
 }
 
 #[derive(Serialize, Deserialize, Debug, Clone, PartialEq)]
@@ -146,15 +129,25 @@ pub struct AssistantFileSearch {
 }
 
 #[derive(Serialize, Deserialize, Debug, Clone, PartialEq)]
-#[serde(rename_all = "snake_case")]
+#[serde(rename_all = "lowercase")]
 pub enum AssistantResponseFormat {
     Auto,
+    None,
     #[serde(untagged)]
-    JsonObject {
-        /// Must be one of text or json_object.
-        #[serde(rename = "type")]
-        r#type: String,
-    },
+    Format(AssistantResponseFormatType),
+}
+
+#[derive(Serialize, Deserialize, Debug, Clone, PartialEq)]
+pub struct AssistantResponseFormatType {
+    pub r#type: AssistantResponseFormatTypeDefinition,
+}
+
+#[derive(Serialize, Deserialize, Debug, Clone, PartialEq)]
+#[serde(rename_all = "snake_case")]
+pub enum AssistantResponseFormatTypeDefinition {
+    Text,
+    JsonObject,
+    JsonSchema(JsonSchema), // @todo
 }
 
 #[derive(Serialize, Deserialize, Debug, Clone, PartialEq)]
@@ -188,9 +181,16 @@ pub struct ToolOutput {
 }
 
 #[derive(Serialize, Deserialize, Debug, Clone, PartialEq)]
-#[serde(untagged)]
-pub enum AssistantTools {
-    CodeInterpreter(AssistantCodeInterpreterTool),
-    FileSearch(AssistantFileSearchTool),
-    Function(AssistantFunctionTool),
+#[serde(tag = "type")]
+#[serde(rename_all = "snake_case")]
+pub enum AssistantTool {
+    CodeInterpreter,
+    FileSearch {
+        #[serde(skip_serializing_if = "Option::is_none")]
+        file_search: Option<AssistantFileSearch>,
+    },
+    Function {
+        #[serde(skip_serializing_if = "Option::is_none")]
+        function: Option<AssistantFunction>,
+    },
 }
