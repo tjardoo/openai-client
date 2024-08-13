@@ -46,7 +46,8 @@ pub(crate) async fn check_status_code(
 }
 
 pub(crate) fn validate_response(response: String) -> Result<Value, APIError> {
-    let value: Value = serde_json::from_str(&response).unwrap();
+    let value: Value =
+        serde_json::from_str(&response).map_err(|error| APIError::ParseError(error.to_string()))?;
 
     if let Some(object) = value.as_object() {
         if object.len() == 1 && object.contains_key("error") {
