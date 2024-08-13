@@ -17,4 +17,4 @@ jobs:
     steps:
     - uses: actions/checkout@v3
     - name: Cargo clippy
-      run: cargo clippy --tests --workspace --all-targets
+      run: cargo clippy --tests --workspace --all-targets -- -Dwarnings

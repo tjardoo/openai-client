@@ -205,10 +205,10 @@ impl Client {
             Err(error) => return Err(error),
         };
 
-        Ok(response
+        response
             .text()
             .await
-            .map_err(|error| APIError::ParseError(error.to_string()))?)
+            .map_err(|error| APIError::ParseError(error.to_string()))
     }
 
     pub(crate) async fn post_with_form(&self, path: &str, form: Form) -> Result<String, APIError> {
@@ -228,10 +228,10 @@ impl Client {
             Err(error) => return Err(error),
         };
 
-        Ok(response
+        response
             .text()
             .await
-            .map_err(|error| APIError::ParseError(error.to_string()))?)
+            .map_err(|error| APIError::ParseError(error.to_string()))
     }
 
     pub(crate) async fn post_raw<T: Serialize>(
@@ -250,10 +250,10 @@ impl Client {
             Err(error) => return Err(error),
         };
 
-        Ok(response
+        response
             .bytes()
             .await
-            .map_err(|error| APIError::ParseError(error.to_string()))?)
+            .map_err(|error| APIError::ParseError(error.to_string()))
     }
 
     #[cfg(feature = "stream")]
