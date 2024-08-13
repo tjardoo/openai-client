@@ -1,0 +1,20 @@
+name: Cargo clippy
+
+on:
+  push:
+    branches: [ "master" ]
+  pull_request:
+    branches: [ "master" ]
+
+env:
+  CARGO_TERM_COLOR: always
+
+jobs:
+  cargo-fmt:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v3
+    - name: Cargo clippy
+      run: cargo clippy --tests --workspace --all-targets

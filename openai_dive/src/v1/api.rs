@@ -312,8 +312,7 @@ impl Client {
                                         )),
                                         Err(_) => Err(APIError::StreamError(format!(
                                             "{} {}",
-                                            error.to_string(),
-                                            message.data
+                                            error, message.data
                                         ))),
                                     }
                                 }

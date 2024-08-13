@@ -166,20 +166,14 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
     for message in messages.data.into_iter().rev() {
         if message.role == MessageRole::Assistant {
             for item in message.content {
-                match item {
-                    MessageContent::Text { text, .. } => {
-                        println!("Assistant: \x1b[92m{:?}\x1b[0m", text.value);
-                    }
-                    _ => {}
+                if let MessageContent::Text { text, .. } = item {
+                    println!("Assistant: \x1b[92m{:?}\x1b[0m", text.value);
                 }
             }
         } else if message.role == MessageRole::User {
             for item in message.content {
-                match item {
-                    MessageContent::Text { text, .. } => {
-                        println!("You: \x1b[90m{:?}\x1b[0m", text.value);
-                    }
-                    _ => {}
+                if let MessageContent::Text { text, .. } = item {
+                    println!("You: \x1b[90m{:?}\x1b[0m", text.value);
                 }
             }
         }

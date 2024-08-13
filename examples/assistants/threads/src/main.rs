@@ -46,14 +46,12 @@ pub async fn create_thread(client: &Client) -> Thread {
         .build()
         .unwrap();
 
-    let thread = client
+    client
         .assistants()
         .threads()
         .create(parameters)
         .await
-        .unwrap();
-
-    thread
+        .unwrap()
 }
 
 pub async fn modify_thread(client: &Client, thread_id: &str) {

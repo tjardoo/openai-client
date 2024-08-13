@@ -36,7 +36,7 @@ async fn main() {
                 Ok(chunk) => {
                     println!("Received chunk of {} bytes", chunk.bytes.len());
 
-                    file.write(&chunk.bytes).unwrap();
+                    file.write_all(&chunk.bytes).unwrap();
                 }
                 Err(error) => println!("Steam error: {:?}", error),
             }

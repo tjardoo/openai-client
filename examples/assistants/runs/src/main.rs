@@ -36,14 +36,12 @@ pub async fn create_run(client: &Client, thread_id: &str, assistant_id: &str) ->
         .build()
         .unwrap();
 
-    let run = client
+    client
         .assistants()
         .runs()
         .create(thread_id, parameters)
         .await
-        .unwrap();
-
-    run
+        .unwrap()
 }
 
 pub async fn modify_run(client: &Client, thread_id: &str, run_id: &str) -> Run {
@@ -57,14 +55,12 @@ pub async fn modify_run(client: &Client, thread_id: &str, run_id: &str) -> Run {
         .build()
         .unwrap();
 
-    let run = client
+    client
         .assistants()
         .runs()
         .modify(thread_id, run_id, parameters)
         .await
-        .unwrap();
-
-    run
+        .unwrap()
 }
 
 pub async fn retrieve_run(client: &Client, thread_id: &str, run_id: &str) {
