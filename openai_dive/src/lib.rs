@@ -33,7 +33,7 @@
 //!
 //! - [Chat](#chat)
 //!   - [Create chat completion](#create-chat-completion)
-//!   - [Create chat completion with image](#create-chat-completion-with-image)
+//!   - [Vision](#vision)
 //!   - [Function calling](#function-calling)
 //!   - [Structured outputs](#structured-outputs)
 //! - [Images](#images)
@@ -88,9 +88,9 @@
 //!
 //! More information: [Create chat completion](https://platform.openai.com/docs/api-reference/chat/create)
 //!
-//! ### Create chat completion with image
+//! ### Vision
 //!
-//! Creates a model response for the given chat conversation.
+//! Learn how to use vision capabilities to understand images.
 //!
 //! ```rust
 //! let parameters = ChatCompletionParametersBuilder::default()
@@ -124,7 +124,7 @@
 //!     .await?;
 //! ```
 //!
-//! More information: [Create chat completion](https://platform.openai.com/docs/api-reference/chat/create)
+//! More information: [Vision](https://platform.openai.com/docs/guides/vision)
 //!
 //! ### Function calling
 //!

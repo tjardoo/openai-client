@@ -1,9 +1,10 @@
 use openai_dive::v1::api::Client;
 use openai_dive::v1::models::Gpt4Engine;
-use openai_dive::v1::resources::assistant::assistant::AssistantCodeInterpreterTool;
 use openai_dive::v1::resources::assistant::assistant::AssistantParametersBuilder;
 use openai_dive::v1::resources::assistant::assistant::AssistantResponseFormat;
-use openai_dive::v1::resources::assistant::assistant::AssistantTools;
+use openai_dive::v1::resources::assistant::assistant::AssistantResponseFormatType;
+use openai_dive::v1::resources::assistant::assistant::AssistantResponseFormatTypeDefinition;
+use openai_dive::v1::resources::assistant::assistant::AssistantTool;
 use std::vec;
 
 #[tokio::main]
@@ -19,12 +20,10 @@ async fn main() {
             "You are a personal math tutor. When asked a question, write and run PHP code to answer the question."
                 .to_string(),
         )
-        .tools(vec![AssistantTools::CodeInterpreter(
-            AssistantCodeInterpreterTool {
-                r#type: "code_interpreter".to_string(),
-            }
-        )])
-        .response_format(AssistantResponseFormat::JsonObject { r#type: "text".to_string() })
+        .tools(vec![AssistantTool::CodeInterpreter])
+        .response_format(AssistantResponseFormat::Format(AssistantResponseFormatType {
+            r#type: AssistantResponseFormatTypeDefinition::Text,
+        }))
         .build()
         .unwrap();
 

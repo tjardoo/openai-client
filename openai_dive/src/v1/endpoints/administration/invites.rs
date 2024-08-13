@@ -1,3 +1,4 @@
+use crate::v1::endpoints::administration::Administration;
 use crate::v1::error::APIError;
 use crate::v1::helpers::format_response;
 use crate::v1::resources::administration::invite::CreateInviteParameters;
@@ -5,8 +6,6 @@ use crate::v1::resources::administration::invite::Invite;
 use crate::v1::resources::shared::DeletedObject;
 use crate::v1::resources::shared::ListResponse;
 use crate::v1::resources::shared::SimpleListParameters;
-
-use super::Administration;
 
 pub struct Invites<'a> {
     pub administration: &'a Administration<'a>,
@@ -33,9 +32,9 @@ impl Invites<'_> {
             .get_with_query("/organization/invites", &query)
             .await?;
 
-        let list_invites_response: ListResponse<Invite> = format_response(response)?;
+        let response: ListResponse<Invite> = format_response(response)?;
 
-        Ok(list_invites_response)
+        Ok(response)
     }
 
     // Retrieves an invite.
@@ -46,9 +45,9 @@ impl Invites<'_> {
             .get(&format!("/organization/invites/{}", invite_id))
             .await?;
 
-        let invite: Invite = format_response(response)?;
+        let response: Invite = format_response(response)?;
 
-        Ok(invite)
+        Ok(response)
     }
 
     /// Create an invite for a user to the organization.
@@ -59,9 +58,9 @@ impl Invites<'_> {
             .post("/organization/invites", &parameters)
             .await?;
 
-        let invite: Invite = format_response(response.data)?;
+        let response: Invite = format_response(response.data)?;
 
-        Ok(invite)
+        Ok(response)
     }
 
     /// Delete an invite.
@@ -72,8 +71,8 @@ impl Invites<'_> {
             .delete(&format!("/organization/invites/{}", invite_id))
             .await?;
 
-        let deleted_object: DeletedObject = format_response(response)?;
+        let response: DeletedObject = format_response(response)?;
 
-        Ok(deleted_object)
+        Ok(response)
     }
 }

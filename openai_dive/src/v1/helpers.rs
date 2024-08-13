@@ -5,7 +5,9 @@ use serde_json::Value;
 #[cfg(feature = "download")]
 use std::time::{SystemTime, UNIX_EPOCH};
 
-pub async fn check_status_code(result: reqwest::Result<Response>) -> Result<Response, APIError> {
+pub(crate) async fn check_status_code(
+    result: reqwest::Result<Response>,
+) -> Result<Response, APIError> {
     match result {
         Ok(response) => {
             if response.status().is_client_error() {
@@ -43,7 +45,7 @@ pub async fn check_status_code(result: reqwest::Result<Response>) -> Result<Resp
     }
 }
 
-pub fn validate_response(response: String) -> Result<Value, APIError> {
+pub(crate) fn validate_response(response: String) -> Result<Value, APIError> {
     let value: Value =
         serde_json::from_str(&response).map_err(|error| APIError::ParseError(error.to_string()))?;
 
@@ -56,7 +58,7 @@ pub fn validate_response(response: String) -> Result<Value, APIError> {
     Ok(value)
 }
 
-pub fn format_response<R: DeserializeOwned>(response: String) -> Result<R, APIError> {
+pub(crate) fn format_response<R: DeserializeOwned>(response: String) -> Result<R, APIError> {
     let value = validate_response(response)?;
 
     let value: R =
@@ -65,8 +67,12 @@ pub fn format_response<R: DeserializeOwned>(response: String) -> Result<R, APIEr
     Ok(value)
 }
 
-pub fn is_beta_feature(path: &str) -> bool {
-    path.starts_with("/assistants") || path.starts_with("/threads")
+pub(crate) fn is_beta_feature(path: &str) -> bool {
+    let beta_features = ["/assistants", "/threads", "/vector_stores"];
+
+    beta_features
+        .iter()
+        .any(|feature| path.starts_with(feature))
 }
 
 #[cfg(feature = "download")]

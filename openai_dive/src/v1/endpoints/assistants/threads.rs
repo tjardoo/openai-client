@@ -22,9 +22,9 @@ impl Threads<'_> {
     pub async fn create(&self, parameters: CreateThreadParameters) -> Result<Thread, APIError> {
         let response = self.assistant.client.post("/threads", &parameters).await?;
 
-        let thread_response: Thread = format_response(response.data)?;
+        let response: Thread = format_response(response.data)?;
 
-        Ok(thread_response)
+        Ok(response)
     }
 
     /// Retrieves a thread.
@@ -35,9 +35,9 @@ impl Threads<'_> {
             .get(&format!("/threads/{thread_id}"))
             .await?;
 
-        let thread_response: Thread = format_response(response)?;
+        let response: Thread = format_response(response)?;
 
-        Ok(thread_response)
+        Ok(response)
     }
 
     /// Create threads that assistants can interact with.
@@ -52,9 +52,9 @@ impl Threads<'_> {
             .post(&format!("/threads/{thread_id}"), &parameters)
             .await?;
 
-        let thread_response: Thread = format_response(response.data)?;
+        let response: Thread = format_response(response.data)?;
 
-        Ok(thread_response)
+        Ok(response)
     }
 
     /// Delete a thread.
@@ -65,8 +65,8 @@ impl Threads<'_> {
             .delete(&format!("/threads/{thread_id}"))
             .await?;
 
-        let deleted_object: DeletedObject = format_response(response)?;
+        let response: DeletedObject = format_response(response)?;
 
-        Ok(deleted_object)
+        Ok(response)
     }
 }
