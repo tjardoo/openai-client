@@ -46,36 +46,31 @@ async fn main() {
 
     let message = result.choices[0].message.clone();
 
-    match message {
-        ChatMessage::Assistant {
-            content: _,
-            refusal: _,
-            name: _,
-            tool_calls,
-        } => {
-            if let Some(tool_calls) = tool_calls {
-                for tool_call in tool_calls {
-                    let name = tool_call.function.name;
-                    let arguments = tool_call.function.arguments;
+    if let ChatMessage::Assistant {
+        content: _,
+        refusal: _,
+        name: _,
+        tool_calls: Some(tool_calls),
+    } = message
+    {
+        for tool_call in tool_calls {
+            let name = tool_call.function.name;
+            let arguments = tool_call.function.arguments;
 
-                    if name == "get_random_number" {
-                        let random_numbers: RandomNumber =
-                            serde_json::from_str(&arguments).unwrap();
+            if name == "get_random_number" {
+                let random_numbers: RandomNumber = serde_json::from_str(&arguments).unwrap();
 
-                        println!("Min: {:?}", &random_numbers.min);
-                        println!("Max: {:?}", &random_numbers.max);
+                println!("Min: {:?}", &random_numbers.min);
+                println!("Max: {:?}", &random_numbers.max);
 
-                        let random_number_result = get_random_number(random_numbers);
+                let random_number_result = get_random_number(random_numbers);
 
-                        println!(
-                            "Random number between those numbers: {:?}",
-                            random_number_result.clone()
-                        );
-                    }
-                }
+                println!(
+                    "Random number between those numbers: {:?}",
+                    random_number_result.clone()
+                );
             }
         }
-        _ => {}
     }
 }
 
