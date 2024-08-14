@@ -3,7 +3,7 @@ use openai_dive::v1::api::Client;
 use openai_dive::v1::models::Gpt4Engine;
 use openai_dive::v1::resources::chat::{
     ChatCompletionFunction, ChatCompletionParametersBuilder, ChatCompletionTool,
-    ChatCompletionToolType, ChatMessage, ChatMessageContent, DeltaFunction,
+    ChatCompletionToolType, ChatMessage, ChatMessageContent, DeltaChatMessage, DeltaFunction,
 };
 use openai_dive::v1::resources::shared::FinishReason;
 use rand::Rng;
@@ -54,10 +54,33 @@ async fn main() {
     while let Some(response) = stream.next().await {
         match response {
             Ok(chat_chunk_response) => chat_chunk_response.choices.iter().for_each(|choice| {
-                if let Some(delta_tool_calls) = &choice.delta.tool_calls {
-                    function.merge(&delta_tool_calls.first().unwrap().function.clone());
-                } else if let Some(content) = &choice.delta.content {
-                    print!("{}", content);
+                match &choice.delta {
+                    DeltaChatMessage::Assistant {
+                        tool_calls: Some(delta_tool_calls),
+                        ..
+                    } => {
+                        function.merge(&delta_tool_calls.first().unwrap().function.clone());
+                    }
+                    DeltaChatMessage::Untagged {
+                        tool_calls: Some(delta_tool_calls),
+                        ..
+                    } => {
+                        function.merge(&delta_tool_calls.first().unwrap().function.clone());
+                    }
+                    _ => {}
+                }
+
+                match &choice.delta {
+                    DeltaChatMessage::User { content, .. } => {
+                        print!("{:?}", content);
+                    }
+                    DeltaChatMessage::System { content, .. } => {
+                        print!("{:?}", content);
+                    }
+                    DeltaChatMessage::Assistant { content, .. } => {
+                        print!("{:?}", content);
+                    }
+                    _ => {}
                 }
 
                 if choice.finish_reason == Some(FinishReason::ToolCalls) {

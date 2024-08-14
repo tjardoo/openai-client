@@ -3,6 +3,7 @@ use openai_dive::v1::api::Client;
 use openai_dive::v1::models::Gpt4Engine;
 use openai_dive::v1::resources::chat::{
     ChatCompletionParametersBuilder, ChatCompletionResponseFormat, ChatMessage, ChatMessageContent,
+    DeltaChatMessage,
 };
 
 #[tokio::main]
@@ -19,7 +20,9 @@ async fn main() {
                 name: None,
             },
             ChatMessage::User {
-                content: ChatMessageContent::Text("What is the capital of Vietnam?".to_string()),
+                content: ChatMessageContent::Text(
+                    "What are the five biggest cities in Vietnam?".to_string(),
+                ),
                 name: None,
             },
         ])
@@ -31,11 +34,32 @@ async fn main() {
 
     while let Some(response) = stream.next().await {
         match response {
-            Ok(chat_response) => chat_response.choices.iter().for_each(|choice| {
-                if let Some(content) = &choice.delta.content {
-                    print!("{}", content);
-                }
-            }),
+            Ok(chat_response) => {
+                chat_response
+                    .choices
+                    .iter()
+                    .for_each(|choice| match &choice.delta {
+                        DeltaChatMessage::User { content, .. } => {
+                            print!("{}", content);
+                        }
+                        DeltaChatMessage::System { content, .. } => {
+                            print!("{}", content);
+                        }
+                        DeltaChatMessage::Assistant {
+                            content: Some(chat_message_content),
+                            ..
+                        } => {
+                            print!("{}", chat_message_content);
+                        }
+                        DeltaChatMessage::Untagged {
+                            content: Some(chat_message_content),
+                            ..
+                        } => {
+                            print!("{}", chat_message_content);
+                        }
+                        _ => {}
+                    })
+            }
             Err(e) => eprintln!("{}", e),
         }
     }
