@@ -3,7 +3,7 @@ use openai_dive::v1::api::Client;
 use openai_dive::v1::models::Gpt4Engine;
 use openai_dive::v1::resources::chat::{
     ChatCompletionFunction, ChatCompletionParametersBuilder, ChatCompletionTool,
-    ChatCompletionToolType, ChatMessageBuilder, ChatMessageContent, DeltaFunction,
+    ChatCompletionToolType, ChatMessage, ChatMessageContent, DeltaFunction,
 };
 use openai_dive::v1::resources::shared::FinishReason;
 use rand::Rng;
@@ -16,12 +16,12 @@ async fn main() {
 
     let client = Client::new(api_key);
 
-    let messages = vec![ChatMessageBuilder::default()
-        .content(ChatMessageContent::Text(
+    let messages = vec![ChatMessage::User {
+        content: ChatMessageContent::Text(
             "Give me a random number higher than 100 but less than 2*150?".to_string(),
-        ))
-        .build()
-        .unwrap()];
+        ),
+        name: None,
+    }];
 
     let parameters = ChatCompletionParametersBuilder::default()
         .model(Gpt4Engine::Gpt4O.to_string())

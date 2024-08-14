@@ -1,7 +1,7 @@
 use openai_dive::v1::api::Client;
 use openai_dive::v1::resources::chat::{
-    ChatCompletionParametersBuilder, ChatCompletionResponseFormat, ChatMessageBuilder,
-    ChatMessageContent, JsonSchemaBuilder, Role,
+    ChatCompletionParametersBuilder, ChatCompletionResponseFormat, ChatMessage, ChatMessageContent,
+    JsonSchemaBuilder,
 };
 
 #[tokio::main]
@@ -11,16 +11,20 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
     let parameters = ChatCompletionParametersBuilder::default()
         .model("gpt-4o-2024-08-06")
         .messages(vec![
-            ChatMessageBuilder::default()
-                .role(Role::System)
-                .content(ChatMessageContent::Text("You are a helpful math tutor. Guide the user through the solution step by step.".to_string()))
-                .build()?,
-            ChatMessageBuilder::default()
-                .role(Role::User)
-                .content(ChatMessageContent::Text(
-                    "how can I solve 8x + 7 = -23".to_string(),
-                ))
-                .build()?,
+            ChatMessage::System {
+                content: ChatMessageContent::Text(
+                    "You are a helpful math tutor. Guide the user through the solution step by step."
+                        .to_string(),
+                ),
+                name: None,
+            },
+            ChatMessage::User {
+                content: ChatMessageContent::Text(
+                    "How can I solve 8x + 7 = -23"
+                        .to_string(),
+                ),
+                name: None,
+            },
         ])
         .response_format(ChatCompletionResponseFormat::JsonSchema(JsonSchemaBuilder::default()
             .name("math_reasoning")

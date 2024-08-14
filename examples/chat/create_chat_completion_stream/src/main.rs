@@ -2,8 +2,7 @@ use futures::StreamExt;
 use openai_dive::v1::api::Client;
 use openai_dive::v1::models::Gpt4Engine;
 use openai_dive::v1::resources::chat::{
-    ChatCompletionParametersBuilder, ChatCompletionResponseFormat, ChatMessageBuilder,
-    ChatMessageContent, Role,
+    ChatCompletionParametersBuilder, ChatCompletionResponseFormat, ChatMessage, ChatMessageContent,
 };
 
 #[tokio::main]
@@ -15,18 +14,14 @@ async fn main() {
     let parameters = ChatCompletionParametersBuilder::default()
         .model(Gpt4Engine::Gpt4O.to_string())
         .messages(vec![
-            ChatMessageBuilder::default()
-                .role(Role::User)
-                .content(ChatMessageContent::Text("Hello!".to_string()))
-                .build()
-                .unwrap(),
-            ChatMessageBuilder::default()
-                .role(Role::User)
-                .content(ChatMessageContent::Text(
-                    "What is the capital of Vietnam?".to_string(),
-                ))
-                .build()
-                .unwrap(),
+            ChatMessage::User {
+                content: ChatMessageContent::Text("Hello!".to_string()),
+                name: None,
+            },
+            ChatMessage::User {
+                content: ChatMessageContent::Text("What is the capital of Vietnam?".to_string()),
+                name: None,
+            },
         ])
         .response_format(ChatCompletionResponseFormat::Text)
         .build()

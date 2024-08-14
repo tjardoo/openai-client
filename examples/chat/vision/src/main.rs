@@ -1,8 +1,7 @@
 use openai_dive::v1::api::Client;
 use openai_dive::v1::models::Gpt4Engine;
 use openai_dive::v1::resources::chat::{
-    ChatCompletionParametersBuilder, ChatMessageBuilder, ChatMessageContent, ImageUrl,
-    ImageUrlType, Role,
+    ChatCompletionParametersBuilder, ChatMessage, ChatMessageContent, ImageUrl, ImageUrlType,
 };
 
 #[tokio::main]
@@ -14,16 +13,12 @@ async fn main() {
     let parameters = ChatCompletionParametersBuilder::default()
         .model(Gpt4Engine::Gpt4O.to_string())
         .messages(vec![
-            ChatMessageBuilder::default()
-                .role(Role::User)
-                .content(ChatMessageContent::Text(
-                    "What is in this image?".to_string(),
-                ))
-                .build()
-                .unwrap(),
-            ChatMessageBuilder::default()
-                .role(Role::User)
-                .content(ChatMessageContent::ImageUrl(vec![ImageUrl {
+            ChatMessage::User {
+                content: ChatMessageContent::Text("What is in this image?".to_string()),
+                name: None,
+            },
+            ChatMessage::User {
+                content: ChatMessageContent::ImageUrl(vec![ImageUrl {
                     r#type: "image_url".to_string(),
                     text: None,
                     image_url: ImageUrlType {
@@ -31,9 +26,9 @@ async fn main() {
                             .to_string(),
                         detail: None,
                     },
-                }]))
-                .build()
-                .unwrap(),
+                }]),
+                name: None,
+            },
         ])
         .max_tokens(50u32)
         .build()
