@@ -1,15 +1,16 @@
 use crate::v1::error::APIError;
 #[cfg(feature = "stream")]
 use crate::v1::resources::chat::ChatCompletionChunkResponse;
-use crate::v1::resources::chat::{
-    ChatCompletionParameters, ChatCompletionResponse, DeltaChatMessage,
-};
+#[cfg(feature = "stream")]
+use crate::v1::resources::chat::DeltaChatMessage;
+use crate::v1::resources::chat::{ChatCompletionParameters, ChatCompletionResponse};
 use crate::v1::resources::shared::ResponseWrapper;
 use crate::v1::{api::Client, helpers::format_response};
 #[cfg(feature = "stream")]
 use futures::Stream;
 #[cfg(feature = "stream")]
 use std::pin::Pin;
+#[cfg(feature = "stream")]
 use std::task::{Context, Poll};
 
 pub struct Chat<'a> {
@@ -68,17 +69,20 @@ impl Chat<'_> {
     }
 }
 
+#[cfg(feature = "stream")]
 enum CurrentRole {
     User,
     System,
     Assistant,
 }
 
+#[cfg(feature = "stream")]
 pub struct RoleTrackingStream<S> {
     stream: S,
     current_role: Option<CurrentRole>,
 }
 
+#[cfg(feature = "stream")]
 impl<S> RoleTrackingStream<S> {
     pub fn new(stream: S) -> Self {
         Self {
@@ -88,6 +92,7 @@ impl<S> RoleTrackingStream<S> {
     }
 }
 
+#[cfg(feature = "stream")]
 impl<S> Stream for RoleTrackingStream<S>
 where
     S: Stream<Item = Result<ChatCompletionChunkResponse, APIError>> + Unpin,
