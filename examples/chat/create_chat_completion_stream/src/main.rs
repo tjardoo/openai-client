@@ -33,6 +33,10 @@ async fn main() {
 
     let stream = client.chat().create_stream(parameters).await.unwrap();
 
+    // The stream will receive a chunk of a chat completion response. The first chunk will contain the role of the message, and subsequent chunks won't contain the role.
+    // When a chunk is received without a role, it will use the `DeltaChatMessage::Untagged` variant. And you'll have to manually infer the role of the message based on the previous messages.
+    // The 'RoleTrackingStream' is a wrapper around the stream that does this for you - it will automatically infer the role of the message and return the correct variant.
+
     let mut tracked_stream = RoleTrackingStream::new(stream);
 
     while let Some(response) = tracked_stream.next().await {

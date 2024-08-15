@@ -162,10 +162,8 @@
 //! let message = result.choices[0].message.clone();
 //!
 //! if let ChatMessage::Assistant {
-//!     content: _,
-//!     refusal: _,
-//!     name: _,
 //!     tool_calls: Some(tool_calls),
+//!     ..
 //! } = message
 //! {
 //!     for tool_call in tool_calls {
