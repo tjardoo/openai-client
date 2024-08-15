@@ -1,5 +1,6 @@
 use futures::StreamExt;
 use openai_dive::v1::api::Client;
+use openai_dive::v1::endpoints::chat::RoleTrackingStream;
 use openai_dive::v1::models::Gpt4Engine;
 use openai_dive::v1::resources::chat::{
     ChatCompletionParametersBuilder, ChatCompletionResponseFormat, ChatMessage, ChatMessageContent,
@@ -30,9 +31,11 @@ async fn main() {
         .build()
         .unwrap();
 
-    let mut stream = client.chat().create_stream(parameters).await.unwrap();
+    let stream = client.chat().create_stream(parameters).await.unwrap();
 
-    while let Some(response) = stream.next().await {
+    let mut tracked_stream = RoleTrackingStream::new(stream);
+
+    while let Some(response) = tracked_stream.next().await {
         match response {
             Ok(chat_response) => {
                 chat_response
@@ -46,12 +49,6 @@ async fn main() {
                             print!("{}", content);
                         }
                         DeltaChatMessage::Assistant {
-                            content: Some(chat_message_content),
-                            ..
-                        } => {
-                            print!("{}", chat_message_content);
-                        }
-                        DeltaChatMessage::Untagged {
                             content: Some(chat_message_content),
                             ..
                         } => {

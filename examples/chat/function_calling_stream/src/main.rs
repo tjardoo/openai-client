@@ -1,5 +1,6 @@
 use futures::StreamExt;
 use openai_dive::v1::api::Client;
+use openai_dive::v1::endpoints::chat::RoleTrackingStream;
 use openai_dive::v1::models::Gpt4Engine;
 use openai_dive::v1::resources::chat::{
     ChatCompletionFunction, ChatCompletionParametersBuilder, ChatCompletionTool,
@@ -44,30 +45,24 @@ async fn main() {
         .build()
         .unwrap();
 
-    let mut stream = client.chat().create_stream(parameters).await.unwrap();
+    let stream = client.chat().create_stream(parameters).await.unwrap();
+
+    let mut tracked_stream = RoleTrackingStream::new(stream);
 
     let mut function = DeltaFunction {
         name: None,
         arguments: None,
     };
 
-    while let Some(response) = stream.next().await {
+    while let Some(response) = tracked_stream.next().await {
         match response {
             Ok(chat_chunk_response) => chat_chunk_response.choices.iter().for_each(|choice| {
-                match &choice.delta {
-                    DeltaChatMessage::Assistant {
-                        tool_calls: Some(delta_tool_calls),
-                        ..
-                    } => {
-                        function.merge(&delta_tool_calls.first().unwrap().function.clone());
-                    }
-                    DeltaChatMessage::Untagged {
-                        tool_calls: Some(delta_tool_calls),
-                        ..
-                    } => {
-                        function.merge(&delta_tool_calls.first().unwrap().function.clone());
-                    }
-                    _ => {}
+                if let DeltaChatMessage::Assistant {
+                    tool_calls: Some(delta_tool_calls),
+                    ..
+                } = &choice.delta
+                {
+                    function.merge(&delta_tool_calls.first().unwrap().function.clone());
                 }
 
                 match &choice.delta {
@@ -77,8 +72,11 @@ async fn main() {
                     DeltaChatMessage::System { content, .. } => {
                         print!("{:?}", content);
                     }
-                    DeltaChatMessage::Assistant { content, .. } => {
-                        print!("{:?}", content);
+                    DeltaChatMessage::Assistant {
+                        content: Some(chat_message_content),
+                        ..
+                    } => {
+                        print!("{:?}", chat_message_content);
                     }
                     _ => {}
                 }

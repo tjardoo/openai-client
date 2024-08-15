@@ -1,13 +1,16 @@
 use crate::v1::error::APIError;
 #[cfg(feature = "stream")]
 use crate::v1::resources::chat::ChatCompletionChunkResponse;
-use crate::v1::resources::chat::{ChatCompletionParameters, ChatCompletionResponse};
+use crate::v1::resources::chat::{
+    ChatCompletionParameters, ChatCompletionResponse, DeltaChatMessage,
+};
 use crate::v1::resources::shared::ResponseWrapper;
 use crate::v1::{api::Client, helpers::format_response};
 #[cfg(feature = "stream")]
 use futures::Stream;
 #[cfg(feature = "stream")]
 use std::pin::Pin;
+use std::task::{Context, Poll};
 
 pub struct Chat<'a> {
     pub client: &'a Client,
@@ -62,5 +65,91 @@ impl Chat<'_> {
             .client
             .post_stream("/chat/completions", &stream_parameters)
             .await)
+    }
+}
+
+enum CurrentRole {
+    User,
+    System,
+    Assistant,
+}
+
+pub struct RoleTrackingStream<S> {
+    stream: S,
+    current_role: Option<CurrentRole>,
+}
+
+impl<S> RoleTrackingStream<S> {
+    pub fn new(stream: S) -> Self {
+        Self {
+            stream,
+            current_role: None,
+        }
+    }
+}
+
+impl<S> Stream for RoleTrackingStream<S>
+where
+    S: Stream<Item = Result<ChatCompletionChunkResponse, APIError>> + Unpin,
+{
+    type Item = Result<ChatCompletionChunkResponse, APIError>;
+
+    fn poll_next(self: Pin<&mut Self>, cx: &mut Context<'_>) -> Poll<Option<Self::Item>> {
+        let this = self.get_mut();
+
+        match Pin::new(&mut this.stream).poll_next(cx) {
+            Poll::Ready(Some(Ok(mut chat_response))) => {
+                chat_response.choices.iter_mut().for_each(|choice| {
+                    match &choice.delta {
+                        DeltaChatMessage::User { .. } => {
+                            this.current_role = Some(CurrentRole::User)
+                        }
+                        DeltaChatMessage::System { .. } => {
+                            this.current_role = Some(CurrentRole::System)
+                        }
+                        DeltaChatMessage::Assistant { .. } => {
+                            this.current_role = Some(CurrentRole::Assistant)
+                        }
+                        _ => {}
+                    }
+
+                    if let DeltaChatMessage::Untagged {
+                        content,
+                        refusal,
+                        name: _,
+                        tool_calls,
+                        tool_call_id: _,
+                    } = &mut choice.delta
+                    {
+                        match this.current_role {
+                            Some(CurrentRole::User) => {
+                                choice.delta = DeltaChatMessage::User {
+                                    name: Some("user".to_string()),
+                                    content: content.clone().unwrap(),
+                                }
+                            }
+                            Some(CurrentRole::System) => {
+                                choice.delta = DeltaChatMessage::System {
+                                    name: Some("system".to_string()),
+                                    content: content.clone().unwrap(),
+                                }
+                            }
+                            Some(CurrentRole::Assistant) => {
+                                choice.delta = DeltaChatMessage::Assistant {
+                                    name: Some("assistant".to_string()),
+                                    content: content.clone(),
+                                    refusal: refusal.clone(),
+                                    tool_calls: tool_calls.clone(),
+                                }
+                            }
+                            _ => {}
+                        }
+                    }
+                });
+
+                Poll::Ready(Some(Ok(chat_response)))
+            }
+            other => other,
+        }
     }
 }
