@@ -2,7 +2,7 @@ use openai_dive::v1::api::Client;
 use openai_dive::v1::models::Gpt4Engine;
 use openai_dive::v1::resources::chat::{
     ChatCompletionFunction, ChatCompletionParametersBuilder, ChatCompletionTool,
-    ChatCompletionToolType, ChatMessageBuilder, ChatMessageContent,
+    ChatCompletionToolType, ChatMessage, ChatMessageContent,
 };
 use rand::Rng;
 use serde::{Deserialize, Serialize};
@@ -14,12 +14,12 @@ async fn main() {
 
     let client = Client::new(api_key);
 
-    let messages = vec![ChatMessageBuilder::default()
-        .content(ChatMessageContent::Text(
-            "Give me a random number between 100 and no more than 150?".to_string(),
-        ))
-        .build()
-        .unwrap()];
+    let messages = vec![ChatMessage::User {
+        content: ChatMessageContent::Text(
+            "Give me a random number higher than 100 but less than 2*150?".to_string(),
+        ),
+        name: None,
+    }];
 
     let parameters = ChatCompletionParametersBuilder::default()
         .model(Gpt4Engine::Gpt4O.to_string())
@@ -46,7 +46,11 @@ async fn main() {
 
     let message = result.choices[0].message.clone();
 
-    if let Some(tool_calls) = message.tool_calls {
+    if let ChatMessage::Assistant {
+        tool_calls: Some(tool_calls),
+        ..
+    } = message
+    {
         for tool_call in tool_calls {
             let name = tool_call.function.name;
             let arguments = tool_call.function.arguments;

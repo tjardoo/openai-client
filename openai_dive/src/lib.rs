@@ -66,16 +66,14 @@
 //! let parameters = ChatCompletionParametersBuilder::default()
 //!     .model(Gpt4Engine::Gpt4O.to_string())
 //!     .messages(vec![
-//!         ChatMessageBuilder::default()
-//!             .role(Role::User)
-//!             .content(ChatMessageContent::Text("Hello!".to_string()))
-//!             .build()?,
-//!         ChatMessageBuilder::default()
-//!             .role(Role::User)
-//!             .content(ChatMessageContent::Text(
-//!                 "What is the capital of Vietnam?".to_string(),
-//!             ))
-//!             .build()?,
+//!         ChatMessage::User {
+//!             content: ChatMessageContent::Text("Hello!".to_string()),
+//!             name: None,
+//!         },
+//!         ChatMessage::User {
+//!             content: ChatMessageContent::Text("What is the capital of Vietnam?".to_string()),
+//!             name: None,
+//!         },
 //!     ])
 //!     .response_format(ChatCompletionResponseFormat::Text)
 //!     .build()?;
@@ -96,15 +94,12 @@
 //! let parameters = ChatCompletionParametersBuilder::default()
 //!     .model(Gpt4Engine::Gpt4O.to_string())
 //!     .messages(vec![
-//!         ChatMessageBuilder::default()
-//!             .role(Role::User)
-//!             .content(ChatMessageContent::Text(
-//!                 "What is in this image?".to_string(),
-//!             ))
-//!             .build()?,
-//!         ChatMessageBuilder::default()
-//!             .role(Role::User)
-//!             .content(ChatMessageContent::ImageUrl(vec![ImageUrl {
+//!         ChatMessage::User {
+//!             content: ChatMessageContent::Text("What is in this image?".to_string()),
+//!             name: None,
+//!         },
+//!         ChatMessage::User {
+//!             content: ChatMessageContent::ImageUrl(vec![ImageUrl {
 //!                 r#type: "image_url".to_string(),
 //!                 text: None,
 //!                 image_url: ImageUrlType {
@@ -112,8 +107,9 @@
 //!                         .to_string(),
 //!                     detail: None,
 //!                 },
-//!             }]))
-//!             .build()?,
+//!             }]),
+//!             name: None,
+//!         },
 //!     ])
 //!     .max_tokens(50u32)
 //!     .build()?;
@@ -131,11 +127,12 @@
 //! In an API call, you can describe functions and have the model intelligently choose to output a JSON object containing arguments to call one or many functions. The Chat Completions API does not call the function; instead, the model generates JSON that you can use to call the function in your code.
 //!
 //! ```rust
-//! let messages = vec![ChatMessageBuilder::default()
-//!     .content(ChatMessageContent::Text(
-//!         "Give me a random number between 100 and no more than 150?".to_string(),
-//!     ))
-//!     .build()?];
+//! let messages = vec![ChatMessage::User {
+//!     content: ChatMessageContent::Text(
+//!         "Give me a random number higher than 100 but less than 2*150?".to_string(),
+//!     ),
+//!     name: None,
+//! }];
 //!
 //! let parameters = ChatCompletionParametersBuilder::default()
 //!     .model(Gpt4Engine::Gpt4O.to_string())
@@ -164,13 +161,17 @@
 //!
 //! let message = result.choices[0].message.clone();
 //!
-//! if let Some(tool_calls) = message.tool_calls {
+//! if let ChatMessage::Assistant {
+//!     tool_calls: Some(tool_calls),
+//!     ..
+//! } = message
+//! {
 //!     for tool_call in tool_calls {
 //!         let name = tool_call.function.name;
 //!         let arguments = tool_call.function.arguments;
 //!
 //!         if name == "get_random_number" {
-//!             let random_numbers: RandomNumber = serde_json::from_str(&arguments)?;
+//!             let random_numbers: RandomNumber = serde_json::from_str(&arguments).unwrap();
 //!
 //!             println!("Min: {:?}", &random_numbers.min);
 //!             println!("Max: {:?}", &random_numbers.max);
@@ -208,16 +209,20 @@
 //! let parameters = ChatCompletionParametersBuilder::default()
 //!     .model("gpt-4o-2024-08-06")
 //!     .messages(vec![
-//!         ChatMessageBuilder::default()
-//!             .role(Role::System)
-//!             .content(ChatMessageContent::Text("You are a helpful math tutor. Guide the user through the solution step by step.".to_string()))
-//!             .build()?,
-//!         ChatMessageBuilder::default()
-//!             .role(Role::User)
-//!             .content(ChatMessageContent::Text(
-//!                 "how can I solve 8x + 7 = -23".to_string(),
-//!             ))
-//!             .build()?,
+//!         ChatMessage::System {
+//!             content: ChatMessageContent::Text(
+//!                 "You are a helpful math tutor. Guide the user through the solution step by step."
+//!                     .to_string(),
+//!             ),
+//!             name: None,
+//!         },
+//!         ChatMessage::User {
+//!             content: ChatMessageContent::Text(
+//!                 "How can I solve 8x + 7 = -23"
+//!                     .to_string(),
+//!             ),
+//!             name: None,
+//!         },
 //!     ])
 //!     .response_format(ChatCompletionResponseFormat::JsonSchema(JsonSchemaBuilder::default()
 //!         .name("math_reasoning")

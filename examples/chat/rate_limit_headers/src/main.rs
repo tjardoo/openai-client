@@ -1,8 +1,7 @@
 use openai_dive::v1::api::Client;
 use openai_dive::v1::models::Gpt4Engine;
 use openai_dive::v1::resources::chat::{
-    ChatCompletionParametersBuilder, ChatCompletionResponse, ChatMessageBuilder,
-    ChatMessageContent, Role,
+    ChatCompletionParametersBuilder, ChatCompletionResponse, ChatMessage, ChatMessageContent,
 };
 use openai_dive::v1::resources::shared::ResponseWrapper;
 
@@ -14,14 +13,13 @@ async fn main() {
 
     let parameters = ChatCompletionParametersBuilder::default()
         .model(Gpt4Engine::Gpt4O.to_string())
-        .messages(vec![ChatMessageBuilder::default()
-            .role(Role::User)
-            .content(ChatMessageContent::Text(
+        .messages(vec![ChatMessage::User {
+            content: ChatMessageContent::Text(
                 "Which 2 country has the largest population? Just give the name: population."
                     .to_string(),
-            ))
-            .build()
-            .unwrap()])
+            ),
+            name: None,
+        }])
         .max_tokens(50u32)
         .build()
         .unwrap();
