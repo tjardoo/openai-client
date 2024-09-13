@@ -2,6 +2,16 @@ use serde::{Deserialize, Serialize};
 use std::fmt::{Display, Formatter, Result};
 
 #[derive(Serialize, Deserialize, Debug, Clone, PartialEq)]
+pub enum O1Engine {
+    // Alias
+    #[serde(rename = "o1-preview")]
+    O1Preview,
+    /// Alias
+    #[serde(rename = "o1-mini")]
+    O1Mini,
+}
+
+#[derive(Serialize, Deserialize, Debug, Clone, PartialEq)]
 pub enum Gpt4Engine {
     /// Alias
     #[serde(rename = "gpt-4o")]

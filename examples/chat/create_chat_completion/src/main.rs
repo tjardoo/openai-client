@@ -1,3 +1,4 @@
+use ftail::Ftail;
 use openai_dive::v1::api::Client;
 use openai_dive::v1::models::Gpt4Engine;
 use openai_dive::v1::resources::chat::{
@@ -6,6 +7,11 @@ use openai_dive::v1::resources::chat::{
 
 #[tokio::main]
 async fn main() -> Result<(), Box<dyn std::error::Error>> {
+    // used to log the JSON response from the OpenAI API
+    Ftail::new()
+        .single_file("results.log", false, log::LevelFilter::Trace)
+        .init()?;
+
     let api_key = std::env::var("OPENAI_API_KEY").expect("$OPENAI_API_KEY is not set");
 
     let client = Client::new(api_key);

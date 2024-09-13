@@ -581,6 +581,9 @@
 //!
 //! You can use these predefined constants to set the model in the parameters or use any string representation (ie. for your custom models).
 //!
+//! - O1Engine
+//!   - O1Preview `o1-preview` (alias)
+//!   - O1Mini `o1-mini` (alias)
 //! - Gpt4Engine
 //!   - Gpt4O `gpt-4o` (alias)
 //!   - Gpt4OMini `gpt-4o-mini` (alias)
