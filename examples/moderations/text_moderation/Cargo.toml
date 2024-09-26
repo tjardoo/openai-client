@@ -1,0 +1,9 @@
+[package]
+name = "text_moderation"
+version = "0.1.0"
+edition = "2021"
+publish = false
+
+[dependencies]
+openai_dive = { path = "./../../../openai_dive" }
+tokio = { version = "1.0", features = ["full"] }
