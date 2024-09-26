@@ -74,13 +74,14 @@ pub enum EmbeddingsEngine {
 #[derive(Serialize, Deserialize, Debug, Clone, PartialEq)]
 pub enum ModerationsEngine {
     /// Alias
+    #[serde(rename = "omni-moderation-latest")]
+    OmniModerationLatest,
+    /// Alias
     #[serde(rename = "text-moderation-latest")]
     TextModerationLatest,
     /// Alias
     #[serde(rename = "text-moderation-stable")]
     TextModerationStable,
-    #[serde(rename = "text-moderation-007")]
-    TextModeration007,
 }
 
 impl Display for Gpt4Engine {
@@ -143,9 +144,9 @@ impl Display for EmbeddingsEngine {
 impl Display for ModerationsEngine {
     fn fmt(&self, f: &mut Formatter<'_>) -> Result {
         match self {
+            ModerationsEngine::OmniModerationLatest => write!(f, "omni-moderation-latest"),
             ModerationsEngine::TextModerationLatest => write!(f, "text-moderation-latest"),
             ModerationsEngine::TextModerationStable => write!(f, "text-moderation-stable"),
-            ModerationsEngine::TextModeration007 => write!(f, "text-moderation-007"),
         }
     }
 }

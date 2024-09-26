@@ -606,9 +606,9 @@
 //!   - TextEmbedding3Large `text-embedding-3-large`
 //!   - TextEmbeddingAda002 `text-embedding-ada-002`
 //! - ModerationsEngine
+//!   - OmniModerationLatest `omni-moderation-latest` (alias)
 //!   - TextModerationLatest `text-moderation-latest` (alias)
 //!   - TextModerationStable `text-moderation-stable` (alias)
-//!   - TextModeration007 `text-moderation-007`
 //!
 //! More information: [Models](https://platform.openai.com/docs/models)
 
