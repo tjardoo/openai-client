@@ -31,15 +31,6 @@ pub enum Gpt4Engine {
 }
 
 #[derive(Serialize, Deserialize, Debug, Clone, PartialEq)]
-pub enum Gpt35Engine {
-    /// Alias
-    #[serde(rename = "gpt-3.5-turbo")]
-    Gpt35Turbo,
-    #[serde(rename = "gpt-3.5-turbo-1106")]
-    Gpt35Turbo1106,
-}
-
-#[derive(Serialize, Deserialize, Debug, Clone, PartialEq)]
 pub enum DallEEngine {
     #[serde(rename = "dall-e-3")]
     DallE3,
@@ -84,6 +75,15 @@ pub enum ModerationsEngine {
     TextModerationStable,
 }
 
+impl Display for O1Engine {
+    fn fmt(&self, f: &mut Formatter<'_>) -> Result {
+        match self {
+            O1Engine::O1Preview => write!(f, "o1-preview"),
+            O1Engine::O1Mini => write!(f, "o1-mini"),
+        }
+    }
+}
+
 impl Display for Gpt4Engine {
     fn fmt(&self, f: &mut Formatter<'_>) -> Result {
         match self {
@@ -92,15 +92,6 @@ impl Display for Gpt4Engine {
             Gpt4Engine::Gpt4 => write!(f, "gpt-4"),
             Gpt4Engine::Gpt4Turbo => write!(f, "gpt-4-turbo"),
             Gpt4Engine::Gpt4TurboPreview => write!(f, "gpt-4-turbo-preview"),
-        }
-    }
-}
-
-impl Display for Gpt35Engine {
-    fn fmt(&self, f: &mut Formatter<'_>) -> Result {
-        match self {
-            Gpt35Engine::Gpt35Turbo => write!(f, "gpt-3.5-turbo"),
-            Gpt35Engine::Gpt35Turbo1106 => write!(f, "gpt-3.5-turbo-1106"),
         }
     }
 }

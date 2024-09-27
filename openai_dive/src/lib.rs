@@ -590,9 +590,6 @@
 //!   - Gpt4 `gpt-4` (alias)
 //!   - Gpt4Turbo `gpt-4-turbo` (alias)
 //!   - Gpt4TurboPreview `gpt-4-turbo-preview` (alias)
-//! - Gpt35Engine
-//!   - Gpt35Turbo `gpt-3.5-turbo` (alias)
-//!   - Gpt35Turbo1106 `gpt-3.5-turbo-1106`
 //! - DallEEngine
 //!   - DallE3 `dall-e-2`
 //!   - DallE2 `dall-e-3`

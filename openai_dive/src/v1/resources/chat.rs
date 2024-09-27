@@ -65,16 +65,15 @@ pub struct ChatCompletionParameters {
     pub logit_bias: Option<HashMap<String, i32>>,
     /// Whether to return log probabilities of the output tokens or not.
     /// If true, returns the log probabilities of each output token returned in the 'content' of 'message'.
-    /// This option is currently not available on the 'gpt-4-vision-preview' model.
     #[serde(skip_serializing_if = "Option::is_none")]
     pub logprobs: Option<bool>,
     /// An integer between 0 and 5 specifying the number of most likely tokens to return at each token position,
     /// each with an associated log probability. 'logprobs' must be set to 'true' if this parameter is used.
     #[serde(skip_serializing_if = "Option::is_none")]
     pub top_logprobs: Option<u32>,
-    /// The maximum number of tokens to generate in the chat completion.
+    /// An upper bound for the number of tokens that can be generated for a completion, including visible output tokens and reasoning tokens.
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub max_tokens: Option<u32>,
+    pub max_completion_tokens: Option<u32>,
     /// How many chat completion choices to generate for each input message.
     #[serde(skip_serializing_if = "Option::is_none")]
     pub n: Option<u32>,
@@ -83,7 +82,9 @@ pub struct ChatCompletionParameters {
     #[serde(skip_serializing_if = "Option::is_none")]
     pub presence_penalty: Option<f32>,
     /// An object specifying the format that the model must output.
-    /// Setting to { "type": "json_object" } enables JSON mode, which guarantees the message the model generates is valid JSON.
+    /// Compatible with GPT-4o, GPT-4o mini, GPT-4 Turbo and all GPT-3.5 Turbo models newer than gpt-3.5-turbo-1106.
+    /// Setting to { "type": "json_schema", "json_schema": {...} } enables Structured Outputs which ensures the model will match your supplied JSON schema.
+    /// Setting to { "type": "json_object" } enables JSON mode, which ensures the message the model generates is valid JSON.
     #[serde(skip_serializing_if = "Option::is_none")]
     pub response_format: Option<ChatCompletionResponseFormat>,
     /// This feature is in Beta. If specified, our system will make a best effort to sample deterministically,
@@ -98,6 +99,9 @@ pub struct ChatCompletionParameters {
     /// as they become available, with the stream terminated by a data: [DONE] message.
     #[serde(skip_serializing_if = "Option::is_none")]
     pub stream: Option<bool>,
+    /// Options for streaming response. Only set this when you set stream: true.
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub stream_options: Option<ChatCompletionStreamOptions>,
     /// What sampling temperature to use, between 0 and 2. Higher values like 0.8 will make the output more random,
     /// while lower values like 0.2 will make it more focused and deterministic.
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -116,9 +120,18 @@ pub struct ChatCompletionParameters {
     /// Specifying a particular tool via {"type": "function", "function": {"name": "my_function"}} forces the model to call that tool.
     #[serde(skip_serializing_if = "Option::is_none")]
     pub tool_choice: Option<ChatCompletionToolChoice>,
+    /// Whether to enable parallel function calling during tool use.
+    #[serde(skip_serializing_if = "Option::is_none")]
+    parallel_tool_calls: Option<bool>,
     /// A unique identifier representing your end-user, which can help OpenAI to monitor and detect abuse.
     #[serde(skip_serializing_if = "Option::is_none")]
     pub user: Option<String>,
+}
+
+#[derive(Serialize, Deserialize, Debug, Clone, PartialEq)]
+pub struct ChatCompletionStreamOptions {
+    /// If set, an additional chunk will be streamed before the data: [DONE] message.
+    pub include_usage: Option<bool>,
 }
 
 #[derive(Serialize, Deserialize, Debug, Clone, PartialEq)]

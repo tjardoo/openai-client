@@ -30,7 +30,7 @@ async fn main() {
                 name: None,
             },
         ])
-        .max_tokens(50u32)
+        .max_completion_tokens(50u32)
         .build()
         .unwrap();
 
