@@ -14,9 +14,21 @@ pub struct Usage {
     pub completion_tokens: Option<u32>,
     /// Number of tokens in the entire response.
     pub total_tokens: u32,
+    /// Breakdown of tokens used in the prompt.
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub prompt_tokens_details: Option<PromptTokensDetails>,
     /// Breakdown of tokens used in a completion.
     #[serde(skip_serializing_if = "Option::is_none")]
     completion_tokens_details: Option<CompletionTokensDetails>,
+}
+
+#[derive(Serialize, Deserialize, Debug, Clone, PartialEq)]
+pub struct PromptTokensDetails {
+    /// Audio input tokens present in the prompt.
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub audio_tokens: Option<u32>,
+    /// Cached tokens present in the prompt.
+    pub cached_tokens: u32,
 }
 
 #[derive(Serialize, Deserialize, Debug, Clone, PartialEq)]
