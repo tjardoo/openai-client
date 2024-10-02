@@ -56,6 +56,12 @@ pub struct ChatCompletionParameters {
     pub messages: Vec<ChatMessage>,
     /// ID of the model to use.
     pub model: String,
+    /// Whether or not to store the output of this chat completion request for use in our model distillation or evals products.
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub store: Option<bool>,
+    /// Developer-defined tags and values used for filtering completions in the dashboard.
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub metadata: Option<HashMap<String, String>>,
     /// Number between -2.0 and 2.0. Positive values penalize new tokens based on their existing frequency in the text so far,
     /// decreasing the model's likelihood to repeat the same line verbatim.
     #[serde(skip_serializing_if = "Option::is_none")]
