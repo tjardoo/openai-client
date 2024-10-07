@@ -13,6 +13,7 @@ members = [
     "examples/models/*",
     "examples/moderations/*",
     "examples/uploads/*",
+    "examples/realtime",
 ]
 default-members = ["openai_dive"]
 resolver = "2"

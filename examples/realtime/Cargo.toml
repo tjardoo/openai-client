@@ -1,0 +1,13 @@
+[package]
+name = "realtime"
+version = "0.1.0"
+edition = "2021"
+publish = false
+
+[dependencies]
+openai_dive = { path = "./../../openai_dive", features = ["realtime"] }
+tokio = { version = "1.0", features = ["full"] }
+reqwest-websocket = "0.4"
+futures-util = "0.3"
+serde = { version = "1.0", features = ["derive"] }
+serde_json = "1.0"

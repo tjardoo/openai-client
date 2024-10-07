@@ -58,6 +58,7 @@ let result = client
 - [Batches](#batches)
 - [Assistants](#assistants)
 - [Administration](#administration)
+- [Realtime WIP]
 
 ## Chat
 

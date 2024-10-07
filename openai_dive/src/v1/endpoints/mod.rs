@@ -9,4 +9,6 @@ pub mod fine_tuning;
 pub mod images;
 pub mod models;
 pub mod moderations;
+#[cfg(feature = "realtime")]
+pub mod realtime;
 pub mod uploads;
