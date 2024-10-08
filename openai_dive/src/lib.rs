@@ -522,6 +522,8 @@
 //!
 //! Enable the feature flag `realtime` to use this feature.
 //!
+//! For more information see the examples in the [examples/realtime](https://github.com/tjardoo/openai-client/tree/master/examples/realtime) directory.
+//!
 //! - All client events
 //! - All server events
 //!
