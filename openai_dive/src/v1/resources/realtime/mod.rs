@@ -2,7 +2,7 @@ use client::*;
 use server::{
     ConversationCreated, ConversationItemCreated, ConversationItemDeleted,
     ConversationItemInputAudioTranscriptionCompleted,
-    ConversationItemInputAudioTranscriptionFailed, ConversationItemTruncated,
+    ConversationItemInputAudioTranscriptionFailed, ConversationItemTruncated, Error,
     InputAudioBufferCleared, InputAudioBufferCommitted, InputAudioBufferSpeechStarted,
     InputAudioBufferSpeechStopped, RateLimitsUpdated, ResponseAudioDelta, ResponseAudioDone,
     ResponseAudioTranscriptDelta, ResponseAudioTranscriptDone, ResponseContentPartAdded,
@@ -14,15 +14,18 @@ use server::{
 use std::{collections::HashMap, fmt::Debug};
 
 pub mod client;
+pub mod resources;
 pub mod server;
-pub mod shared;
 
-pub fn get_realtime_server_events_deserializers(
-) -> HashMap<&'static str, fn(&str) -> Result<Box<dyn Debug>, serde_json::Error>> {
-    let mut deserializers: HashMap<
-        &'static str,
-        fn(&str) -> Result<Box<dyn Debug>, serde_json::Error>,
-    > = HashMap::new();
+type DeserializeHashMap =
+    HashMap<&'static str, fn(&str) -> Result<Box<dyn Debug>, serde_json::Error>>;
+
+pub(crate) fn default_type_value(value: &'static str) -> String {
+    value.to_string()
+}
+
+pub fn get_realtime_server_events_deserializers() -> DeserializeHashMap {
+    let mut deserializers: DeserializeHashMap = HashMap::new();
 
     // add_client_deserializers(&mut deserializers);
     add_server_deserializers(&mut deserializers);
@@ -31,12 +34,7 @@ pub fn get_realtime_server_events_deserializers(
 }
 
 #[allow(dead_code)]
-fn add_client_deserializers(
-    deserializers: &mut HashMap<
-        &'static str,
-        fn(&str) -> Result<Box<dyn Debug>, serde_json::Error>,
-    >,
-) {
+fn add_client_deserializers(deserializers: &mut DeserializeHashMap) {
     deserializers.insert("session.update", |text| {
         Ok(Box::new(serde_json::from_str::<SessionUpdate>(text)?))
     });
@@ -78,12 +76,10 @@ fn add_client_deserializers(
     });
 }
 
-fn add_server_deserializers(
-    deserializers: &mut HashMap<
-        &'static str,
-        fn(&str) -> Result<Box<dyn Debug>, serde_json::Error>,
-    >,
-) {
+fn add_server_deserializers(deserializers: &mut DeserializeHashMap) {
+    deserializers.insert("error", |text| {
+        Ok(Box::new(serde_json::from_str::<Error>(text)?))
+    });
     deserializers.insert("session.created", |text| {
         Ok(Box::new(serde_json::from_str::<SessionCreated>(text)?))
     });

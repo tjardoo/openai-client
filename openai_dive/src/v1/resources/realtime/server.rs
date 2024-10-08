@@ -1,7 +1,8 @@
 use serde::{Deserialize, Serialize};
 
-use super::shared::{
-    Content, Conversation, ErrorDetail, Item, RateLimit, Response, Session, TranscriptionError,
+use super::resources::{
+    content_part::ContentPart, conversation::Conversation, error::RealtimeError, item::Item,
+    rate_limit::RateLimit, response::Response, session::Session,
 };
 
 #[derive(Serialize, Deserialize, Debug, Clone, PartialEq)]
@@ -11,7 +12,7 @@ pub struct Error {
     /// The event type, must be "error".
     pub r#type: String,
     /// Details of the error.
-    pub error: ErrorDetail,
+    pub error: RealtimeError,
 }
 
 #[derive(Serialize, Deserialize, Debug, Clone, PartialEq)]
@@ -95,7 +96,7 @@ pub struct ConversationItemCreated {
     /// The event type, must be "conversation.item.created".
     pub r#type: String,
     /// The ID of the preceding item.
-    pub previous_item_id: String,
+    pub previous_item_id: Option<String>,
     /// The item that was created.
     pub item: Item,
 }
@@ -125,7 +126,7 @@ pub struct ConversationItemInputAudioTranscriptionFailed {
     /// The index of the content part containing the audio.
     pub content_index: u32,
     /// Details of the transcription error.
-    pub error: TranscriptionError,
+    pub error: RealtimeError,
 }
 
 #[derive(Serialize, Deserialize, Debug, Clone, PartialEq)]
@@ -215,7 +216,7 @@ pub struct ResponseContentPartAdded {
     /// The index of the content part in the item's content array.
     pub content_index: u32,
     /// The content part that was added.
-    pub part: Content,
+    pub part: ContentPart,
 }
 
 #[derive(Serialize, Deserialize, Debug, Clone, PartialEq)]
@@ -233,7 +234,7 @@ pub struct ResponseContentPartDone {
     /// The index of the content part in the item's content array.
     pub content_index: u32,
     /// The content part that is done.
-    pub part: Content,
+    pub part: ContentPart,
 }
 
 #[derive(Serialize, Deserialize, Debug, Clone, PartialEq)]

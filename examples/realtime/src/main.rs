@@ -1,11 +1,13 @@
+use std::vec;
+
 use futures_util::{SinkExt, TryStreamExt};
 use openai_dive::v1::{
     api::Client,
     resources::realtime::{
         client::{ConversationItemCreateBuilder, ResponseCreate},
         get_realtime_server_events_deserializers,
+        resources::item::{ContentType, Item, ItemContent, ItemRole, ItemType},
         server::ResponseAudioTranscriptDelta,
-        shared::{Content, ContentType, ItemBuilder, ItemRole, ItemType},
     },
 };
 use reqwest_websocket::Message;
@@ -23,17 +25,17 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
         .await?;
 
     let message = ConversationItemCreateBuilder::default()
-        .item(
-            ItemBuilder::default()
-                .r#type(ItemType::Message)
-                .role(ItemRole::User)
-                .content(vec![Content {
-                    r#type: ContentType::InputText,
-                    text: Some("Hello, how are you?".to_string()),
-                    ..Default::default()
-                }])
-                .build()?,
-        )
+        .item(Item {
+            r#type: Some(ItemType::Message),
+            role: Some(ItemRole::User),
+            content: Some(vec![ItemContent {
+                r#type: ContentType::InputText,
+                text: Some("Hello, how are you?".to_string()),
+                audio: None,
+                transcript: None,
+            }]),
+            ..Default::default()
+        })
         .build()?;
 
     websocket
@@ -60,8 +62,13 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
                     if let Some(message_type) = json.get("type").and_then(|t| t.as_str()) {
                         if let Some(deserializer) = deserializers.get(message_type) {
                             match deserializer(&text) {
-                                Ok(_struct_value) => {
-                                    // println!("Received: {:?}", struct_value)
+                                Ok(struct_value) => {
+                                    // temporary disable printing of audio deltas
+                                    if message_type != "response.audio.delta"
+                                        && message_type != "response.audio_transcript.delta"
+                                    {
+                                        println!("Received: {:?}", struct_value);
+                                    }
 
                                     if message_type == "response.audio_transcript.delta" {
                                         if let Ok(response) =
@@ -75,17 +82,17 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
                                         println!();
                                     }
                                 }
-                                Err(_error) => {
-                                    // eprintln!("Failed to deserialize {}: {}", message_type, error);
+                                Err(error) => {
+                                    eprintln!("Failed to deserialize {}: {}", message_type, error);
                                 }
                             }
                         } else {
-                            // println!("Unknown message type: {}", message_type);
+                            println!("Unknown message type: {}", message_type);
                         }
                     }
                 }
-                Err(_error) => {
-                    // eprintln!("Failed to deserialize message: {}", error);
+                Err(error) => {
+                    eprintln!("Failed to deserialize message: {}", error);
                 }
             }
         }

@@ -1,7 +1,9 @@
+use super::{
+    default_type_value,
+    resources::{item::Item, response::Response, session::Session},
+};
 use derive_builder::Builder;
 use serde::{Deserialize, Serialize};
-
-use super::shared::{default_type_value, Item, Response, Session};
 
 #[derive(Serialize, Deserialize, Debug, Default, Builder, Clone, PartialEq)]
 #[builder(name = "SessionUpdateBuilder")]
