@@ -14,6 +14,7 @@ pub enum APIError {
     ParseError(String),
     FileError(String),
     StreamError(String),
+    WebSocketError(String),
     UnknownError(u16, String),
 }
 
@@ -30,7 +31,8 @@ impl APIError {
             | APIError::RateLimitError(message)
             | APIError::ParseError(message)
             | APIError::FileError(message)
-            | APIError::StreamError(message) => message.to_string(),
+            | APIError::StreamError(message)
+            | APIError::WebSocketError(message) => message.to_string(),
             APIError::UnknownError(status_code, message) => {
                 format!("{}: {}", status_code, message)
             }
@@ -57,5 +59,14 @@ impl Display for APIError {
 impl Display for InvalidRequestError {
     fn fmt(&self, f: &mut Formatter) -> Result {
         write!(f, "{} {}", self.code, self.message)
+    }
+}
+
+#[cfg(feature = "realtime")]
+impl From<reqwest_websocket::Error> for APIError {
+    fn from(error: reqwest_websocket::Error) -> Self {
+        dbg!(&error);
+
+        APIError::WebSocketError(error.to_string())
     }
 }

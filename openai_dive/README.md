@@ -58,6 +58,7 @@ let result = client
 - [Batches](#batches)
 - [Assistants](#assistants)
 - [Administration](#administration)
+- [Realtime](#realtime)
 
 ## Chat
 
@@ -517,6 +518,21 @@ For more information see the examples in the [examples/administration](https://g
 - Project Users
 - Project Service Accounts
 - Project API Keys
+
+More information [Administration](https://platform.openai.com/docs/api-reference/administration)
+
+### Realtime
+
+Communicate with a GPT-4o class model live, in real time, over WebSocket. Produces both audio and text transcriptions.
+
+Enable the feature flag `realtime` to use this feature.
+
+For more information see the examples in the [examples/realtime](https://github.com/tjardoo/openai-client/tree/master/examples/realtime) directory.
+
+- All client events
+- All server events
+
+More information [Realtime](https://platform.openai.com/docs/api-reference/realtime)
 
 ## Configuration
 
