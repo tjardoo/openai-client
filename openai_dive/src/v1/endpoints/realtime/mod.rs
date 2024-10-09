@@ -13,7 +13,7 @@ impl Client {
 }
 
 impl Realtime<'_> {
-    pub async fn init(&self, model: &str) -> Result<WebSocket, APIError> {
+    pub async fn websocket(&self, model: &str) -> Result<WebSocket, APIError> {
         let response = reqwest::Client::default()
             .get(format!("wss://api.openai.com/v1/realtime?model={}", model))
             .header("OpenAI-Beta", "realtime=v1")
