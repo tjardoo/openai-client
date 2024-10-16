@@ -419,6 +419,7 @@ pub struct ChatCompletionChunkChoice {
     #[serde(skip_serializing_if = "Option::is_none")]
     pub finish_reason: Option<FinishReason>,
     /// Log probability information for the choice.
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub logprobs: Option<LogProps>, 
 }
 
