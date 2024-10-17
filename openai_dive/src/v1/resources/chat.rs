@@ -427,17 +427,6 @@ pub struct ChatCompletionChunkChoice {
 }
 
 #[derive(Serialize, Deserialize, Debug, Clone, PartialEq)]
-pub struct ImageUrl {
-    /// The type of the content part.
-    pub r#type: String,
-    /// The text content.
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub text: Option<String>,
-    /// The image URL.
-    pub image_url: ImageUrlType,
-}
-
-#[derive(Serialize, Deserialize, Debug, Clone, PartialEq)]
 pub struct ImageUrlType {
     /// Either a URL of the image or the base64 encoded image data.
     pub url: String,
@@ -458,7 +447,6 @@ pub enum ImageUrlDetail {
 #[serde(untagged)]
 pub enum ChatMessageContent {
     Text(String),
-    // ImageUrl(Vec<ImageUrl>),
     TextContentPart(Vec<ChatMessageTextContentPart>),
     ImageContentPart(Vec<ChatMessageImageContentPart>),
     None,
@@ -477,7 +465,7 @@ pub struct ChatMessageImageContentPart {
     /// The type of the content part.
     pub r#type: String,
     /// The text content.
-    pub image_url: String
+    pub image_url: ImageUrlType
 }
 
 
