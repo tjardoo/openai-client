@@ -77,6 +77,9 @@ pub struct ChatCompletionParameters {
     /// each with an associated log probability. 'logprobs' must be set to 'true' if this parameter is used.
     #[serde(skip_serializing_if = "Option::is_none")]
     pub top_logprobs: Option<u32>,
+    /// Max completion tokens, deprecated (still used by vllm)
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub max_tokens: Option<u32>,
     /// An upper bound for the number of tokens that can be generated for a completion, including visible output tokens and reasoning tokens.
     #[serde(skip_serializing_if = "Option::is_none")]
     pub max_completion_tokens: Option<u32>,
