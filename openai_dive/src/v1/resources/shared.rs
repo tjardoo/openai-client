@@ -19,7 +19,7 @@ pub struct Usage {
     pub prompt_tokens_details: Option<PromptTokensDetails>,
     /// Breakdown of tokens used in a completion.
     #[serde(skip_serializing_if = "Option::is_none")]
-    completion_tokens_details: Option<CompletionTokensDetails>,
+    pub completion_tokens_details: Option<CompletionTokensDetails>,
 }
 
 #[derive(Serialize, Deserialize, Debug, Clone, PartialEq)]

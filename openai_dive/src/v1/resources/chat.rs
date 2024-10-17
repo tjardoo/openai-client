@@ -77,6 +77,9 @@ pub struct ChatCompletionParameters {
     /// each with an associated log probability. 'logprobs' must be set to 'true' if this parameter is used.
     #[serde(skip_serializing_if = "Option::is_none")]
     pub top_logprobs: Option<u32>,
+    /// Max completion tokens, deprecated (still used by vllm)
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub max_tokens: Option<u32>,
     /// An upper bound for the number of tokens that can be generated for a completion, including visible output tokens and reasoning tokens.
     #[serde(skip_serializing_if = "Option::is_none")]
     pub max_completion_tokens: Option<u32>,
@@ -418,17 +421,9 @@ pub struct ChatCompletionChunkChoice {
     /// The reason the model stopped generating tokens.
     #[serde(skip_serializing_if = "Option::is_none")]
     pub finish_reason: Option<FinishReason>,
-}
-
-#[derive(Serialize, Deserialize, Debug, Clone, PartialEq)]
-pub struct ImageUrl {
-    /// The type of the content part.
-    pub r#type: String,
-    /// The text content.
+    /// Log probability information for the choice.
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub text: Option<String>,
-    /// The image URL.
-    pub image_url: ImageUrlType,
+    pub logprobs: Option<LogProps>, 
 }
 
 #[derive(Serialize, Deserialize, Debug, Clone, PartialEq)]
@@ -452,17 +447,49 @@ pub enum ImageUrlDetail {
 #[serde(untagged)]
 pub enum ChatMessageContent {
     Text(String),
-    ImageUrl(Vec<ImageUrl>),
+    TextContentPart(Vec<ChatMessageTextContentPart>),
+    ImageContentPart(Vec<ChatMessageImageContentPart>),
     None,
+}
+
+#[derive(Serialize, Deserialize, Debug, Clone, PartialEq)]
+pub struct ChatMessageTextContentPart {
+    /// The type of the content part.
+    pub r#type: String,
+    /// The text content.
+    pub text: String
+}
+
+#[derive(Serialize, Deserialize, Debug, Clone, PartialEq)]
+pub struct ChatMessageImageContentPart {
+    /// The type of the content part.
+    pub r#type: String,
+    /// The text content.
+    pub image_url: ImageUrlType
+}
+
+
+#[derive(Serialize, Deserialize, Debug, Clone, PartialEq)]
+pub struct ChatMessageImageUrl {
+    /// Either a URL of the image or the base64 encoded image data.
+    pub url: String,
+    /// Specifies the detail level of the image. 
+    pub detail: String
 }
 
 impl Display for ChatMessageContent {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
         match self {
             ChatMessageContent::Text(text) => write!(f, "{}", text),
-            ChatMessageContent::ImageUrl(image_urls) => {
-                for image_url in image_urls {
-                    write!(f, "{:?}", image_url)?;
+            ChatMessageContent::TextContentPart(tcp) => {
+                for part in tcp {
+                    write!(f, "{:?}", part)?;
+                }
+                Ok(())
+            }
+            ChatMessageContent::ImageContentPart(icp) => {
+                for part in icp {
+                    write!(f, "{:?}", part)?;
                 }
                 Ok(())
             }
