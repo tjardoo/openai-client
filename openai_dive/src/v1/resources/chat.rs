@@ -131,7 +131,7 @@ pub struct ChatCompletionParameters {
     pub tool_choice: Option<ChatCompletionToolChoice>,
     /// Whether to enable parallel function calling during tool use.
     #[serde(skip_serializing_if = "Option::is_none")]
-    parallel_tool_calls: Option<bool>,
+    pub parallel_tool_calls: Option<bool>,
     /// A unique identifier representing your end-user, which can help OpenAI to monitor and detect abuse.
     #[serde(skip_serializing_if = "Option::is_none")]
     pub user: Option<String>,
@@ -423,7 +423,7 @@ pub struct ChatCompletionChunkChoice {
     pub finish_reason: Option<FinishReason>,
     /// Log probability information for the choice.
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub logprobs: Option<LogProps>, 
+    pub logprobs: Option<LogProps>,
 }
 
 #[derive(Serialize, Deserialize, Debug, Clone, PartialEq)]
@@ -457,7 +457,7 @@ pub struct ChatMessageTextContentPart {
     /// The type of the content part.
     pub r#type: String,
     /// The text content.
-    pub text: String
+    pub text: String,
 }
 
 #[derive(Serialize, Deserialize, Debug, Clone, PartialEq)]
@@ -465,16 +465,15 @@ pub struct ChatMessageImageContentPart {
     /// The type of the content part.
     pub r#type: String,
     /// The text content.
-    pub image_url: ImageUrlType
+    pub image_url: ImageUrlType,
 }
-
 
 #[derive(Serialize, Deserialize, Debug, Clone, PartialEq)]
 pub struct ChatMessageImageUrl {
     /// Either a URL of the image or the base64 encoded image data.
     pub url: String,
-    /// Specifies the detail level of the image. 
-    pub detail: String
+    /// Specifies the detail level of the image.
+    pub detail: String,
 }
 
 impl Display for ChatMessageContent {
