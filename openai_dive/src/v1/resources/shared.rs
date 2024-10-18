@@ -136,18 +136,32 @@ pub enum LastErrorCode {
 #[serde(rename_all = "snake_case")]
 pub enum FinishReason {
     /// API returned complete message, or a message terminated by one of the stop sequences provided via the stop parameter.
-    #[serde(rename = "stop")]
+    #[serde(rename = "stop", alias = "STOP")]
     StopSequenceReached,
     /// Incomplete model output due to max_tokens parameter or token limit.
-    #[serde(rename = "length")]
+    #[serde(rename = "length", alias = "MAX_TOKENS")]
     TokenLimitReached,
     /// Omitted content due to a flag from our content filters.
-    #[serde(rename = "content_filter")]
+    #[serde(
+        rename = "content_filter",
+        alias = "SAFETY",
+        alias = "SPII",
+        alias = "PROHIBITED_CONTENT",
+        alias = "BLOCKLIST",
+        alias = "RECITATION"
+    )]
     ContentFilterFlagged,
     /// The model decided to call one or more tools.
     ToolCalls,
     /// The model reached a natural stopping point. [Claude]
     EndTurn,
+    /// The finish reason is unspecified. [Gemini]
+    #[serde(rename = "FINISH_REASON_UNSPECIFIED	")]
+    FinishReasonUnspecified,
+    #[serde(rename = "MALFORMED_FUNCTION_CALL")]
+    MalformedFunctionCall,
+    #[serde(rename = "OTHER")]
+    Other,
 }
 
 #[derive(Serialize, Deserialize, Debug, Clone, PartialEq)]
