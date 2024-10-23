@@ -449,6 +449,7 @@ pub enum ChatMessageContent {
     Text(String),
     TextContentPart(Vec<ChatMessageTextContentPart>),
     ImageContentPart(Vec<ChatMessageImageContentPart>),
+    AudioContentPart(Vec<ChatMessageAudioContentPart>),
     None,
 }
 
@@ -469,11 +470,27 @@ pub struct ChatMessageImageContentPart {
 }
 
 #[derive(Serialize, Deserialize, Debug, Clone, PartialEq)]
+pub struct ChatMessageAudioContentPart {
+    /// The type of the content part. Always input_audio.
+    pub r#type: String,
+    /// The input audio data.
+    pub input_audio: InputAudioData,
+}
+
+#[derive(Serialize, Deserialize, Debug, Clone, PartialEq)]
 pub struct ChatMessageImageUrl {
     /// Either a URL of the image or the base64 encoded image data.
     pub url: String,
     /// Specifies the detail level of the image.
     pub detail: String,
+}
+
+#[derive(Serialize, Deserialize, Debug, Clone, PartialEq)]
+pub struct InputAudioData {
+    /// Base64 encoded audio data.
+    pub data: String,
+    /// The format of the encoded audio data. Currently supports "wav" and "mp3".
+    pub format: String,
 }
 
 impl Display for ChatMessageContent {
@@ -488,6 +505,12 @@ impl Display for ChatMessageContent {
             }
             ChatMessageContent::ImageContentPart(icp) => {
                 for part in icp {
+                    write!(f, "{:?}", part)?;
+                }
+                Ok(())
+            }
+            ChatMessageContent::AudioContentPart(acp) => {
+                for part in acp {
                     write!(f, "{:?}", part)?;
                 }
                 Ok(())
