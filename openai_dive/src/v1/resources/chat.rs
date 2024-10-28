@@ -427,17 +427,6 @@ pub struct ChatCompletionChunkChoice {
 }
 
 #[derive(Serialize, Deserialize, Debug, Clone, PartialEq)]
-pub struct ImageUrl {
-    /// The type of the content part.
-    pub r#type: String,
-    /// The text content.
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub text: Option<String>,
-    /// The image URL.
-    pub image_url: ImageUrlType,
-}
-
-#[derive(Serialize, Deserialize, Debug, Clone, PartialEq)]
 pub struct ImageUrlType {
     /// Either a URL of the image or the base64 encoded image data.
     pub url: String,
@@ -458,17 +447,71 @@ pub enum ImageUrlDetail {
 #[serde(untagged)]
 pub enum ChatMessageContent {
     Text(String),
-    ImageUrl(Vec<ImageUrl>),
+    TextContentPart(Vec<ChatMessageTextContentPart>),
+    ImageContentPart(Vec<ChatMessageImageContentPart>),
+    AudioContentPart(Vec<ChatMessageAudioContentPart>),
     None,
+}
+
+#[derive(Serialize, Deserialize, Debug, Clone, PartialEq)]
+pub struct ChatMessageTextContentPart {
+    /// The type of the content part.
+    pub r#type: String,
+    /// The text content.
+    pub text: String,
+}
+
+#[derive(Serialize, Deserialize, Debug, Clone, PartialEq)]
+pub struct ChatMessageImageContentPart {
+    /// The type of the content part.
+    pub r#type: String,
+    /// The text content.
+    pub image_url: ImageUrlType,
+}
+
+#[derive(Serialize, Deserialize, Debug, Clone, PartialEq)]
+pub struct ChatMessageAudioContentPart {
+    /// The type of the content part. Always input_audio.
+    pub r#type: String,
+    /// The input audio data.
+    pub input_audio: InputAudioData,
+}
+
+#[derive(Serialize, Deserialize, Debug, Clone, PartialEq)]
+pub struct ChatMessageImageUrl {
+    /// Either a URL of the image or the base64 encoded image data.
+    pub url: String,
+    /// Specifies the detail level of the image.
+    pub detail: String,
+}
+
+#[derive(Serialize, Deserialize, Debug, Clone, PartialEq)]
+pub struct InputAudioData {
+    /// Base64 encoded audio data.
+    pub data: String,
+    /// The format of the encoded audio data. Currently supports "wav" and "mp3".
+    pub format: String,
 }
 
 impl Display for ChatMessageContent {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
         match self {
             ChatMessageContent::Text(text) => write!(f, "{}", text),
-            ChatMessageContent::ImageUrl(image_urls) => {
-                for image_url in image_urls {
-                    write!(f, "{:?}", image_url)?;
+            ChatMessageContent::TextContentPart(tcp) => {
+                for part in tcp {
+                    write!(f, "{:?}", part)?;
+                }
+                Ok(())
+            }
+            ChatMessageContent::ImageContentPart(icp) => {
+                for part in icp {
+                    write!(f, "{:?}", part)?;
+                }
+                Ok(())
+            }
+            ChatMessageContent::AudioContentPart(acp) => {
+                for part in acp {
+                    write!(f, "{:?}", part)?;
                 }
                 Ok(())
             }

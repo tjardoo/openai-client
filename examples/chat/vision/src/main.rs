@@ -1,7 +1,8 @@
 use openai_dive::v1::api::Client;
 use openai_dive::v1::models::Gpt4Engine;
 use openai_dive::v1::resources::chat::{
-    ChatCompletionParametersBuilder, ChatMessage, ChatMessageContent, ImageUrl, ImageUrlType,
+    ChatCompletionParametersBuilder, ChatMessage, ChatMessageContent, ChatMessageImageContentPart,
+    ImageUrlType,
 };
 
 #[tokio::main]
@@ -18,9 +19,8 @@ async fn main() {
                 name: None,
             },
             ChatMessage::User {
-                content: ChatMessageContent::ImageUrl(vec![ImageUrl {
+                content: ChatMessageContent::ImageContentPart(vec![ChatMessageImageContentPart {
                     r#type: "image_url".to_string(),
-                    text: None,
                     image_url: ImageUrlType {
                         url: "https://images.unsplash.com/photo-1526682847805-721837c3f83b?w=640"
                             .to_string(),
