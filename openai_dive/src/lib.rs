@@ -33,7 +33,8 @@
 //!
 //! - [Chat](#chat)
 //!   - [Create chat completion](#create-chat-completion)
-//!   - [Vision](#vision)
+//!   - [Chat vision](#chat-vision)
+//!   - [Chat audio](#chat-audio)
 //!   - [Function calling](#function-calling)
 //!   - [Structured outputs](#structured-outputs)
 //! - [Images](#images)
@@ -87,7 +88,7 @@
 //!
 //! More information: [Create chat completion](https://platform.openai.com/docs/api-reference/chat/create)
 //!
-//! ### Vision
+//! ### Chat vision
 //!
 //! Learn how to use vision capabilities to understand images.
 //!
@@ -100,9 +101,8 @@
 //!             name: None,
 //!         },
 //!         ChatMessage::User {
-//!             content: ChatMessageContent::ImageUrl(vec![ImageUrl {
+//!             content: ChatMessageContent::ImageContentPart(vec![ChatMessageImageContentPart {
 //!                 r#type: "image_url".to_string(),
-//!                 text: None,
 //!                 image_url: ImageUrlType {
 //!                     url: "https://images.unsplash.com/photo-1526682847805-721837c3f83b?w=640"
 //!                         .to_string(),
@@ -112,7 +112,6 @@
 //!             name: None,
 //!         },
 //!     ])
-//!     .max_tokens(50u32)
 //!     .build()?;
 //!
 //! let result = client
@@ -122,6 +121,43 @@
 //! ```
 //!
 //! More information: [Vision](https://platform.openai.com/docs/guides/vision)
+//!
+//! ### Chat audio
+//!
+//! Learn how to use audio capabilities to understand audio files.
+//!
+//! ```rust
+//! let recording = std::fs::read("example-audio.txt").unwrap();
+//!
+//! let parameters = ChatCompletionParametersBuilder::default()
+//!     .model(Gpt4Engine::Gpt4OAudioPreview.to_string())
+//!     .messages(vec![
+//!         ChatMessage::User {
+//!             content: ChatMessageContent::Text(
+//!                 "What do you hear in this recording?".to_string(),
+//!             ),
+//!             name: None,
+//!         },
+//!         ChatMessage::User {
+//!             content: ChatMessageContent::AudioContentPart(vec![ChatMessageAudioContentPart {
+//!                 r#type: "input_audio".to_string(),
+//!                 input_audio: InputAudioData {
+//!                     data: String::from_utf8(recording).unwrap(),
+//!                     format: "mp3".to_string(),
+//!                 },
+//!             }]),
+//!             name: None,
+//!         },
+//!     ])
+//!     .build()?;
+//!
+//! let result = client
+//!     .chat()
+//!     .create(parameters)
+//!     .await?;
+//! ```
+//!
+//! More information: [Vision](https://platform.openai.com/docs/guides/audio)
 //!
 //! ### Function calling
 //!
@@ -603,6 +639,7 @@
 //! - Gpt4Engine
 //!   - Gpt4O `gpt-4o` (alias)
 //!   - Gpt4OMini `gpt-4o-mini` (alias)
+//!   - Gpt4OAudioPreview `gpt-4o-audio-preview` (alias)
 //!   - Gpt4 `gpt-4` (alias)
 //!   - Gpt4Turbo `gpt-4-turbo` (alias)
 //!   - Gpt4TurboPreview `gpt-4-turbo-preview` (alias)

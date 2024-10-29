@@ -9,9 +9,6 @@ pub enum O1Engine {
     /// Alias
     #[serde(rename = "o1-mini")]
     O1Mini,
-    /// Alias
-    #[serde(rename = "gpt-4o-audio-preview")]
-    Gpt4OAudioPreview,
 }
 
 #[derive(Serialize, Deserialize, Debug, Clone, PartialEq)]
@@ -22,6 +19,9 @@ pub enum Gpt4Engine {
     /// Alias
     #[serde(rename = "gpt-4o-mini")]
     Gpt4OMini,
+    /// Alias
+    #[serde(rename = "gpt-4o-audio-preview")]
+    Gpt4OAudioPreview,
     /// Alias
     #[serde(rename = "gpt-4")]
     Gpt4,
@@ -83,7 +83,6 @@ impl Display for O1Engine {
         match self {
             O1Engine::O1Preview => write!(f, "o1-preview"),
             O1Engine::O1Mini => write!(f, "o1-mini"),
-            O1Engine::Gpt4OAudioPreview => write!(f, "gpt-4o-audio-preview"),
         }
     }
 }
@@ -93,6 +92,7 @@ impl Display for Gpt4Engine {
         match self {
             Gpt4Engine::Gpt4O => write!(f, "gpt-4o"),
             Gpt4Engine::Gpt4OMini => write!(f, "gpt-4o-mini"),
+            Gpt4Engine::Gpt4OAudioPreview => write!(f, "gpt-4o-audio-preview"),
             Gpt4Engine::Gpt4 => write!(f, "gpt-4"),
             Gpt4Engine::Gpt4Turbo => write!(f, "gpt-4-turbo"),
             Gpt4Engine::Gpt4TurboPreview => write!(f, "gpt-4-turbo-preview"),
