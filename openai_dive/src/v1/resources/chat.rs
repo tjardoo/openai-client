@@ -89,6 +89,10 @@ pub struct ChatCompletionParameters {
     /// Output types that you would like the model to generate for this request.
     #[serde(skip_serializing_if = "Option::is_none")]
     pub modalities: Option<Vec<Modality>>,
+    /// Configuration for a Predicted Output, which can greatly improve response times when large parts of the model response are known ahead of time.
+    /// This is most common when you are regenerating a file with only minor changes to most of the content.
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub prediction: Option<PredictedOutput>,
     /// Parameters for audio output. Required when audio output is requested with modalities: ["audio"].
     #[serde(skip_serializing_if = "Option::is_none")]
     pub audio: Option<AudioParameters>,
@@ -447,6 +451,30 @@ pub struct ImageUrlType {
     /// Specifies the detail level of the image.
     #[serde(skip_serializing_if = "Option::is_none")]
     pub detail: Option<ImageUrlDetail>,
+}
+
+#[derive(Serialize, Deserialize, Debug, Clone, PartialEq)]
+pub struct PredictedOutput {
+    /// The type of the predicted content you want to provide. This type is currently always 'content'.
+    pub r#type: String,
+    /// The content that should be matched when generating a model response.
+    /// If generated tokens would match this content, the entire model response can be returned much more quickly.
+    pub content: PredictedOutputType,
+}
+
+#[derive(Serialize, Deserialize, Debug, Clone, PartialEq)]
+#[serde(untagged)]
+pub enum PredictedOutputType {
+    String(String),
+    Array(Vec<PredictedOutputArrayPart>),
+}
+
+#[derive(Serialize, Deserialize, Debug, Clone, PartialEq)]
+pub struct PredictedOutputArrayPart {
+    /// The type of the content part.
+    pub r#type: String,
+    /// The text content.
+    pub text: String,
 }
 
 #[derive(Serialize, Deserialize, Debug, Clone, PartialEq)]
