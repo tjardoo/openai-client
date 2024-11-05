@@ -1,8 +1,8 @@
 use openai_dive::v1::api::Client;
 use openai_dive::v1::models::Gpt4Engine;
 use openai_dive::v1::resources::chat::{
-    ChatCompletionParametersBuilder, ChatMessage, ChatMessageAudioContentPart, ChatMessageContent,
-    InputAudioData,
+    AudioFormat, AudioParameters, ChatCompletionParametersBuilder, ChatMessage,
+    ChatMessageAudioContentPart, ChatMessageContent, InputAudioData, Voice,
 };
 
 #[tokio::main]
@@ -15,6 +15,10 @@ async fn main() {
 
     let parameters = ChatCompletionParametersBuilder::default()
         .model(Gpt4Engine::Gpt4OAudioPreview.to_string())
+        .audio(AudioParameters {
+            voice: Voice::Alloy,
+            format: AudioFormat::Mp3,
+        })
         .messages(vec![
             ChatMessage::User {
                 content: ChatMessageContent::Text(

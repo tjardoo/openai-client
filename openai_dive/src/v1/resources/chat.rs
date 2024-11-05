@@ -86,6 +86,12 @@ pub struct ChatCompletionParameters {
     /// How many chat completion choices to generate for each input message.
     #[serde(skip_serializing_if = "Option::is_none")]
     pub n: Option<u32>,
+    /// Output types that you would like the model to generate for this request.
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub modalities: Option<Vec<Modality>>,
+    /// Parameters for audio output. Required when audio output is requested with modalities: ["audio"].
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub audio: Option<AudioParameters>,
     /// Number between -2.0 and 2.0. Positive values penalize new tokens based on whether they appear in the text so far,
     /// increasing the model's likelihood to talk about new topics.
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -391,6 +397,14 @@ pub struct ChatCompletionChoice {
 }
 
 #[derive(Serialize, Deserialize, Debug, Clone, PartialEq)]
+pub struct AudioParameters {
+    /// The voice the model uses to respond.
+    pub voice: Voice,
+    /// Specifies the output audio format.
+    pub format: AudioFormat,
+}
+
+#[derive(Serialize, Deserialize, Debug, Clone, PartialEq)]
 pub struct LogProps {
     /// A list of message content tokens with log probability information.
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -433,6 +447,13 @@ pub struct ImageUrlType {
     /// Specifies the detail level of the image.
     #[serde(skip_serializing_if = "Option::is_none")]
     pub detail: Option<ImageUrlDetail>,
+}
+
+#[derive(Serialize, Deserialize, Debug, Clone, PartialEq)]
+#[serde(rename_all = "lowercase")]
+pub enum Modality {
+    Text,
+    Audio,
 }
 
 #[derive(Serialize, Deserialize, Debug, Clone, PartialEq)]
@@ -534,6 +555,29 @@ pub enum ChatCompletionToolChoice {
     Auto,
     Required,
     ChatCompletionToolChoiceFunction(ChatCompletionToolChoiceFunction),
+}
+
+#[derive(Serialize, Deserialize, Debug, Clone, PartialEq)]
+#[serde(rename_all = "lowercase")]
+pub enum Voice {
+    Alloy,
+    Ash,
+    Ballad,
+    Coral,
+    Echo,
+    Sage,
+    Shimmer,
+    Verse,
+}
+
+#[derive(Serialize, Deserialize, Debug, Clone, PartialEq)]
+#[serde(rename_all = "lowercase")]
+pub enum AudioFormat {
+    Wav,
+    Mp3,
+    Flac,
+    Opus,
+    Pcm16,
 }
 
 impl Default for ChatMessageContent {

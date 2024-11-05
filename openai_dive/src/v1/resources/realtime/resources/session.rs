@@ -87,8 +87,13 @@ pub enum Modality {
 #[serde(rename_all = "lowercase")]
 pub enum RealtimeVoice {
     Alloy,
+    Ash,
+    Ballad,
+    Coral,
     Echo,
+    Sage,
     Shimmer,
+    Verse,
 }
 
 #[derive(Serialize, Deserialize, Debug, Clone, PartialEq)]
