@@ -455,16 +455,16 @@ pub struct ImageUrlType {
 
 #[derive(Serialize, Deserialize, Debug, Clone, PartialEq)]
 pub struct PredictedOutput {
-    /// The type of the predicted content you want to provide. This type is currently always 'content'.
-    pub r#type: String,
+    /// The type of the predicted content you want to provide.
+    pub r#type: PredictedOutputType,
     /// The content that should be matched when generating a model response.
     /// If generated tokens would match this content, the entire model response can be returned much more quickly.
-    pub content: PredictedOutputType,
+    pub content: PredictedOutputContent,
 }
 
 #[derive(Serialize, Deserialize, Debug, Clone, PartialEq)]
 #[serde(untagged)]
-pub enum PredictedOutputType {
+pub enum PredictedOutputContent {
     String(String),
     Array(Vec<PredictedOutputArrayPart>),
 }
@@ -475,6 +475,12 @@ pub struct PredictedOutputArrayPart {
     pub r#type: String,
     /// The text content.
     pub text: String,
+}
+
+#[derive(Serialize, Deserialize, Debug, Clone, PartialEq)]
+#[serde(rename_all = "lowercase")]
+pub enum PredictedOutputType {
+    Content,
 }
 
 #[derive(Serialize, Deserialize, Debug, Clone, PartialEq)]
