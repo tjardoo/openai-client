@@ -502,10 +502,16 @@ pub enum ImageUrlDetail {
 #[serde(untagged)]
 pub enum ChatMessageContent {
     Text(String),
-    TextContentPart(Vec<ChatMessageTextContentPart>),
-    ImageContentPart(Vec<ChatMessageImageContentPart>),
-    AudioContentPart(Vec<ChatMessageAudioContentPart>),
+    ContentPart(Vec<ChatMessageContentPart>),
     None,
+}
+
+#[derive(Serialize, Deserialize, Debug, Clone, PartialEq)]
+#[serde(untagged)]
+pub enum ChatMessageContentPart {
+    Text(ChatMessageTextContentPart),
+    Image(ChatMessageImageContentPart),
+    Audio(ChatMessageAudioContentPart)
 }
 
 #[derive(Serialize, Deserialize, Debug, Clone, PartialEq)]
@@ -552,20 +558,8 @@ impl Display for ChatMessageContent {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
         match self {
             ChatMessageContent::Text(text) => write!(f, "{}", text),
-            ChatMessageContent::TextContentPart(tcp) => {
+            ChatMessageContent::ContentPart(tcp) => {
                 for part in tcp {
-                    write!(f, "{:?}", part)?;
-                }
-                Ok(())
-            }
-            ChatMessageContent::ImageContentPart(icp) => {
-                for part in icp {
-                    write!(f, "{:?}", part)?;
-                }
-                Ok(())
-            }
-            ChatMessageContent::AudioContentPart(acp) => {
-                for part in acp {
                     write!(f, "{:?}", part)?;
                 }
                 Ok(())
