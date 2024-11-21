@@ -511,7 +511,7 @@ pub enum ChatMessageContent {
 pub enum ChatMessageContentPart {
     Text(ChatMessageTextContentPart),
     Image(ChatMessageImageContentPart),
-    Audio(ChatMessageAudioContentPart)
+    Audio(ChatMessageAudioContentPart),
 }
 
 #[derive(Serialize, Deserialize, Debug, Clone, PartialEq)]

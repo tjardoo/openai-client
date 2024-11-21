@@ -1,7 +1,8 @@
 use openai_dive::v1::api::Client;
 use openai_dive::v1::models::Gpt4Engine;
 use openai_dive::v1::resources::chat::{
-    ChatCompletionParameters, ChatCompletionParametersBuilder, ChatMessage, ChatMessageContent, ChatMessageContentPart, ChatMessageImageContentPart, ImageUrlType
+    ChatCompletionParameters, ChatCompletionParametersBuilder, ChatMessage, ChatMessageContent,
+    ChatMessageContentPart, ChatMessageImageContentPart, ImageUrlType,
 };
 
 #[tokio::main]
@@ -18,15 +19,17 @@ async fn main() {
                 name: None,
             },
             ChatMessage::User {
-                content: ChatMessageContent::ContentPart(
-                    vec![ChatMessageContentPart::Image(
-                        ChatMessageImageContentPart {
-                            r#type: "image_url".to_string(),
-                            image_url: ImageUrlType {
-                                url: "https://images.unsplash.com/photo-1526682847805-721837c3f83b?w=640"
+                content: ChatMessageContent::ContentPart(vec![ChatMessageContentPart::Image(
+                    ChatMessageImageContentPart {
+                        r#type: "image_url".to_string(),
+                        image_url: ImageUrlType {
+                            url:
+                                "https://images.unsplash.com/photo-1526682847805-721837c3f83b?w=640"
                                     .to_string(),
-                                detail: None,
-                            }})]),
+                            detail: None,
+                        },
+                    },
+                )]),
                 name: None,
             },
         ])
@@ -64,7 +67,8 @@ async fn main() {
         "max_tokens": 1024
       }"#;
 
-    let parameters: ChatCompletionParameters = serde_json::from_str(json).expect("Failed to parse JSON");
+    let parameters: ChatCompletionParameters =
+        serde_json::from_str(json).expect("Failed to parse JSON");
     let result = client.chat().create(parameters).await.unwrap();
     println!("{:#?}", result);
 }
