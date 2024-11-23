@@ -101,14 +101,17 @@
 //!             name: None,
 //!         },
 //!         ChatMessage::User {
-//!             content: ChatMessageContent::ImageContentPart(vec![ChatMessageImageContentPart {
-//!                 r#type: "image_url".to_string(),
-//!                 image_url: ImageUrlType {
-//!                     url: "https://images.unsplash.com/photo-1526682847805-721837c3f83b?w=640"
-//!                         .to_string(),
-//!                     detail: None,
+//!             content: ChatMessageContent::ContentPart(vec![ChatMessageContentPart::Image(
+//!                 ChatMessageImageContentPart {
+//!                     r#type: "image_url".to_string(),
+//!                     image_url: ImageUrlType {
+//!                         url:
+//!                             "https://images.unsplash.com/photo-1526682847805-721837c3f83b?w=640"
+//!                                 .to_string(),
+//!                         detail: None,
+//!                     },
 //!                 },
-//!             }]),
+//!             )]),
 //!             name: None,
 //!         },
 //!     ])
