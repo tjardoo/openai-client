@@ -26,6 +26,7 @@
 //!
 //! - [Set API key](#set-api-key)
 //! - [Set organization/project id](#set-organizationproject-id)
+//! - [Change base URL](#change-base-url)
 //! - [Add proxy](#add-proxy)
 //! - [Available models](#available-models)
 //!
@@ -597,6 +598,17 @@
 //! client
 //!     .set_organization("org-XXX")
 //!     .set_project("proj_XXX");
+//! ```
+//!
+//! ### Change base URL
+//!
+//! You can change the base URL to use a OpenAI compatible API endpoint.
+//!
+//! ```rust
+//! let mut client = Client::new(api_key);
+//!
+//! client
+//!     .set_base_url("https://api.openai.com/v1");
 //! ```
 //!
 //! ### Add proxy
