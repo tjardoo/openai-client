@@ -107,7 +107,7 @@ pub struct ImageFile {
 #[derive(Serialize, Deserialize, Debug, Clone, PartialEq)]
 pub struct ImageUrl {
     /// The external URL of the image, must be a supported image types: jpeg, jpg, png, gif, webp.
-    pub file_id: String,
+    pub url: String,
     /// Specifies the detail level of the image if specified by the user.
     /// 'low' uses fewer tokens, you can opt in to high resolution using 'high'.
     pub detail: String,
@@ -208,13 +208,19 @@ pub enum MessageContent {
         /// The type of the content part.
         r#type: String,
         /// Object containing the image file's URL.
-        image_url: ImageFile,
+        image_url: ImageUrl,
     },
     Text {
         /// Always 'text'.
         r#type: String,
         /// Object containing the text.
         text: Text,
+    },
+    Refusal {
+        /// Always 'refusal'.
+        r#type: String,
+        /// The refusal text.
+        refusal: String,
     },
 }
 
