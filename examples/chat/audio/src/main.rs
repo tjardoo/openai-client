@@ -2,7 +2,7 @@ use openai_dive::v1::api::Client;
 use openai_dive::v1::models::Gpt4Engine;
 use openai_dive::v1::resources::chat::{
     AudioFormat, AudioParameters, ChatCompletionParametersBuilder, ChatMessage,
-    ChatMessageAudioContentPart, ChatMessageContent, InputAudioData, Voice,
+    ChatMessageAudioContentPart, ChatMessageContent, ChatMessageContentPart, InputAudioData, Voice,
 };
 
 #[tokio::main]
@@ -27,13 +27,15 @@ async fn main() {
                 name: None,
             },
             ChatMessage::User {
-                content: ChatMessageContent::AudioContentPart(vec![ChatMessageAudioContentPart {
-                    r#type: "input_audio".to_string(),
-                    input_audio: InputAudioData {
-                        data: String::from_utf8(recording).unwrap(),
-                        format: "mp3".to_string(),
+                content: ChatMessageContent::ContentPart(vec![ChatMessageContentPart::Audio(
+                    ChatMessageAudioContentPart {
+                        r#type: "input_audio".to_string(),
+                        input_audio: InputAudioData {
+                            data: String::from_utf8(recording).unwrap(),
+                            format: "mp3".to_string(),
+                        },
                     },
-                }]),
+                )]),
                 name: None,
             },
         ])
