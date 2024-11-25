@@ -12,6 +12,7 @@ use openai_dive::v1::{
     },
 };
 use reqwest_websocket::Message;
+use rodio::{Decoder, OutputStream, Source};
 use serde_json::Value;
 use std::{io::Write, vec};
 use tokio::io::{AsyncBufReadExt, BufReader};
@@ -61,6 +62,26 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
                                         } else if message_type == "response.done" {
                                             print!("\n{}", "You: ".black());
                                             std::io::stdout().flush().unwrap();
+
+                                            let (_stream, stream_handle) =
+                                                OutputStream::try_default().unwrap();
+
+                                            let file = std::fs::File::open("output.wav").unwrap();
+
+                                            let wav_reader = hound::WavReader::new(file).unwrap();
+
+                                            let duration = wav_reader.len() as f64 / 24000_f64;
+
+                                            let file = std::fs::File::open("output.wav").unwrap();
+
+                                            let source = Decoder::new(file).unwrap();
+
+                                            let _ =
+                                                stream_handle.play_raw(source.convert_samples());
+
+                                            std::thread::sleep(std::time::Duration::from_secs_f64(
+                                                duration,
+                                            ));
                                         } else if message_type == "response.created" {
                                             print!("{}", "AI: ".blue());
 
