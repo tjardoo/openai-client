@@ -26,16 +26,10 @@ base64 = { version = "0.22", optional = true }
 log = { version = "0.4", optional = true }
 bytes = { version = "1.5.0", features = ["serde"] }
 derive_builder = "0.20.0"
-serde_html_form = { version = "0.2", optional = true }
+serde_html_form = "0.2"
 
 [features]
-default = [
-    "reqwest",
-    "tokio",
-    "tokio-util",
-    "reqwest/default-tls",
-    "serde_html_form",
-]
+default = ["reqwest", "tokio", "tokio-util", "reqwest/default-tls"]
 download = ["dep:futures", "dep:base64"]
 stream = ["dep:reqwest-eventsource", "dep:futures", "dep:tokio-stream"]
 rustls-tls = ["reqwest/rustls-tls"]
