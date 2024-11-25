@@ -10,9 +10,7 @@ use std::io::Write;
 
 #[tokio::main]
 async fn main() {
-    let api_key = std::env::var("OPENAI_API_KEY").expect("$OPENAI_API_KEY is not set");
-
-    let client = Client::new(api_key);
+    let client = Client::new_from_env();
 
     let parameters = AudioSpeechParametersBuilder::default()
         .model(TTSEngine::Tts1.to_string())

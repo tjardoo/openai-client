@@ -4,9 +4,7 @@ use openai_dive::v1::api::Client;
 async fn main() {
     dotenv::dotenv().ok();
 
-    let api_key = std::env::var("OPENAI_API_KEY").expect("$OPENAI_API_KEY is not set");
-
-    let client = Client::new(api_key);
+    let client = Client::new_from_env();
 
     let assistant_id =
         std::env::var("ASSISTANT_ID").expect("ASSISTANT_ID is not set in the .env file.");

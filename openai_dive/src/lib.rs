@@ -2,8 +2,6 @@
 //!
 //! OpenAI Dive is an unofficial async Rust library that allows you to interact with the OpenAI API.
 //!
-//! Sign up for an account on [https://platform.openai.com/overview](https://platform.openai.com/overview) to get your API key.
-//!
 //! ```ini
 //! [dependencies]
 //! openai_dive = "0.6"
@@ -16,7 +14,7 @@
 //!
 //! let api_key = std::env::var("OPENAI_API_KEY").expect("$OPENAI_API_KEY is not set");
 //!
-//! let client = Client::new(api_key); // or Client::new_from_env()
+//! let client = Client::new_from_env(); // or Client::new(api_key);
 //!
 //! let result = client
 //!     .models()
@@ -593,7 +591,7 @@
 //! You can set the organization ID and/or project ID on the client via the `set_organization` and `set_project` methods. If you don't set the organization and/or project ID, the client will use the default organization and default project.
 //!
 //! ```rust
-//! let mut client = Client::new(api_key);
+//! let mut client = Client::new_from_env();
 //!
 //! client
 //!     .set_organization("org-XXX")
@@ -605,7 +603,7 @@
 //! You can change the base URL to use a OpenAI compatible API endpoint.
 //!
 //! ```rust
-//! let mut client = Client::new(api_key);
+//! let mut client = Client::new_from_env();
 //!
 //! client
 //!     .set_base_url("https://api.openai.com/v1");
