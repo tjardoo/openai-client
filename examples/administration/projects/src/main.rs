@@ -5,7 +5,10 @@ use openai_dive::v1::resources::administration::project::{
 
 #[tokio::main]
 async fn main() -> Result<(), Box<dyn std::error::Error>> {
-    let client = Client::new_from_env();
+    let admin_api_key =
+        std::env::var("OPENAI_ADMIN_API_KEY").expect("OPENAI_ADMIN_API_KEY is not set");
+
+    let client = Client::new(admin_api_key);
 
     let projects = client.administration().projects().list(None).await?;
 

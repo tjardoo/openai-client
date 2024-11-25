@@ -556,6 +556,8 @@ For more information see the examples in the [examples/administration](https://g
 - Project Users
 - Project Service Accounts
 - Project API Keys
+- Rate Limits
+- Audit Logs
 
 More information [Administration](https://platform.openai.com/docs/api-reference/administration)
 

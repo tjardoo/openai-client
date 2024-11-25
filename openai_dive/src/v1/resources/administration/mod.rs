@@ -1,3 +1,4 @@
+pub mod audit_log;
 pub mod invite;
 pub mod project;
 pub mod project_api_key;
