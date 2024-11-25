@@ -1,6 +1,7 @@
 use base64::{engine::general_purpose, Engine};
 use ftail::ansi_escape::TextStyling;
 use futures_util::{SinkExt, StreamExt};
+use hound::{WavSpec, WavWriter};
 use openai_dive::v1::{
     api::Client,
     resources::realtime::{
@@ -62,12 +63,13 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
                                             std::io::stdout().flush().unwrap();
                                         } else if message_type == "response.created" {
                                             print!("{}", "AI: ".blue());
+
+                                            std::fs::write("output.wav", vec![]).unwrap();
                                         } else if message_type == "session.created" {
                                             // update the settings...
                                             //
                                             //
                                         } else if message_type == "response.audio.delta" {
-                                            // get the delta and save it to a file
                                             if let Ok(response_audio_delta) =
                                                 serde_json::from_str::<ResponseAudioDelta>(&text)
                                             {
@@ -83,6 +85,17 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
 
                                                 file.write_all(&decoded_audio).unwrap();
                                             }
+                                        } else if message_type == "response.audio.done" {
+                                            let audio = std::fs::read("output.wav").unwrap();
+
+                                            let pcm_samples: Vec<i16> = audio
+                                                .chunks(2)
+                                                .map(|chunk| {
+                                                    i16::from_le_bytes([chunk[0], chunk[1]])
+                                                })
+                                                .collect();
+
+                                            save_as_wav(&pcm_samples, 24000, "output.wav").unwrap();
                                         }
                                     }
                                     Err(error) => {
@@ -163,6 +176,29 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
 
     tokio::signal::ctrl_c().await?;
     println!("\nShutting down...");
+
+    Ok(())
+}
+
+fn save_as_wav(
+    pcm_data: &[i16],
+    sample_rate: u32,
+    file_path: &str,
+) -> Result<(), Box<dyn std::error::Error>> {
+    let spec = WavSpec {
+        channels: 1,
+        sample_rate,
+        bits_per_sample: 16,
+        sample_format: hound::SampleFormat::Int,
+    };
+
+    let mut writer = WavWriter::create(file_path, spec)?;
+
+    for sample in pcm_data {
+        writer.write_sample(*sample)?;
+    }
+
+    writer.finalize()?;
 
     Ok(())
 }
