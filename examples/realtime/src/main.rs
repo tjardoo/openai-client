@@ -1,6 +1,7 @@
 use base64::{engine::general_purpose, Engine};
 use ftail::ansi_escape::TextStyling;
 use futures_util::{SinkExt, StreamExt};
+#[cfg(feature = "audio")]
 use hound::{WavSpec, WavWriter};
 use openai_dive::v1::{
     api::Client,
@@ -12,6 +13,7 @@ use openai_dive::v1::{
     },
 };
 use reqwest_websocket::Message;
+#[cfg(feature = "audio")]
 use rodio::{Decoder, OutputStream, Source};
 use serde_json::Value;
 use std::{io::Write, vec};
@@ -63,25 +65,31 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
                                             print!("\n{}", "You: ".black());
                                             std::io::stdout().flush().unwrap();
 
-                                            let (_stream, stream_handle) =
-                                                OutputStream::try_default().unwrap();
+                                            #[cfg(feature = "audio")]
+                                            {
+                                                let (_stream, stream_handle) =
+                                                    OutputStream::try_default().unwrap();
 
-                                            let file = std::fs::File::open("output.wav").unwrap();
+                                                let file =
+                                                    std::fs::File::open("output.wav").unwrap();
 
-                                            let wav_reader = hound::WavReader::new(file).unwrap();
+                                                let wav_reader =
+                                                    hound::WavReader::new(file).unwrap();
 
-                                            let duration = wav_reader.len() as f64 / 24000_f64;
+                                                let duration = wav_reader.len() as f64 / 24000_f64;
 
-                                            let file = std::fs::File::open("output.wav").unwrap();
+                                                let file =
+                                                    std::fs::File::open("output.wav").unwrap();
 
-                                            let source = Decoder::new(file).unwrap();
+                                                let source = Decoder::new(file).unwrap();
 
-                                            let _ =
-                                                stream_handle.play_raw(source.convert_samples());
+                                                let _ = stream_handle
+                                                    .play_raw(source.convert_samples());
 
-                                            std::thread::sleep(std::time::Duration::from_secs_f64(
-                                                duration,
-                                            ));
+                                                std::thread::sleep(
+                                                    std::time::Duration::from_secs_f64(duration),
+                                                );
+                                            }
                                         } else if message_type == "response.created" {
                                             print!("{}", "AI: ".blue());
 
@@ -107,16 +115,20 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
                                                 file.write_all(&decoded_audio).unwrap();
                                             }
                                         } else if message_type == "response.audio.done" {
-                                            let audio = std::fs::read("output.wav").unwrap();
+                                            #[cfg(feature = "audio")]
+                                            {
+                                                let audio = std::fs::read("output.wav").unwrap();
 
-                                            let pcm_samples: Vec<i16> = audio
-                                                .chunks(2)
-                                                .map(|chunk| {
-                                                    i16::from_le_bytes([chunk[0], chunk[1]])
-                                                })
-                                                .collect();
+                                                let pcm_samples: Vec<i16> = audio
+                                                    .chunks(2)
+                                                    .map(|chunk| {
+                                                        i16::from_le_bytes([chunk[0], chunk[1]])
+                                                    })
+                                                    .collect();
 
-                                            save_as_wav(&pcm_samples, 24000, "output.wav").unwrap();
+                                                save_as_wav(&pcm_samples, 24000, "output.wav")
+                                                    .unwrap();
+                                            }
                                         }
                                     }
                                     Err(error) => {
@@ -201,6 +213,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
     Ok(())
 }
 
+#[cfg(feature = "audio")]
 fn save_as_wav(
     pcm_data: &[i16],
     sample_rate: u32,
