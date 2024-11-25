@@ -1,13 +1,13 @@
-use ftail::{ansi_escape::TextStyling, Ftail};
+use base64::{engine::general_purpose, Engine};
+use ftail::ansi_escape::TextStyling;
 use futures_util::{SinkExt, StreamExt};
-use log::LevelFilter;
 use openai_dive::v1::{
     api::Client,
     resources::realtime::{
         client::{ConversationItemCreateBuilder, ResponseCreateBuilder},
         get_realtime_server_events_deserializers,
         resources::item::{ContentType, Item, ItemContent, ItemRole, ItemType},
-        server::ResponseAudioTranscriptDelta,
+        server::{ResponseAudioDelta, ResponseAudioTranscriptDelta},
     },
 };
 use reqwest_websocket::Message;
@@ -17,7 +17,9 @@ use tokio::io::{AsyncBufReadExt, BufReader};
 
 #[tokio::main]
 async fn main() -> Result<(), Box<dyn std::error::Error>> {
-    Ftail::new().console(LevelFilter::Debug).init()?;
+    // ftail::Ftail::new()
+    //     .console(log::LevelFilter::Debug)
+    //     .init()?;
 
     let client = Client::new_from_env();
 
@@ -47,12 +49,12 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
                                 match deserializer(&text) {
                                     Ok(_) => {
                                         if message_type == "response.audio_transcript.delta" {
-                                            if let Ok(response) = serde_json::from_str::<
-                                                ResponseAudioTranscriptDelta,
-                                            >(
-                                                &text
-                                            ) {
-                                                print!("{}", response.delta);
+                                            if let Ok(response_audio_transcript_delta) =
+                                                serde_json::from_str::<ResponseAudioTranscriptDelta>(
+                                                    &text,
+                                                )
+                                            {
+                                                print!("{}", response_audio_transcript_delta.delta);
                                                 std::io::stdout().flush().unwrap();
                                             }
                                         } else if message_type == "response.done" {
@@ -60,6 +62,27 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
                                             std::io::stdout().flush().unwrap();
                                         } else if message_type == "response.created" {
                                             print!("{}", "AI: ".blue());
+                                        } else if message_type == "session.created" {
+                                            // update the settings...
+                                            //
+                                            //
+                                        } else if message_type == "response.audio.delta" {
+                                            // get the delta and save it to a file
+                                            if let Ok(response_audio_delta) =
+                                                serde_json::from_str::<ResponseAudioDelta>(&text)
+                                            {
+                                                let decoded_audio = general_purpose::STANDARD
+                                                    .decode(response_audio_delta.delta.as_bytes())
+                                                    .unwrap();
+
+                                                let mut file = std::fs::OpenOptions::new()
+                                                    .create(true)
+                                                    .append(true)
+                                                    .open("output.wav")
+                                                    .unwrap();
+
+                                                file.write_all(&decoded_audio).unwrap();
+                                            }
                                         }
                                     }
                                     Err(error) => {
@@ -139,7 +162,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
     });
 
     tokio::signal::ctrl_c().await?;
-    println!("Shutting down...");
+    println!("\nShutting down...");
 
     Ok(())
 }

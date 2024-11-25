@@ -11,5 +11,7 @@ reqwest-websocket = "0.4"
 futures-util = "0.3"
 serde = { version = "1.0", features = ["derive"] }
 serde_json = "1.0"
+base64 = "0.22"
+hound = "3.5"
 log = "0.4"
 ftail = "0.1"
