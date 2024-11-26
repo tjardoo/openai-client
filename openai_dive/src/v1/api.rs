@@ -37,7 +37,7 @@ impl Client {
     }
 
     /// Create a new instance of the OpenAI client with a custom base URL and set the API key.
-    #[deprecated(since = "0.6.6", note = "Please use `set_base_url` instead")]
+    #[deprecated(since = "0.7.0", note = "Please use `set_base_url` instead")]
     pub fn new_with_base(base_url: &str, api_key: String) -> Self {
         Self {
             base_url: base_url.to_string(),

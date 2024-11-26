@@ -9,7 +9,7 @@ OpenAI Dive is an unofficial async Rust library that allows you to interact with
 
 ```ini
 [dependencies]
-openai_dive = "0.6"
+openai_dive = "0.7"
 ```
 
 ## Get started
