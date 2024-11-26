@@ -6,9 +6,7 @@ use openai_dive::v1::resources::embedding::{
 
 #[tokio::main]
 async fn main() {
-    let api_key = std::env::var("OPENAI_API_KEY").expect("$OPENAI_API_KEY is not set");
-
-    let client = Client::new(api_key);
+    let client = Client::new_from_env();
 
     let parameters = EmbeddingParametersBuilder::default()
         .model(EmbeddingsEngine::TextEmbedding3Small.to_string())

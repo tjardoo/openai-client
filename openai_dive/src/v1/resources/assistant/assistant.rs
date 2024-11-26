@@ -147,7 +147,7 @@ pub struct AssistantResponseFormatType {
 pub enum AssistantResponseFormatTypeDefinition {
     Text,
     JsonObject,
-    JsonSchema(JsonSchema), // @todo
+    JsonSchema(JsonSchema),
 }
 
 #[derive(Serialize, Deserialize, Debug, Clone, PartialEq)]

@@ -20,10 +20,9 @@ use serde_json::json;
 async fn main() -> Result<(), Box<dyn std::error::Error>> {
     let question = "What is the conversion rate for 5000 SGD? And 1000 JPY?";
 
-    let api_key = std::env::var("OPENAI_API_KEY").expect("$OPENAI_API_KEY is not set");
     let project_id = std::env::var("OPENAI_PROJECT_ID");
 
-    let mut client = Client::new(api_key);
+    let mut client = Client::new_from_env();
     if project_id.is_ok() {
         client.set_project(&project_id.unwrap());
     }

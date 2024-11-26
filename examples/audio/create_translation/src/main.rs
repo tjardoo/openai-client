@@ -5,9 +5,7 @@ use openai_dive::v1::resources::shared::FileUpload;
 
 #[tokio::main]
 async fn main() {
-    let api_key = std::env::var("OPENAI_API_KEY").expect("$OPENAI_API_KEY is not set");
-
-    let client = Client::new(api_key);
+    let client = Client::new_from_env();
 
     let parameters = AudioTranslationParametersBuilder::default()
         .file(FileUpload::File("./audio/multilingual.mp3".to_string()))

@@ -65,8 +65,6 @@ impl Display for InvalidRequestError {
 #[cfg(feature = "realtime")]
 impl From<reqwest_websocket::Error> for APIError {
     fn from(error: reqwest_websocket::Error) -> Self {
-        dbg!(&error);
-
         APIError::WebSocketError(error.to_string())
     }
 }

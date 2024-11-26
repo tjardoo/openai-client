@@ -13,9 +13,7 @@ use serde_json::{json, Value};
 
 #[tokio::main]
 async fn main() {
-    let api_key = std::env::var("OPENAI_API_KEY").expect("$OPENAI_API_KEY is not set");
-
-    let client = Client::new(api_key);
+    let client = Client::new_from_env();
 
     let messages = vec![ChatMessage::User {
         content: ChatMessageContent::Text(

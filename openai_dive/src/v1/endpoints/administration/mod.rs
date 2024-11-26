@@ -1,7 +1,9 @@
 use crate::v1::api::Client;
 
+pub mod audit_logs;
 pub mod invites;
 pub mod project_api_keys;
+pub mod project_rate_limits;
 pub mod project_service_accounts;
 pub mod project_users;
 pub mod projects;

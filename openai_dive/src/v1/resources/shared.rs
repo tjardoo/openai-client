@@ -82,13 +82,9 @@ pub struct ListParameters {
     #[serde(skip_serializing_if = "Option::is_none")]
     pub order: Option<String>,
     /// A cursor for use in pagination. after is an object ID that defines your place in the list.
-    /// For instance, if you make a list request and receive 100 objects, ending with obj_foo,
-    /// your subsequent call can include after=obj_foo in order to fetch the next page of the list.
     #[serde(skip_serializing_if = "Option::is_none")]
     pub after: Option<String>,
     /// A cursor for use in pagination. before is an object ID that defines your place in the list.
-    /// For instance, if you make a list request and receive 100 objects, ending with obj_foo,
-    /// your subsequent call can include before=obj_foo in order to fetch the previous page of the list.
     #[serde(skip_serializing_if = "Option::is_none")]
     pub before: Option<String>,
 }

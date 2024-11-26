@@ -10,9 +10,7 @@ use std::collections::HashMap;
 async fn main() {
     dotenv::dotenv().ok();
 
-    let api_key = std::env::var("OPENAI_API_KEY").expect("$OPENAI_API_KEY is not set");
-
-    let client = Client::new(api_key);
+    let client = Client::new_from_env();
 
     let thread_id = std::env::var("THREAD_ID").expect("THREAD_ID is not set in the .env file.");
 
