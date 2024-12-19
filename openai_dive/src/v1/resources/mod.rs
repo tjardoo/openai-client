@@ -13,3 +13,4 @@ pub mod moderation;
 pub mod realtime;
 pub mod shared;
 pub mod upload;
+pub mod usage;

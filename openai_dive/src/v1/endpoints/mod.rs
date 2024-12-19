@@ -12,3 +12,4 @@ pub mod moderations;
 #[cfg(feature = "realtime")]
 pub mod realtime;
 pub mod uploads;
+pub mod usage;
