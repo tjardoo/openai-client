@@ -25,14 +25,6 @@ pub struct ListFilesParameters {
     pub purpose: Option<FilePurpose>,
 }
 
-#[derive(Serialize, Deserialize, Debug, Clone, PartialEq)]
-pub struct ListFilesResponse {
-    /// A list of file objects.
-    pub data: Vec<File>,
-    /// The object type, which is always list.
-    pub object: String,
-}
-
 #[derive(Serialize, Deserialize, Debug, Default, Builder, Clone, PartialEq)]
 #[builder(name = "UploadFileParametersBuilder")]
 #[builder(setter(into, strip_option), default)]

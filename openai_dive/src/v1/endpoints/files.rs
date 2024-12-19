@@ -2,9 +2,9 @@ use crate::v1::api::Client;
 use crate::v1::error::APIError;
 use crate::v1::helpers::format_response;
 use crate::v1::resources::file::ListFilesParameters;
-use crate::v1::resources::file::ListFilesResponse;
 use crate::v1::resources::file::{File, UploadFileParameters};
 use crate::v1::resources::shared::DeletedObject;
+use crate::v1::resources::shared::ListResponse;
 
 pub struct Files<'a> {
     pub client: &'a Client,
@@ -22,10 +22,10 @@ impl Files<'_> {
     pub async fn list(
         &self,
         query: Option<ListFilesParameters>,
-    ) -> Result<ListFilesResponse, APIError> {
+    ) -> Result<ListResponse<File>, APIError> {
         let response = self.client.get_with_query("/files", &query).await?;
 
-        let response: ListFilesResponse = format_response(response)?;
+        let response: ListResponse<File> = format_response(response)?;
 
         Ok(response)
     }

@@ -8,7 +8,7 @@ async fn main() {
     let client = Client::new_from_env();
 
     let query = ListFilesParameters {
-        purpose: Some(FilePurpose::FineTune),
+        purpose: Some(FilePurpose::Assistants),
     };
 
     let result = client.files().list(Some(query)).await.unwrap();
