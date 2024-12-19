@@ -53,6 +53,7 @@
 //! - [Batches](#batches)
 //! - [Assistants](#assistants)
 //! - [Administration](#administration)
+//! - [Usage](#usage)
 //! - [Realtime](#realtime)
 //!
 //! ## Chat
@@ -482,7 +483,7 @@
 //!
 //! More information [Moderation](https://platform.openai.com/docs/api-reference/moderations)
 //!
-//! ### Uploads
+//! ## Uploads
 //!
 //! Creates an intermediate Upload object that you can add Parts to. Currently, an Upload can accept at most 8 GB in total and expires after an hour after you create it.
 //!
@@ -497,7 +498,7 @@
 //!
 //! More information [Uploads](https://platform.openai.com/docs/api-reference/uploads)
 //!
-//! ### Fine-tuning
+//! ## Fine-tuning
 //!
 //! Manage fine-tuning jobs to tailor a model to your specific training data.
 //!
@@ -512,7 +513,7 @@
 //!
 //! More information [Fine-tuning](https://platform.openai.com/docs/api-reference/fine-tuning)
 //!
-//! ### Batches
+//! ## Batches
 //!
 //! Create large batches of API requests for asynchronous processing. The Batch API returns completions within 24 hours for a 50% discount.
 //!
@@ -539,7 +540,7 @@
 //!
 //! More information [Assistants](https://platform.openai.com/docs/api-reference/assistants)
 //!
-//! ### Administration
+//! ## Administration
 //!
 //! Programmatically manage your organization.
 //!
@@ -556,7 +557,27 @@
 //!
 //! More information [Administration](https://platform.openai.com/docs/api-reference/administration)
 //!
-//! ### Realtime
+//! ### Usage
+//!
+//! The Usage API provides detailed insights into your activity across the OpenAI API.
+//!
+//! It also includes a separate Costs endpoint, which offers visibility into your spend, breaking down consumption by invoice line items and project IDs.
+//!
+//! For more information see the examples in the [examples/usage](https://github.com/tjardoo/openai-client/tree/master/examples/usage) directory.
+//!
+//! - Completions
+//! - Embeddings
+//! - Moderations
+//! - Images
+//! - Audio speeches
+//! - Audio transcriptions
+//! - Vector stores
+//! - Code interpreter sessions
+//! - Costs
+//!
+//! More information [Usage](https://platform.openai.com/docs/api-reference/usage)
+//!
+//! ## Realtime
 //!
 //! Communicate with a GPT-4o class model live, in real time, over WebSocket. Produces both audio and text transcriptions.
 //!
