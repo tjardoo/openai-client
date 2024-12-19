@@ -59,6 +59,10 @@ pub struct ChatCompletionParameters {
     /// Whether or not to store the output of this chat completion request for use in our model distillation or evals products.
     #[serde(skip_serializing_if = "Option::is_none")]
     pub store: Option<bool>,
+    /// Constrains effort on reasoning for reasoning models (o1 models only).
+    /// Reducing reasoning effort can result in faster responses and fewer tokens used on reasoning in a response.
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub reasoning_effort: Option<ReasoningEffort>,
     /// Developer-defined tags and values used for filtering completions in the dashboard.
     #[serde(skip_serializing_if = "Option::is_none")]
     pub metadata: Option<HashMap<String, String>>,
@@ -241,6 +245,13 @@ pub struct ChatCompletionTool {
 #[derive(Serialize, Deserialize, Debug, Clone, PartialEq)]
 #[serde(tag = "role", rename_all = "lowercase")]
 pub enum ChatMessage {
+    Developer {
+        /// The contents of the developer message.
+        content: ChatMessageContent,
+        /// An optional name for the participant. Provides the model information to differentiate between participants of the same role.
+        #[serde(skip_serializing_if = "Option::is_none")]
+        name: Option<String>,
+    },
     System {
         /// The contents of the system message.
         content: ChatMessageContent,
@@ -275,18 +286,18 @@ pub enum ChatMessage {
         /// Tool call that this message is responding to.
         tool_call_id: String,
     },
-    Function {
-        /// The contents of the function message.
-        #[serde(skip_serializing_if = "Option::is_none")]
-        content: Option<String>,
-        /// The name of the function to call.
-        name: String,
-    },
 }
 
 #[derive(Serialize, Deserialize, Debug, Clone, PartialEq)]
 #[serde(tag = "role", rename_all = "lowercase")]
 pub enum DeltaChatMessage {
+    Developer {
+        /// The contents of the developer message.
+        content: ChatMessageContent,
+        /// An optional name for the participant. Provides the model information to differentiate between participants of the same role.
+        #[serde(skip_serializing_if = "Option::is_none")]
+        name: Option<String>,
+    },
     System {
         /// The contents of the system message.
         content: ChatMessageContent,
@@ -320,13 +331,6 @@ pub enum DeltaChatMessage {
         content: String,
         /// Tool call that this message is responding to.
         tool_call_id: String,
-    },
-    Function {
-        /// The contents of the function message.
-        #[serde(skip_serializing_if = "Option::is_none")]
-        content: Option<String>,
-        /// The name of the function to call.
-        name: String,
     },
     #[serde(untagged)]
     Untagged {
@@ -467,6 +471,13 @@ pub struct PredictedOutput {
 pub enum PredictedOutputContent {
     String(String),
     Array(Vec<PredictedOutputArrayPart>),
+}
+
+#[derive(Serialize, Deserialize, Debug, Clone, PartialEq)]
+pub enum ReasoningEffort {
+    Low,
+    Medium,
+    High,
 }
 
 #[derive(Serialize, Deserialize, Debug, Clone, PartialEq)]

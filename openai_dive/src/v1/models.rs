@@ -4,8 +4,8 @@ use std::fmt::{Display, Formatter, Result};
 #[derive(Serialize, Deserialize, Debug, Clone, PartialEq)]
 pub enum O1Engine {
     // Alias
-    #[serde(rename = "o1-preview")]
-    O1Preview,
+    #[serde(rename = "o1")]
+    O1,
     /// Alias
     #[serde(rename = "o1-mini")]
     O1Mini,
@@ -14,23 +14,26 @@ pub enum O1Engine {
 #[derive(Serialize, Deserialize, Debug, Clone, PartialEq)]
 pub enum Gpt4Engine {
     /// Alias
-    #[serde(rename = "gpt-4o")]
-    Gpt4O,
-    /// Alias
-    #[serde(rename = "gpt-4o-mini")]
-    Gpt4OMini,
-    /// Alias
-    #[serde(rename = "gpt-4o-audio-preview")]
-    Gpt4OAudioPreview,
-    /// Alias
     #[serde(rename = "gpt-4")]
     Gpt4,
     /// Alias
     #[serde(rename = "gpt-4-turbo")]
     Gpt4Turbo,
     /// Alias
-    #[serde(rename = "gpt-4-turbo-preview")]
-    Gpt4TurboPreview,
+    #[serde(rename = "gpt-4o")]
+    Gpt4O,
+    /// Alias
+    #[serde(rename = "gpt-4o-mini")]
+    Gpt4OMini,
+    /// Alias
+    #[serde(rename = "gpt-4o-realtime-preview")]
+    Gpt4ORealtimePreview,
+    /// Alias
+    #[serde(rename = "gpt-4o-mini-realtime-preview")]
+    Gpt4OMiniRealtimePreview,
+    /// Alias
+    #[serde(rename = "gpt-4o-audio-preview")]
+    Gpt4OAudioPreview,
 }
 
 #[derive(Serialize, Deserialize, Debug, Clone, PartialEq)]
@@ -81,7 +84,7 @@ pub enum ModerationsEngine {
 impl Display for O1Engine {
     fn fmt(&self, f: &mut Formatter<'_>) -> Result {
         match self {
-            O1Engine::O1Preview => write!(f, "o1-preview"),
+            O1Engine::O1 => write!(f, "o1"),
             O1Engine::O1Mini => write!(f, "o1-mini"),
         }
     }
@@ -90,12 +93,13 @@ impl Display for O1Engine {
 impl Display for Gpt4Engine {
     fn fmt(&self, f: &mut Formatter<'_>) -> Result {
         match self {
+            Gpt4Engine::Gpt4 => write!(f, "gpt-4"),
+            Gpt4Engine::Gpt4Turbo => write!(f, "gpt-4-turbo"),
             Gpt4Engine::Gpt4O => write!(f, "gpt-4o"),
             Gpt4Engine::Gpt4OMini => write!(f, "gpt-4o-mini"),
             Gpt4Engine::Gpt4OAudioPreview => write!(f, "gpt-4o-audio-preview"),
-            Gpt4Engine::Gpt4 => write!(f, "gpt-4"),
-            Gpt4Engine::Gpt4Turbo => write!(f, "gpt-4-turbo"),
-            Gpt4Engine::Gpt4TurboPreview => write!(f, "gpt-4-turbo-preview"),
+            Gpt4Engine::Gpt4ORealtimePreview => write!(f, "gpt-4o-realtime-preview"),
+            Gpt4Engine::Gpt4OMiniRealtimePreview => write!(f, "gpt-4o-mini-realtime-preview"),
         }
     }
 }

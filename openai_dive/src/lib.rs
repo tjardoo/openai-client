@@ -649,15 +649,16 @@
 //! You can use these predefined constants to set the model in the parameters or use any string representation (ie. for your custom models).
 //!
 //! - O1Engine
-//!   - O1Preview `o1-preview` (alias)
+//!   - O1 `o1` (alias)
 //!   - O1Mini `o1-mini` (alias)
 //! - Gpt4Engine
-//!   - Gpt4O `gpt-4o` (alias)
-//!   - Gpt4OMini `gpt-4o-mini` (alias)
-//!   - Gpt4OAudioPreview `gpt-4o-audio-preview` (alias)
 //!   - Gpt4 `gpt-4` (alias)
 //!   - Gpt4Turbo `gpt-4-turbo` (alias)
-//!   - Gpt4TurboPreview `gpt-4-turbo-preview` (alias)
+//!   - Gpt4O `gpt-4o` (alias)
+//!   - Gpt4OMini `gpt-4o-mini` (alias)
+//!   - Gpt4ORealtimePreview `gpt-4o-realtime-preview` (alias)
+//!   - Gpt4OMiniRealtimePreview `gpt-4o-mini-realtime-preview` (alias)
+//!   - Gpt4OAudioPreview `gpt-4o-audio-preview` (alias)
 //! - DallEEngine
 //!   - DallE3 `dall-e-2`
 //!   - DallE2 `dall-e-3`
