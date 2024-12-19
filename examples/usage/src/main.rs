@@ -1,5 +1,5 @@
 use openai_dive::v1::api::Client;
-use openai_dive::v1::resources::usage::CompletionUsageParametersBuilder;
+use openai_dive::v1::resources::usage::{GroupBy, ImageSource, UsageParametersBuilder};
 
 #[tokio::main]
 async fn main() -> Result<(), Box<dyn std::error::Error>> {
@@ -10,13 +10,24 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
 
     let start_time = chrono::Utc::now() - chrono::Duration::hours(1);
 
-    let parameters = CompletionUsageParametersBuilder::default()
+    let parameters = UsageParametersBuilder::default()
         .start_time(start_time.timestamp() as u32)
+        .sources(vec![ImageSource::ImageGeneration])
+        .group_by(vec![GroupBy::Source, GroupBy::Size])
         .build()?;
 
-    let result = client.usage().completions(parameters).await.unwrap();
+    let images = client.usage().images(parameters.clone()).await.unwrap();
 
-    println!("{:#?}", result);
+    println!("{:#?}", images);
+
+    let parameters = UsageParametersBuilder::default()
+        .start_time(start_time.timestamp() as u32)
+        .group_by(vec![GroupBy::LineItem])
+        .build()?;
+
+    let costs = client.usage().costs(parameters.clone()).await.unwrap();
+
+    println!("{:#?}", costs);
 
     Ok(())
 }
