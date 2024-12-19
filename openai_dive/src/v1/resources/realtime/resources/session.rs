@@ -100,9 +100,9 @@ pub enum RealtimeVoice {
 pub enum AudioFormat {
     #[serde(rename = "pcm16")]
     Pcm16,
-    #[serde(rename = "g711-ulaw")]
+    #[serde(rename = "g711_ulaw")]
     G711Ulaw,
-    #[serde(rename = "g711-alaw")]
+    #[serde(rename = "g711_alaw")]
     G711Alaw,
 }
 
