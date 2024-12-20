@@ -23,6 +23,9 @@ pub struct Invite {
     /// The Unix timestamp (in seconds) of when the invite was accepted.
     #[serde(skip_serializing_if = "Option::is_none")]
     pub accepted_at: Option<u32>,
+    /// The projects that were granted membership upon acceptance of the invite.
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub projects: Option<Vec<ProjectInvite>>,
 }
 
 #[derive(Serialize, Deserialize, Debug, Builder, Clone, PartialEq)]
@@ -33,6 +36,10 @@ pub struct CreateInviteParameters {
     pub email: String,
     /// The role for the user.
     pub role: UserRole,
+    /// An array of projects to which membership is granted at the same time the org invite is accepted.
+    /// If omitted, the user will be invited to the default project for compatibility with legacy behavior.
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub projects: Option<Vec<ProjectInvite>>,
 }
 
 #[derive(Serialize, Deserialize, Debug, Clone, PartialEq)]
@@ -41,4 +48,12 @@ pub enum InviteStatus {
     Accepted,
     Expired,
     Pending,
+}
+
+#[derive(Serialize, Deserialize, Debug, Clone, PartialEq)]
+pub struct ProjectInvite {
+    /// Project's public ID
+    pub id: String,
+    /// Project membership role
+    pub role: UserRole,
 }

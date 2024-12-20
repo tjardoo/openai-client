@@ -16,6 +16,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
     let parameters = CreateInviteParameters {
         email: "XXX".to_string(),
         role: UserRole::Reader,
+        projects: None,
     };
 
     let _invite = client.administration().invites().create(parameters).await?;
