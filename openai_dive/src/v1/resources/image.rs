@@ -11,7 +11,7 @@ use futures::future;
 use serde::{Deserialize, Serialize};
 use std::fmt::Display;
 
-#[derive(Serialize, Debug, Default, Builder, Clone, PartialEq)]
+#[derive(Serialize, Deserialize, Debug, Default, Builder, Clone, PartialEq)]
 #[builder(name = "CreateImageParametersBuilder")]
 #[builder(setter(into, strip_option), default)]
 pub struct CreateImageParameters {
