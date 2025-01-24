@@ -16,7 +16,7 @@ pub struct AudioSpeechParameters {
     pub model: String,
     /// The text to generate audio for. The maximum length is 4096 characters.
     pub input: String,
-    /// The voice to use when generating the audio. Supported voices are alloy, echo, fable, onyx, nova, and shimmer.
+    /// The voice to use when generating the audio.
     pub voice: AudioVoice,
     /// The format to audio in. Supported formats are mp3, opus, aac, flac, wav and pcm.
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -87,7 +87,7 @@ pub struct StreamAudioSpeechParameters {
     pub model: String,
     /// The text to generate audio for. The maximum length is 4096 characters.
     pub input: String,
-    /// The voice to use when generating the audio. Supported voices are alloy, echo, fable, onyx, nova, and shimmer.
+    /// The voice to use when generating the audio.
     pub voice: AudioVoice,
     /// The format to audio in. Supported formats are mp3, opus, aac, flac, wav and pcm.
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -130,10 +130,13 @@ pub enum AudioSpeechResponseFormat {
 pub enum AudioVoice {
     #[default]
     Alloy,
+    Ash,
+    Coral,
     Echo,
     Fable,
     Onyx,
     Nova,
+    Sage,
     Shimmer,
 }
 
