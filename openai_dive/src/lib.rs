@@ -23,7 +23,7 @@
 //! ```
 //!
 //! - [Set API key](#set-api-key)
-//! - [Using OpenAI-Compatible APIs](#using-openai-compatible-apis)
+//! - [Using OpenAI-compatible APIs](#using-openai-compatible-apis)
 //! - [Set organization/project id](#set-organizationproject-id)
 //! - [Add proxy](#add-proxy)
 //! - [Available models](#available-models)
