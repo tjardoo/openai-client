@@ -273,6 +273,8 @@ pub enum ChatMessage {
         /// The contents of the assistant message. Required unless tool_calls is specified.
         #[serde(skip_serializing_if = "Option::is_none")]
         content: Option<ChatMessageContent>,
+        #[serde(skip_serializing_if = "Option::is_none")]
+        reasoning_content: Option<String>,
         /// The refusal message by the assistant.
         #[serde(skip_serializing_if = "Option::is_none")]
         refusal: Option<String>,
