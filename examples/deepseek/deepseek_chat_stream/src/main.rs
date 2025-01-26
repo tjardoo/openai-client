@@ -1,6 +1,8 @@
+use ftail::ansi_escape::TextStyling;
 use futures::StreamExt;
 use openai_dive::v1::api::Client;
 use openai_dive::v1::endpoints::chat::RoleTrackingStream;
+use openai_dive::v1::models::DeepSeekEngine;
 use openai_dive::v1::resources::chat::{
     ChatCompletionParametersBuilder, ChatCompletionResponseFormat, ChatMessage, ChatMessageContent,
     DeltaChatMessage,
@@ -14,7 +16,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
     client.set_base_url("https://api.deepseek.com");
 
     let parameters = ChatCompletionParametersBuilder::default()
-        .model("deepseek-chat".to_string())
+        .model(DeepSeekEngine::DeepSeekReasoner.to_string())
         .messages(vec![ChatMessage::User {
             content: ChatMessageContent::Text(
                 "What are the five biggest cities in China?".to_string(),
@@ -42,10 +44,17 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
                             print!("{}", content);
                         }
                         DeltaChatMessage::Assistant {
-                            content: Some(chat_message_content),
+                            reasoning_content,
+                            content,
                             ..
                         } => {
-                            print!("{}", chat_message_content);
+                            if let Some(reasoning_content) = reasoning_content {
+                                print!("{}", reasoning_content.black());
+                            }
+
+                            if let Some(chat_message_content) = content {
+                                print!("{}", chat_message_content);
+                            }
                         }
                         _ => {}
                     })

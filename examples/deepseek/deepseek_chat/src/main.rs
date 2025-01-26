@@ -1,5 +1,6 @@
 use openai_dive::v1::{
     api::Client,
+    models::DeepSeekEngine,
     resources::chat::{
         ChatCompletionParametersBuilder, ChatCompletionResponseFormat, ChatMessage,
         ChatMessageContent,
@@ -18,7 +19,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
     println!("{:#?}", result);
 
     let parameters = ChatCompletionParametersBuilder::default()
-        .model("deepseek-reasoner".to_string())
+        .model(DeepSeekEngine::DeepSeekChat.to_string())
         .messages(vec![
             ChatMessage::User {
                 content: ChatMessageContent::Text("I want to learn Mandarin. How can I best approach this? I already used the DuoLingo app for a half a year.".to_string()),
