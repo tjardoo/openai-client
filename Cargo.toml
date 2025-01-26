@@ -15,7 +15,7 @@ members = [
     "examples/uploads/*",
     "examples/realtime",
     "examples/usage",
-    "examples/deepseek",
+    "examples/deepseek/*",
 ]
 default-members = ["openai_dive"]
 resolver = "2"
