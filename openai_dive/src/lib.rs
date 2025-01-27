@@ -23,8 +23,8 @@
 //! ```
 //!
 //! - [Set API key](#set-api-key)
+//! - [Using OpenAI-compatible APIs](#using-openai-compatible-apis)
 //! - [Set organization/project id](#set-organizationproject-id)
-//! - [Change base URL](#change-base-url)
 //! - [Add proxy](#add-proxy)
 //! - [Available models](#available-models)
 //!
@@ -607,6 +607,17 @@
 //! export OPENAI_API_KEY='sk-...'
 //! ```
 //!
+//! ### Using OpenAI-compatible APIs
+//!
+//! By simply changing the base URL, you can use this crate with other OpenAI-compatible APIs.
+//!
+//! ```rust
+//! let deepseek_api_key = std::env::var("DEEPSEEK_API_KEY").expect("DEEPSEEK_API_KEY is not set");
+//!
+//! let mut client = Client::new(deepseek_api_key);
+//! client.set_base_url("https://api.deepseek.com");
+//! ```
+//!
 //! ### Set organization/project ID
 //!
 //! You can create multiple organizations and projects in the OpenAI platform. This allows you to group files, fine-tuned models and other resources.
@@ -619,17 +630,6 @@
 //! client
 //!     .set_organization("org-XXX")
 //!     .set_project("proj_XXX");
-//! ```
-//!
-//! ### Change base URL
-//!
-//! You can change the base URL to use a OpenAI compatible API endpoint.
-//!
-//! ```rust
-//! let mut client = Client::new_from_env();
-//!
-//! client
-//!     .set_base_url("https://api.openai.com/v1");
 //! ```
 //!
 //! ### Add proxy

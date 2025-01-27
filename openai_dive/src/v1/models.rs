@@ -81,6 +81,16 @@ pub enum ModerationsEngine {
     TextModerationStable,
 }
 
+#[derive(Serialize, Deserialize, Debug, Clone, PartialEq)]
+pub enum DeepSeekEngine {
+    /// Alias
+    #[serde(rename = "deepseek-chat")]
+    DeepSeekChat,
+    /// Alias
+    #[serde(rename = "deepseek-reasoner")]
+    DeepSeekReasoner,
+}
+
 impl Display for O1Engine {
     fn fmt(&self, f: &mut Formatter<'_>) -> Result {
         match self {
@@ -146,6 +156,15 @@ impl Display for ModerationsEngine {
             ModerationsEngine::OmniModerationLatest => write!(f, "omni-moderation-latest"),
             ModerationsEngine::TextModerationLatest => write!(f, "text-moderation-latest"),
             ModerationsEngine::TextModerationStable => write!(f, "text-moderation-stable"),
+        }
+    }
+}
+
+impl Display for DeepSeekEngine {
+    fn fmt(&self, f: &mut Formatter<'_>) -> Result {
+        match self {
+            DeepSeekEngine::DeepSeekChat => write!(f, "deepseek-chat"),
+            DeepSeekEngine::DeepSeekReasoner => write!(f, "deepseek-reasoner"),
         }
     }
 }
