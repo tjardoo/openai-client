@@ -2,6 +2,13 @@ use serde::{Deserialize, Serialize};
 use std::fmt::{Display, Formatter, Result};
 
 #[derive(Serialize, Deserialize, Debug, Clone, PartialEq)]
+pub enum O3Engine {
+    // Alias
+    #[serde(rename = "o3-mini")]
+    O3Mini,
+}
+
+#[derive(Serialize, Deserialize, Debug, Clone, PartialEq)]
 pub enum O1Engine {
     // Alias
     #[serde(rename = "o1")]
@@ -89,6 +96,14 @@ pub enum DeepSeekEngine {
     /// Alias
     #[serde(rename = "deepseek-reasoner")]
     DeepSeekReasoner,
+}
+
+impl Display for O3Engine {
+    fn fmt(&self, f: &mut Formatter<'_>) -> Result {
+        match self {
+            O3Engine::O3Mini => write!(f, "o3-mini"),
+        }
+    }
 }
 
 impl Display for O1Engine {
