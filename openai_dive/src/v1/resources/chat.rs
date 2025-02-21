@@ -365,9 +365,13 @@ pub struct ToolCall {
     /// The ID of the tool call.
     pub id: String,
     /// The type of the tool. Currently, only function is supported.
+    #[serde(default = "default_tool_type")]
     pub r#type: String,
     /// The function that the model called.
     pub function: Function,
+}
+fn default_tool_type() -> String {
+    "function".to_string()
 }
 
 #[derive(Serialize, Deserialize, Debug, Clone, PartialEq)]
