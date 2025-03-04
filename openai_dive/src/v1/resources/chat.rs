@@ -443,6 +443,15 @@ pub struct LogProps {
 
 #[derive(Serialize, Deserialize, Debug, Clone, PartialEq)]
 pub struct LogPropsContent {
+    /// Token information
+    #[serde(flatten)]
+    pub token_info: LogProbsContentInfo,
+    /// List of the most likely tokens and their log probability, at this token position.
+    pub top_logprobs: Vec<LogProbsContentInfo>,
+}
+
+#[derive(Serialize, Deserialize, Debug, Clone, PartialEq)]
+pub struct LogProbsContentInfo {
     /// The token.
     pub token: String,
     /// The log probability of this token, if it is within the top 20 most likely tokens.
