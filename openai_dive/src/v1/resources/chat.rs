@@ -9,7 +9,8 @@ use std::fmt::Display;
 #[derive(Serialize, Deserialize, Debug, Clone, PartialEq)]
 pub struct ChatCompletionResponse {
     /// A unique identifier for the chat completion.
-    pub id: String,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub id: Option<String>,
     /// A list of chat completion choices. Can be more than one if n is greater than 1.
     pub choices: Vec<ChatCompletionChoice>,
     /// The Unix timestamp (in seconds) of when the chat completion was created.
@@ -33,7 +34,8 @@ pub struct ChatCompletionResponse {
 #[derive(Serialize, Deserialize, Debug, Clone, PartialEq)]
 pub struct ChatCompletionChunkResponse {
     /// A unique identifier for the chat completion. Each chunk has the same ID.
-    pub id: String,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub id: Option<String>,
     /// A list of chat completion choices. Can be more than one if n is greater than 1.
     pub choices: Vec<ChatCompletionChunkChoice>,
     /// The Unix timestamp (in seconds) of when the chat completion was created. Each chunk has the same timestamp.
