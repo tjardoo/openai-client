@@ -1,12 +1,10 @@
 use openai_dive::v1::{
     api::Client,
     resources::{
-        assistant::{
-            vector_store::CreateVectorStoreParametersBuilder,
-            vector_store_file::CreateVectorStoreFileParametersBuilder,
-        },
         file::{FilePurpose, UploadFileParametersBuilder},
         shared::FileUpload,
+        vector_store::CreateVectorStoreParametersBuilder,
+        vector_store_file::CreateVectorStoreFileParametersBuilder,
     },
 };
 
