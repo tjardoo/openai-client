@@ -36,6 +36,8 @@
 //!   - [Chat audio](#chat-audio)
 //!   - [Function calling](#function-calling)
 //!   - [Structured outputs](#structured-outputs)
+//!   - [Web search](#web-search)
+//! - [Responses](#responses)
 //! - [Images](#images)
 //!   - [Create image](#create-image)
 //!   - [Create image edit](#create-image-edit)
@@ -294,6 +296,53 @@
 //! ```
 //!
 //! More information: [Structured outputs](https://platform.openai.com/docs/guides/structured-outputs)
+//!
+//! ### Web search
+//!
+//! Allow models to search the web for the latest information before generating a response.
+//!
+//! ```rust
+//! let parameters = ChatCompletionParametersBuilder::default()
+//!     .model(ToolModel::Gpt4OMiniSearchPreview.to_string())
+//!     .messages(vec![ChatMessage::User {
+//!         content: ChatMessageContent::Text(
+//!             "What was a positive news story from today?!".to_string(),
+//!         ),
+//!         name: None,
+//!     }])
+//!     .web_search_options(WebSearchOptions {
+//!         search_context_size: Some(WebSearchContextSize::Low),
+//!         user_location: Some(ApproximateUserLocation {
+//!             r#type: UserLocationType::Approximate,
+//!             approximate: WebSearchUserLocation {
+//!                 city: Some("Amsterdam".to_string()),
+//!                 country: Some("NL".to_string()),
+//!                 region: None,
+//!                 timezone: None,
+//!             },
+//!         }),
+//!     })
+//!     .response_format(ChatCompletionResponseFormat::Text)
+//!     .build()?;
+//!
+//! let result = client.chat().create(parameters).await?;
+//! ```
+//!
+//! More information: [Web search](https://platform.openai.com/docs/guides/web-search)
+//!
+//! ## Responses
+//!
+//! OpenAI's most advanced interface for generating model responses. Supports text and image inputs, and text outputs. Create stateful interactions with the model, using the output of previous responses as input. Extend the model's capabilities with built-in tools for file search, web search, computer use, and more. Allow the model access to external systems and data using function calling.
+//!
+//! For more information see the examples in the [examples/responses](https://github.com/tjardoo/openai-client/tree/master/examples/responses) directory.
+//!
+//! - Text & image inputs
+//! - Text outputs
+//! - Stateful interactions
+//! - File search
+//! - Web search
+//! - Computer use
+//! - Function calling
 //!
 //! ## Images
 //!
@@ -654,33 +703,52 @@
 //!
 //! You can use these predefined constants to set the model in the parameters or use any string representation (ie. for your custom models).
 //!
-//! - O1Engine
-//!   - O1 `o1` (alias)
-//!   - O1Mini `o1-mini` (alias)
-//! - Gpt4Engine
-//!   - Gpt4 `gpt-4` (alias)
-//!   - Gpt4Turbo `gpt-4-turbo` (alias)
-//!   - Gpt4O `gpt-4o` (alias)
-//!   - Gpt4OMini `gpt-4o-mini` (alias)
-//!   - Gpt4ORealtimePreview `gpt-4o-realtime-preview` (alias)
-//!   - Gpt4OMiniRealtimePreview `gpt-4o-mini-realtime-preview` (alias)
-//!   - Gpt4OAudioPreview `gpt-4o-audio-preview` (alias)
-//! - DallEEngine
-//!   - DallE3 `dall-e-2`
-//!   - DallE2 `dall-e-3`
-//! - TTSEngine
-//!   - Tts1 `tts-1`
-//!   - Tts1HD `tts-1-hd`
-//! - WhisperEngine
-//!   - Whisper1 `whisper-1`
-//! - EmbeddingsEngine
-//!   - TextEmbedding3Small `text-embedding-3-small`
-//!   - TextEmbedding3Large `text-embedding-3-large`
-//!   - TextEmbeddingAda002 `text-embedding-ada-002`
-//! - ModerationsEngine
-//!   - OmniModerationLatest `omni-moderation-latest` (alias)
-//!   - TextModerationLatest `text-moderation-latest` (alias)
-//!   - TextModerationStable `text-moderation-stable` (alias)
+//! ### Flagship Models
+//!
+//! - **Gpt45Preview** (`gpt-4.5-preview`)
+//! - **Gpt4O** (`gpt-4o`)
+//! - **Gpt4OAudioPreview** (`gpt-4o-audio-preview`)
+//!
+//! ### Cost-Optimized Models
+//!
+//! - **Gpt4OMini** (`gpt-4o-mini`)
+//! - **Gpt4OMiniAudioPreview** (`gpt-4o-mini-audio-preview`)
+//!
+//! ### Reasoning Models
+//!
+//! - **O3Mini** (`o3-mini`)
+//! - **O1** (`o1`)
+//! - **O1Mini** (`o1-mini`)
+//!
+//! ### Tool Models
+//!
+//! - **Gpt4OSearchPreview** (`gpt-4o-search-preview`)
+//! - **Gpt4OMiniSearchPreview** (`gpt-4o-mini-search-preview`)
+//! - **ComputerUsePreview** (`computer-use-preview`)
+//!
+//! ### Moderation Models
+//!
+//! - **OmniModerationLatest** (`omni-moderation-latest`)
+//! - **TextModerationLatest** (`text-moderation-latest`)
+//!
+//! ### Embedding Models
+//!
+//! - **TextEmbedding3Small** (`text-embedding-3-small`)
+//! - **TextEmbedding3Large** (`text-embedding-3-large`)
+//!
+//! ### Whisper Models
+//!
+//! - **Whisper1** (`whisper-1`)
+//!
+//! ### TTS Models
+//!
+//! - **Tts1** (`tts-1`)
+//! - **Tts1HD** (`tts-1-hd`)
+//!
+//! ### DALL·E Models
+//!
+//! - **DallE3** (`dall-e-3`)
+//! - **DallE2** (`dall-e-2`)
 //!
 //! More information: [Models](https://platform.openai.com/docs/models)
 
