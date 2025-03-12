@@ -2,9 +2,15 @@ use derive_builder::Builder;
 use serde::{Deserialize, Serialize};
 use std::collections::HashMap;
 
+use crate::v1::resources::shared::WebSearchContextSize;
+
 use super::{
-    response::{ResponseReasoning, ResponseText},
-    shared::{ResponseTool, ResponseToolChoice, TruncationStrategy},
+    items::{
+        FileSearchToolCall, FunctionToolCall, FunctionToolCallOutput, Message, Reasoning,
+        WebSearchToolCall,
+    },
+    response::{ResponseReasoning, ResponseText, Role},
+    shared::{ResponseTool, ResponseToolChoice, TruncationStrategy, WebSearchUserLocation},
 };
 
 #[derive(Serialize, Deserialize, Debug, Default, Builder, Clone, PartialEq)]
@@ -66,16 +72,82 @@ pub struct ResponseParameters {
 }
 
 #[derive(Serialize, Deserialize, Debug, Clone, PartialEq)]
+pub struct InputMessage {
+    pub role: Role,
+    pub content: ContentInput,
+}
+
+#[derive(Serialize, Deserialize, Debug, Clone, PartialEq)]
+#[serde(untagged)]
+pub enum ContentInput {
+    Text(String),
+    List(Vec<ContentItem>),
+}
+
+#[derive(Serialize, Deserialize, Debug, Clone, PartialEq)]
+pub enum ContentItem {
+    #[serde(rename = "input_text")]
+    Text { text: String },
+    #[serde(rename = "input_image")]
+    Image {
+        detail: ImageDetailLevel,
+        file_id: Option<String>,
+        image_url: Option<String>,
+    },
+    #[serde(rename = "input_file")]
+    File {
+        file_data: Option<String>,
+        file_id: Option<String>,
+        filename: Option<String>,
+    },
+}
+
+#[derive(Serialize, Deserialize, Debug, Clone, PartialEq)]
 #[serde(untagged)]
 pub enum ResponseInput {
     Text(String),
-    // List(Vec<ResponseInputItem>),
+    List(Vec<ResponseInputItem>),
 }
 
 impl Default for ResponseInput {
     fn default() -> Self {
         ResponseInput::Text(String::new())
     }
+}
+
+#[derive(Serialize, Deserialize, Debug, Clone, PartialEq)]
+#[serde(tag = "type", rename_all = "snake_case")]
+pub enum ResponseInputItem {
+    Message(InputMessage),
+    ItemReference { id: String },
+    Item(InputItem),
+}
+
+#[derive(Serialize, Deserialize, Debug, Clone, PartialEq)]
+#[serde(tag = "type")]
+pub enum InputItem {
+    #[serde(rename = "message")]
+    Message(Message),
+    #[serde(rename = "file_search_call")]
+    FileSearchToolCall(FileSearchToolCall),
+    #[serde(rename = "computer_call")]
+    ComputerToolCall,
+    #[serde(rename = "computer_call_output")]
+    ComputerToolCallOutput,
+    #[serde(rename = "web_search_call")]
+    WebSearchToolCall(WebSearchToolCall),
+    #[serde(rename = "function_call")]
+    FunctionToolCall(FunctionToolCall),
+    #[serde(rename = "function_call_output")]
+    FunctionToolCallOutput(FunctionToolCallOutput),
+    #[serde(rename = "reasoning")]
+    Reasoning(Reasoning),
+}
+
+#[derive(Serialize, Deserialize, Debug, Clone, PartialEq)]
+pub struct WebSearchOption {
+    pub search_context_size: Option<WebSearchContextSize>,
+    pub user_location: Option<WebSearchUserLocation>,
 }
 
 #[derive(Serialize, Deserialize, Debug, Clone, PartialEq)]
@@ -86,4 +158,12 @@ pub enum ResponseInclude {
     MessageInputImageUrls,
     #[serde(rename = "computer_call_output.output.image_url")]
     ComputerCallOutputOutputImageUrls,
+}
+
+#[derive(Serialize, Deserialize, Debug, Clone, PartialEq)]
+#[serde(rename_all = "lowercase")]
+pub enum ImageDetailLevel {
+    High,
+    Low,
+    Auto,
 }

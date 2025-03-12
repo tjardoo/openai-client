@@ -7,7 +7,6 @@ use openai_dive::v1::resources::chat::{
 
 #[tokio::main]
 async fn main() -> Result<(), Box<dyn std::error::Error>> {
-    // used to log the JSON response from the OpenAI API
     Ftail::new()
         .single_file("results.log", false, log::LevelFilter::Trace)
         .init()?;

@@ -20,8 +20,6 @@ impl Responses<'_> {
     pub async fn create(&self, parameters: ResponseParameters) -> Result<ResponseObject, APIError> {
         let response = self.client.post("/responses", &parameters).await?;
 
-        dbg!(&response.data);
-
         let response: ResponseObject = format_response(response.data)?;
 
         Ok(response)

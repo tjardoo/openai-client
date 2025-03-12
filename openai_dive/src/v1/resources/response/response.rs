@@ -1,9 +1,12 @@
 use serde::{Deserialize, Serialize};
 use std::collections::HashMap;
 
-use crate::v1::resources::{chat::ReasoningEffort, shared::Usage};
+use crate::v1::resources::shared::{ReasoningEffort, Usage};
 
-use super::shared::{ResponseFormat, ResponseTool, ResponseToolChoice, TruncationStrategy};
+use super::{
+    items::{FileSearchToolCall, FunctionToolCall, Reasoning, WebSearchToolCall},
+    shared::{Annotation, ResponseFormat, ResponseTool, ResponseToolChoice, TruncationStrategy},
+};
 
 #[derive(Serialize, Deserialize, Debug, Clone, PartialEq)]
 pub struct ResponseObject {
@@ -71,6 +74,14 @@ pub struct IncompleteDetails {
 #[serde(tag = "type", rename_all = "snake_case")]
 pub enum ResponseOutput {
     Message(OutputMessage),
+    FunctionToolCall(FunctionToolCall),
+    #[serde(rename = "file_search_call")]
+    FileSearchToolCall(FileSearchToolCall),
+    #[serde(rename = "web_search_call")]
+    WebSearchToolCall(WebSearchToolCall),
+    #[serde(rename = "computer_call")]
+    // ComputerToolCall(ComputerToolCall),
+    Reasoning(Reasoning),
 }
 
 #[derive(Serialize, Deserialize, Debug, Clone, PartialEq)]
@@ -134,7 +145,7 @@ pub enum OutputContent {
     #[serde(rename = "output_text")]
     Text {
         text: String,
-        // annotations: Vec<Annotation>,
+        annotations: Vec<Annotation>,
     },
     #[serde(rename = "refusal")]
     Refusal { refusal: String },

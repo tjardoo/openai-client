@@ -41,6 +41,12 @@ pub enum Gpt4Engine {
     /// Alias
     #[serde(rename = "gpt-4o-audio-preview")]
     Gpt4OAudioPreview,
+    /// Alias
+    #[serde(rename = "gpt-4o-search-preview")]
+    Gpt4OSearchPreview,
+    /// Alias
+    #[serde(rename = "gpt-4o-mini-search-preview")]
+    Gpt4OMiniSearchPreview,
 }
 
 #[derive(Serialize, Deserialize, Debug, Clone, PartialEq)]
@@ -125,6 +131,8 @@ impl Display for Gpt4Engine {
             Gpt4Engine::Gpt4OAudioPreview => write!(f, "gpt-4o-audio-preview"),
             Gpt4Engine::Gpt4ORealtimePreview => write!(f, "gpt-4o-realtime-preview"),
             Gpt4Engine::Gpt4OMiniRealtimePreview => write!(f, "gpt-4o-mini-realtime-preview"),
+            Gpt4Engine::Gpt4OSearchPreview => write!(f, "gpt-4o-search-preview"),
+            Gpt4Engine::Gpt4OMiniSearchPreview => write!(f, "gpt-4o-mini-search-preview"),
         }
     }
 }
