@@ -8,4 +8,4 @@ publish = false
 openai_dive = { path = "./../../../openai_dive", features = ["log"] }
 tokio = { version = "1.0", features = ["full"] }
 log = "0.4"
-ftail = "0.1"
+ftail = "0.2"

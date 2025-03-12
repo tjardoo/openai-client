@@ -17,7 +17,7 @@ rodio = { version = "0.20", default-features = false, features = [
     "wav",
 ], optional = true }
 log = "0.4"
-ftail = "0.1"
+ftail = "0.2"
 
 [features]
 default = ["audio"]

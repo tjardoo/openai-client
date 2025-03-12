@@ -39,9 +39,13 @@ pub struct UploadFileParameters {
 #[serde(rename_all = "snake_case")]
 pub enum FilePurpose {
     Assistants,
+    AssistantsOutput,
     Batch,
+    BatchOutput,
     #[serde(rename = "fine-tune")]
     FineTune,
+    #[serde(rename = "fine-tune-results")]
+    FineTuneResults,
     Vision,
     #[default]
     UserData,
@@ -55,8 +59,11 @@ impl Display for FilePurpose {
             "{}",
             match self {
                 FilePurpose::Assistants => "assistants",
+                FilePurpose::AssistantsOutput => "assistants_output",
                 FilePurpose::Batch => "batch",
+                FilePurpose::BatchOutput => "batch_output",
                 FilePurpose::FineTune => "fine-tune",
+                FilePurpose::FineTuneResults => "fine-tune-results",
                 FilePurpose::Vision => "vision",
                 FilePurpose::UserData => "user_data",
                 FilePurpose::Evals => "evals",
