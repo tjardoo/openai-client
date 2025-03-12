@@ -703,49 +703,49 @@
 //!
 //! You can use these predefined constants to set the model in the parameters or use any string representation (ie. for your custom models).
 //!
-//! ### Flagship Models
+//! #### Flagship Models
 //!
 //! - **Gpt45Preview** (`gpt-4.5-preview`)
 //! - **Gpt4O** (`gpt-4o`)
 //! - **Gpt4OAudioPreview** (`gpt-4o-audio-preview`)
 //!
-//! ### Cost-Optimized Models
+//! #### Cost-Optimized Models
 //!
 //! - **Gpt4OMini** (`gpt-4o-mini`)
 //! - **Gpt4OMiniAudioPreview** (`gpt-4o-mini-audio-preview`)
 //!
-//! ### Reasoning Models
+//! #### Reasoning Models
 //!
 //! - **O3Mini** (`o3-mini`)
 //! - **O1** (`o1`)
 //! - **O1Mini** (`o1-mini`)
 //!
-//! ### Tool Models
+//! #### Tool Models
 //!
 //! - **Gpt4OSearchPreview** (`gpt-4o-search-preview`)
 //! - **Gpt4OMiniSearchPreview** (`gpt-4o-mini-search-preview`)
 //! - **ComputerUsePreview** (`computer-use-preview`)
 //!
-//! ### Moderation Models
+//! #### Moderation Models
 //!
 //! - **OmniModerationLatest** (`omni-moderation-latest`)
 //! - **TextModerationLatest** (`text-moderation-latest`)
 //!
-//! ### Embedding Models
+//! #### Embedding Models
 //!
 //! - **TextEmbedding3Small** (`text-embedding-3-small`)
 //! - **TextEmbedding3Large** (`text-embedding-3-large`)
 //!
-//! ### Whisper Models
+//! #### Whisper Models
 //!
 //! - **Whisper1** (`whisper-1`)
 //!
-//! ### TTS Models
+//! #### TTS Models
 //!
 //! - **Tts1** (`tts-1`)
 //! - **Tts1HD** (`tts-1-hd`)
 //!
-//! ### DALL·E Models
+//! #### DALL·E Models
 //!
 //! - **DallE3** (`dall-e-3`)
 //! - **DallE2** (`dall-e-2`)
