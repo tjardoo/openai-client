@@ -1,23 +1,21 @@
 use crate::v1::{
-    endpoints::assistants::assistants::Assistants,
+    api::Client,
     error::APIError,
     helpers::format_response,
     resources::{
-        assistant::vector_store::{
-            CreateVectorStoreParameters, ModifyVectorStoreParameters, VectorStore,
-        },
         shared::{DeletedObject, ListParameters, ListResponse},
+        vector_store::{CreateVectorStoreParameters, ModifyVectorStoreParameters, VectorStore},
     },
 };
 
 pub struct VectorStores<'a> {
-    pub assistant: &'a Assistants<'a>,
+    pub client: &'a Client,
 }
 
-impl Assistants<'_> {
+impl Client {
     /// Vector stores are used to store files for use by the file_search tool.
     pub fn vector_stores(&self) -> VectorStores {
-        VectorStores { assistant: self }
+        VectorStores { client: self }
     }
 }
 
@@ -27,11 +25,7 @@ impl VectorStores<'_> {
         &self,
         parameters: CreateVectorStoreParameters,
     ) -> Result<VectorStore, APIError> {
-        let response = self
-            .assistant
-            .client
-            .post("/vector_stores", &parameters)
-            .await?;
+        let response = self.client.post("/vector_stores", &parameters).await?;
 
         let response: VectorStore = format_response(response.data)?;
 
@@ -43,11 +37,7 @@ impl VectorStores<'_> {
         &self,
         query: Option<ListParameters>,
     ) -> Result<ListResponse<VectorStore>, APIError> {
-        let response = self
-            .assistant
-            .client
-            .get_with_query("/vector_stores", &query)
-            .await?;
+        let response = self.client.get_with_query("/vector_stores", &query).await?;
 
         let response: ListResponse<VectorStore> = format_response(response)?;
 
@@ -57,7 +47,6 @@ impl VectorStores<'_> {
     /// Retrieves a vector store.
     pub async fn retrieve(&self, vector_store_id: &str) -> Result<VectorStore, APIError> {
         let response = self
-            .assistant
             .client
             .get(&format!("/vector_stores/{vector_store_id}"))
             .await?;
@@ -74,7 +63,6 @@ impl VectorStores<'_> {
         parameters: ModifyVectorStoreParameters,
     ) -> Result<VectorStore, APIError> {
         let response = self
-            .assistant
             .client
             .post(&format!("/vector_stores/{vector_store_id}"), &parameters)
             .await?;
@@ -87,7 +75,6 @@ impl VectorStores<'_> {
     /// Delete a vector store.
     pub async fn delete(&self, vector_store_id: &str) -> Result<DeletedObject, APIError> {
         let response = self
-            .assistant
             .client
             .delete(&format!("/threads/{vector_store_id}"))
             .await?;

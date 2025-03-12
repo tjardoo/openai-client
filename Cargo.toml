@@ -15,6 +15,7 @@ members = [
     "examples/uploads/*",
     "examples/realtime",
     "examples/usage",
+    "examples/vector_stores",
     "examples/deepseek/*",
 ]
 default-members = ["openai_dive"]

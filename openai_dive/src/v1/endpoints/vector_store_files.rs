@@ -1,21 +1,21 @@
 use crate::v1::{
-    endpoints::assistants::assistants::Assistants,
+    api::Client,
     error::APIError,
     helpers::format_response,
     resources::{
-        assistant::vector_store_file::{CreateVectorStoreFileParameters, VectorStoreFile},
         shared::{DeletedObject, ListParameters, ListResponse},
+        vector_store_file::{CreateVectorStoreFileParameters, VectorStoreFile},
     },
 };
 
 pub struct VectorStoreFiles<'a> {
-    pub assistant: &'a Assistants<'a>,
+    pub client: &'a Client,
 }
 
-impl Assistants<'_> {
+impl Client {
     /// Vector store files represent files inside a vector store.
     pub fn vector_store_files(&self) -> VectorStoreFiles {
-        VectorStoreFiles { assistant: self }
+        VectorStoreFiles { client: self }
     }
 }
 
@@ -27,7 +27,6 @@ impl VectorStoreFiles<'_> {
         parameters: CreateVectorStoreFileParameters,
     ) -> Result<VectorStoreFile, APIError> {
         let response = self
-            .assistant
             .client
             .post(
                 &format!("/vector_stores/{vector_store_id}/files"),
@@ -47,7 +46,6 @@ impl VectorStoreFiles<'_> {
         query: Option<ListParameters>,
     ) -> Result<ListResponse<VectorStoreFile>, APIError> {
         let response = self
-            .assistant
             .client
             .get_with_query(&format!("/vector_stores/{vector_store_id}/files"), &query)
             .await?;
@@ -64,7 +62,6 @@ impl VectorStoreFiles<'_> {
         vector_store_file_id: &str,
     ) -> Result<VectorStoreFile, APIError> {
         let response = self
-            .assistant
             .client
             .get(&format!(
                 "/vector_stores/{vector_store_id}/files/{vector_store_file_id}"
@@ -83,7 +80,6 @@ impl VectorStoreFiles<'_> {
         vector_store_file_id: &str,
     ) -> Result<DeletedObject, APIError> {
         let response = self
-            .assistant
             .client
             .delete(&format!(
                 "/vector_stores/{vector_store_id}/files/{vector_store_file_id}"
