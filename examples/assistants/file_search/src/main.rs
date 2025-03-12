@@ -10,11 +10,11 @@ use openai_dive::v1::{
             message::MessageRole,
             run::{CreateRunParametersBuilder, CreateThreadAndRunParametersBuilder},
             thread::{CreateThreadParametersBuilder, ThreadMessageBuilder},
-            vector_store::CreateVectorStoreParametersBuilder,
-            vector_store_file::CreateVectorStoreFileParametersBuilder,
         },
         file::{FilePurpose, UploadFileParametersBuilder},
         shared::FileUpload,
+        vector_store::CreateVectorStoreParametersBuilder,
+        vector_store_file::CreateVectorStoreFileParametersBuilder,
     },
 };
 
@@ -37,11 +37,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
         .name("OpenAI Test Vector Store 2".to_string())
         .build()?;
 
-    let vector_store = client
-        .assistants()
-        .vector_stores()
-        .create(parameters)
-        .await?;
+    let vector_store = client.vector_stores().create(parameters).await?;
 
     println!("{:#?}", vector_store);
 
@@ -50,7 +46,6 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
         .build()?;
 
     let vector_store_file = client
-        .assistants()
         .vector_store_files()
         .create(&vector_store.id, parameters)
         .await?;
@@ -58,7 +53,6 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
     println!("{:#?}", vector_store_file);
 
     let vector_store_file_list = client
-        .assistants()
         .vector_store_files()
         .list(&vector_store.id, None)
         .await?;

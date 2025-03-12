@@ -14,3 +14,5 @@ pub mod realtime;
 pub mod shared;
 pub mod upload;
 pub mod usage;
+pub mod vector_store;
+pub mod vector_store_file;
