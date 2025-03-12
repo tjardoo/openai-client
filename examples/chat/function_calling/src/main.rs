@@ -1,5 +1,5 @@
 use openai_dive::v1::api::Client;
-use openai_dive::v1::models::Gpt4Engine;
+use openai_dive::v1::models::FlagshipModel;
 use openai_dive::v1::resources::chat::{
     ChatCompletionFunction, ChatCompletionParametersBuilder, ChatCompletionTool,
     ChatCompletionToolType, ChatMessage, ChatMessageContent,
@@ -20,7 +20,7 @@ async fn main() {
     }];
 
     let parameters = ChatCompletionParametersBuilder::default()
-        .model(Gpt4Engine::Gpt4O.to_string())
+        .model(FlagshipModel::Gpt4O.to_string())
         .messages(messages)
         .tools(vec![ChatCompletionTool {
             r#type: ChatCompletionToolType::Function,

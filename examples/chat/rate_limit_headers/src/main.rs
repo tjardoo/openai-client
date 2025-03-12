@@ -1,5 +1,5 @@
 use openai_dive::v1::api::Client;
-use openai_dive::v1::models::Gpt4Engine;
+use openai_dive::v1::models::FlagshipModel;
 use openai_dive::v1::resources::chat::{
     ChatCompletionParametersBuilder, ChatCompletionResponse, ChatMessage, ChatMessageContent,
 };
@@ -10,7 +10,7 @@ async fn main() {
     let client = Client::new_from_env();
 
     let parameters = ChatCompletionParametersBuilder::default()
-        .model(Gpt4Engine::Gpt4O.to_string())
+        .model(FlagshipModel::Gpt4O.to_string())
         .messages(vec![ChatMessage::User {
             content: ChatMessageContent::Text(
                 "Which 2 country has the largest population? Just give the name: population."

@@ -1,6 +1,6 @@
 use ftail::Ftail;
 use openai_dive::v1::api::Client;
-use openai_dive::v1::models::Gpt4Engine;
+use openai_dive::v1::models::CostOptimizedModel;
 use openai_dive::v1::resources::response::request::{ResponseInput, ResponseParametersBuilder};
 use openai_dive::v1::resources::response::shared::{ResponseTool, ResponseToolChoice};
 
@@ -13,7 +13,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
     let client = Client::new_from_env();
 
     let parameters = ResponseParametersBuilder::default()
-        .model(Gpt4Engine::Gpt4OMini.to_string())
+        .model(CostOptimizedModel::Gpt4OMini.to_string())
         .input(ResponseInput::Text(
             "What is the weather like in Ho Chi Minh City today?".to_string(),
         ))

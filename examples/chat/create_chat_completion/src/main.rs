@@ -1,6 +1,6 @@
 use ftail::Ftail;
 use openai_dive::v1::api::Client;
-use openai_dive::v1::models::O1Engine;
+use openai_dive::v1::models::ReasoningModel;
 use openai_dive::v1::resources::chat::{
     ChatCompletionParametersBuilder, ChatCompletionResponseFormat, ChatMessage, ChatMessageContent,
 };
@@ -14,7 +14,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
     let client = Client::new_from_env();
 
     let parameters = ChatCompletionParametersBuilder::default()
-        .model(O1Engine::O1Mini.to_string())
+        .model(ReasoningModel::O1Mini.to_string())
         .messages(vec![
             ChatMessage::User {
                 content: ChatMessageContent::Text("Hello!".to_string()),
