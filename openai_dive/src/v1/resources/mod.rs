@@ -1,5 +1,4 @@
 pub mod administration;
-pub mod assistant;
 pub mod audio;
 pub mod batch;
 pub mod chat;
@@ -15,3 +14,5 @@ pub mod response;
 pub mod shared;
 pub mod upload;
 pub mod usage;
+pub mod vector_store;
+pub mod vector_store_file;

@@ -51,7 +51,6 @@
 //! - [Uploads](#uploads)
 //! - [Fine-tuning](#fine-tuning)
 //! - [Batches](#batches)
-//! - [Assistants](#assistants)
 //! - [Administration](#administration)
 //! - [Usage](#usage)
 //! - [Realtime](#realtime)
@@ -525,20 +524,6 @@
 //! - Cancel batch
 //!
 //! More information [Batch](https://platform.openai.com/docs/api-reference/batch)
-//!
-//! ## Assistants
-//!
-//! Build assistants that can call models and use tools to perform tasks.
-//!
-//! For more information see the examples in the [examples/assistants](https://github.com/tjardoo/openai-client/tree/master/examples/assistants) directory.
-//!
-//! - Assistants
-//! - Threads
-//! - Messages
-//! - Runs
-//! - Run Steps
-//!
-//! More information [Assistants](https://platform.openai.com/docs/api-reference/assistants)
 //!
 //! ## Administration
 //!

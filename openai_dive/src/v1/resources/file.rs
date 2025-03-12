@@ -32,8 +32,6 @@ pub struct UploadFileParameters {
     /// The File object to be uploaded.
     pub file: FileUpload,
     /// The intended purpose of the uploaded file.
-    /// Use "assistants" for Assistants and Message files, "vision" for Assistants image file inputs,
-    /// "batch" for Batch API, and "fine-tune" for Fine-tuning.
     pub purpose: FilePurpose,
 }
 
@@ -41,15 +39,13 @@ pub struct UploadFileParameters {
 #[serde(rename_all = "snake_case")]
 pub enum FilePurpose {
     Assistants,
-    AssistantsOutput,
     Batch,
-    BatchOutput,
-    #[default]
     #[serde(rename = "fine-tune")]
     FineTune,
-    #[serde(rename = "fine-tune-results")]
-    FineTuneResults,
     Vision,
+    #[default]
+    UserData,
+    Evals,
 }
 
 impl Display for FilePurpose {
@@ -59,12 +55,11 @@ impl Display for FilePurpose {
             "{}",
             match self {
                 FilePurpose::Assistants => "assistants",
-                FilePurpose::AssistantsOutput => "assistants_output",
                 FilePurpose::Batch => "batch",
-                FilePurpose::BatchOutput => "batch_output",
                 FilePurpose::FineTune => "fine-tune",
-                FilePurpose::FineTuneResults => "fine-tune-results",
                 FilePurpose::Vision => "vision",
+                FilePurpose::UserData => "user_data",
+                FilePurpose::Evals => "evals",
             }
         )
     }

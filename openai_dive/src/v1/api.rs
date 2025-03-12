@@ -1,4 +1,4 @@
-use crate::v1::helpers::{check_status_code, is_beta_feature};
+use crate::v1::helpers::check_status_code;
 use crate::v1::{error::APIError, resources::shared::Headers};
 use bytes::Bytes;
 #[cfg(feature = "stream")]
@@ -112,10 +112,6 @@ impl Client {
 
         if let Some(project) = &self.project {
             request = request.header("OpenAI-Project", project);
-        }
-
-        if is_beta_feature(path) {
-            request = request.header("OpenAI-Beta", "assistants=v2");
         }
 
         request
