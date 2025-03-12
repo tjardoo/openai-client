@@ -4,7 +4,10 @@ use crate::v1::{
     helpers::format_response,
     resources::{
         shared::{DeletedObject, ListParameters, ListResponse},
-        vector_store::{CreateVectorStoreParameters, ModifyVectorStoreParameters, VectorStore},
+        vector_store::{
+            CreateVectorStoreParameters, ModifyVectorStoreParameters, SearchVectorStoreParameters,
+            SearchVectorStoreResults, VectorStore,
+        },
     },
 };
 
@@ -80,6 +83,25 @@ impl VectorStores<'_> {
             .await?;
 
         let response: DeletedObject = format_response(response)?;
+
+        Ok(response)
+    }
+
+    /// Search a vector store for relevant chunks based on a query and file attributes filter.
+    pub async fn search(
+        &self,
+        vector_store_id: &str,
+        parameters: SearchVectorStoreParameters,
+    ) -> Result<SearchVectorStoreResults, APIError> {
+        let response = self
+            .client
+            .post(
+                &format!("/vector_stores/{vector_store_id}/search"),
+                &parameters,
+            )
+            .await?;
+
+        let response: SearchVectorStoreResults = format_response(response.data)?;
 
         Ok(response)
     }
