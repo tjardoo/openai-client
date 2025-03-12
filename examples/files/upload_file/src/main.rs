@@ -12,7 +12,7 @@ async fn main() {
 
     let parameters = UploadFileParametersBuilder::default()
         .file(FileUpload::File("./files/DummyUsers.json".to_string()))
-        .purpose(FilePurpose::Assistants)
+        .purpose(FilePurpose::UserData)
         .build()
         .unwrap();
 

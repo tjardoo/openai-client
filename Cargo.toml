@@ -2,7 +2,6 @@
 members = [
     "openai_dive",
     "examples/administration/*",
-    "examples/assistants/*",
     "examples/audio/*",
     "examples/batches/*",
     "examples/chat/*",

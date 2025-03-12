@@ -70,14 +70,6 @@ pub(crate) fn format_response<R: DeserializeOwned>(response: String) -> Result<R
     Ok(value)
 }
 
-pub(crate) fn is_beta_feature(path: &str) -> bool {
-    let beta_features = ["/assistants", "/threads", "/vector_stores"];
-
-    beta_features
-        .iter()
-        .any(|feature| path.starts_with(feature))
-}
-
 #[cfg(feature = "download")]
 pub fn generate_file_name(path: &str, length: u32, file_type: &str) -> String {
     const ALPHABET: &[u8] = b"ABCDEFGHIJKLMNOPQRSTUVWXYZ";

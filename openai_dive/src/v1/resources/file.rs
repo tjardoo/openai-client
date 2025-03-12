@@ -32,8 +32,6 @@ pub struct UploadFileParameters {
     /// The File object to be uploaded.
     pub file: FileUpload,
     /// The intended purpose of the uploaded file.
-    /// Use "assistants" for Assistants and Message files, "vision" for Assistants image file inputs,
-    /// "batch" for Batch API, and "fine-tune" for Fine-tuning.
     pub purpose: FilePurpose,
 }
 
