@@ -1,5 +1,4 @@
 pub mod administration;
-pub mod assistants;
 pub mod audio;
 pub mod batch;
 pub mod chat;
