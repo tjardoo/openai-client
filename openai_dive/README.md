@@ -41,6 +41,8 @@ let result = client
   - [Chat audio](#chat-audio)
   - [Function calling](#function-calling)
   - [Structured outputs](#structured-outputs)
+- [Responses](#responses)
+  - [Create response](#create-response)
 - [Images](#images)
   - [Create image](#create-image)
   - [Create image edit](#create-image-edit)
@@ -300,6 +302,14 @@ let result = client.chat().create(parameters).await?;
 ```
 
 More information: [Structured outputs](https://platform.openai.com/docs/guides/structured-outputs)
+
+## Responses
+
+OpenAI's most advanced interface for generating model responses. Supports text and image inputs, and text outputs.
+
+### Create response
+
+TODO
 
 ## Images
 

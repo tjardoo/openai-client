@@ -16,6 +16,7 @@ members = [
     "examples/realtime",
     "examples/usage",
     "examples/deepseek/*",
+    "examples/responses/*",
 ]
 default-members = ["openai_dive"]
 resolver = "2"
