@@ -15,7 +15,7 @@ pub struct Message {
 pub struct FileSearchToolCall {
     pub id: String,
     pub queries: Vec<String>,
-    pub name: String,
+    pub name: Option<String>,
     pub results: Option<Vec<FileSearchResult>>,
     pub status: FileSearchStatus,
 }

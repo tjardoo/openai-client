@@ -74,6 +74,7 @@ pub struct IncompleteDetails {
 #[serde(tag = "type", rename_all = "snake_case")]
 pub enum ResponseOutput {
     Message(OutputMessage),
+    #[serde(rename = "function_call")]
     FunctionToolCall(FunctionToolCall),
     #[serde(rename = "file_search_call")]
     FileSearchToolCall(FileSearchToolCall),
@@ -96,8 +97,8 @@ pub struct OutputMessage {
 pub struct ResponseReasoning {
     /// Constrains effort on reasoning for reasoning models.
     pub effort: Option<ReasoningEffort>,
-    /// A summary of the reasoning performed by the model.
-    pub generate_summary: Option<ReasoningSummary>,
+    // A summary of the reasoning performed by the model.
+    // pub generate_summary: Option<ReasoningSummary>,
 }
 
 #[derive(Serialize, Deserialize, Debug, Clone, PartialEq)]

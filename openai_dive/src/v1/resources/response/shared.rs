@@ -20,15 +20,15 @@ pub enum ResponseToolChoice {
 pub enum ResponseTool {
     Function {
         name: String,
+        description: Option<String>,
         parameters: serde_json::Value,
         strict: bool,
-        description: Option<String>,
     },
     FileSearch {
         vector_store_ids: Vec<String>,
-        filters: FileSearchFilters,
-        max_num_results: u32,
-        ranking_options: FileSearchRankingOption,
+        filters: Option<FileSearchFilters>,
+        max_num_results: Option<u32>,
+        ranking_options: Option<FileSearchRankingOption>,
     },
     #[serde(rename = "web_search_preview")]
     WebSearch {
@@ -37,9 +37,9 @@ pub enum ResponseTool {
     },
     #[serde(rename = "computer_use_preview")]
     ComputerUse {
-        display_height: u64,
-        display_width: u64,
-        environment: CompuserUseEnvironment,
+        display_height: Option<u64>,
+        display_width: Option<u64>,
+        environment: Option<CompuserUseEnvironment>,
     },
 }
 

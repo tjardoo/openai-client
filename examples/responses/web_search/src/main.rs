@@ -17,20 +17,20 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
 
     let parameters = ResponseParametersBuilder::default()
         .model(Gpt4Engine::Gpt4O.to_string())
+        .input(ResponseInput::Text(
+            "What was a positive news story from today?".to_string(),
+        ))
         .tools(vec![ResponseTool::WebSearch {
             search_context_size: Some(WebSearchContextSize::Low),
             user_location: Some(WebSearchUserLocation {
                 r#type: UserLocationType::Approximate,
-                city: None,
-                country: Some("NL".to_string()),
+                city: Some("Bangkok".to_string()),
+                country: Some("TH".to_string()),
                 region: None,
                 timezone: None,
             }),
         }])
         .tool_choice(ResponseToolChoice::WebSearchPreview)
-        .input(ResponseInput::Text(
-            "What was a positive news story from today?".to_string(),
-        ))
         .build()?;
 
     let result = client.responses().create(parameters).await?;
