@@ -1,5 +1,5 @@
 use openai_dive::v1::api::Client;
-use openai_dive::v1::models::EmbeddingsEngine;
+use openai_dive::v1::models::EmbeddingModel;
 use openai_dive::v1::resources::embedding::{
     EmbeddingEncodingFormat, EmbeddingInput, EmbeddingParametersBuilder,
 };
@@ -9,7 +9,7 @@ async fn main() {
     let client = Client::new_from_env();
 
     let parameters = EmbeddingParametersBuilder::default()
-        .model(EmbeddingsEngine::TextEmbedding3Small.to_string())
+        .model(EmbeddingModel::TextEmbedding3Large.to_string())
         .input(EmbeddingInput::String(
             "The food was delicious and the waiter...".to_string(),
         ))

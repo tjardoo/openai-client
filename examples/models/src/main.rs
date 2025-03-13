@@ -1,4 +1,4 @@
-use openai_dive::v1::{api::Client, models::Gpt4Engine};
+use openai_dive::v1::{api::Client, models::FlagshipModel};
 
 #[tokio::main]
 async fn main() {
@@ -10,7 +10,7 @@ async fn main() {
 
     let result = client
         .models()
-        .get(&Gpt4Engine::Gpt4O.to_string())
+        .get(&FlagshipModel::Gpt4O.to_string())
         .await
         .unwrap();
 

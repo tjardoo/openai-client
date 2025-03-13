@@ -8,7 +8,8 @@ use serde::{Deserialize, Serialize};
 #[derive(Serialize, Deserialize, Debug, Clone, PartialEq)]
 pub struct Usage {
     /// Number of tokens in the prompt.
-    pub prompt_tokens: u32,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub prompt_tokens: Option<u32>,
     /// Number of tokens in the completion.
     #[serde(skip_serializing_if = "Option::is_none")]
     pub completion_tokens: Option<u32>,
@@ -167,6 +168,22 @@ pub enum FinishReason {
     MalformedFunctionCall,
     #[serde(rename = "OTHER")]
     Other,
+}
+
+#[derive(Serialize, Deserialize, Debug, Clone, PartialEq)]
+#[serde(rename_all = "lowercase")]
+pub enum ReasoningEffort {
+    Low,
+    Medium,
+    High,
+}
+
+#[derive(Serialize, Deserialize, Debug, Clone, PartialEq)]
+#[serde(rename_all = "lowercase")]
+pub enum WebSearchContextSize {
+    Low,
+    Medium,
+    Large,
 }
 
 #[derive(Serialize, Deserialize, Debug, Clone, PartialEq)]

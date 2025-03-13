@@ -5,6 +5,7 @@ members = [
     "examples/audio/*",
     "examples/batches",
     "examples/chat/*",
+    "examples/responses/*",
     "examples/embeddings",
     "examples/files",
     "examples/fine_tuning",

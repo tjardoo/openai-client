@@ -50,6 +50,30 @@ pub struct VectorStoreFileCounts {
 }
 
 #[derive(Serialize, Deserialize, Debug, Clone, PartialEq)]
+pub struct SearchVectorStoreResults {
+    pub object: String,
+    pub search_query: Vec<String>,
+    pub data: Vec<SearchVectorStoreItem>,
+    pub has_more: bool,
+    pub next_page: Option<String>,
+}
+
+#[derive(Serialize, Deserialize, Debug, Clone, PartialEq)]
+pub struct SearchVectorStoreItem {
+    pub file_id: String,
+    pub filename: String,
+    pub score: f32,
+    pub attributes: Option<HashMap<String, String>>,
+    pub content: Vec<SearchVectorStoreItemContent>,
+}
+
+#[derive(Serialize, Deserialize, Debug, Clone, PartialEq)]
+pub struct SearchVectorStoreItemContent {
+    r#type: String,
+    text: String,
+}
+
+#[derive(Serialize, Deserialize, Debug, Clone, PartialEq)]
 #[serde(rename_all = "snake_case")]
 pub enum VectorStoreStatus {
     InProgress,
@@ -83,6 +107,31 @@ pub struct CreateVectorStoreParameters {
     /// Set of 16 key-value pairs that can be attached to an object.
     #[serde(skip_serializing_if = "Option::is_none")]
     pub metadata: Option<HashMap<String, String>>,
+}
+
+#[derive(Serialize, Deserialize, Debug, Default, Builder, Clone, PartialEq)]
+#[builder(name = "SearchVectorStoreParametersBuilder")]
+#[builder(setter(into, strip_option), default)]
+pub struct SearchVectorStoreParameters {
+    /// A query string for a search
+    pub query: String,
+    /// The maximum number of results to return. This number should be between 1 and 50 inclusive.
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub max_num_results: Option<u32>,
+    /// Ranking options for search.
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub ranking_options: Option<SearchRankingOptions>,
+    /// Whether to rewrite the natural language query for vector search.
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub rewrite_query: Option<bool>,
+}
+
+#[derive(Serialize, Deserialize, Debug, Clone, PartialEq)]
+pub struct SearchRankingOptions {
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub ranker: Option<String>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub score_threshold: Option<f32>,
 }
 
 #[derive(Serialize, Deserialize, Debug, Default, Builder, Clone, PartialEq)]

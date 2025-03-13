@@ -41,14 +41,10 @@ let result = client
   - [Chat audio](#chat-audio)
   - [Function calling](#function-calling)
   - [Structured outputs](#structured-outputs)
+  - [Web search](#web-search)
+- [Responses](#responses)
 - [Images](#images)
-  - [Create image](#create-image)
-  - [Create image edit](#create-image-edit)
-  - [Create image variation](#create-image-variation)
 - [Audio](#audio)
-  - [Create speech](#create-speech)
-  - [Create transcription](#create-transcription)
-  - [Create translation](#create-translation)
 - [Models](#models)
 - [Files](#files)
 - [Embeddings](#embeddings)
@@ -70,7 +66,7 @@ Creates a model response for the given chat conversation.
 
 ```rust
 let parameters = ChatCompletionParametersBuilder::default()
-    .model(Gpt4Engine::Gpt4O.to_string())
+    .model(FlagshipModel::Gpt4O.to_string())
     .messages(vec![
         ChatMessage::User {
             content: ChatMessageContent::Text("Hello!".to_string()),
@@ -98,7 +94,7 @@ Learn how to use vision capabilities to understand images.
 
 ```rust
 let parameters = ChatCompletionParametersBuilder::default()
-    .model(Gpt4Engine::Gpt4O.to_string())
+    .model(FlagshipModel::Gpt4O.to_string())
     .messages(vec![
         ChatMessage::User {
             content: ChatMessageContent::Text("What is in this image?".to_string()),
@@ -137,7 +133,7 @@ Learn how to use audio capabilities to understand audio files.
 let recording = std::fs::read("example-audio.txt").unwrap();
 
 let parameters = ChatCompletionParametersBuilder::default()
-    .model(Gpt4Engine::Gpt4OAudioPreview.to_string())
+    .model(FlagshipModel::Gpt4OAudioPreview.to_string())
     .messages(vec![
         ChatMessage::User {
             content: ChatMessageContent::Text(
@@ -179,7 +175,7 @@ let messages = vec![ChatMessage::User {
 }];
 
 let parameters = ChatCompletionParametersBuilder::default()
-    .model(Gpt4Engine::Gpt4O.to_string())
+    .model(FlagshipModel::Gpt4O.to_string())
     .messages(messages)
     .tools(vec![ChatCompletionTool {
         r#type: ChatCompletionToolType::Function,
@@ -300,146 +296,76 @@ let result = client.chat().create(parameters).await?;
 
 More information: [Structured outputs](https://platform.openai.com/docs/guides/structured-outputs)
 
+### Web search
+
+Allow models to search the web for the latest information before generating a response.
+
+```rust
+let parameters = ChatCompletionParametersBuilder::default()
+    .model(ToolModel::Gpt4OMiniSearchPreview.to_string())
+    .messages(vec![ChatMessage::User {
+        content: ChatMessageContent::Text(
+            "What was a positive news story from today?!".to_string(),
+        ),
+        name: None,
+    }])
+    .web_search_options(WebSearchOptions {
+        search_context_size: Some(WebSearchContextSize::Low),
+        user_location: Some(ApproximateUserLocation {
+            r#type: UserLocationType::Approximate,
+            approximate: WebSearchUserLocation {
+                city: Some("Amsterdam".to_string()),
+                country: Some("NL".to_string()),
+                region: None,
+                timezone: None,
+            },
+        }),
+    })
+    .response_format(ChatCompletionResponseFormat::Text)
+    .build()?;
+
+let result = client.chat().create(parameters).await?;
+```
+
+More information: [Web search](https://platform.openai.com/docs/guides/web-search)
+
+## Responses
+
+OpenAI's most advanced interface for generating model responses. Supports text and image inputs, and text outputs. Create stateful interactions with the model, using the output of previous responses as input. Extend the model's capabilities with built-in tools for file search, web search, computer use, and more. Allow the model access to external systems and data using function calling.
+
+For more information see the examples in the [examples/responses](https://github.com/tjardoo/openai-client/tree/master/examples/responses) directory.
+
+- Text & image inputs
+- Text outputs
+- Stateful interactions
+- File search
+- Web search
+- Computer use
+- Function calling
+
 ## Images
 
 Given a prompt and/or an input image, the model will generate a new image.
 
-### Create image
+- Create image
+- Create image edit
+- Create image variation
 
-Creates an image given a prompt.
+For more information see the examples in the [examples/images](https://github.com/tjardoo/openai-client/tree/master/examples/images) directory.
 
-```rust
-let parameters = CreateImageParametersBuilder::default()
-    .prompt("A cute dog in the park")
-    .model(DallEEngine::DallE3.to_string())
-    .n(1u32)
-    .quality(ImageQuality::Standard)
-    .response_format(ResponseFormat::Url)
-    .size(ImageSize::Size1024X1024)
-    .style(ImageStyle::Natural)
-    .build()?;
-
-let result = client
-    .images()
-    .create(parameters)
-    .await?;
-
-let paths = result
-    .save("./images")
-    .await?;
-```
-
-More information: [Create image](https://platform.openai.com/docs/api-reference/images/create)
-
-### Create image edit
-
-Creates an edited or extended image given an original image and a prompt.
-
-```rust
-let parameters = EditImageParametersBuilder::default()
-    .image(FileUpload::File(
-        "./images/image_edit_original.png".to_string(),
-    ))
-    .prompt("A cute baby sea otter")
-    .mask(FileUpload::File("./images/image_edit_mask.png".to_string()))
-    .n(1u32)
-    .size(ImageSize::Size512X512)
-    .build()?;
-
-let result = client
-    .images()
-    .edit(parameters)
-    .await?;
-```
-
-More information: [Create image edit](https://platform.openai.com/docs/api-reference/images/createEdit)
-
-### Create image variation
-
-Creates a variation of a given image.
-
-```rust
-let parameters = CreateImageVariationParametersBuilder::default()
-    .image(FileUpload::File(
-        "./images/image_edit_original.png".to_string(),
-    ))
-    .n(1u32)
-    .size(ImageSize::Size256X256)
-    .build()?;
-
-let result = client
-    .images()
-    .variation(parameters)
-    .await?;
-```
-
-More information: [Create image variation](https://platform.openai.com/docs/api-reference/images/createVariation)
+More information [Images](https://platform.openai.com/docs/api-reference/images)
 
 ## Audio
 
 Learn how to turn audio into text or text into audio.
 
-### Create speech
+- Create speech
+- Create transcription
+- Create translation
 
-Generates audio from the input text.
+For more information see the examples in the [examples/audio](https://github.com/tjardoo/openai-client/tree/master/examples/audio) directory.
 
-```rust
-let parameters = AudioSpeechParametersBuilder::default()
-    .model(TTSEngine::Tts1.to_string())
-    .input("Hallo, this is a test from OpenAI Dive.")
-    .voice(AudioVoice::Alloy)
-    .response_format(AudioSpeechResponseFormat::Mp3)
-    .build()?;
-
-let response = client
-    .audio()
-    .create_speech(parameters)
-    .await?;
-
-response
-    .save("files/example.mp3")
-    .await?;
-```
-
-More information: [Create speech](https://platform.openai.com/docs/api-reference/audio/createSpeech)
-
-### Create transcription
-
-Transcribes audio into the input language.
-
-```rust
-let parameters = AudioTranscriptionParametersBuilder::default()
-    .file(FileUpload::File("./audio/micro-machines.mp3".to_string()))
-    .model(WhisperEngine::Whisper1.to_string())
-    .response_format(AudioOutputFormat::VerboseJson)
-    .build()?;
-
-let result = client
-    .audio()
-    .create_transcription(parameters)
-    .await?;
-```
-
-More information: [Create transcription](https://platform.openai.com/docs/api-reference/audio/createTranscription)
-
-### Create translation
-
-Translates audio into English.
-
-```rust
-let parameters = AudioTranslationParametersBuilder::default()
-    .file(FileUpload::File("./audio/multilingual.mp3".to_string()))
-    .model(WhisperEngine::Whisper1.to_string())
-    .response_format(AudioOutputFormat::Srt)
-    .build()?;
-
-let result = client
-    .audio()
-    .create_translation(parameters)
-    .await?;
-```
-
-More information: [Create translation](https://platform.openai.com/docs/api-reference/audio/createTranslation)
+More information [Audio](https://platform.openai.com/docs/api-reference/audio)
 
 ## Models
 
@@ -659,32 +585,51 @@ let client = Client {
 
 You can use these predefined constants to set the model in the parameters or use any string representation (ie. for your custom models).
 
-- O1Engine
-  - O1 `o1` (alias)
-  - O1Mini `o1-mini` (alias)
-- Gpt4Engine
-  - Gpt4 `gpt-4` (alias)
-  - Gpt4Turbo `gpt-4-turbo` (alias)
-  - Gpt4O `gpt-4o` (alias)
-  - Gpt4OMini `gpt-4o-mini` (alias)
-  - Gpt4ORealtimePreview `gpt-4o-realtime-preview` (alias)
-  - Gpt4OMiniRealtimePreview `gpt-4o-mini-realtime-preview` (alias)
-  - Gpt4OAudioPreview `gpt-4o-audio-preview` (alias)
-- DallEEngine
-  - DallE3 `dall-e-2`
-  - DallE2 `dall-e-3`
-- TTSEngine
-  - Tts1 `tts-1`
-  - Tts1HD `tts-1-hd`
-- WhisperEngine
-  - Whisper1 `whisper-1`
-- EmbeddingsEngine
-  - TextEmbedding3Small `text-embedding-3-small`
-  - TextEmbedding3Large `text-embedding-3-large`
-  - TextEmbeddingAda002 `text-embedding-ada-002`
-- ModerationsEngine
-  - OmniModerationLatest `omni-moderation-latest` (alias)
-  - TextModerationLatest `text-moderation-latest` (alias)
-  - TextModerationStable `text-moderation-stable` (alias)
+#### Flagship Models
+
+- Gpt45Preview (`gpt-4.5-preview`)
+- Gpt4O (`gpt-4o`)
+- Gpt4OAudioPreview (`gpt-4o-audio-preview`)
+
+#### Cost-Optimized Models
+
+- Gpt4OMini (`gpt-4o-mini`)
+- Gpt4OMiniAudioPreview (`gpt-4o-mini-audio-preview`)
+
+#### Reasoning Models
+
+- O3Mini (`o3-mini`)
+- O1 (`o1`)
+- O1Mini (`o1-mini`)
+
+#### Tool Models
+
+- Gpt4OSearchPreview (`gpt-4o-search-preview`)
+- Gpt4OMiniSearchPreview (`gpt-4o-mini-search-preview`)
+- ComputerUsePreview (`computer-use-preview`)
+
+#### Moderation Models
+
+- OmniModerationLatest (`omni-moderation-latest`)
+- TextModerationLatest (`text-moderation-latest`)
+
+#### Embedding Models
+
+- TextEmbedding3Small (`text-embedding-3-small`)
+- TextEmbedding3Large (`text-embedding-3-large`)
+
+#### Whisper Models
+
+- Whisper1 (`whisper-1`)
+
+#### TTS Models
+
+- Tts1 (`tts-1`)
+- Tts1HD (`tts-1-hd`)
+
+#### DALL·E Models
+
+- DallE3 (`dall-e-3`)
+- DallE2 (`dall-e-2`)
 
 More information: [Models](https://platform.openai.com/docs/models)

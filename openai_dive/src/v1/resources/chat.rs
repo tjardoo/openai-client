@@ -6,6 +6,8 @@ use serde::{Deserialize, Serialize, Serializer};
 use std::collections::HashMap;
 use std::fmt::Display;
 
+use super::shared::{ReasoningEffort, WebSearchContextSize};
+
 #[derive(Serialize, Deserialize, Debug, Clone, PartialEq)]
 pub struct ChatCompletionResponse {
     /// A unique identifier for the chat completion.
@@ -153,6 +155,9 @@ pub struct ChatCompletionParameters {
     /// A unique identifier representing your end-user, which can help OpenAI to monitor and detect abuse.
     #[serde(skip_serializing_if = "Option::is_none")]
     pub user: Option<String>,
+    /// This tool searches the web for relevant results to use in a response.
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub web_search_options: Option<WebSearchOptions>,
 }
 
 #[derive(Serialize, Deserialize, Debug, Clone, PartialEq)]
@@ -504,14 +509,6 @@ pub enum PredictedOutputContent {
 }
 
 #[derive(Serialize, Deserialize, Debug, Clone, PartialEq)]
-#[serde(rename_all = "lowercase")]
-pub enum ReasoningEffort {
-    Low,
-    Medium,
-    High,
-}
-
-#[derive(Serialize, Deserialize, Debug, Clone, PartialEq)]
 pub struct PredictedOutputArrayPart {
     /// The type of the content part.
     pub r#type: String,
@@ -596,6 +593,23 @@ pub struct InputAudioData {
     pub format: String,
 }
 
+#[derive(Serialize, Deserialize, Debug, Clone, PartialEq)]
+pub struct WebSearchOptions {
+    /// High level guidance for the amount of context window space to use for the search.
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub search_context_size: Option<WebSearchContextSize>,
+    /// Approximate location parameters for the search.
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub user_location: Option<ApproximateUserLocation>,
+}
+
+#[derive(Serialize, Deserialize, Debug, Clone, PartialEq)]
+pub struct ApproximateUserLocation {
+    pub r#type: UserLocationType,
+    /// Approximate location parameters for the search.
+    pub approximate: WebSearchUserLocation,
+}
+
 impl Display for ChatMessageContent {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
         match self {
@@ -625,6 +639,20 @@ pub enum ChatCompletionToolChoice {
     Auto,
     Required,
     ChatCompletionToolChoiceFunction(ChatCompletionToolChoiceFunction),
+}
+
+#[derive(Serialize, Deserialize, Debug, Clone, PartialEq)]
+pub struct WebSearchUserLocation {
+    pub city: Option<String>,
+    pub country: Option<String>,
+    pub region: Option<String>,
+    pub timezone: Option<String>,
+}
+
+#[derive(Serialize, Deserialize, Debug, Clone, PartialEq)]
+#[serde(rename_all = "lowercase")]
+pub enum UserLocationType {
+    Approximate,
 }
 
 #[derive(Serialize, Deserialize, Debug, Clone, PartialEq)]

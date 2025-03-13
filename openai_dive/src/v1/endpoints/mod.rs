@@ -10,6 +10,7 @@ pub mod models;
 pub mod moderations;
 #[cfg(feature = "realtime")]
 pub mod realtime;
+pub mod responses;
 pub mod uploads;
 pub mod usage;
 pub mod vector_store_files;

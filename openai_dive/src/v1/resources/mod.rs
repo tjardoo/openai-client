@@ -10,6 +10,7 @@ pub mod model;
 pub mod moderation;
 #[cfg(feature = "realtime")]
 pub mod realtime;
+pub mod response;
 pub mod shared;
 pub mod upload;
 pub mod usage;
