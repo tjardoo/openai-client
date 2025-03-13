@@ -402,7 +402,7 @@
 //!
 //! Given some input text, outputs if the model classifies it as potentially harmful across several categories.
 //!
-//! For more information see the examples in the [examples/moderation](https://github.com/tjardoo/openai-client/tree/master/examples/moderation) directory.
+//! For more information see the examples in the [examples/moderations](https://github.com/tjardoo/openai-client/tree/master/examples/moderations) directory.
 //!
 //! - Create moderation
 //!
