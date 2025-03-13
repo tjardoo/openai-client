@@ -36,9 +36,9 @@ let result = client
 ## Endpoints
 
 - [Chat](#chat)
-  - [Create chat completion](#create-chat-completion)
-  - [Chat vision](#chat-vision)
-  - [Chat audio](#chat-audio)
+  - [Completion](#completion)
+  - [Vision](#vision)
+  - [Voice](#voice)
   - [Function calling](#function-calling)
   - [Structured outputs](#structured-outputs)
   - [Web search](#web-search)
@@ -60,7 +60,7 @@ let result = client
 
 Given a list of messages comprising a conversation, the model will return a response.
 
-### Create chat completion
+### Completion
 
 Creates a model response for the given chat conversation.
 
@@ -88,7 +88,7 @@ let result = client
 
 More information: [Create chat completion](https://platform.openai.com/docs/api-reference/chat/create)
 
-### Chat vision
+### Vision
 
 Learn how to use vision capabilities to understand images.
 
@@ -125,7 +125,7 @@ let result = client
 
 More information: [Vision](https://platform.openai.com/docs/guides/vision)
 
-### Chat audio
+### Voice
 
 Learn how to use audio capabilities to understand audio files.
 
