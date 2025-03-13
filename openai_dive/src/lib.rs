@@ -468,7 +468,7 @@
 //!
 //! More information [Administration](https://platform.openai.com/docs/api-reference/administration)
 //!
-//! ### Usage
+//! ## Usage
 //!
 //! The Usage API provides detailed insights into your activity across the OpenAI API.
 //!
