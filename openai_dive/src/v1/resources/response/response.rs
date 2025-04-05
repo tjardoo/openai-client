@@ -80,7 +80,7 @@ pub enum ResponseOutput {
     FileSearchToolCall(FileSearchToolCall),
     #[serde(rename = "web_search_call")]
     WebSearchToolCall(WebSearchToolCall),
-    #[serde(rename = "computer_call")]
+    // #[serde(rename = "computer_call")]
     // ComputerToolCall(ComputerToolCall),
     Reasoning(Reasoning),
 }
