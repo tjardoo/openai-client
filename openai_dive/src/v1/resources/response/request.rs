@@ -85,6 +85,7 @@ pub enum ContentInput {
 }
 
 #[derive(Serialize, Deserialize, Debug, Clone, PartialEq)]
+#[serde(tag = "type")]
 pub enum ContentItem {
     #[serde(rename = "input_text")]
     Text { text: String },
