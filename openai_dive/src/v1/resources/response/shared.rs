@@ -39,7 +39,7 @@ pub enum ResponseTool {
     ComputerUse {
         display_height: Option<u64>,
         display_width: Option<u64>,
-        environment: Option<CompuserUseEnvironment>,
+        environment: Option<ComputerUseEnvironment>,
     },
 }
 
