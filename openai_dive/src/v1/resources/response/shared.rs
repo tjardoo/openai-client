@@ -39,7 +39,7 @@ pub enum ResponseTool {
     ComputerUse {
         display_height: Option<u64>,
         display_width: Option<u64>,
-        environment: Option<CompuserUseEnvironment>,
+        environment: Option<ComputerUseEnvironment>,
     },
 }
 
@@ -86,7 +86,7 @@ pub enum TruncationStrategy {
 
 #[derive(Serialize, Deserialize, Debug, Clone, PartialEq)]
 #[serde(rename_all = "lowercase")]
-pub enum CompuserUseEnvironment {
+pub enum ComputerUseEnvironment {
     Browser,
     Mac,
     Ubuntu,
