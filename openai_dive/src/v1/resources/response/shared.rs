@@ -86,7 +86,7 @@ pub enum TruncationStrategy {
 
 #[derive(Serialize, Deserialize, Debug, Clone, PartialEq)]
 #[serde(rename_all = "lowercase")]
-pub enum CompuserUseEnvironment {
+pub enum ComputerUseEnvironment {
     Browser,
     Mac,
     Ubuntu,
