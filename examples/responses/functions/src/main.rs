@@ -2,7 +2,9 @@ use ftail::Ftail;
 use openai_dive::v1::api::Client;
 use openai_dive::v1::models::CostOptimizedModel;
 use openai_dive::v1::resources::response::items::{FunctionToolCallOutput, InputItemStatus};
-use openai_dive::v1::resources::response::request::{InputItem, ResponseInput, ResponseInputItem, ResponseParametersBuilder};
+use openai_dive::v1::resources::response::request::{
+    InputItem, ResponseInput, ResponseInputItem, ResponseParametersBuilder,
+};
 use openai_dive::v1::resources::response::response::ResponseOutput;
 use openai_dive::v1::resources::response::shared::{ResponseTool, ResponseToolChoice};
 
@@ -53,12 +55,14 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
 
     let parameters = ResponseParametersBuilder::default()
         .model(CostOptimizedModel::Gpt4OMini.to_string())
-        .input(ResponseInput::List(vec![ResponseInputItem::Item(InputItem::FunctionToolCallOutput(FunctionToolCallOutput {
-            id: None,
-            call_id: call.call_id.clone(),
-            output: "{\"temperature_2m\":30,\"wind_speed_10m\":5}".to_string(),
-            status: InputItemStatus::Completed,
-        }))]))
+        .input(ResponseInput::List(vec![ResponseInputItem::Item(
+            InputItem::FunctionToolCallOutput(FunctionToolCallOutput {
+                id: None,
+                call_id: call.call_id.clone(),
+                output: "{\"temperature_2m\":30,\"wind_speed_10m\":5}".to_string(),
+                status: InputItemStatus::Completed,
+            }),
+        )]))
         .previous_response_id(result.id)
         .build()?;
 
