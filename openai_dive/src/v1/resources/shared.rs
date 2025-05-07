@@ -321,10 +321,9 @@ impl FileUpload {
                 let stream = FramedRead::new(file, BytesCodec::new());
                 let file_body = reqwest::Body::wrap_stream(stream);
 
-                let file_part = reqwest::multipart::Part::stream(file_body)
-                    .file_name(path)
-                    .mime_str("application/octet-stream")
-                    .unwrap();
+                let file_part = reqwest::multipart::Part::stream(file_body).file_name(path);
+                // .mime_str("application/octet-stream")
+                // .unwrap();
 
                 Ok(file_part)
             }
