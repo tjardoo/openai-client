@@ -295,14 +295,20 @@ impl FileUploadBytes {
 #[derive(Serialize, Deserialize, Clone, Debug, PartialEq)]
 pub enum FileUpload {
     Bytes(FileUploadBytes),
+    BytesArray(Vec<FileUploadBytes>),
     #[cfg(all(feature = "tokio", feature = "tokio-util"))]
     File(String),
+    #[cfg(all(feature = "tokio", feature = "tokio-util"))]
+    FileArray(Vec<String>),
 }
 impl FileUpload {
     #[cfg(feature = "reqwest")]
     pub(crate) async fn into_part(self) -> Result<Part, APIError> {
         match self {
             FileUpload::Bytes(bytes) => bytes.into_part(),
+            FileUpload::BytesArray(_) => {
+                unimplemented!("BytesArray is not supported for this route")
+            }
             #[cfg(all(feature = "tokio", feature = "tokio-util"))]
             FileUpload::File(path) => {
                 use tokio::fs::File;
@@ -321,6 +327,64 @@ impl FileUpload {
                     .unwrap();
 
                 Ok(file_part)
+            }
+            #[cfg(all(feature = "tokio", feature = "tokio-util"))]
+            FileUpload::FileArray(_) => {
+                unimplemented!("FileArray is not supported for this route")
+            }
+        }
+    }
+
+    #[cfg(feature = "reqwest")]
+    pub(crate) async fn into_parts(self) -> Result<Vec<Part>, APIError> {
+        match self {
+            FileUpload::Bytes(bytes) => bytes.into_part().map(|part| vec![part]),
+            FileUpload::BytesArray(bytes) => bytes
+                .into_iter()
+                .map(|bytes| bytes.into_part())
+                .collect::<Result<Vec<Part>, APIError>>(),
+            #[cfg(all(feature = "tokio", feature = "tokio-util"))]
+            FileUpload::File(path) => {
+                use tokio::fs::File;
+                use tokio_util::codec::{BytesCodec, FramedRead};
+
+                let file = File::open(&path)
+                    .await
+                    .map_err(|error| APIError::FileError(error.to_string()))?;
+
+                let stream = FramedRead::new(file, BytesCodec::new());
+                let file_body = reqwest::Body::wrap_stream(stream);
+
+                let file_part = reqwest::multipart::Part::stream(file_body)
+                    .file_name(path)
+                    .mime_str("application/octet-stream")
+                    .unwrap();
+
+                Ok(vec![file_part])
+            }
+            #[cfg(all(feature = "tokio", feature = "tokio-util"))]
+            FileUpload::FileArray(paths) => {
+                use tokio::fs::File;
+                use tokio_util::codec::{BytesCodec, FramedRead};
+
+                let mut file_parts = vec![];
+                for path in paths {
+                    let file = File::open(&path)
+                        .await
+                        .map_err(|error| APIError::FileError(error.to_string()))?;
+
+                    let stream = FramedRead::new(file, BytesCodec::new());
+                    let file_body = reqwest::Body::wrap_stream(stream);
+
+                    let file_part = reqwest::multipart::Part::stream(file_body)
+                        .file_name(path)
+                        .mime_str("application/octet-stream")
+                        .unwrap();
+
+                    file_parts.push(file_part);
+                }
+
+                Ok(file_parts)
             }
         }
     }

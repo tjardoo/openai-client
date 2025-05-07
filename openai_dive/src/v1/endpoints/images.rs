@@ -4,6 +4,7 @@ use crate::v1::helpers::format_response;
 use crate::v1::resources::image::{
     CreateImageParameters, CreateImageVariationParameters, EditImageParameters, ImageResponse,
 };
+use crate::v1::resources::shared::FileUpload;
 
 pub struct Images<'a> {
     pub client: &'a Client,
@@ -33,10 +34,60 @@ impl Images<'_> {
     pub async fn edit(&self, parameters: EditImageParameters) -> Result<ImageResponse, APIError> {
         let mut form = reqwest::multipart::Form::new();
 
-        let image = parameters.image.into_part().await?;
-        form = form.part("image", image);
+        let mime_type = parameters.mime_type;
+
+        match parameters.image {
+            #[cfg(all(feature = "tokio", feature = "tokio-util"))]
+            FileUpload::File(_) => {
+                let mut image = parameters.image.into_part().await?;
+
+                if let Some(ref mime_type) = mime_type {
+                    image = image
+                        .mime_str(mime_type.as_str())
+                        .map_err(|error| APIError::FileError(error.to_string()))?;
+                }
+                form = form.part("image", image);
+            }
+            #[cfg(all(feature = "tokio", feature = "tokio-util"))]
+            FileUpload::FileArray(_) => {
+                let images = parameters.image.into_parts().await?;
+                for mut image in images {
+                    if let Some(ref mime_type) = mime_type {
+                        image = image
+                            .mime_str(mime_type.as_str())
+                            .map_err(|error| APIError::FileError(error.to_string()))?;
+                    }
+                    form = form.part("image[]", image);
+                }
+            }
+            FileUpload::Bytes(_) => {
+                let mut image = parameters.image.into_part().await?;
+
+                if let Some(ref mime_type) = mime_type {
+                    image = image
+                        .mime_str(mime_type.as_str())
+                        .map_err(|error| APIError::FileError(error.to_string()))?;
+                }
+                form = form.part("image", image);
+            }
+            FileUpload::BytesArray(_) => {
+                let images = parameters.image.into_parts().await?;
+                for mut image in images {
+                    if let Some(ref mime_type) = mime_type {
+                        image = image
+                            .mime_str(mime_type.as_str())
+                            .map_err(|error| APIError::FileError(error.to_string()))?;
+                    }
+                    form = form.part("image[]", image);
+                }
+            }
+        }
 
         form = form.text("prompt", parameters.prompt);
+
+        if let Some(quality) = parameters.quality {
+            form = form.text("quality", quality.to_string());
+        }
 
         if let Some(mask) = parameters.mask {
             let image = mask.into_part().await?;
