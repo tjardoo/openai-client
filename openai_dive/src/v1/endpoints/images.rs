@@ -43,7 +43,7 @@ impl Images<'_> {
 
                 if let Some(ref mime_type) = mime_type {
                     image = image
-                        .mime_str(mime_type.as_str())
+                        .mime_str(&mime_type.to_string())
                         .map_err(|error| APIError::FileError(error.to_string()))?;
                 }
                 form = form.part("image", image);
@@ -54,7 +54,7 @@ impl Images<'_> {
                 for mut image in images {
                     if let Some(ref mime_type) = mime_type {
                         image = image
-                            .mime_str(mime_type.as_str())
+                            .mime_str(&mime_type.to_string())
                             .map_err(|error| APIError::FileError(error.to_string()))?;
                     }
                     form = form.part("image[]", image);
@@ -65,7 +65,7 @@ impl Images<'_> {
 
                 if let Some(ref mime_type) = mime_type {
                     image = image
-                        .mime_str(mime_type.as_str())
+                        .mime_str(&mime_type.to_string())
                         .map_err(|error| APIError::FileError(error.to_string()))?;
                 }
                 form = form.part("image", image);
@@ -75,7 +75,7 @@ impl Images<'_> {
                 for mut image in images {
                     if let Some(ref mime_type) = mime_type {
                         image = image
-                            .mime_str(mime_type.as_str())
+                            .mime_str(&mime_type.to_string())
                             .map_err(|error| APIError::FileError(error.to_string()))?;
                     }
                     form = form.part("image[]", image);
@@ -84,6 +84,10 @@ impl Images<'_> {
         }
 
         form = form.text("prompt", parameters.prompt);
+
+        if let Some(background) = parameters.background {
+            form = form.text("background", background.to_string());
+        }
 
         if let Some(quality) = parameters.quality {
             form = form.text("quality", quality.to_string());
