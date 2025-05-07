@@ -1,5 +1,5 @@
 use openai_dive::v1::api::Client;
-use openai_dive::v1::models::DallEModel;
+use openai_dive::v1::models::ImageModel;
 use openai_dive::v1::resources::image::{
     CreateImageParametersBuilder, ImageQuality, ImageSize, ImageStyle, ResponseFormat,
 };
@@ -10,7 +10,7 @@ async fn main() {
 
     let parameters = CreateImageParametersBuilder::default()
         .prompt("A cute dog in the park")
-        .model(DallEModel::DallE3.to_string())
+        .model(ImageModel::DallE3.to_string())
         .n(1u32)
         .quality(ImageQuality::Standard)
         .response_format(ResponseFormat::Url)

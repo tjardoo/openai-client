@@ -1,4 +1,5 @@
 use openai_dive::v1::api::Client;
+use openai_dive::v1::models::ImageModel;
 use openai_dive::v1::resources::image::{
     EditImageParametersBuilder, ImageQuality, ImageSize, MimeType,
 };
@@ -11,7 +12,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
     let parameters = EditImageParametersBuilder::default()
         .prompt("Make this person smile with full teeth")
         .image(FileUpload::File("./images/person.png".to_string()))
-        .model("gpt-image-1")
+        .model(ImageModel::GptImage1.to_string())
         .quality(ImageQuality::Low)
         .mime_type(MimeType::Png)
         .n(1u32)

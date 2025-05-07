@@ -2,8 +2,8 @@ use serde::{Deserialize, Serialize};
 
 #[derive(Serialize, Deserialize, Debug, Clone, PartialEq)]
 pub enum FlagshipModel {
-    #[serde(rename = "gpt-4.5-preview")]
-    Gpt45Preview,
+    #[serde(rename = "gpt-4.1")]
+    Gpt41,
     #[serde(rename = "gpt-4o")]
     Gpt4O,
     #[serde(rename = "gpt-4o-audio-preview")]
@@ -12,20 +12,20 @@ pub enum FlagshipModel {
 
 #[derive(Serialize, Deserialize, Debug, Clone, PartialEq)]
 pub enum CostOptimizedModel {
+    #[serde(rename = "o4-mini")]
+    O4Mini,
+    #[serde(rename = "gpt-4.1-nano")]
+    Gpt41Nano,
     #[serde(rename = "gpt-4o-mini")]
     Gpt4OMini,
-    #[serde(rename = "gpt-4o-mini-audio-preview")]
-    Gpt4OMiniAudioPreview,
 }
 
 #[derive(Serialize, Deserialize, Debug, Clone, PartialEq)]
 pub enum ReasoningModel {
+    #[serde(rename = "o4-mini")]
+    O4Mini,
     #[serde(rename = "o3-mini")]
     O3Mini,
-    #[serde(rename = "o1")]
-    O1,
-    #[serde(rename = "o1-mini")]
-    O1Mini,
 }
 
 #[derive(Serialize, Deserialize, Debug, Clone, PartialEq)]
@@ -42,8 +42,6 @@ pub enum ToolModel {
 pub enum ModerationModel {
     #[serde(rename = "omni-moderation-latest")]
     OmniModerationLatest,
-    #[serde(rename = "text-moderation-latest")]
-    TextModerationLatest,
 }
 
 #[derive(Serialize, Deserialize, Debug, Clone, PartialEq)]
@@ -55,13 +53,17 @@ pub enum EmbeddingModel {
 }
 
 #[derive(Serialize, Deserialize, Debug, Clone, PartialEq)]
-pub enum WhisperModel {
+pub enum TranscriptionModel {
+    #[serde(rename = "gpt-4o-transcribe")]
+    Gpt4OTranscribe,
     #[serde(rename = "whisper-1")]
     Whisper1,
 }
 
 #[derive(Serialize, Deserialize, Debug, Clone, PartialEq)]
 pub enum TTSModel {
+    #[serde(rename = "gpt-4o-mini-tts")]
+    Gpt4OMiniTts,
     #[serde(rename = "tts-1")]
     Tts1,
     #[serde(rename = "tts-1-hd")]
@@ -69,7 +71,9 @@ pub enum TTSModel {
 }
 
 #[derive(Serialize, Deserialize, Debug, Clone, PartialEq)]
-pub enum DallEModel {
+pub enum ImageModel {
+    #[serde(rename = "gpt-image-1")]
+    GptImage1,
     #[serde(rename = "dall-e-3")]
     DallE3,
     #[serde(rename = "dall-e-2")]
@@ -94,6 +98,6 @@ impl_display!(ReasoningModel);
 impl_display!(ToolModel);
 impl_display!(ModerationModel);
 impl_display!(EmbeddingModel);
-impl_display!(WhisperModel);
+impl_display!(TranscriptionModel);
 impl_display!(TTSModel);
-impl_display!(DallEModel);
+impl_display!(ImageModel);

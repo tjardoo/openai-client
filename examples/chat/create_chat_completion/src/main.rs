@@ -14,7 +14,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
     let client = Client::new_from_env();
 
     let parameters = ChatCompletionParametersBuilder::default()
-        .model(ReasoningModel::O1Mini.to_string())
+        .model(ReasoningModel::O3Mini.to_string())
         .messages(vec![
             ChatMessage::User {
                 content: ChatMessageContent::Text("Hello!".to_string()),
