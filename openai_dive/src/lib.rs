@@ -582,20 +582,20 @@
 //!
 //! #### Flagship Models
 //!
-//! - Gpt45Preview (`gpt-4.5-preview`)
+//! - Gpt41 (`gpt-4.1`)
 //! - Gpt4O (`gpt-4o`)
 //! - Gpt4OAudioPreview (`gpt-4o-audio-preview`)
 //!
 //! #### Cost-Optimized Models
 //!
+//! - O4Mini (`o4-mini`)
+//! - Gpt41Nano (`gpt-4.1-nano`)
 //! - Gpt4OMini (`gpt-4o-mini`)
-//! - Gpt4OMiniAudioPreview (`gpt-4o-mini-audio-preview`)
 //!
 //! #### Reasoning Models
 //!
+//! - O4Mini (`o4-mini`)
 //! - O3Mini (`o3-mini`)
-//! - O1 (`o1`)
-//! - O1Mini (`o1-mini`)
 //!
 //! #### Tool Models
 //!
@@ -606,24 +606,26 @@
 //! #### Moderation Models
 //!
 //! - OmniModerationLatest (`omni-moderation-latest`)
-//! - TextModerationLatest (`text-moderation-latest`)
 //!
 //! #### Embedding Models
 //!
 //! - TextEmbedding3Small (`text-embedding-3-small`)
 //! - TextEmbedding3Large (`text-embedding-3-large`)
 //!
-//! #### Whisper Models
+//! #### Transcription Models
 //!
+//! - Gpt4OTranscribe (`gpt-4o-transcribe`)
 //! - Whisper1 (`whisper-1`)
 //!
 //! #### TTS Models
 //!
+//! - Gpt4OMiniTts (`gpt-4o-mini-tts`)
 //! - Tts1 (`tts-1`)
 //! - Tts1HD (`tts-1-hd`)
 //!
-//! #### DALL·E Models
+//! #### Image Models
 //!
+//! - GptImage1 (`gpt-image-1`)
 //! - DallE3 (`dall-e-3`)
 //! - DallE2 (`dall-e-2`)
 //!
