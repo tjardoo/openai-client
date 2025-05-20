@@ -1,9 +1,9 @@
 use crate::v1::resources::shared::StopToken;
 use crate::v1::resources::shared::{FinishReason, Usage};
 use derive_builder::Builder;
+use serde::de::{self, MapAccess, Visitor};
 use serde::ser::SerializeStruct;
-use serde::{Deserialize, Serialize, Serializer, Deserializer};
-use serde::de::{self, Visitor, MapAccess};
+use serde::{Deserialize, Deserializer, Serialize, Serializer};
 use std::collections::HashMap;
 use std::fmt::Display;
 
@@ -272,16 +272,25 @@ impl<'de> Deserialize<'de> for ChatCompletionResponseFormat {
                     "text" => Ok(ChatCompletionResponseFormat::Text),
                     "json_object" => Ok(ChatCompletionResponseFormat::JsonObject),
                     "json_schema" => {
-                        let json_schema = json_schema_field.ok_or_else(|| de::Error::missing_field("json_schema"))?;
+                        let json_schema = json_schema_field
+                            .ok_or_else(|| de::Error::missing_field("json_schema"))?;
                         Ok(ChatCompletionResponseFormat::JsonSchema(json_schema))
                     }
-                    _ => Err(de::Error::unknown_variant(&type_field, &["text", "json_object", "json_schema"])),
+                    _ => Err(de::Error::unknown_variant(
+                        type_field,
+                        &["text", "json_object", "json_schema"],
+                    )),
                 }
             }
         }
 
-        const FIELDS: &'static [&'static str] = &["type", "json_schema"];
-        deserializer.deserialize_struct("ChatCompletionResponseFormat", FIELDS, ChatCompletionResponseFormatVisitor)
+        const FIELDS: &[&str] = &["type", "json_schema"];
+
+        deserializer.deserialize_struct(
+            "ChatCompletionResponseFormat",
+            FIELDS,
+            ChatCompletionResponseFormatVisitor,
+        )
     }
 }
 
@@ -788,11 +797,17 @@ mod tests {
         let deserialized: ChatCompletionResponseFormat = serde_json::from_str(&serialized).unwrap();
         match deserialized {
             ChatCompletionResponseFormat::JsonSchema(json_schema) => {
-                assert_eq!(json_schema.description, Some("This is a test schema".to_string()));
+                assert_eq!(
+                    json_schema.description,
+                    Some("This is a test schema".to_string())
+                );
                 assert_eq!(json_schema.name, "test_schema".to_string());
-                assert_eq!(json_schema.schema, Some(serde_json::json!({"type": "object"})));
+                assert_eq!(
+                    json_schema.schema,
+                    Some(serde_json::json!({"type": "object"}))
+                );
                 assert_eq!(json_schema.strict, Some(true));
-            },
+            }
             _ => panic!("Deserialized format should be JsonSchema"),
         }
     }
