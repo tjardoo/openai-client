@@ -679,7 +679,7 @@ impl DeltaFunction {
 
 #[cfg(test)]
 mod tests {
-    use crate::v1::resources::chat::{ChatCompletionResponseFormat, JsonSchema, JsonSchemaBuilder};
+    use crate::v1::resources::chat::{ChatCompletionResponseFormat, JsonSchemaBuilder};
     use serde_json;
 
     #[test]
