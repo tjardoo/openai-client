@@ -2,7 +2,8 @@ use crate::v1::resources::shared::StopToken;
 use crate::v1::resources::shared::{FinishReason, Usage};
 use derive_builder::Builder;
 use serde::ser::SerializeStruct;
-use serde::{Deserialize, Serialize, Serializer};
+use serde::{Deserialize, Serialize, Serializer, Deserializer};
+use serde::de::{self, Visitor, MapAccess};
 use std::collections::HashMap;
 use std::fmt::Display;
 
@@ -192,8 +193,7 @@ pub struct ChatCompletionFunction {
     pub parameters: serde_json::Value,
 }
 
-#[derive(Deserialize, Debug, Clone, PartialEq)]
-#[serde(rename_all = "snake_case")]
+#[derive(Debug, Clone, PartialEq)]
 pub enum ChatCompletionResponseFormat {
     Text,
     JsonObject,
@@ -223,6 +223,65 @@ impl Serialize for ChatCompletionResponseFormat {
                 state.end()
             }
         }
+    }
+}
+
+impl<'de> Deserialize<'de> for ChatCompletionResponseFormat {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: Deserializer<'de>,
+    {
+        struct ChatCompletionResponseFormatVisitor;
+
+        impl<'de> Visitor<'de> for ChatCompletionResponseFormatVisitor {
+            type Value = ChatCompletionResponseFormat;
+
+            fn expecting(&self, formatter: &mut std::fmt::Formatter) -> std::fmt::Result {
+                formatter.write_str("a map containing a 'type' field")
+            }
+
+            fn visit_map<A>(self, mut map: A) -> Result<Self::Value, A::Error>
+            where
+                A: MapAccess<'de>,
+            {
+                let mut type_field = None;
+                let mut json_schema_field = None;
+
+                while let Some(key) = map.next_key()? {
+                    match key {
+                        "type" => {
+                            if type_field.is_some() {
+                                return Err(de::Error::duplicate_field("type"));
+                            }
+                            type_field = Some(map.next_value()?);
+                        }
+                        "json_schema" => {
+                            if json_schema_field.is_some() {
+                                return Err(de::Error::duplicate_field("json_schema"));
+                            }
+                            json_schema_field = Some(map.next_value()?);
+                        }
+                        _ => {
+                            return Err(de::Error::unknown_field(key, &["type", "json_schema"]));
+                        }
+                    }
+                }
+
+                let type_field = type_field.ok_or_else(|| de::Error::missing_field("type"))?;
+                match type_field {
+                    "text" => Ok(ChatCompletionResponseFormat::Text),
+                    "json_object" => Ok(ChatCompletionResponseFormat::JsonObject),
+                    "json_schema" => {
+                        let json_schema = json_schema_field.ok_or_else(|| de::Error::missing_field("json_schema"))?;
+                        Ok(ChatCompletionResponseFormat::JsonSchema(json_schema))
+                    }
+                    _ => Err(de::Error::unknown_variant(&type_field, &["text", "json_object", "json_schema"])),
+                }
+            }
+        }
+
+        const FIELDS: &'static [&'static str] = &["type", "json_schema"];
+        deserializer.deserialize_struct("ChatCompletionResponseFormat", FIELDS, ChatCompletionResponseFormatVisitor)
     }
 }
 
