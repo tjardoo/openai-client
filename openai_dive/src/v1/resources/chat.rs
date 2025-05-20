@@ -1,8 +1,7 @@
 use crate::v1::resources::shared::StopToken;
 use crate::v1::resources::shared::{FinishReason, Usage};
 use derive_builder::Builder;
-use serde::ser::SerializeStruct;
-use serde::{Deserialize, Serialize, Serializer};
+use serde::{Deserialize, Serialize};
 use std::collections::HashMap;
 use std::fmt::Display;
 
@@ -192,38 +191,14 @@ pub struct ChatCompletionFunction {
     pub parameters: serde_json::Value,
 }
 
-#[derive(Deserialize, Debug, Clone, PartialEq)]
-#[serde(rename_all = "snake_case")]
+#[derive(Serialize, Deserialize, Debug, Clone, PartialEq)]
+#[serde(tag = "type", rename_all = "snake_case")]
 pub enum ChatCompletionResponseFormat {
     Text,
     JsonObject,
-    JsonSchema(JsonSchema),
-}
-
-impl Serialize for ChatCompletionResponseFormat {
-    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-    where
-        S: Serializer,
-    {
-        match self {
-            ChatCompletionResponseFormat::Text => {
-                let mut state = serializer.serialize_struct("ChatCompletionResponseFormat", 1)?;
-                state.serialize_field("type", "text")?;
-                state.end()
-            }
-            ChatCompletionResponseFormat::JsonObject => {
-                let mut state = serializer.serialize_struct("ChatCompletionResponseFormat", 1)?;
-                state.serialize_field("type", "json_object")?;
-                state.end()
-            }
-            ChatCompletionResponseFormat::JsonSchema(json_schema) => {
-                let mut state = serializer.serialize_struct("ChatCompletionResponseFormat", 2)?;
-                state.serialize_field("type", "json_schema")?;
-                state.serialize_field("json_schema", json_schema)?;
-                state.end()
-            }
-        }
-    }
+    JsonSchema {
+        JsonSchema
+    },
 }
 
 #[derive(Serialize, Deserialize, Debug, Default, Builder, Clone, PartialEq)]
