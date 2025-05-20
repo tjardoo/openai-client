@@ -703,3 +703,38 @@ impl DeltaFunction {
         self.name.is_none() && self.arguments.is_none()
     }
 }
+
+#[cfg(test)]
+mod tests {
+    use crate::v1::resources::chat::{ChatCompletionResponseFormat, JsonSchemaBuilder};
+    use serde_json;
+
+    #[test]
+    fn test_chat_completion_response_format_serialization_deserialization() {
+        let json_schema = JsonSchemaBuilder::default()
+            .description("This is a test schema".to_string())
+            .name("test_schema".to_string())
+            .schema(Some(serde_json::json!({"type": "object"})))
+            .strict(true)
+            .build()
+            .unwrap();
+
+        let response_format = ChatCompletionResponseFormat::JsonSchema(json_schema);
+
+        // Serialize the response format to a JSON string
+        let serialized = serde_json::to_string(&response_format).unwrap();
+        assert_eq!(serialized, "{\"type\":\"json_schema\",\"json_schema\":{\"description\":\"This is a test schema\",\"name\":\"test_schema\",\"schema\":{\"type\":\"object\"},\"strict\":true}}");
+
+        // Deserialize the JSON string back to a ChatCompletionResponseFormat
+        let deserialized: ChatCompletionResponseFormat = serde_json::from_str(&serialized).unwrap();
+        match deserialized {
+            ChatCompletionResponseFormat::JsonSchema(json_schema) => {
+                assert_eq!(json_schema.description, Some("This is a test schema".to_string()));
+                assert_eq!(json_schema.name, "test_schema".to_string());
+                assert_eq!(json_schema.schema, Some(serde_json::json!({"type": "object"})));
+                assert_eq!(json_schema.strict, Some(true));
+            },
+            _ => panic!("Deserialized format should be JsonSchema"),
+        }
+    }
+}
