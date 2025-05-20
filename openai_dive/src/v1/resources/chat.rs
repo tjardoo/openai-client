@@ -196,9 +196,7 @@ pub struct ChatCompletionFunction {
 pub enum ChatCompletionResponseFormat {
     Text,
     JsonObject,
-    JsonSchema {
-        json_schema: JsonSchema
-    },
+    JsonSchema { json_schema: JsonSchema },
 }
 
 #[derive(Serialize, Deserialize, Debug, Default, Builder, Clone, PartialEq)]
@@ -694,9 +692,7 @@ mod tests {
             .build()
             .unwrap();
 
-        let response_format = ChatCompletionResponseFormat::JsonSchema {
-            json_schema,
-        };
+        let response_format = ChatCompletionResponseFormat::JsonSchema { json_schema };
 
         // Serialize the response format to a JSON string
         let serialized = serde_json::to_string(&response_format).unwrap();
@@ -706,11 +702,17 @@ mod tests {
         let deserialized: ChatCompletionResponseFormat = serde_json::from_str(&serialized).unwrap();
         match deserialized {
             ChatCompletionResponseFormat::JsonSchema { json_schema } => {
-                assert_eq!(json_schema.description, Some("This is a test schema".to_string()));
+                assert_eq!(
+                    json_schema.description,
+                    Some("This is a test schema".to_string())
+                );
                 assert_eq!(json_schema.name, "test_schema".to_string());
-                assert_eq!(json_schema.schema, Some(serde_json::json!({"type": "object"})));
+                assert_eq!(
+                    json_schema.schema,
+                    Some(serde_json::json!({"type": "object"}))
+                );
                 assert_eq!(json_schema.strict, Some(true));
-            },
+            }
             _ => panic!("Deserialized format should be JsonSchema"),
         }
     }

@@ -26,7 +26,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
                 name: None,
             },
         ])
-        .response_format(ChatCompletionResponseFormat::JsonSchema { 
+        .response_format(ChatCompletionResponseFormat::JsonSchema {
             json_schema: JsonSchemaBuilder::default()
                 .name("math_reasoning")
                 .schema(serde_json::json!({
