@@ -1,8 +1,9 @@
 use crate::v1::resources::shared::StopToken;
 use crate::v1::resources::shared::{FinishReason, Usage};
 use derive_builder::Builder;
+use serde::de::{self, MapAccess, Visitor};
 use serde::ser::SerializeStruct;
-use serde::{Deserialize, Serialize, Serializer};
+use serde::{Deserialize, Deserializer, Serialize, Serializer};
 use std::collections::HashMap;
 use std::fmt::Display;
 
@@ -192,8 +193,7 @@ pub struct ChatCompletionFunction {
     pub parameters: serde_json::Value,
 }
 
-#[derive(Deserialize, Debug, Clone, PartialEq)]
-#[serde(rename_all = "snake_case")]
+#[derive(Debug, Clone, PartialEq)]
 pub enum ChatCompletionResponseFormat {
     Text,
     JsonObject,
@@ -223,6 +223,74 @@ impl Serialize for ChatCompletionResponseFormat {
                 state.end()
             }
         }
+    }
+}
+
+impl<'de> Deserialize<'de> for ChatCompletionResponseFormat {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: Deserializer<'de>,
+    {
+        struct ChatCompletionResponseFormatVisitor;
+
+        impl<'de> Visitor<'de> for ChatCompletionResponseFormatVisitor {
+            type Value = ChatCompletionResponseFormat;
+
+            fn expecting(&self, formatter: &mut std::fmt::Formatter) -> std::fmt::Result {
+                formatter.write_str("a map containing a 'type' field")
+            }
+
+            fn visit_map<A>(self, mut map: A) -> Result<Self::Value, A::Error>
+            where
+                A: MapAccess<'de>,
+            {
+                let mut type_field = None;
+                let mut json_schema_field = None;
+
+                while let Some(key) = map.next_key()? {
+                    match key {
+                        "type" => {
+                            if type_field.is_some() {
+                                return Err(de::Error::duplicate_field("type"));
+                            }
+                            type_field = Some(map.next_value()?);
+                        }
+                        "json_schema" => {
+                            if json_schema_field.is_some() {
+                                return Err(de::Error::duplicate_field("json_schema"));
+                            }
+                            json_schema_field = Some(map.next_value()?);
+                        }
+                        _ => {
+                            return Err(de::Error::unknown_field(key, &["type", "json_schema"]));
+                        }
+                    }
+                }
+
+                let type_field = type_field.ok_or_else(|| de::Error::missing_field("type"))?;
+                match type_field {
+                    "text" => Ok(ChatCompletionResponseFormat::Text),
+                    "json_object" => Ok(ChatCompletionResponseFormat::JsonObject),
+                    "json_schema" => {
+                        let json_schema = json_schema_field
+                            .ok_or_else(|| de::Error::missing_field("json_schema"))?;
+                        Ok(ChatCompletionResponseFormat::JsonSchema(json_schema))
+                    }
+                    _ => Err(de::Error::unknown_variant(
+                        type_field,
+                        &["text", "json_object", "json_schema"],
+                    )),
+                }
+            }
+        }
+
+        const FIELDS: &[&str] = &["type", "json_schema"];
+
+        deserializer.deserialize_struct(
+            "ChatCompletionResponseFormat",
+            FIELDS,
+            ChatCompletionResponseFormatVisitor,
+        )
     }
 }
 
@@ -701,5 +769,46 @@ impl DeltaFunction {
 
     pub fn is_empty(&self) -> bool {
         self.name.is_none() && self.arguments.is_none()
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use crate::v1::resources::chat::{ChatCompletionResponseFormat, JsonSchemaBuilder};
+    use serde_json;
+
+    #[test]
+    fn test_chat_completion_response_format_serialization_deserialization() {
+        let json_schema = JsonSchemaBuilder::default()
+            .description("This is a test schema".to_string())
+            .name("test_schema".to_string())
+            .schema(Some(serde_json::json!({"type": "object"})))
+            .strict(true)
+            .build()
+            .unwrap();
+
+        let response_format = ChatCompletionResponseFormat::JsonSchema(json_schema);
+
+        // Serialize the response format to a JSON string
+        let serialized = serde_json::to_string(&response_format).unwrap();
+        assert_eq!(serialized, "{\"type\":\"json_schema\",\"json_schema\":{\"description\":\"This is a test schema\",\"name\":\"test_schema\",\"schema\":{\"type\":\"object\"},\"strict\":true}}");
+
+        // Deserialize the JSON string back to a ChatCompletionResponseFormat
+        let deserialized: ChatCompletionResponseFormat = serde_json::from_str(&serialized).unwrap();
+        match deserialized {
+            ChatCompletionResponseFormat::JsonSchema(json_schema) => {
+                assert_eq!(
+                    json_schema.description,
+                    Some("This is a test schema".to_string())
+                );
+                assert_eq!(json_schema.name, "test_schema".to_string());
+                assert_eq!(
+                    json_schema.schema,
+                    Some(serde_json::json!({"type": "object"}))
+                );
+                assert_eq!(json_schema.strict, Some(true));
+            }
+            _ => panic!("Deserialized format should be JsonSchema"),
+        }
     }
 }
