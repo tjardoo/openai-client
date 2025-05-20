@@ -197,9 +197,10 @@ pub enum ChatCompletionResponseFormat {
     Text,
     JsonObject,
     JsonSchema {
-        JsonSchema
+        json_schema: JsonSchema
     },
 }
+
 
 #[derive(Serialize, Deserialize, Debug, Default, Builder, Clone, PartialEq)]
 #[builder(name = "JsonSchemaBuilder")]
