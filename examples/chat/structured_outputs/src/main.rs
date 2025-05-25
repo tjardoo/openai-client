@@ -26,31 +26,33 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
                 name: None,
             },
         ])
-        .response_format(ChatCompletionResponseFormat::JsonSchema(JsonSchemaBuilder::default()
-            .name("math_reasoning")
-            .schema(serde_json::json!({
-                "type": "object",
-                "properties": {
-                    "steps": {
-                        "type": "array",
-                        "items": {
-                            "type": "object",
-                            "properties": {
-                                "explanation": { "type": "string" },
-                                "output": { "type": "string" }
-                            },
-                            "required": ["explanation", "output"],
-                            "additionalProperties": false
-                        }
+        .response_format(ChatCompletionResponseFormat::JsonSchema {
+            json_schema: JsonSchemaBuilder::default()
+                .name("math_reasoning")
+                .schema(serde_json::json!({
+                    "type": "object",
+                    "properties": {
+                        "steps": {
+                            "type": "array",
+                            "items": {
+                                "type": "object",
+                                "properties": {
+                                    "explanation": { "type": "string" },
+                                    "output": { "type": "string" }
+                                },
+                                "required": ["explanation", "output"],
+                                "additionalProperties": false
+                            }
+                        },
+                        "final_answer": { "type": "string" }
                     },
-                    "final_answer": { "type": "string" }
-                },
-                "required": ["steps", "final_answer"],
-                "additionalProperties": false
-            }))
-            .strict(true)
-            .build()?
-        ))
+                    "required": ["steps", "final_answer"],
+                    "additionalProperties": false
+                }))
+                .strict(true)
+                .build()?
+            }
+        )
         .build()?;
 
     let result = client.chat().create(parameters).await?;
