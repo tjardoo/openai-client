@@ -9,7 +9,7 @@ OpenAI Dive is an unofficial async Rust library that allows you to interact with
 
 ```ini
 [dependencies]
-openai_dive = "1.0"
+openai_dive = "1.2"
 ```
 
 ## Get started
@@ -264,7 +264,7 @@ let parameters = ChatCompletionParametersBuilder::default()
             name: None,
         },
     ])
-    .response_format(ChatCompletionResponseFormat::JsonSchema { 
+    .response_format(ChatCompletionResponseFormat::JsonSchema {
         json_schema: JsonSchemaBuilder::default()
             .name("math_reasoning")
             .schema(serde_json::json!({
