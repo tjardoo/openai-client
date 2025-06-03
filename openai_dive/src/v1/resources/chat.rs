@@ -606,11 +606,11 @@ pub enum ChatCompletionToolType {
 
 #[derive(Serialize, Deserialize, Debug, Clone, PartialEq)]
 #[serde(rename_all = "lowercase")]
-#[serde(untagged)]
 pub enum ChatCompletionToolChoice {
     None,
     Auto,
     Required,
+    #[serde(untagged)]
     ChatCompletionToolChoiceFunction(ChatCompletionToolChoiceFunction),
 }
 
