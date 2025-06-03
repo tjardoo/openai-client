@@ -679,7 +679,7 @@ impl DeltaFunction {
 
 #[cfg(test)]
 mod tests {
-    use crate::v1::resources::chat::{ChatCompletionResponseFormat, JsonSchemaBuilder};
+    use crate::v1::resources::chat::{ChatCompletionResponseFormat, ChatCompletionToolChoice, ChatCompletionToolChoiceFunction, ChatCompletionToolChoiceFunctionName, ChatCompletionToolType, JsonSchemaBuilder};
     use serde_json;
 
     #[test]
@@ -715,5 +715,32 @@ mod tests {
             }
             _ => panic!("Deserialized format should be JsonSchema"),
         }
+    }
+
+    #[test]
+    fn test_chat_completion_tool_choice_required_serialization_deserialization() {
+        let tool_choice = ChatCompletionToolChoice::Required;
+
+        let serialized = serde_json::to_string(&tool_choice).unwrap();
+        assert_eq!(serialized, "\"required\"");
+
+        let deserialized: ChatCompletionToolChoice = serde_json::from_str(serialized.as_str()).unwrap();
+        assert_eq!(deserialized, tool_choice)
+    }
+
+    #[test]
+    fn test_chat_completion_tool_choice_named_function_serialization_deserialization() {
+        let tool_choice = ChatCompletionToolChoice::ChatCompletionToolChoiceFunction(ChatCompletionToolChoiceFunction {
+            r#type: Some(ChatCompletionToolType::Function),
+            function: ChatCompletionToolChoiceFunctionName {
+                name: "get_current_weather".to_string(),
+            },
+        });
+
+        let serialized = serde_json::to_string(&tool_choice).unwrap();
+        assert_eq!(serialized, "{\"type\":\"function\",\"function\":{\"name\":\"get_current_weather\"}}");
+
+        let deserialized: ChatCompletionToolChoice = serde_json::from_str(serialized.as_str()).unwrap();
+        assert_eq!(deserialized, tool_choice)
     }
 }
