@@ -1,11 +1,11 @@
+use super::shared::{ReasoningEffort, WebSearchContextSize};
 use crate::v1::resources::shared::StopToken;
 use crate::v1::resources::shared::{FinishReason, Usage};
 use derive_builder::Builder;
 use serde::{Deserialize, Serialize};
+use serde_json::Value;
 use std::collections::HashMap;
 use std::fmt::Display;
-use serde_json::Value;
-use super::shared::{ReasoningEffort, WebSearchContextSize};
 
 #[derive(Serialize, Deserialize, Debug, Clone, PartialEq)]
 pub struct ChatCompletionResponse {
