@@ -4,7 +4,7 @@ use derive_builder::Builder;
 use serde::{Deserialize, Serialize};
 use std::collections::HashMap;
 use std::fmt::Display;
-
+use serde_json::Value;
 use super::shared::{ReasoningEffort, WebSearchContextSize};
 
 #[derive(Serialize, Deserialize, Debug, Clone, PartialEq)]
@@ -157,6 +157,10 @@ pub struct ChatCompletionParameters {
     /// This tool searches the web for relevant results to use in a response.
     #[serde(skip_serializing_if = "Option::is_none")]
     pub web_search_options: Option<WebSearchOptions>,
+    /// Allows to pass arbitrary json as an extra_body parameter, for specific features/openai-compatible endpoints.
+    #[serde(flatten)]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub extra_body: Option<Value>,
 }
 
 #[derive(Serialize, Deserialize, Debug, Clone, PartialEq)]
