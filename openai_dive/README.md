@@ -536,6 +536,8 @@ let mut client = Client::new(deepseek_api_key);
 client.set_base_url("https://api.deepseek.com");
 ```
 
+Use `extra_body` in `ChatCompletionParametersBuilder` to pass non-standard parameters supported by OpenAI-compatible APIs.
+
 ### Set organization/project ID
 
 You can create multiple organizations and projects in the OpenAI platform. This allows you to group files, fine-tuned models and other resources.
