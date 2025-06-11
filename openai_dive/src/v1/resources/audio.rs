@@ -18,6 +18,9 @@ pub struct AudioSpeechParameters {
     pub input: String,
     /// The voice to use when generating the audio.
     pub voice: AudioVoice,
+    /// Control the voice of your generated audio with additional instructions. Does not work with tts-1 or tts-1-hd
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub instructions: Option<String>,
     /// The format to audio in. Supported formats are mp3, opus, aac, flac, wav and pcm.
     #[serde(skip_serializing_if = "Option::is_none")]
     pub response_format: Option<AudioSpeechResponseFormat>,
