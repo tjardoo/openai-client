@@ -280,7 +280,6 @@ pub enum ChatMessage {
     },
 }
 
-
 impl ChatMessage {
     /// Get the ChatMessageContent data, if it exists.
     pub fn message_content(&self) -> Option<&ChatMessageContent> {
@@ -288,9 +287,12 @@ impl ChatMessage {
             ChatMessage::Developer { content, .. }
             | ChatMessage::System { content, .. }
             | ChatMessage::User { content, .. }
-            | ChatMessage::Assistant { content: Some(content), .. } => { Some(content) }
+            | ChatMessage::Assistant {
+                content: Some(content),
+                ..
+            } => Some(content),
             ChatMessage::Assistant { content: None, .. } => None,
-            ChatMessage::Tool { .. } =>  None,
+            ChatMessage::Tool { .. } => None,
         }
     }
 
@@ -300,7 +302,10 @@ impl ChatMessage {
             ChatMessage::Developer { content, .. }
             | ChatMessage::System { content, .. }
             | ChatMessage::User { content, .. }
-            | ChatMessage::Assistant { content: Some(content), .. } => {
+            | ChatMessage::Assistant {
+                content: Some(content),
+                ..
+            } => {
                 if let ChatMessageContent::Text(text) = content {
                     Some(text)
                 } else {
@@ -387,7 +392,6 @@ pub enum DeltaChatMessage {
         tool_call_id: Option<String>,
     },
 }
-
 
 #[derive(Serialize, Deserialize, Debug, Clone, PartialEq)]
 pub struct ToolCall {
