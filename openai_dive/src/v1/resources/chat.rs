@@ -280,6 +280,55 @@ pub enum ChatMessage {
     },
 }
 
+impl ChatMessage {
+    /// Get the ChatMessageContent data, if it exists.
+    pub fn message(&self) -> Option<&ChatMessageContent> {
+        match self {
+            ChatMessage::Developer { content, .. }
+            | ChatMessage::System { content, .. }
+            | ChatMessage::User { content, .. }
+            | ChatMessage::Assistant {
+                content: Some(content),
+                ..
+            } => Some(content),
+            ChatMessage::Assistant { content: None, .. } => None,
+            ChatMessage::Tool { .. } => None,
+        }
+    }
+
+    /// Get the content of the message as text, if it is a simple text message.
+    pub fn text(&self) -> Option<&str> {
+        match self {
+            ChatMessage::Developer { content, .. }
+            | ChatMessage::System { content, .. }
+            | ChatMessage::User { content, .. }
+            | ChatMessage::Assistant {
+                content: Some(content),
+                ..
+            } => {
+                if let ChatMessageContent::Text(text) = content {
+                    Some(text)
+                } else {
+                    None
+                }
+            }
+            ChatMessage::Assistant { content: None, .. } => None,
+            ChatMessage::Tool { content, .. } => Some(content),
+        }
+    }
+
+    /// Get the name of the message sender, if it exists.
+    pub fn name(&self) -> Option<&str> {
+        match self {
+            ChatMessage::Developer { name, .. }
+            | ChatMessage::System { name, .. }
+            | ChatMessage::User { name, .. }
+            | ChatMessage::Assistant { name, .. } => name.as_deref(),
+            ChatMessage::Tool { .. } => None,
+        }
+    }
+}
+
 #[derive(Serialize, Deserialize, Debug, Clone, PartialEq)]
 #[serde(tag = "role", rename_all = "lowercase")]
 pub enum DeltaChatMessage {
