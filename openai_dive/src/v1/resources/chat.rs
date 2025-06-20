@@ -282,7 +282,7 @@ pub enum ChatMessage {
 
 impl ChatMessage {
     /// Get the ChatMessageContent data, if it exists.
-    pub fn message_content(&self) -> Option<&ChatMessageContent> {
+    pub fn message(&self) -> Option<&ChatMessageContent> {
         match self {
             ChatMessage::Developer { content, .. }
             | ChatMessage::System { content, .. }
@@ -297,7 +297,7 @@ impl ChatMessage {
     }
 
     /// Get the content of the message as text, if it is a simple text message.
-    pub fn content_text(&self) -> Option<&str> {
+    pub fn text(&self) -> Option<&str> {
         match self {
             ChatMessage::Developer { content, .. }
             | ChatMessage::System { content, .. }
