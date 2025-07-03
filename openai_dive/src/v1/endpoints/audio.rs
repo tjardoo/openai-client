@@ -57,8 +57,7 @@ impl Audio<'_> {
         }
 
         if let Some(chunking_strategy) = parameters.chunking_strategy {
-            let a = chunking_strategy.to_string();
-            form = form.text("chunking_strategy", a);
+            form = form.text("chunking_strategy", chunking_strategy.to_string());
         }
 
         if let Some(response_format) = parameters.response_format {
