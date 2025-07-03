@@ -9,9 +9,9 @@ use crate::v1::resources::audio::{AudioTranscriptionParameters, AudioTranslation
 use futures::Stream;
 #[cfg(feature = "stream")]
 use futures::StreamExt;
+use serde_json::Value;
 #[cfg(feature = "stream")]
 use std::pin::Pin;
-use serde_json::Value;
 
 pub struct Audio<'a> {
     pub client: &'a Client,
@@ -83,7 +83,7 @@ impl Audio<'_> {
                     .join(","),
             );
         }
-        
+
         if let Some(extra_body) = parameters.extra_body {
             match extra_body {
                 Value::Object(map) => {
@@ -92,7 +92,9 @@ impl Audio<'_> {
                     }
                 }
                 _ => {
-                    return Err(APIError::BadRequestError("extra_body must be formatted as a map of key: value".to_string()));
+                    return Err(APIError::BadRequestError(
+                        "extra_body must be formatted as a map of key: value".to_string(),
+                    ));
                 }
             }
         }

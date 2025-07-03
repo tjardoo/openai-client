@@ -4,10 +4,10 @@ use crate::v1::resources::shared::FileUpload;
 use bytes::Bytes;
 use derive_builder::Builder;
 use serde::{Deserialize, Serialize};
+use serde_json::Value;
 use std::fmt::Display;
 #[cfg(feature = "tokio")]
 use std::path::Path;
-use serde_json::Value;
 
 #[derive(Serialize, Deserialize, Debug, Default, Builder, Clone, PartialEq)]
 #[builder(name = "AudioSpeechParametersBuilder")]
@@ -259,7 +259,10 @@ impl AudioSpeechResponse {
 
 #[cfg(test)]
 mod tests {
-    use crate::v1::resources::audio::{AudioTranscriptionParameters, AudioTranscriptionParametersBuilder, TranscriptionChunkingStrategy, VadConfig, VadConfigType};
+    use crate::v1::resources::audio::{
+        AudioTranscriptionParameters, AudioTranscriptionParametersBuilder,
+        TranscriptionChunkingStrategy, VadConfig, VadConfigType,
+    };
     use crate::v1::resources::shared::FileUpload;
 
     #[test]
