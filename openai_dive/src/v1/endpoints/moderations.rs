@@ -20,7 +20,7 @@ impl Moderations<'_> {
         &self,
         parameters: ModerationParameters,
     ) -> Result<ModerationResponse, APIError> {
-        let response = self.client.post("/moderations", &parameters).await?;
+        let response = self.client.post("/moderations", &parameters, None).await?;
 
         let response: ModerationResponse = format_response(response.data)?;
 

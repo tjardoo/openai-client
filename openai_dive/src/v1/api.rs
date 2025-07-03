@@ -172,9 +172,11 @@ impl Client {
         &self,
         path: &str,
         parameters: &T,
+        query_params: impl Into<Option<&HashMap<String, String>>>,
     ) -> Result<ResponseWrapper<String>, APIError> {
         let result = self
             .build_request(Method::POST, path, "application/json")
+            .query(&query_params.into())
             .json(&parameters)
             .send()
             .await;
@@ -268,6 +270,7 @@ impl Client {
         &self,
         path: &str,
         parameters: &I,
+        query_params: impl Into<Option<&HashMap<String, String>>>,
     ) -> Pin<Box<dyn Stream<Item = Result<O, APIError>> + Send>>
     where
         I: Serialize,
@@ -276,6 +279,7 @@ impl Client {
         let event_source = self
             .build_request(Method::POST, path, "application/json")
             .json(&parameters)
+            .query(&query_params.into())
             .eventsource()
             .unwrap();
 

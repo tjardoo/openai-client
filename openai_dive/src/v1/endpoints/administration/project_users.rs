@@ -69,6 +69,7 @@ impl ProjectUsers<'_> {
             .post(
                 &format!("/organization/projects/{project_id}/users"),
                 &parameters,
+                None,
             )
             .await?;
 
@@ -90,6 +91,7 @@ impl ProjectUsers<'_> {
             .post(
                 &format!("/organization/projects/{project_id}/users/{user_id}"),
                 &parameters,
+                None,
             )
             .await?;
 

@@ -19,7 +19,7 @@ impl Client {
 impl Responses<'_> {
     /// Creates a model response.
     pub async fn create(&self, parameters: ResponseParameters) -> Result<ResponseObject, APIError> {
-        let response = self.client.post("/responses", &parameters).await?;
+        let response = self.client.post("/responses", &parameters, None).await?;
 
         let response: ResponseObject = format_response(response.data)?;
 

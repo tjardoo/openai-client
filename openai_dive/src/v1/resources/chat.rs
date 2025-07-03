@@ -161,6 +161,10 @@ pub struct ChatCompletionParameters {
     #[serde(flatten)]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub extra_body: Option<Value>,
+    /// Azure OpenAI and some other providers may require special query parameters to be set on the request URL.
+    /// This field allows you to specify those query parameters.
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub query_params: Option<HashMap<String, String>>,
 }
 
 #[derive(Serialize, Deserialize, Debug, Clone, PartialEq)]

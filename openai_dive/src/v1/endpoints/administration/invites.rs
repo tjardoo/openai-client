@@ -55,7 +55,7 @@ impl Invites<'_> {
         let response = self
             .administration
             .client
-            .post("/organization/invites", &parameters)
+            .post("/organization/invites", &parameters, None)
             .await?;
 
         let response: Invite = format_response(response.data)?;

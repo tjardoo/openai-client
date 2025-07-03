@@ -23,7 +23,7 @@ impl Client {
 impl Uploads<'_> {
     /// Creates an intermediate Upload object that you can add Parts to.
     pub async fn create(&self, parameters: CreateUploadParameters) -> Result<Upload, APIError> {
-        let response = self.client.post("/uploads", &parameters).await?;
+        let response = self.client.post("/uploads", &parameters, None).await?;
 
         let response: Upload = format_response(response.data)?;
 
@@ -59,7 +59,7 @@ impl Uploads<'_> {
     ) -> Result<Upload, APIError> {
         let response = self
             .client
-            .post(&format!("/uploads/{id}/complete"), &parameters)
+            .post(&format!("/uploads/{id}/complete"), &parameters, None)
             .await?;
 
         let response: Upload = format_response(response.data)?;
@@ -71,7 +71,7 @@ impl Uploads<'_> {
     pub async fn cancel(&self, id: &str) -> Result<Upload, APIError> {
         let response = self
             .client
-            .post(&format!("/uploads/{id}/cancel"), &Value::Null)
+            .post(&format!("/uploads/{id}/cancel"), &Value::Null, None)
             .await?;
 
         let response: Upload = format_response(response.data)?;

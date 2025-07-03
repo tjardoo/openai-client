@@ -59,7 +59,7 @@ impl Users<'_> {
         let response = self
             .administration
             .client
-            .post(&format!("/organization/users/{user_id}"), &parameters)
+            .post(&format!("/organization/users/{user_id}"), &parameters, None)
             .await?;
 
         let response: User = format_response(response.data)?;

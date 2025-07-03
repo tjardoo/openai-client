@@ -22,7 +22,7 @@ impl Client {
 impl Batches<'_> {
     /// Creates and executes a batch from an uploaded file of requests
     pub async fn create(&self, parameters: CreateBatchParameters) -> Result<Batch, APIError> {
-        let response = self.client.post("/batches", &parameters).await?;
+        let response = self.client.post("/batches", &parameters, None).await?;
 
         let response: Batch = format_response(response.data)?;
 
@@ -42,7 +42,7 @@ impl Batches<'_> {
     pub async fn cancel(&self, id: &str) -> Result<Batch, APIError> {
         let response = self
             .client
-            .post(&format!("/batches/{id}/cancel"), &())
+            .post(&format!("/batches/{id}/cancel"), &(), None)
             .await?;
 
         let response: Batch = format_response(response.data)?;

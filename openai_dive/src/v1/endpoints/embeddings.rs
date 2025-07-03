@@ -31,7 +31,7 @@ impl Embeddings<'_> {
         &self,
         parameters: EmbeddingParameters,
     ) -> Result<ResponseWrapper<EmbeddingResponse>, APIError> {
-        let response = self.client.post("/embeddings", &parameters).await?;
+        let response = self.client.post("/embeddings", &parameters, None).await?;
 
         let data: EmbeddingResponse = format_response(response.data)?;
 
