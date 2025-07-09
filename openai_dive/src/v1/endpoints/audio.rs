@@ -9,6 +9,7 @@ use crate::v1::resources::audio::{AudioTranscriptionParameters, AudioTranslation
 use futures::Stream;
 #[cfg(feature = "stream")]
 use futures::StreamExt;
+use serde_json::Value;
 #[cfg(feature = "stream")]
 use std::pin::Pin;
 
@@ -55,8 +56,16 @@ impl Audio<'_> {
             form = form.text("language", language.to_string());
         }
 
+        if let Some(chunking_strategy) = parameters.chunking_strategy {
+            form = form.text("chunking_strategy", chunking_strategy.to_string());
+        }
+
         if let Some(response_format) = parameters.response_format {
             form = form.text("response_format", response_format.to_string());
+        }
+
+        if let Some(stream) = parameters.stream {
+            form = form.text("stream", stream.to_string());
         }
 
         if let Some(temperature) = parameters.temperature {
@@ -72,6 +81,21 @@ impl Audio<'_> {
                     .collect::<Vec<String>>()
                     .join(","),
             );
+        }
+
+        if let Some(extra_body) = parameters.extra_body {
+            match extra_body {
+                Value::Object(map) => {
+                    for (key, value) in map {
+                        form = form.text(key, value.to_string());
+                    }
+                }
+                _ => {
+                    return Err(APIError::BadRequestError(
+                        "extra_body must be formatted as a map of key: value".to_string(),
+                    ));
+                }
+            }
         }
 
         let response = self
