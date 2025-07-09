@@ -639,10 +639,10 @@ pub struct ApproximateUserLocation {
 impl Display for ChatMessageContent {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
         match self {
-            ChatMessageContent::Text(text) => write!(f, "{}", text),
+            ChatMessageContent::Text(text) => write!(f, "{text}"),
             ChatMessageContent::ContentPart(tcp) => {
                 for part in tcp {
-                    write!(f, "{:?}", part)?;
+                    write!(f, "{part:?}")?;
                 }
                 Ok(())
             }

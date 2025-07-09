@@ -26,7 +26,7 @@ async fn main() {
 
     let upload = client.uploads().create(parameters).await.unwrap();
 
-    println!("{:#?}", upload);
+    println!("{upload:#?}");
 
     // Add part to upload
     let parameters = AddPartParametersBuilder::default()
@@ -43,7 +43,7 @@ async fn main() {
         .await
         .unwrap();
 
-    println!("{:#?}", upload_part);
+    println!("{upload_part:#?}");
 
     // Complete upload
     let parameters = CompleteUploadParametersBuilder::default()
@@ -57,7 +57,7 @@ async fn main() {
         .await
         .unwrap();
 
-    println!("{:#?}", result);
+    println!("{result:#?}");
 
     // Cancel upload
     // let result = client

@@ -132,18 +132,18 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
                                         }
                                     }
                                     Err(error) => {
-                                        eprintln!("Failed to deserialize message: {}", error);
+                                        eprintln!("Failed to deserialize message: {error}");
                                     }
                                 }
                             }
                         }
                     }
                     Err(error) => {
-                        eprintln!("Failed to deserialize message: {}", error);
+                        eprintln!("Failed to deserialize message: {error}");
                     }
                 },
                 Err(error) => {
-                    eprintln!("Failed to deserialize message: {}", error);
+                    eprintln!("Failed to deserialize message: {error}");
                 }
                 _ => {}
             }
@@ -154,7 +154,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
     tokio::spawn(async move {
         while let Some(message) = rx.recv().await {
             if let Err(error) = websocket_writer.send(Message::Text(message)).await {
-                eprintln!("Failed to send message: {}", error);
+                eprintln!("Failed to send message: {error}");
             }
         }
     });
@@ -197,11 +197,11 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
                         .send(serde_json::to_string(&response_create).unwrap())
                         .await
                     {
-                        eprintln!("Failed to send message: {}", error);
+                        eprintln!("Failed to send message: {error}");
                     }
                 }
                 Err(error) => {
-                    eprintln!("Failed to build message: {}", error);
+                    eprintln!("Failed to build message: {error}");
                 }
             }
         }

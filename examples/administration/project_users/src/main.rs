@@ -15,7 +15,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
         .list("proj_XXX", None)
         .await?;
 
-    println!("{:#?}", project_users);
+    println!("{project_users:#?}");
 
     let project_user = client
         .administration()
@@ -23,7 +23,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
         .retrieve("proj_XXX", "user-XXX")
         .await?;
 
-    println!("{:#?}", project_user);
+    println!("{project_user:#?}");
 
     let parameters = ModifyProjectUserParametersBuilder::default()
         .role(ProjectUserRole::Owner)
@@ -35,7 +35,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
         .modify("proj_XXX", "user-XXX", parameters)
         .await?;
 
-    println!("{:#?}", modified_project_user);
+    println!("{modified_project_user:#?}");
 
     Ok(())
 }

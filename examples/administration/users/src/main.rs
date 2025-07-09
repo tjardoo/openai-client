@@ -7,11 +7,11 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
 
     let users = client.administration().users().list(None).await?;
 
-    println!("{:#?}", users);
+    println!("{users:#?}");
 
     let user = client.administration().users().retrieve("user-XXX").await?;
 
-    println!("{:#?}", user);
+    println!("{user:#?}");
 
     let parameters = ModifyUserParameters {
         role: UserRole::Owner,
@@ -23,7 +23,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
         .modify("user-XXX", parameters)
         .await?;
 
-    println!("{:#?}", modified_user);
+    println!("{modified_user:#?}");
 
     Ok(())
 }

@@ -30,7 +30,7 @@ impl Responses<'_> {
     pub async fn retrieve(&self, response_id: &str) -> Result<ResponseObject, APIError> {
         let response = self
             .client
-            .get(&format!("/responses/{}", response_id))
+            .get(&format!("/responses/{response_id}"))
             .await?;
 
         let response: ResponseObject = format_response(response)?;
@@ -42,7 +42,7 @@ impl Responses<'_> {
     pub async fn delete(&self, response_id: &str) -> Result<DeletedObject, APIError> {
         let response = self
             .client
-            .delete(&format!("/responses/{}", response_id))
+            .delete(&format!("/responses/{response_id}"))
             .await?;
 
         let response: DeletedObject = format_response(response)?;

@@ -42,7 +42,7 @@ impl Users<'_> {
         let response = self
             .administration
             .client
-            .get(&format!("/organization/users/{}", user_id))
+            .get(&format!("/organization/users/{user_id}"))
             .await?;
 
         let response: User = format_response(response)?;
@@ -59,7 +59,7 @@ impl Users<'_> {
         let response = self
             .administration
             .client
-            .post(&format!("/organization/users/{}", user_id), &parameters)
+            .post(&format!("/organization/users/{user_id}"), &parameters)
             .await?;
 
         let response: User = format_response(response.data)?;
@@ -72,7 +72,7 @@ impl Users<'_> {
         let response = self
             .administration
             .client
-            .delete(&format!("/organization/users/{}", user_id))
+            .delete(&format!("/organization/users/{user_id}"))
             .await?;
 
         let response: DeletedObject = format_response(response)?;

@@ -40,7 +40,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
 
     let result = client.chat().create(parameters).await?;
 
-    println!("{:#?}", result);
+    println!("{result:#?}");
 
     Ok(())
 }

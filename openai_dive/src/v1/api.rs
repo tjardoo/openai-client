@@ -145,7 +145,7 @@ impl Client {
     {
         let encoded_query = serde_html_form::to_string(query).unwrap_or_else(|_| "".to_string());
 
-        let path = format!("{}?{}", path, encoded_query);
+        let path = format!("{path}?{encoded_query}");
 
         let result = self
             .build_request(Method::GET, &path, "application/json")

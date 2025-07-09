@@ -32,7 +32,7 @@ impl ProjectRateLimits<'_> {
             .administration
             .client
             .get_with_query(
-                &format!("/organization/projects/{}/rate_limits", project_id),
+                &format!("/organization/projects/{project_id}/rate_limits"),
                 &query,
             )
             .await?;
@@ -54,8 +54,7 @@ impl ProjectRateLimits<'_> {
             .client
             .post(
                 &format!(
-                    "/organization/projects/{}/rate_limits/{}",
-                    project_id, rate_limit_id
+                    "/organization/projects/{project_id}/rate_limits/{rate_limit_id}"
                 ),
                 &parameters,
             )

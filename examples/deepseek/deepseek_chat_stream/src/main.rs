@@ -37,10 +37,10 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
                     .iter()
                     .for_each(|choice| match &choice.delta {
                         DeltaChatMessage::User { content, .. } => {
-                            print!("{}", content);
+                            print!("{content}");
                         }
                         DeltaChatMessage::System { content, .. } => {
-                            print!("{}", content);
+                            print!("{content}");
                         }
                         DeltaChatMessage::Assistant {
                             reasoning_content,
@@ -52,13 +52,13 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
                             }
 
                             if let Some(chat_message_content) = content {
-                                print!("{}", chat_message_content);
+                                print!("{chat_message_content}");
                             }
                         }
                         _ => {}
                     })
             }
-            Err(e) => eprintln!("{}", e),
+            Err(e) => eprintln!("{e}"),
         }
     }
 

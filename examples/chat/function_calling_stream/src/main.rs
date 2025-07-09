@@ -69,16 +69,16 @@ async fn main() {
 
                 match &choice.delta {
                     DeltaChatMessage::User { content, .. } => {
-                        print!("{:?}", content);
+                        print!("{content:?}");
                     }
                     DeltaChatMessage::System { content, .. } => {
-                        print!("{:?}", content);
+                        print!("{content:?}");
                     }
                     DeltaChatMessage::Assistant {
                         content: Some(chat_message_content),
                         ..
                     } => {
-                        print!("{:?}", chat_message_content);
+                        print!("{chat_message_content:?}");
                     }
                     _ => {}
                 }
@@ -103,7 +103,7 @@ async fn main() {
                     }
                 }
             }),
-            Err(e) => eprintln!("{}", e),
+            Err(e) => eprintln!("{e}"),
         }
     }
 }

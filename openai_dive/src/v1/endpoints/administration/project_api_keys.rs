@@ -30,7 +30,7 @@ impl ProjectApiKeys<'_> {
             .administration
             .client
             .get_with_query(
-                &format!("/organization/projects/{}/api_keys", project_id),
+                &format!("/organization/projects/{project_id}/api_keys"),
                 &query,
             )
             .await?;
@@ -50,8 +50,7 @@ impl ProjectApiKeys<'_> {
             .administration
             .client
             .get(&format!(
-                "/organization/projects/{}/api_keys/{}",
-                project_id, api_key_id
+                "/organization/projects/{project_id}/api_keys/{api_key_id}"
             ))
             .await?;
 
@@ -70,8 +69,7 @@ impl ProjectApiKeys<'_> {
             .administration
             .client
             .delete(&format!(
-                "/organization/projects/{}/api_keys/{}",
-                project_id, api_key_id
+                "/organization/projects/{project_id}/api_keys/{api_key_id}"
             ))
             .await?;
 

@@ -34,7 +34,7 @@ impl APIError {
             | APIError::StreamError(message)
             | APIError::WebSocketError(message) => message.to_string(),
             APIError::UnknownError(status_code, message) => {
-                format!("{}: {}", status_code, message)
+                format!("{status_code}: {message}")
             }
         }
     }

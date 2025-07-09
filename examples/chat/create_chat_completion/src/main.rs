@@ -30,11 +30,11 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
 
     let result = client.chat().create(parameters).await?;
 
-    println!("{:#?}", result);
+    println!("{result:#?}");
 
     for choice in &result.choices {
         if let Some(text) = choice.message.text() {
-            println!("{}", text);
+            println!("{text}");
         }
     }
 

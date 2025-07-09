@@ -16,5 +16,5 @@ async fn main() {
 
     let result = client.audio().create_translation(parameters).await.unwrap();
 
-    println!("{:#?}", result);
+    println!("{result:#?}");
 }

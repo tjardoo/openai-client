@@ -42,7 +42,7 @@ impl Invites<'_> {
         let response = self
             .administration
             .client
-            .get(&format!("/organization/invites/{}", invite_id))
+            .get(&format!("/organization/invites/{invite_id}"))
             .await?;
 
         let response: Invite = format_response(response)?;
@@ -68,7 +68,7 @@ impl Invites<'_> {
         let response = self
             .administration
             .client
-            .delete(&format!("/organization/invites/{}", invite_id))
+            .delete(&format!("/organization/invites/{invite_id}"))
             .await?;
 
         let response: DeletedObject = format_response(response)?;

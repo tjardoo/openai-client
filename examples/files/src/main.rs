@@ -21,14 +21,14 @@ async fn main() {
     println!("{:#?}", &file);
 
     let result = client.files().retrieve(&file.id).await.unwrap();
-    println!("{:#?}", result);
+    println!("{result:#?}");
 
     let result = client.files().retrieve_content(&file.id).await.unwrap();
-    println!("{:#?}", result);
+    println!("{result:#?}");
 
     let result = client.files().list(None).await.unwrap();
-    println!("{:#?}", result);
+    println!("{result:#?}");
 
     let result = client.files().delete(&file.id).await.unwrap();
-    println!("{:#?}", result);
+    println!("{result:#?}");
 }

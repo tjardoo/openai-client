@@ -18,7 +18,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
 
     let images = client.usage().images(parameters.clone()).await.unwrap();
 
-    println!("{:#?}", images);
+    println!("{images:#?}");
 
     let parameters = UsageParametersBuilder::default()
         .start_time(start_time.timestamp() as u32)
@@ -27,7 +27,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
 
     let costs = client.usage().costs(parameters.clone()).await.unwrap();
 
-    println!("{:#?}", costs);
+    println!("{costs:#?}");
 
     Ok(())
 }

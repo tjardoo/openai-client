@@ -23,7 +23,7 @@ async fn main() {
 
     let paths = result.save("./images").await.unwrap();
 
-    println!("{:?}", paths);
+    println!("{paths:?}");
 
-    println!("{:#?}", result);
+    println!("{result:#?}");
 }

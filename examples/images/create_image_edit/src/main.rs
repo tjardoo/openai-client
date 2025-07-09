@@ -20,5 +20,5 @@ async fn main() {
 
     let result = client.images().edit(parameters).await.unwrap();
 
-    println!("{:#?}", result);
+    println!("{result:#?}");
 }

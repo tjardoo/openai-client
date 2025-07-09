@@ -11,7 +11,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
 
     let invites = client.administration().invites().list(None).await?;
 
-    println!("{:#?}", invites);
+    println!("{invites:#?}");
 
     let parameters = CreateInviteParameters {
         email: "XXX".to_string(),
@@ -27,7 +27,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
         .retrieve("invite-XXX")
         .await?;
 
-    println!("{:#?}", invite);
+    println!("{invite:#?}");
 
     let deleted_invite = client
         .administration()
@@ -35,7 +35,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
         .delete("invite-XXX")
         .await?;
 
-    println!("{:#?}", deleted_invite);
+    println!("{deleted_invite:#?}");
 
     Ok(())
 }
