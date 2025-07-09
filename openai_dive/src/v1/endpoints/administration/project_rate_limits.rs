@@ -53,9 +53,7 @@ impl ProjectRateLimits<'_> {
             .administration
             .client
             .post(
-                &format!(
-                    "/organization/projects/{project_id}/rate_limits/{rate_limit_id}"
-                ),
+                &format!("/organization/projects/{project_id}/rate_limits/{rate_limit_id}"),
                 &parameters,
             )
             .await?;
