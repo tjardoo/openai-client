@@ -6,7 +6,7 @@ async fn main() {
 
     let result = client.models().list().await.unwrap();
 
-    println!("{:#?}", result);
+    println!("{result:#?}");
 
     let result = client
         .models()
@@ -14,5 +14,5 @@ async fn main() {
         .await
         .unwrap();
 
-    println!("{:#?}", result);
+    println!("{result:#?}");
 }

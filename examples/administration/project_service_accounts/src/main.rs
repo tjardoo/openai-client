@@ -16,7 +16,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
         .list(project_id, None)
         .await?;
 
-    println!("{:#?}", project_service_accounts);
+    println!("{project_service_accounts:#?}");
 
     let parameters = CreateProjectServiceAccountParameters {
         name: "Test Project Service Account A".to_string(),
@@ -34,7 +34,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
         .retrieve(project_id, "user-XXX")
         .await?;
 
-    println!("{:#?}", project_service_account);
+    println!("{project_service_account:#?}");
 
     let deleted_project_service_account = client
         .administration()
@@ -42,7 +42,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
         .delete(project_id, "user-XXX")
         .await?;
 
-    println!("{:#?}", deleted_project_service_account);
+    println!("{deleted_project_service_account:#?}");
 
     Ok(())
 }

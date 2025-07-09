@@ -12,7 +12,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
 
     let projects = client.administration().projects().list(None).await?;
 
-    println!("{:#?}", projects);
+    println!("{projects:#?}");
 
     let parameters = CreateProjectParameters {
         name: "Test Project A".to_string(),
@@ -30,7 +30,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
         .retrieve(&project.id)
         .await?;
 
-    println!("{:#?}", project_a);
+    println!("{project_a:#?}");
 
     let parameters = ModifyProjectParameters {
         name: "Test Project B".to_string(),
@@ -42,7 +42,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
         .modify(&project.id, parameters)
         .await?;
 
-    println!("{:#?}", project_b);
+    println!("{project_b:#?}");
 
     let archived_project = client
         .administration()
@@ -50,7 +50,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
         .archive(&project.id)
         .await?;
 
-    println!("{:#?}", archived_project);
+    println!("{archived_project:#?}");
 
     Ok(())
 }

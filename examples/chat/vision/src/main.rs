@@ -36,7 +36,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
 
     let result = client.chat().create(parameters).await?;
 
-    println!("{:#?}", result);
+    println!("{result:#?}");
 
     let parameters = ChatCompletionParametersBuilder::default()
         .model("gpt-4o-mini".to_string())
@@ -72,7 +72,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
 
     let result = client.chat().create(parameters).await.unwrap();
 
-    println!("{:#?}", result);
+    println!("{result:#?}");
 
     Ok(())
 }

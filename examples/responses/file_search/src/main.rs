@@ -26,7 +26,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
 
     let file = client.files().upload(parameters).await?;
 
-    println!("{:#?}", file);
+    println!("{file:#?}");
 
     let parameters = CreateVectorStoreParametersBuilder::default()
         .name("OpenAI Dive Response File Search Example".to_string())
@@ -35,7 +35,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
 
     let vector_store = client.vector_stores().create(parameters).await?;
 
-    println!("{:#?}", vector_store);
+    println!("{vector_store:#?}");
 
     let parameters = ResponseParametersBuilder::default()
         .model(FlagshipModel::Gpt4O.to_string())
@@ -54,7 +54,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
 
     let result = client.responses().create(parameters).await?;
 
-    println!("{:#?}", result);
+    println!("{result:#?}");
 
     Ok(())
 }

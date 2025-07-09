@@ -15,7 +15,7 @@ impl Client {
 impl Realtime<'_> {
     pub async fn websocket(&self, model: &str) -> Result<WebSocket, APIError> {
         let response = reqwest::Client::default()
-            .get(format!("wss://api.openai.com/v1/realtime?model={}", model))
+            .get(format!("wss://api.openai.com/v1/realtime?model={model}"))
             .header("OpenAI-Beta", "realtime=v1")
             .bearer_auth(&self.client.api_key)
             .upgrade()

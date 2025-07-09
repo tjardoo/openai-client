@@ -46,7 +46,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
 
     let result = client.responses().create(parameters).await?;
 
-    println!("{:#?}", result);
+    println!("{result:#?}");
 
     let call = match &result.output[0] {
         ResponseOutput::FunctionToolCall(call) => call,
@@ -68,7 +68,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
 
     let result = client.responses().create(parameters).await?;
 
-    println!("{:#?}", result);
+    println!("{result:#?}");
 
     Ok(())
 }

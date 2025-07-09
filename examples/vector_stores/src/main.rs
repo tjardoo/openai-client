@@ -19,7 +19,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
 
     let file = client.files().upload(parameters).await?;
 
-    println!("{:#?}", file);
+    println!("{file:#?}");
 
     let parameters = CreateVectorStoreParametersBuilder::default()
         .name("OpenAI Test Vector Store 2".to_string())
@@ -27,7 +27,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
 
     let vector_store = client.vector_stores().create(parameters).await?;
 
-    println!("{:#?}", vector_store);
+    println!("{vector_store:#?}");
 
     let parameters = CreateVectorStoreFileParametersBuilder::default()
         .file_id(file.id)
@@ -38,14 +38,14 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
         .create(&vector_store.id, parameters)
         .await?;
 
-    println!("{:#?}", vector_store_file);
+    println!("{vector_store_file:#?}");
 
     let vector_store_file_list = client
         .vector_store_files()
         .list(&vector_store.id, None)
         .await?;
 
-    println!("{:#?}", vector_store_file_list);
+    println!("{vector_store_file_list:#?}");
 
     Ok(())
 }

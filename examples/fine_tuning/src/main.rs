@@ -25,27 +25,27 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
         .build()?;
 
     let fine_tuning_job = client.fine_tuning().create(parameters).await?;
-    println!("{:#?}", fine_tuning_job);
+    println!("{fine_tuning_job:#?}");
 
     let fine_tuning_checkpoints = client
         .fine_tuning()
         .list_checkpoints(&fine_tuning_job.id, None)
         .await?;
 
-    println!("{:#?}", fine_tuning_checkpoints);
+    println!("{fine_tuning_checkpoints:#?}");
 
     let fine_tuning_events = client
         .fine_tuning()
         .list_job_events(&fine_tuning_job.id, None)
         .await?;
 
-    println!("{:#?}", fine_tuning_events);
+    println!("{fine_tuning_events:#?}");
 
     let result = client.fine_tuning().retrieve(&fine_tuning_job.id).await?;
-    println!("{:#?}", result);
+    println!("{result:#?}");
 
     let fine_tuning_jobs = client.fine_tuning().list(None).await?;
-    println!("{:#?}", fine_tuning_jobs);
+    println!("{fine_tuning_jobs:#?}");
 
     Ok(())
 }

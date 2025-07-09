@@ -21,7 +21,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
 
     let result = client.images().edit(parameters).await?;
 
-    println!("{:#?}", result);
+    println!("{result:#?}");
 
     let parameters = EditImageParametersBuilder::default()
         .prompt("Combine the person into the orginal image")
@@ -38,7 +38,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
 
     let result = client.images().edit(parameters).await?;
 
-    println!("{:#?}", result);
+    println!("{result:#?}");
 
     Ok(())
 }

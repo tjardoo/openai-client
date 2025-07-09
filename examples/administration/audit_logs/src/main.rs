@@ -23,7 +23,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
         .list(Some(parameters))
         .await?;
 
-    println!("{:#?}", audit_logs);
+    println!("{audit_logs:#?}");
 
     Ok(())
 }

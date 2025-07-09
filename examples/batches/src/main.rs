@@ -29,9 +29,9 @@ async fn main() {
 
     let result = client.batches().retrieve(&batch.id).await.unwrap();
 
-    println!("{:#?}", result);
+    println!("{result:#?}");
 
     let result = client.batches().list(None).await.unwrap();
 
-    println!("{:#?}", result);
+    println!("{result:#?}");
 }

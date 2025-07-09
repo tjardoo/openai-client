@@ -36,7 +36,7 @@ async fn main() {
 
                     file.write_all(&chunk.bytes).unwrap();
                 }
-                Err(error) => println!("Steam error: {:?}", error),
+                Err(error) => println!("Steam error: {error:?}"),
             }
 
             future::ready(())

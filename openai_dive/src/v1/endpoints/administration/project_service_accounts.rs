@@ -31,7 +31,7 @@ impl ProjectServiceAccounts<'_> {
             .administration
             .client
             .get_with_query(
-                &format!("/organization/projects/{}/service_accounts", project_id),
+                &format!("/organization/projects/{project_id}/service_accounts"),
                 &query,
             )
             .await?;
@@ -51,8 +51,7 @@ impl ProjectServiceAccounts<'_> {
             .administration
             .client
             .get(&format!(
-                "/organization/projects/{}/service_accounts/{}",
-                project_id, service_account_id
+                "/organization/projects/{project_id}/service_accounts/{service_account_id}"
             ))
             .await?;
 
@@ -71,7 +70,7 @@ impl ProjectServiceAccounts<'_> {
             .administration
             .client
             .post(
-                &format!("/organization/projects/{}/service_accounts", project_id),
+                &format!("/organization/projects/{project_id}/service_accounts"),
                 &parameters,
             )
             .await?;
@@ -91,8 +90,7 @@ impl ProjectServiceAccounts<'_> {
             .administration
             .client
             .delete(&format!(
-                "/organization/projects/{}/service_accounts/{}",
-                project_id, service_account_id
+                "/organization/projects/{project_id}/service_accounts/{service_account_id}"
             ))
             .await?;
 

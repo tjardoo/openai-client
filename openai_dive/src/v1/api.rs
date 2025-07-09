@@ -134,7 +134,7 @@ impl Client {
             .map_err(|error| APIError::ParseError(error.to_string()))?;
 
         #[cfg(feature = "log")]
-        log::trace!("{}", response_text);
+        log::trace!("{response_text}");
 
         Ok(response_text)
     }
@@ -145,7 +145,7 @@ impl Client {
     {
         let encoded_query = serde_html_form::to_string(query).unwrap_or_else(|_| "".to_string());
 
-        let path = format!("{}?{}", path, encoded_query);
+        let path = format!("{path}?{encoded_query}");
 
         let result = self
             .build_request(Method::GET, &path, "application/json")
@@ -163,7 +163,7 @@ impl Client {
             .map_err(|error| APIError::ParseError(error.to_string()))?;
 
         #[cfg(feature = "log")]
-        log::trace!("{}", response_text);
+        log::trace!("{response_text}");
 
         Ok(response_text)
     }
@@ -193,7 +193,7 @@ impl Client {
         let response_headers: Headers = header_map.into();
 
         #[cfg(feature = "log")]
-        log::trace!("{}", response_text);
+        log::trace!("{response_text}");
 
         Ok(ResponseWrapper {
             data: response_text.to_string(),

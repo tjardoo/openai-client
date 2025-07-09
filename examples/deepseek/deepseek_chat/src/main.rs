@@ -15,7 +15,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
 
     let result = client.models().list().await.unwrap();
 
-    println!("{:#?}", result);
+    println!("{result:#?}");
 
     let parameters = ChatCompletionParametersBuilder::default()
         .model("deepseek-chat".to_string())
@@ -30,7 +30,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
 
     let result = client.chat().create(parameters).await?;
 
-    println!("{:#?}", result);
+    println!("{result:#?}");
 
     Ok(())
 }

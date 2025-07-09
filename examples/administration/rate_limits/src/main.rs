@@ -30,7 +30,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
         .list("proj_gnQ3egl0t8whJIDUNP6BK5Me", None)
         .await?;
 
-    println!("{:?}", project_rate_limits);
+    println!("{project_rate_limits:?}");
 
     Ok(())
 }

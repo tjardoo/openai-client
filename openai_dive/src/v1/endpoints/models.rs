@@ -27,7 +27,7 @@ impl Models<'_> {
 
     /// Retrieves a model instance, providing basic information about the model such as the owner and permissioning.
     pub async fn get(&self, model_id: &str) -> Result<Model, APIError> {
-        let path = format!("/models/{}", model_id);
+        let path = format!("/models/{model_id}");
 
         let response = self.client.get(&path).await?;
 
@@ -38,7 +38,7 @@ impl Models<'_> {
 
     /// Delete a fine-tuned model. You must have the Owner role in your organization to delete a model.
     pub async fn delete(&self, model_id: &str) -> Result<DeletedObject, APIError> {
-        let path = format!("/models/{}", model_id);
+        let path = format!("/models/{model_id}");
 
         let response = self.client.delete(&path).await?;
 

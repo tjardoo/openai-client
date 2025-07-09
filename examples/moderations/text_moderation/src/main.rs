@@ -17,5 +17,5 @@ async fn main() {
 
     let result = client.moderations().create(parameters).await.unwrap();
 
-    println!("{:#?}", result);
+    println!("{result:#?}");
 }

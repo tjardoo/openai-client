@@ -88,5 +88,5 @@ pub fn generate_file_name(path: &str, length: u32, file_type: &str) -> String {
         seed /= alphabet_len as u128;
     }
 
-    format!("{}/{}.{}", path, random_str, file_type)
+    format!("{path}/{random_str}.{file_type}")
 }

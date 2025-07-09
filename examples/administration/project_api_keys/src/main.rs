@@ -15,7 +15,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
         .list(project_id, None)
         .await?;
 
-    println!("{:#?}", project_api_keys);
+    println!("{project_api_keys:#?}");
 
     let project_api_key = client
         .administration()
@@ -23,7 +23,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
         .retrieve(project_id, "key_XXX")
         .await?;
 
-    println!("{:#?}", project_api_key);
+    println!("{project_api_key:#?}");
 
     let deleted_project_api_key = client
         .administration()
@@ -31,7 +31,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
         .delete(project_id, "key_XXX")
         .await?;
 
-    println!("{:#?}", deleted_project_api_key);
+    println!("{deleted_project_api_key:#?}");
 
     Ok(())
 }
