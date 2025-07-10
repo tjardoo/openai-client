@@ -31,6 +31,7 @@ impl VectorStoreFiles<'_> {
             .post(
                 &format!("/vector_stores/{vector_store_id}/files"),
                 &parameters,
+                None,
             )
             .await?;
 

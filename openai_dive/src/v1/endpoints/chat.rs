@@ -40,7 +40,17 @@ impl Chat<'_> {
         &self,
         parameters: ChatCompletionParameters,
     ) -> Result<ResponseWrapper<ChatCompletionResponse>, APIError> {
-        let response = self.client.post("/chat/completions", &parameters).await?;
+        let response = self
+            .client
+            .post(
+                "/chat/completions",
+                &ChatCompletionParameters {
+                    query_params: None,
+                    ..parameters
+                },
+                parameters.query_params.as_ref(),
+            )
+            .await?;
 
         let data: ChatCompletionResponse = format_response(response.data)?;
 
@@ -59,12 +69,19 @@ impl Chat<'_> {
         Pin<Box<dyn Stream<Item = Result<ChatCompletionChunkResponse, APIError>> + Send>>,
         APIError,
     > {
-        let mut stream_parameters = parameters;
+        let mut stream_parameters = ChatCompletionParameters {
+            query_params: None,
+            ..parameters
+        };
         stream_parameters.stream = Some(true);
 
         Ok(self
             .client
-            .post_stream("/chat/completions", &stream_parameters)
+            .post_stream(
+                "/chat/completions",
+                &stream_parameters,
+                stream_parameters.query_params.as_ref(),
+            )
             .await)
     }
 }

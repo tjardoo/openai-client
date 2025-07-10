@@ -28,7 +28,10 @@ impl VectorStores<'_> {
         &self,
         parameters: CreateVectorStoreParameters,
     ) -> Result<VectorStore, APIError> {
-        let response = self.client.post("/vector_stores", &parameters).await?;
+        let response = self
+            .client
+            .post("/vector_stores", &parameters, None)
+            .await?;
 
         let response: VectorStore = format_response(response.data)?;
 
@@ -67,7 +70,11 @@ impl VectorStores<'_> {
     ) -> Result<VectorStore, APIError> {
         let response = self
             .client
-            .post(&format!("/vector_stores/{vector_store_id}"), &parameters)
+            .post(
+                &format!("/vector_stores/{vector_store_id}"),
+                &parameters,
+                None,
+            )
             .await?;
 
         let response: VectorStore = format_response(response.data)?;
@@ -98,6 +105,7 @@ impl VectorStores<'_> {
             .post(
                 &format!("/vector_stores/{vector_store_id}/search"),
                 &parameters,
+                None,
             )
             .await?;
 

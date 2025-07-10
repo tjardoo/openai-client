@@ -26,7 +26,10 @@ impl FineTuning<'_> {
         &self,
         parameters: CreateFineTuningJobParameters,
     ) -> Result<FineTuningJob, APIError> {
-        let response = self.client.post("/fine_tuning/jobs", &parameters).await?;
+        let response = self
+            .client
+            .post("/fine_tuning/jobs", &parameters, None)
+            .await?;
 
         let response: FineTuningJob = format_response(response.data)?;
 
@@ -61,7 +64,11 @@ impl FineTuning<'_> {
     pub async fn cancel(&self, id: &str) -> Result<FineTuningJob, APIError> {
         let response = self
             .client
-            .post(&format!("/fine_tuning/jobs/{id}/cancel"), &Value::Null)
+            .post(
+                &format!("/fine_tuning/jobs/{id}/cancel"),
+                &Value::Null,
+                None,
+            )
             .await?;
 
         let response: FineTuningJob = format_response(response.data)?;

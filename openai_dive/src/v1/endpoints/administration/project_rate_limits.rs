@@ -55,6 +55,7 @@ impl ProjectRateLimits<'_> {
             .post(
                 &format!("/organization/projects/{project_id}/rate_limits/{rate_limit_id}"),
                 &parameters,
+                None,
             )
             .await?;
 
