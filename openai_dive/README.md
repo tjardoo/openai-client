@@ -536,7 +536,9 @@ let mut client = Client::new(deepseek_api_key);
 client.set_base_url("https://api.deepseek.com");
 ```
 
-Use `extra_body` in `ChatCompletionParametersBuilder` to pass non-standard parameters supported by OpenAI-compatible APIs.
+Use `extra_body` in `ChatCompletionParameters` to pass non-standard parameters supported by OpenAI-compatible APIs.
+
+Use `query_params` in `ChatCompletionParameters` to pass non-standard `query` parameters supported by OpenAI-compatible APIs.
 
 ### Set organization/project ID
 

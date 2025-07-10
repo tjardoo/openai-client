@@ -1,6 +1,6 @@
 [package]
 name = "openai_dive"
-version = "1.2.2"
+version = "1.2.3"
 edition = "2021"
 license = "MIT"
 description = "OpenAI Dive is an unofficial async Rust library that allows you to interact with the OpenAI API."
