@@ -21,6 +21,8 @@ pub struct ResponseParameters {
     pub input: ResponseInput,
     /// Model ID used to generate the response.
     pub model: String,
+    /// Reference to a prompt template and its variables.
+    pub prompt: Option<Prompt>,
     /// Specify additional output data to include in the model response.
     #[serde(skip_serializing_if = "Option::is_none")]
     pub include: Option<Vec<ResponseInclude>>,
@@ -75,6 +77,16 @@ pub struct ResponseParameters {
 pub struct InputMessage {
     pub role: Role,
     pub content: ContentInput,
+}
+
+#[derive(Serialize, Deserialize, Debug, Clone, PartialEq)]
+pub struct Prompt {
+    /// The unique identifier of the prompt template to use.
+    pub id: String,
+    /// Optional version of the prompt template.
+    pub version: Option<String>,
+    /// Optional map of values to substitute in for variables in your prompt.
+    pub variables: Option<HashMap<String, String>>,
 }
 
 #[derive(Serialize, Deserialize, Debug, Clone, PartialEq)]
