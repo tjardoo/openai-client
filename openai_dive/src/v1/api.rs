@@ -16,6 +16,7 @@ use std::pin::Pin;
 use super::resources::shared::ResponseWrapper;
 
 const OPENAI_API_V1_ENDPOINT: &str = "https://api.openai.com/v1";
+const MIME_TYPE_APPLICATION_JSON: &str = "application/json";
 
 #[derive(Clone, Debug)]
 pub struct Client {
@@ -90,15 +91,18 @@ impl Client {
         &self,
         method: reqwest::Method,
         path: &str,
-        content_type: &str,
+        content_type: Option<&str>,
     ) -> RequestBuilder {
         let url = format!("{}{}", &self.base_url, path);
 
         let mut request = self
             .http_client
             .request(method, url)
-            .header(reqwest::header::CONTENT_TYPE, content_type)
             .bearer_auth(&self.api_key);
+
+        if let Some(content_type) = content_type {
+            request = request.header(reqwest::header::CONTENT_TYPE, content_type);
+        }
 
         if let Some(headers) = &self.headers {
             for (key, value) in headers {
@@ -119,7 +123,7 @@ impl Client {
 
     pub(crate) async fn get(&self, path: &str) -> Result<String, APIError> {
         let result = self
-            .build_request(Method::GET, path, "application/json")
+            .build_request(Method::GET, path, Some(MIME_TYPE_APPLICATION_JSON))
             .send()
             .await;
 
@@ -148,7 +152,7 @@ impl Client {
         let path = format!("{path}?{encoded_query}");
 
         let result = self
-            .build_request(Method::GET, &path, "application/json")
+            .build_request(Method::GET, &path, Some(MIME_TYPE_APPLICATION_JSON))
             .send()
             .await;
 
@@ -175,7 +179,7 @@ impl Client {
         query_params: impl Into<Option<&HashMap<String, String>>>,
     ) -> Result<ResponseWrapper<String>, APIError> {
         let result = self
-            .build_request(Method::POST, path, "application/json")
+            .build_request(Method::POST, path, Some(MIME_TYPE_APPLICATION_JSON))
             .query(&query_params.into())
             .json(&parameters)
             .send()
@@ -205,7 +209,7 @@ impl Client {
 
     pub(crate) async fn delete(&self, path: &str) -> Result<String, APIError> {
         let result = self
-            .build_request(Method::DELETE, path, "application/json")
+            .build_request(Method::DELETE, path, Some(MIME_TYPE_APPLICATION_JSON))
             .send()
             .await;
 
@@ -221,13 +225,8 @@ impl Client {
     }
 
     pub(crate) async fn post_with_form(&self, path: &str, form: Form) -> Result<String, APIError> {
-        #[cfg(not(target_arch = "wasm32"))]
-        let content_type = format!("multipart/form-data; boundary={}", form.boundary());
-        #[cfg(target_arch = "wasm32")]
-        let content_type = format!("multipart/form-data");
-
         let result = self
-            .build_request(Method::POST, path, &content_type)
+            .build_request(Method::POST, path, None)
             .multipart(form)
             .send()
             .await;
@@ -249,7 +248,7 @@ impl Client {
         parameters: &T,
     ) -> Result<Bytes, APIError> {
         let result = self
-            .build_request(Method::POST, path, "application/json")
+            .build_request(Method::POST, path, Some(MIME_TYPE_APPLICATION_JSON))
             .json(&parameters)
             .send()
             .await;
@@ -277,7 +276,7 @@ impl Client {
         O: DeserializeOwned + std::marker::Send + 'static,
     {
         let event_source = self
-            .build_request(Method::POST, path, "application/json")
+            .build_request(Method::POST, path, Some(MIME_TYPE_APPLICATION_JSON))
             .json(&parameters)
             .query(&query_params.into())
             .eventsource()
@@ -296,7 +295,7 @@ impl Client {
         I: Serialize,
     {
         let stream = self
-            .build_request(Method::POST, path, "application/json")
+            .build_request(Method::POST, path, Some(MIME_TYPE_APPLICATION_JSON))
             .json(&parameters)
             .send()
             .await
