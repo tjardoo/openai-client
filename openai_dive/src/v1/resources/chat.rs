@@ -171,6 +171,8 @@ pub struct ChatCompletionParameters {
 pub struct ChatCompletionStreamOptions {
     /// If set, an additional chunk will be streamed before the data: [DONE] message.
     pub include_usage: Option<bool>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub continuous_usage_stats: Option<bool>,
 }
 
 #[derive(Serialize, Deserialize, Debug, Clone, PartialEq)]
