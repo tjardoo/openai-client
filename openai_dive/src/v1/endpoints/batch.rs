@@ -14,7 +14,7 @@ pub struct Batches<'a> {
 
 impl Client {
     /// Create large batches of API requests for asynchronous processing.
-    pub fn batches(&self) -> Batches {
+    pub fn batches(&self) -> Batches<'_> {
         Batches { client: self }
     }
 }

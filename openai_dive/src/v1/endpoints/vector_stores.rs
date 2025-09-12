@@ -17,7 +17,7 @@ pub struct VectorStores<'a> {
 
 impl Client {
     /// Vector stores are used to store files for use by the file_search tool.
-    pub fn vector_stores(&self) -> VectorStores {
+    pub fn vector_stores(&self) -> VectorStores<'_> {
         VectorStores { client: self }
     }
 }

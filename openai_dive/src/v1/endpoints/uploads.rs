@@ -15,7 +15,7 @@ pub struct Uploads<'a> {
 
 impl Client {
     /// Allows you to upload large files in multiple parts.
-    pub fn uploads(&self) -> Uploads {
+    pub fn uploads(&self) -> Uploads<'_> {
         Uploads { client: self }
     }
 }

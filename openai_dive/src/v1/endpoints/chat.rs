@@ -19,7 +19,7 @@ pub struct Chat<'a> {
 
 impl Client {
     /// Given a list of messages comprising a conversation, the model will return a response.
-    pub fn chat(&self) -> Chat {
+    pub fn chat(&self) -> Chat<'_> {
         Chat { client: self }
     }
 }

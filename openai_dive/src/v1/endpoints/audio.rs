@@ -19,7 +19,7 @@ pub struct Audio<'a> {
 
 impl Client {
     /// Learn how to turn audio into text or text into audio.
-    pub fn audio(&self) -> Audio {
+    pub fn audio(&self) -> Audio<'_> {
         Audio { client: self }
     }
 }

@@ -14,7 +14,7 @@ pub struct AuditLogs<'a> {
 
 impl Administration<'_> {
     /// List user actions and configuration changes within this organization.
-    pub fn audit_logs(&self) -> AuditLogs {
+    pub fn audit_logs(&self) -> AuditLogs<'_> {
         AuditLogs {
             administration: self,
         }

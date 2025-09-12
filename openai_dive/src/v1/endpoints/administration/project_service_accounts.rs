@@ -13,7 +13,7 @@ pub struct ProjectServiceAccounts<'a> {
 
 impl Administration<'_> {
     /// Manage service accounts within a project.
-    pub fn project_service_accounts(&self) -> ProjectServiceAccounts {
+    pub fn project_service_accounts(&self) -> ProjectServiceAccounts<'_> {
         ProjectServiceAccounts {
             administration: self,
         }

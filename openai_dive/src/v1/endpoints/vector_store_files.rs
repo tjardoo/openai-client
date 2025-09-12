@@ -14,7 +14,7 @@ pub struct VectorStoreFiles<'a> {
 
 impl Client {
     /// Vector store files represent files inside a vector store.
-    pub fn vector_store_files(&self) -> VectorStoreFiles {
+    pub fn vector_store_files(&self) -> VectorStoreFiles<'_> {
         VectorStoreFiles { client: self }
     }
 }

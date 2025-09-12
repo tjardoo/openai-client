@@ -75,6 +75,7 @@ pub enum ItemRole {
 pub enum ContentType {
     InputText,
     InputAudio,
+    OutputAudio,
     Text,
     Audio,
 }

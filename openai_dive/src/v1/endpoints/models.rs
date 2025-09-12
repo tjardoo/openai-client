@@ -10,7 +10,7 @@ pub struct Models<'a> {
 
 impl Client {
     /// List and describe the various models available in the API.
-    pub fn models(&self) -> Models {
+    pub fn models(&self) -> Models<'_> {
         Models { client: self }
     }
 }

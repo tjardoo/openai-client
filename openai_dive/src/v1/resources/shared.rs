@@ -173,9 +173,10 @@ pub enum FinishReason {
 #[derive(Serialize, Deserialize, Debug, Clone, PartialEq)]
 #[serde(rename_all = "lowercase")]
 pub enum ReasoningEffort {
-    Low,
-    Medium,
     High,
+    Medium,
+    Low,
+    Minimal,
 }
 
 #[derive(Serialize, Deserialize, Debug, Clone, PartialEq)]

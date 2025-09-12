@@ -9,7 +9,7 @@ pub struct Moderations<'a> {
 
 impl Client {
     /// Given some input text, outputs if the model classifies it as potentially harmful across several categories.
-    pub fn moderations(&self) -> Moderations {
+    pub fn moderations(&self) -> Moderations<'_> {
         Moderations { client: self }
     }
 }

@@ -66,7 +66,7 @@ Creates a model response for the given chat conversation.
 
 ```rust
 let parameters = ChatCompletionParametersBuilder::default()
-    .model(FlagshipModel::Gpt4O.to_string())
+    .model(Gpt4Model::Gpt4O.to_string())
     .messages(vec![
         ChatMessage::User {
             content: ChatMessageContent::Text("Hello!".to_string()),
@@ -94,7 +94,7 @@ Learn how to use vision capabilities to understand images.
 
 ```rust
 let parameters = ChatCompletionParametersBuilder::default()
-    .model(FlagshipModel::Gpt4O.to_string())
+    .model(Gpt4Model::Gpt4O.to_string())
     .messages(vec![
         ChatMessage::User {
             content: ChatMessageContent::Text("What is in this image?".to_string()),
@@ -133,7 +133,7 @@ Learn how to use audio capabilities to understand audio files.
 let recording = std::fs::read("example-audio.txt").unwrap();
 
 let parameters = ChatCompletionParametersBuilder::default()
-    .model(FlagshipModel::Gpt4OAudioPreview.to_string())
+    .model(Gpt4Model::Gpt4OAudioPreview.to_string())
     .messages(vec![
         ChatMessage::User {
             content: ChatMessageContent::Text(
@@ -175,7 +175,7 @@ let messages = vec![ChatMessage::User {
 }];
 
 let parameters = ChatCompletionParametersBuilder::default()
-    .model(FlagshipModel::Gpt4O.to_string())
+    .model(Gpt4Model::Gpt4O.to_string())
     .messages(messages)
     .tools(vec![ChatCompletionTool {
         r#type: ChatCompletionToolType::Function,
@@ -591,22 +591,17 @@ let client = Client {
 
 You can use these predefined constants to set the model in the parameters or use any string representation (ie. for your custom models).
 
-#### Flagship Models
+#### GPT-5
+
+- Gpt51 (`gpt-5.1`)
+- Gpt5O (`gpt-5o`)
+- Gpt5OAudioPreview (`gpt-5o-audio-preview`)
+
+#### GPT-4
 
 - Gpt41 (`gpt-4.1`)
 - Gpt4O (`gpt-4o`)
 - Gpt4OAudioPreview (`gpt-4o-audio-preview`)
-
-#### Cost-Optimized Models
-
-- O4Mini (`o4-mini`)
-- Gpt41Nano (`gpt-4.1-nano`)
-- Gpt4OMini (`gpt-4o-mini`)
-
-#### Reasoning Models
-
-- O4Mini (`o4-mini`)
-- O3Mini (`o3-mini`)
 
 #### Tool Models
 
