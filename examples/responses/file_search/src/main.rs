@@ -2,7 +2,7 @@ use std::vec;
 
 use ftail::Ftail;
 use openai_dive::v1::api::Client;
-use openai_dive::v1::models::FlagshipModel;
+use openai_dive::v1::models::Gpt4Model;
 use openai_dive::v1::resources::file::{FilePurpose, UploadFileParametersBuilder};
 use openai_dive::v1::resources::response::request::{ResponseInput, ResponseParametersBuilder};
 use openai_dive::v1::resources::response::shared::{ResponseTool, ResponseToolChoice};
@@ -38,7 +38,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
     println!("{vector_store:#?}");
 
     let parameters = ResponseParametersBuilder::default()
-        .model(FlagshipModel::Gpt4O.to_string())
+        .model(Gpt4Model::Gpt4O.to_string())
         .input(ResponseInput::Text(
             "Can I use the OpenAI Dive crate for other compatible APIs like Google's Gemini?"
                 .to_string(),

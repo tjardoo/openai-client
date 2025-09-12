@@ -40,9 +40,12 @@ pub struct CreateImageParameters {
     /// This param is only supported for dall-e-3.
     #[serde(skip_serializing_if = "Option::is_none")]
     pub style: Option<ImageStyle>,
-    /// A unique identifier representing your end-user, which can help OpenAI to monitor and detect abuse.
+    /// A stable identifier used to help detect users of your application that may be violating OpenAI's usage policies.
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub user: Option<String>,
+    pub safety_identifier: Option<String>,
+    /// Used by OpenAI to cache responses for similar requests to optimize your cache hit rates.
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub prompt_cache_key: Option<String>,
 }
 
 #[derive(Serialize, Deserialize, Debug, Default, Builder, Clone, PartialEq)]

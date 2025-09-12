@@ -1,31 +1,23 @@
 use serde::{Deserialize, Serialize};
 
 #[derive(Serialize, Deserialize, Debug, Clone, PartialEq)]
-pub enum FlagshipModel {
+pub enum Gpt5Model {
+    #[serde(rename = "gpt-5")]
+    Gpt5,
+    #[serde(rename = "gpt-5-mini")]
+    Gpt5Mini,
+    #[serde(rename = "gpt-5-nano")]
+    Gpt5Nano,
+}
+
+#[derive(Serialize, Deserialize, Debug, Clone, PartialEq)]
+pub enum Gpt4Model {
     #[serde(rename = "gpt-4.1")]
     Gpt41,
     #[serde(rename = "gpt-4o")]
     Gpt4O,
     #[serde(rename = "gpt-4o-audio-preview")]
     Gpt4OAudioPreview,
-}
-
-#[derive(Serialize, Deserialize, Debug, Clone, PartialEq)]
-pub enum CostOptimizedModel {
-    #[serde(rename = "o4-mini")]
-    O4Mini,
-    #[serde(rename = "gpt-4.1-nano")]
-    Gpt41Nano,
-    #[serde(rename = "gpt-4o-mini")]
-    Gpt4OMini,
-}
-
-#[derive(Serialize, Deserialize, Debug, Clone, PartialEq)]
-pub enum ReasoningModel {
-    #[serde(rename = "o4-mini")]
-    O4Mini,
-    #[serde(rename = "o3-mini")]
-    O3Mini,
 }
 
 #[derive(Serialize, Deserialize, Debug, Clone, PartialEq)]
@@ -92,9 +84,8 @@ macro_rules! impl_display {
     };
 }
 
-impl_display!(FlagshipModel);
-impl_display!(CostOptimizedModel);
-impl_display!(ReasoningModel);
+impl_display!(Gpt5Model);
+impl_display!(Gpt4Model);
 impl_display!(ToolModel);
 impl_display!(ModerationModel);
 impl_display!(EmbeddingModel);

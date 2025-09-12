@@ -115,11 +115,6 @@ pub struct ChatCompletionParameters {
     /// Setting to { "type": "json_object" } enables JSON mode, which ensures the message the model generates is valid JSON.
     #[serde(skip_serializing_if = "Option::is_none")]
     pub response_format: Option<ChatCompletionResponseFormat>,
-    /// This feature is in Beta. If specified, our system will make a best effort to sample deterministically,
-    /// such that repeated requests with the same seed and parameters should return the same result.
-    /// Determinism is not guaranteed, and you should refer to the system_fingerprint response parameter to monitor changes in the backend.
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub seed: Option<u32>,
     /// Up to 4 sequences where the API will stop generating further tokens.
     #[serde(skip_serializing_if = "Option::is_none")]
     pub stop: Option<StopToken>,
@@ -151,9 +146,12 @@ pub struct ChatCompletionParameters {
     /// Whether to enable parallel function calling during tool use.
     #[serde(skip_serializing_if = "Option::is_none")]
     pub parallel_tool_calls: Option<bool>,
-    /// A unique identifier representing your end-user, which can help OpenAI to monitor and detect abuse.
+    /// A stable identifier used to help detect users of your application that may be violating OpenAI's usage policies.
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub user: Option<String>,
+    pub safety_identifier: Option<String>,
+    /// Used by OpenAI to cache responses for similar requests to optimize your cache hit rates.
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub prompt_cache_key: Option<String>,
     /// This tool searches the web for relevant results to use in a response.
     #[serde(skip_serializing_if = "Option::is_none")]
     pub web_search_options: Option<WebSearchOptions>,
