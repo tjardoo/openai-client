@@ -13,7 +13,7 @@ pub struct Invites<'a> {
 
 impl Administration<'_> {
     /// Invite and manage invitations for an organization.
-    pub fn invites(&self) -> Invites {
+    pub fn invites(&self) -> Invites<'_> {
         Invites {
             administration: self,
         }

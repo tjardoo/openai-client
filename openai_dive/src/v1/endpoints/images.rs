@@ -12,7 +12,7 @@ pub struct Images<'a> {
 
 impl Client {
     /// Given a prompt and/or an input image, the model will generate a new image.
-    pub fn images(&self) -> Images {
+    pub fn images(&self) -> Images<'_> {
         Images { client: self }
     }
 }

@@ -12,7 +12,7 @@ pub struct Files<'a> {
 
 impl Client {
     /// Files are used to upload documents that can be used with features like Assistants, Fine-tuning, and Batch API.
-    pub fn files(&self) -> Files {
+    pub fn files(&self) -> Files<'_> {
         Files { client: self }
     }
 }

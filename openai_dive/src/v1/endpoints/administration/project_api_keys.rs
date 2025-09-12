@@ -12,7 +12,7 @@ pub struct ProjectApiKeys<'a> {
 
 impl Administration<'_> {
     /// Manage API keys for a given project.
-    pub fn project_api_keys(&self) -> ProjectApiKeys {
+    pub fn project_api_keys(&self) -> ProjectApiKeys<'_> {
         ProjectApiKeys {
             administration: self,
         }

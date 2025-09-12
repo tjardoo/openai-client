@@ -13,7 +13,7 @@ pub struct Projects<'a> {
 
 impl Administration<'_> {
     /// Manage the projects within an organization includes creation, updating, and archiving of projects.
-    pub fn projects(&self) -> Projects {
+    pub fn projects(&self) -> Projects<'_> {
         Projects {
             administration: self,
         }

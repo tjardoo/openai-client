@@ -14,7 +14,7 @@ pub struct Usage<'a> {
 
 impl Client {
     /// The Usage API provides detailed insights into your activity across the OpenAI API.
-    pub fn usage(&self) -> Usage {
+    pub fn usage(&self) -> Usage<'_> {
         Usage { client: self }
     }
 }

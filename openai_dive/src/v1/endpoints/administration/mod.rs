@@ -15,7 +15,7 @@ pub struct Administration<'a> {
 
 impl Client {
     /// Programmatically manage your organization.
-    pub fn administration(&self) -> Administration {
+    pub fn administration(&self) -> Administration<'_> {
         Administration { client: self }
     }
 }

@@ -13,7 +13,7 @@ pub struct Users<'a> {
 
 impl Administration<'_> {
     /// Manage users and their role in an organization.
-    pub fn users(&self) -> Users {
+    pub fn users(&self) -> Users<'_> {
         Users {
             administration: self,
         }

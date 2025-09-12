@@ -15,7 +15,7 @@ pub struct FineTuning<'a> {
 
 impl Client {
     /// Manage fine-tuning jobs to tailor a model to your specific training data.
-    pub fn fine_tuning(&self) -> FineTuning {
+    pub fn fine_tuning(&self) -> FineTuning<'_> {
         FineTuning { client: self }
     }
 }

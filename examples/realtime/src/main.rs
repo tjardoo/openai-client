@@ -14,20 +14,20 @@ use openai_dive::v1::{
 };
 use reqwest_websocket::Message;
 #[cfg(feature = "audio")]
-use rodio::{Decoder, OutputStream, Source};
+use rodio::{Decoder, OutputStream};
 use serde_json::Value;
 use std::{io::Write, vec};
 use tokio::io::{AsyncBufReadExt, BufReader};
 
 #[tokio::main]
 async fn main() -> Result<(), Box<dyn std::error::Error>> {
-    // ftail::Ftail::new()
-    //     .console(log::LevelFilter::Debug)
-    //     .init()?;
+    ftail::Ftail::new()
+        .console(log::LevelFilter::Debug)
+        .init()?;
 
     let client = Client::new_from_env();
 
-    let model = "gpt-4o-realtime-preview-2024-10-01";
+    let model = "gpt-realtime";
 
     let websocket = client.realtime().websocket(model).await?;
 
@@ -52,7 +52,8 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
                             if let Some(deserializer) = deserializers.get(message_type) {
                                 match deserializer(&text) {
                                     Ok(_) => {
-                                        if message_type == "response.audio_transcript.delta" {
+                                        if message_type == "response.output_audio_transcript.delta"
+                                        {
                                             if let Ok(response_audio_transcript_delta) =
                                                 serde_json::from_str::<ResponseAudioTranscriptDelta>(
                                                     &text,
@@ -62,33 +63,41 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
                                                 std::io::stdout().flush().unwrap();
                                             }
                                         } else if message_type == "response.done" {
-                                            print!("\n{}", "You: ".black());
-                                            std::io::stdout().flush().unwrap();
-
-                                            #[cfg(feature = "audio")]
+                                            if let Ok(json) =
+                                                serde_json::from_str::<serde_json::Value>(&text)
                                             {
-                                                let (_stream, stream_handle) =
-                                                    OutputStream::try_default().unwrap();
-
-                                                let file =
-                                                    std::fs::File::open("output.wav").unwrap();
-
-                                                let wav_reader =
-                                                    hound::WavReader::new(file).unwrap();
-
-                                                let duration = wav_reader.len() as f64 / 24000_f64;
-
-                                                let file =
-                                                    std::fs::File::open("output.wav").unwrap();
-
-                                                let source = Decoder::new(file).unwrap();
-
-                                                let _ = stream_handle
-                                                    .play_raw(source.convert_samples());
-
-                                                std::thread::sleep(
-                                                    std::time::Duration::from_secs_f64(duration),
-                                                );
+                                                if let Some(output) = json
+                                                    .get("response")
+                                                    .and_then(|r| r.get("output"))
+                                                {
+                                                    if let Some(array) = output.as_array() {
+                                                        for item in array {
+                                                            if let Some(content) = item
+                                                                .get("content")
+                                                                .and_then(|c| c.as_array())
+                                                            {
+                                                                for c in content {
+                                                                    if c.get("type")
+                                                                        .and_then(|t| t.as_str())
+                                                                        == Some("output_audio")
+                                                                    {
+                                                                        if let Some(transcript) = c
+                                                                            .get("transcript")
+                                                                            .and_then(|t| {
+                                                                                t.as_str()
+                                                                            })
+                                                                        {
+                                                                            println!(
+                                                                                "AI: {}",
+                                                                                transcript.blue()
+                                                                            );
+                                                                        }
+                                                                    }
+                                                                }
+                                                            }
+                                                        }
+                                                    }
+                                                }
                                             }
                                         } else if message_type == "response.created" {
                                             print!("{}", "AI: ".blue());
@@ -98,7 +107,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
                                             // update the settings...
                                             //
                                             //
-                                        } else if message_type == "response.audio.delta" {
+                                        } else if message_type == "response.output_audio.delta" {
                                             if let Ok(response_audio_delta) =
                                                 serde_json::from_str::<ResponseAudioDelta>(&text)
                                             {
@@ -114,9 +123,13 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
 
                                                 file.write_all(&decoded_audio).unwrap();
                                             }
-                                        } else if message_type == "response.audio.done" {
+                                        } else if message_type
+                                            == "response.output_audio_transcript.done"
+                                        {
                                             #[cfg(feature = "audio")]
                                             {
+                                                //
+
                                                 let audio = std::fs::read("output.wav").unwrap();
 
                                                 let pcm_samples: Vec<i16> = audio
@@ -128,6 +141,17 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
 
                                                 save_as_wav(&pcm_samples, 24000, "output.wav")
                                                     .unwrap();
+
+                                                let (_stream, stream_handle) =
+                                                    OutputStream::try_default().unwrap();
+                                                let file =
+                                                    std::fs::File::open("output.wav").unwrap();
+                                                let source = Decoder::new(file).unwrap();
+
+                                                let sink =
+                                                    rodio::Sink::try_new(&stream_handle).unwrap();
+                                                sink.append(source);
+                                                sink.sleep_until_end();
                                             }
                                         }
                                     }

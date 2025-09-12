@@ -14,7 +14,7 @@ pub struct ProjectRateLimits<'a> {
 
 impl Administration<'_> {
     /// Manage rate limits per model for projects. Rate limits may be configured to be equal to or lower than the organization's rate limits.
-    pub fn project_rate_limits(&self) -> ProjectRateLimits {
+    pub fn project_rate_limits(&self) -> ProjectRateLimits<'_> {
         ProjectRateLimits {
             administration: self,
         }

@@ -14,7 +14,7 @@ pub struct ProjectUsers<'a> {
 
 impl Administration<'_> {
     /// Manage users within a project, including adding, updating roles, and removing users.
-    pub fn project_users(&self) -> ProjectUsers {
+    pub fn project_users(&self) -> ProjectUsers<'_> {
         ProjectUsers {
             administration: self,
         }

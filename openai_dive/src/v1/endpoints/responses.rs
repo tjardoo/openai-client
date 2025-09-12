@@ -11,7 +11,7 @@ pub struct Responses<'a> {
 
 impl Client {
     /// OpenAI's most advanced interface for generating model responses. Supports text and image inputs, and text outputs.
-    pub fn responses(&self) -> Responses {
+    pub fn responses(&self) -> Responses<'_> {
         Responses { client: self }
     }
 }

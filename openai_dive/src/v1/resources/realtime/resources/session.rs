@@ -132,5 +132,5 @@ pub enum FunctionType {
 pub enum MaxOutputTokens {
     Integer(u32),
     #[serde(rename = "inf")]
-    Inf,
+    Inf(String),
 }

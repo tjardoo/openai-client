@@ -86,7 +86,7 @@ fn add_server_deserializers(deserializers: &mut DeserializeHashMap) {
     deserializers.insert("session.updated", |text| {
         Ok(Box::new(serde_json::from_str::<SessionUpdated>(text)?))
     });
-    deserializers.insert("conversation.created", |text| {
+    deserializers.insert("conversation.item.retieved", |text| {
         Ok(Box::new(serde_json::from_str::<ConversationCreated>(text)?))
     });
     deserializers.insert("input_audio_buffer.committed", |text| {
@@ -109,7 +109,7 @@ fn add_server_deserializers(deserializers: &mut DeserializeHashMap) {
             InputAudioBufferSpeechStopped,
         >(text)?))
     });
-    deserializers.insert("conversation.item.created", |text| {
+    deserializers.insert("conversation.item.added", |text| {
         Ok(Box::new(serde_json::from_str::<ConversationItemCreated>(
             text,
         )?))
@@ -166,26 +166,26 @@ fn add_server_deserializers(deserializers: &mut DeserializeHashMap) {
             text,
         )?))
     });
-    deserializers.insert("response.text.delta", |text| {
+    deserializers.insert("response.output_text.delta", |text| {
         Ok(Box::new(serde_json::from_str::<ResponseTextDelta>(text)?))
     });
-    deserializers.insert("response.text.done", |text| {
+    deserializers.insert("response.output_text.done", |text| {
         Ok(Box::new(serde_json::from_str::<ResponseTextDone>(text)?))
     });
-    deserializers.insert("response.audio_transcript.delta", |text| {
+    deserializers.insert("response.output_audio_transcript.delta", |text| {
         Ok(Box::new(serde_json::from_str::<
             ResponseAudioTranscriptDelta,
         >(text)?))
     });
-    deserializers.insert("response.audio_transcript.done", |text| {
+    deserializers.insert("response.output_audio_transcript.done", |text| {
         Ok(Box::new(
             serde_json::from_str::<ResponseAudioTranscriptDone>(text)?,
         ))
     });
-    deserializers.insert("response.audio.delta", |text| {
+    deserializers.insert("response.output_audio.delta", |text| {
         Ok(Box::new(serde_json::from_str::<ResponseAudioDelta>(text)?))
     });
-    deserializers.insert("response.audio.done", |text| {
+    deserializers.insert("response.output_audio.done", |text| {
         Ok(Box::new(serde_json::from_str::<ResponseAudioDone>(text)?))
     });
     deserializers.insert("response.function_call_arguments.delta", |text| {
