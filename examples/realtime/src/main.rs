@@ -1,20 +1,23 @@
+#[cfg(feature = "audio")]
 use base64::{engine::general_purpose, Engine};
 use ftail::ansi_escape::TextStyling;
 use futures_util::{SinkExt, StreamExt};
 #[cfg(feature = "audio")]
-use hound::{WavSpec, WavWriter};
+use openai_dive::v1::resources::realtime::server::ResponseAudioDelta;
 use openai_dive::v1::{
     api::Client,
     resources::realtime::{
         client::{ConversationItemCreateBuilder, ResponseCreateBuilder},
         get_realtime_server_events_deserializers,
         resources::item::{ContentType, Item, ItemContent, ItemRole, ItemType},
-        server::{ResponseAudioDelta, ResponseAudioTranscriptDelta},
+        server::ResponseAudioTranscriptDelta,
     },
 };
 use reqwest_websocket::Message;
 #[cfg(feature = "audio")]
-use rodio::{Decoder, OutputStream};
+use rodio::buffer::SamplesBuffer;
+#[cfg(feature = "audio")]
+use rodio::OutputStream;
 use serde_json::Value;
 use std::{io::Write, vec};
 use tokio::io::{AsyncBufReadExt, BufReader};
@@ -24,6 +27,11 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
     ftail::Ftail::new()
         .console(log::LevelFilter::Debug)
         .init()?;
+
+    #[cfg(feature = "audio")]
+    let (_stream, stream_handle) = OutputStream::try_default().unwrap();
+    #[cfg(feature = "audio")]
+    let sink = rodio::Sink::try_new(&stream_handle).unwrap();
 
     let client = Client::new_from_env();
 
@@ -62,52 +70,10 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
                                                 print!("{}", response_audio_transcript_delta.delta);
                                                 std::io::stdout().flush().unwrap();
                                             }
-                                        } else if message_type == "response.done" {
-                                            if let Ok(json) =
-                                                serde_json::from_str::<serde_json::Value>(&text)
-                                            {
-                                                if let Some(output) = json
-                                                    .get("response")
-                                                    .and_then(|r| r.get("output"))
-                                                {
-                                                    if let Some(array) = output.as_array() {
-                                                        for item in array {
-                                                            if let Some(content) = item
-                                                                .get("content")
-                                                                .and_then(|c| c.as_array())
-                                                            {
-                                                                for c in content {
-                                                                    if c.get("type")
-                                                                        .and_then(|t| t.as_str())
-                                                                        == Some("output_audio")
-                                                                    {
-                                                                        if let Some(transcript) = c
-                                                                            .get("transcript")
-                                                                            .and_then(|t| {
-                                                                                t.as_str()
-                                                                            })
-                                                                        {
-                                                                            println!(
-                                                                                "AI: {}",
-                                                                                transcript.blue()
-                                                                            );
-                                                                        }
-                                                                    }
-                                                                }
-                                                            }
-                                                        }
-                                                    }
-                                                }
-                                            }
                                         } else if message_type == "response.created" {
                                             print!("{}", "AI: ".blue());
-
-                                            std::fs::write("output.wav", vec![]).unwrap();
-                                        } else if message_type == "session.created" {
-                                            // update the settings...
-                                            //
-                                            //
                                         } else if message_type == "response.output_audio.delta" {
+                                            #[cfg(feature = "audio")]
                                             if let Ok(response_audio_delta) =
                                                 serde_json::from_str::<ResponseAudioDelta>(&text)
                                             {
@@ -115,44 +81,20 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
                                                     .decode(response_audio_delta.delta.as_bytes())
                                                     .unwrap();
 
-                                                let mut file = std::fs::OpenOptions::new()
-                                                    .create(true)
-                                                    .append(true)
-                                                    .open("output.wav")
-                                                    .unwrap();
-
-                                                file.write_all(&decoded_audio).unwrap();
-                                            }
-                                        } else if message_type
-                                            == "response.output_audio_transcript.done"
-                                        {
-                                            #[cfg(feature = "audio")]
-                                            {
-                                                //
-
-                                                let audio = std::fs::read("output.wav").unwrap();
-
-                                                let pcm_samples: Vec<i16> = audio
-                                                    .chunks(2)
-                                                    .map(|chunk| {
-                                                        i16::from_le_bytes([chunk[0], chunk[1]])
-                                                    })
+                                                let pcm_samples: Vec<i16> = decoded_audio
+                                                    .chunks_exact(2)
+                                                    .map(|c| i16::from_le_bytes([c[0], c[1]]))
                                                     .collect();
 
-                                                save_as_wav(&pcm_samples, 24000, "output.wav")
-                                                    .unwrap();
+                                                let source =
+                                                    SamplesBuffer::new(1, 24000, pcm_samples);
 
-                                                let (_stream, stream_handle) =
-                                                    OutputStream::try_default().unwrap();
-                                                let file =
-                                                    std::fs::File::open("output.wav").unwrap();
-                                                let source = Decoder::new(file).unwrap();
-
-                                                let sink =
-                                                    rodio::Sink::try_new(&stream_handle).unwrap();
                                                 sink.append(source);
-                                                sink.sleep_until_end();
                                             }
+                                        } else if message_type == "response.done" {
+                                            println!();
+
+                                            std::io::stdout().flush().unwrap();
                                         }
                                     }
                                     Err(error) => {
@@ -233,30 +175,6 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
 
     tokio::signal::ctrl_c().await?;
     println!("\nShutting down...");
-
-    Ok(())
-}
-
-#[cfg(feature = "audio")]
-fn save_as_wav(
-    pcm_data: &[i16],
-    sample_rate: u32,
-    file_path: &str,
-) -> Result<(), Box<dyn std::error::Error>> {
-    let spec = WavSpec {
-        channels: 1,
-        sample_rate,
-        bits_per_sample: 16,
-        sample_format: hound::SampleFormat::Int,
-    };
-
-    let mut writer = WavWriter::create(file_path, spec)?;
-
-    for sample in pcm_data {
-        writer.write_sample(*sample)?;
-    }
-
-    writer.finalize()?;
 
     Ok(())
 }
