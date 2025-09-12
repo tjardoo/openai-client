@@ -280,7 +280,7 @@ pub enum ChatMessage {
     },
     Tool {
         /// The contents of the tool message.
-        content: String,
+        content: ChatMessageContent,
         /// Tool call that this message is responding to.
         tool_call_id: String,
     },
@@ -308,6 +308,7 @@ impl ChatMessage {
             ChatMessage::Developer { content, .. }
             | ChatMessage::System { content, .. }
             | ChatMessage::User { content, .. }
+            | ChatMessage::Tool { content, .. }
             | ChatMessage::Assistant {
                 content: Some(content),
                 ..
@@ -319,7 +320,6 @@ impl ChatMessage {
                 }
             }
             ChatMessage::Assistant { content: None, .. } => None,
-            ChatMessage::Tool { content, .. } => Some(content),
         }
     }
 
@@ -740,7 +740,8 @@ impl DeltaFunction {
 mod tests {
     use crate::v1::resources::chat::{
         ChatCompletionResponseFormat, ChatCompletionToolChoice, ChatCompletionToolChoiceFunction,
-        ChatCompletionToolChoiceFunctionName, ChatCompletionToolType, JsonSchemaBuilder,
+        ChatCompletionToolChoiceFunctionName, ChatCompletionToolType, ChatMessage,
+        ChatMessageContent, ChatMessageContentPart, ChatMessageTextContentPart, JsonSchemaBuilder,
     };
     use serde_json;
 
@@ -811,5 +812,43 @@ mod tests {
         let deserialized: ChatCompletionToolChoice =
             serde_json::from_str(serialized.as_str()).unwrap();
         assert_eq!(deserialized, tool_choice)
+    }
+
+    #[test]
+    fn test_chat_message_tool_content_string_serialization_deserialization() {
+        let tool_message = ChatMessage::Tool {
+            content: ChatMessageContent::Text("tool_result".to_string()),
+            tool_call_id: "tool_call_id".to_string(),
+        };
+
+        let serialized = serde_json::to_string(&tool_message).unwrap();
+        assert_eq!(
+            serialized,
+            "{\"role\":\"tool\",\"content\":\"tool_result\",\"tool_call_id\":\"tool_call_id\"}"
+        );
+
+        let deserialized: ChatMessage = serde_json::from_str(serialized.as_str()).unwrap();
+        assert_eq!(deserialized, tool_message)
+    }
+
+    #[test]
+    fn test_chat_message_tool_content_array_serialization_deserialization() {
+        let content_array = vec![ChatMessageContentPart::Text(ChatMessageTextContentPart {
+            r#type: "text".to_string(),
+            text: "tool_result".to_string(),
+        })];
+        let tool_message = ChatMessage::Tool {
+            content: ChatMessageContent::ContentPart(content_array),
+            tool_call_id: "tool_call_id".to_string(),
+        };
+
+        let serialized = serde_json::to_string(&tool_message).unwrap();
+        assert_eq!(
+            serialized,
+            "{\"role\":\"tool\",\"content\":[{\"type\":\"text\",\"text\":\"tool_result\"}],\"tool_call_id\":\"tool_call_id\"}"
+        );
+
+        let deserialized: ChatMessage = serde_json::from_str(serialized.as_str()).unwrap();
+        assert_eq!(deserialized, tool_message)
     }
 }
