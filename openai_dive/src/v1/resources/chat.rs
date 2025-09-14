@@ -115,6 +115,12 @@ pub struct ChatCompletionParameters {
     /// Setting to { "type": "json_object" } enables JSON mode, which ensures the message the model generates is valid JSON.
     #[serde(skip_serializing_if = "Option::is_none")]
     pub response_format: Option<ChatCompletionResponseFormat>,
+    /// Deprecated (still used by vllm)
+    /// This feature is in Beta. If specified, our system will make a best effort to sample deterministically,
+    /// such that repeated requests with the same seed and parameters should return the same result.
+    /// Determinism is not guaranteed, and you should refer to the system_fingerprint response parameter to monitor changes in the backend.
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub seed: Option<u32>,
     /// Up to 4 sequences where the API will stop generating further tokens.
     #[serde(skip_serializing_if = "Option::is_none")]
     pub stop: Option<StopToken>,
