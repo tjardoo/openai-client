@@ -268,11 +268,7 @@ pub struct ComputerToolCall {
 #[serde(tag = "type")]
 pub enum ComputerAction {
     #[serde(rename = "click")]
-    Click {
-        x: i32,
-        y: i32,
-        button: MouseButton,
-    },
+    Click { x: i32, y: i32, button: MouseButton },
     #[serde(rename = "double_click")]
     DoubleClick { x: i32, y: i32 },
     #[serde(rename = "drag")]

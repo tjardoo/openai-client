@@ -185,7 +185,6 @@ pub enum OutputContent {
     Refusal { refusal: String },
 }
 
-
 /// Streaming events for Response API
 #[derive(Serialize, Deserialize, Debug, Clone, PartialEq)]
 #[serde(tag = "type")]
@@ -616,12 +615,20 @@ impl ResponseStreamEvent {
             Self::ResponseContentPartDone { .. } => "response.content_part.done",
             Self::ResponseOutputTextDelta { .. } => "response.output_text.delta",
             Self::ResponseOutputTextDone { .. } => "response.output_text.done",
-            Self::ResponseOutputTextAnnotationAdded { .. } => "response.output_text.annotation.added",
+            Self::ResponseOutputTextAnnotationAdded { .. } => {
+                "response.output_text.annotation.added"
+            }
             Self::ResponseRefusalDelta { .. } => "response.refusal.delta",
             Self::ResponseRefusalDone { .. } => "response.refusal.done",
-            Self::ResponseFunctionCallArgumentsDelta { .. } => "response.function_call_arguments.delta",
-            Self::ResponseFunctionCallArgumentsDone { .. } => "response.function_call_arguments.done",
-            Self::ResponseFileSearchCallInProgress { .. } => "response.file_search_call.in_progress",
+            Self::ResponseFunctionCallArgumentsDelta { .. } => {
+                "response.function_call_arguments.delta"
+            }
+            Self::ResponseFunctionCallArgumentsDone { .. } => {
+                "response.function_call_arguments.done"
+            }
+            Self::ResponseFileSearchCallInProgress { .. } => {
+                "response.file_search_call.in_progress"
+            }
             Self::ResponseFileSearchCallSearching { .. } => "response.file_search_call.searching",
             Self::ResponseFileSearchCallCompleted { .. } => "response.file_search_call.completed",
             Self::ResponseWebSearchCallInProgress { .. } => "response.web_search_call.in_progress",
@@ -629,14 +636,26 @@ impl ResponseStreamEvent {
             Self::ResponseWebSearchCallCompleted { .. } => "response.web_search_call.completed",
             Self::ResponseReasoningTextDelta { .. } => "response.reasoning_text.delta",
             Self::ResponseReasoningTextDone { .. } => "response.reasoning_text.done",
-            Self::ResponseReasoningSummaryPartAdded { .. } => "response.reasoning_summary_part.added",
+            Self::ResponseReasoningSummaryPartAdded { .. } => {
+                "response.reasoning_summary_part.added"
+            }
             Self::ResponseReasoningSummaryPartDone { .. } => "response.reasoning_summary_part.done",
-            Self::ResponseReasoningSummaryTextDelta { .. } => "response.reasoning_summary_text.delta",
+            Self::ResponseReasoningSummaryTextDelta { .. } => {
+                "response.reasoning_summary_text.delta"
+            }
             Self::ResponseReasoningSummaryTextDone { .. } => "response.reasoning_summary_text.done",
-            Self::ResponseImageGenerationCallInProgress { .. } => "response.image_generation_call.in_progress",
-            Self::ResponseImageGenerationCallGenerating { .. } => "response.image_generation_call.generating",
-            Self::ResponseImageGenerationCallPartialImage { .. } => "response.image_generation_call.partial_image",
-            Self::ResponseImageGenerationCallCompleted { .. } => "response.image_generation_call.completed",
+            Self::ResponseImageGenerationCallInProgress { .. } => {
+                "response.image_generation_call.in_progress"
+            }
+            Self::ResponseImageGenerationCallGenerating { .. } => {
+                "response.image_generation_call.generating"
+            }
+            Self::ResponseImageGenerationCallPartialImage { .. } => {
+                "response.image_generation_call.partial_image"
+            }
+            Self::ResponseImageGenerationCallCompleted { .. } => {
+                "response.image_generation_call.completed"
+            }
             Self::ResponseMcpCallInProgress { .. } => "response.mcp_call.in_progress",
             Self::ResponseMcpCallCompleted { .. } => "response.mcp_call.completed",
             Self::ResponseMcpCallFailed { .. } => "response.mcp_call.failed",
@@ -645,12 +664,24 @@ impl ResponseStreamEvent {
             Self::ResponseMcpListToolsInProgress { .. } => "response.mcp_list_tools.in_progress",
             Self::ResponseMcpListToolsCompleted { .. } => "response.mcp_list_tools.completed",
             Self::ResponseMcpListToolsFailed { .. } => "response.mcp_list_tools.failed",
-            Self::ResponseCodeInterpreterCallInProgress { .. } => "response.code_interpreter_call.in_progress",
-            Self::ResponseCodeInterpreterCallInterpreting { .. } => "response.code_interpreter_call.interpreting",
-            Self::ResponseCodeInterpreterCallCompleted { .. } => "response.code_interpreter_call.completed",
-            Self::ResponseCodeInterpreterCallCodeDelta { .. } => "response.code_interpreter_call_code.delta",
-            Self::ResponseCodeInterpreterCallCodeDone { .. } => "response.code_interpreter_call_code.done",
-            Self::ResponseCustomToolCallInputDelta { .. } => "response.custom_tool_call_input.delta",
+            Self::ResponseCodeInterpreterCallInProgress { .. } => {
+                "response.code_interpreter_call.in_progress"
+            }
+            Self::ResponseCodeInterpreterCallInterpreting { .. } => {
+                "response.code_interpreter_call.interpreting"
+            }
+            Self::ResponseCodeInterpreterCallCompleted { .. } => {
+                "response.code_interpreter_call.completed"
+            }
+            Self::ResponseCodeInterpreterCallCodeDelta { .. } => {
+                "response.code_interpreter_call_code.delta"
+            }
+            Self::ResponseCodeInterpreterCallCodeDone { .. } => {
+                "response.code_interpreter_call_code.done"
+            }
+            Self::ResponseCustomToolCallInputDelta { .. } => {
+                "response.custom_tool_call_input.delta"
+            }
             Self::ResponseCustomToolCallInputDone { .. } => "response.custom_tool_call_input.done",
             Self::Error { .. } => "error",
         }
