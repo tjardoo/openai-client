@@ -1,16 +1,16 @@
-use serde::{Deserialize, Serialize};
-use std::collections::HashMap;
-
-use crate::v1::resources::shared::{ReasoningEffort, Usage};
-
+#[cfg(feature = "stream")]
+use super::items::{LogProbs, ReasoningSummaryPart};
 use super::{
     items::{
         CodeInterpreterCall, ComputerToolCall, CustomToolCall, FileSearchToolCall,
-        FunctionToolCall, ImageGenerationCall, LocalShellCall, LogProbs, McpApprovalRequest,
-        McpListTools, McpToolCall, Reasoning, ReasoningSummaryPart, WebSearchToolCall,
+        FunctionToolCall, ImageGenerationCall, LocalShellCall, McpApprovalRequest, McpListTools,
+        McpToolCall, Reasoning, WebSearchToolCall,
     },
     shared::{Annotation, ResponseFormat, ResponseTool, ResponseToolChoice, TruncationStrategy},
 };
+use crate::v1::resources::shared::{ReasoningEffort, Usage};
+use serde::{Deserialize, Serialize};
+use std::collections::HashMap;
 
 #[derive(Serialize, Deserialize, Debug, Clone, PartialEq)]
 pub struct ResponseObject {
@@ -185,6 +185,7 @@ pub enum OutputContent {
     Refusal { refusal: String },
 }
 
+#[cfg(feature = "stream")]
 /// Streaming events for Response API
 #[derive(Serialize, Deserialize, Debug, Clone, PartialEq)]
 #[serde(tag = "type")]
@@ -599,6 +600,7 @@ pub enum ResponseStreamEvent {
     },
 }
 
+#[cfg(feature = "stream")]
 impl ResponseStreamEvent {
     /// Get the SSE event name for this event
     pub fn event_name(&self) -> &'static str {
