@@ -61,7 +61,8 @@ pub struct Reasoning {
     pub content: Option<Vec<ReasoningContent>>,
     #[serde(skip_serializing_if = "Option::is_none")]
     pub encrypted_content: Option<String>,
-    pub status: InputItemStatus,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub status: Option<InputItemStatus>,
 }
 
 #[derive(Serialize, Deserialize, Debug, Clone, PartialEq)]
