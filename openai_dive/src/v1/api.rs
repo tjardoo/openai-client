@@ -276,7 +276,7 @@ impl Client {
         O: DeserializeOwned + std::marker::Send + 'static,
     {
         let event_source = self
-            .build_request(Method::POST, path, Some(MIME_TYPE_APPLICATION_JSON))
+            .build_request(Method::POST, path, None)
             .json(&parameters)
             .query(&query_params.into())
             .eventsource()

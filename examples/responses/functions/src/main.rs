@@ -48,10 +48,17 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
 
     println!("{result:#?}");
 
-    let call = match &result.output[0] {
-        ResponseOutput::FunctionToolCall(call) => call,
-        _ => panic!("unexpected output"),
-    };
+    let call = result
+        .output
+        .iter()
+        .find_map(|item| {
+            if let ResponseOutput::FunctionToolCall(call) = item {
+                Some(call)
+            } else {
+                None
+            }
+        })
+        .expect("No FunctionToolCall found in output");
 
     let parameters = ResponseParametersBuilder::default()
         .model(Gpt5Model::Gpt5Mini.to_string())

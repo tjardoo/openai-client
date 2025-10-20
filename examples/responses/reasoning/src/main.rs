@@ -18,7 +18,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
             "How much wood would a woodchuck chuck?".to_string(),
         ))
         .reasoning(ResponseReasoning {
-            effort: Some(ReasoningEffort::Minimal),
+            effort: Some(ReasoningEffort::Low),
             // generate_summary: Some(ReasoningSummary::Concise),
         })
         .build()?;

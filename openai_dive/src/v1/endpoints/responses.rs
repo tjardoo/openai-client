@@ -3,6 +3,8 @@ use crate::v1::error::APIError;
 use crate::v1::helpers::format_response;
 use crate::v1::resources::response::request::ResponseParameters;
 use crate::v1::resources::response::response::ResponseObject;
+#[cfg(feature = "stream")]
+use crate::v1::resources::response::shared::ResponseStream;
 use crate::v1::resources::shared::DeletedObject;
 
 pub struct Responses<'a> {
@@ -48,5 +50,20 @@ impl Responses<'_> {
         let response: DeletedObject = format_response(response)?;
 
         Ok(response)
+    }
+
+    #[cfg(feature = "stream")]
+    /// Creates a model response.
+    pub async fn create_stream(
+        &self,
+        parameters: ResponseParameters,
+    ) -> Result<ResponseStream, APIError> {
+        let mut stream_parameters = ResponseParameters { ..parameters };
+        stream_parameters.stream = Some(true);
+
+        Ok(self
+            .client
+            .post_stream("/responses", &stream_parameters, None)
+            .await)
     }
 }

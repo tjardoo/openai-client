@@ -1,8 +1,17 @@
-use std::collections::HashMap;
-
-use serde::{de::Visitor, ser::SerializeStruct, Deserialize, Serialize};
-
+#[cfg(feature = "stream")]
+use crate::v1::error::APIError;
+#[cfg(feature = "stream")]
+use crate::v1::resources::response::response::ResponseStreamEvent;
 use crate::v1::resources::shared::WebSearchContextSize;
+#[cfg(feature = "stream")]
+use futures::Stream;
+use serde::{de::Visitor, ser::SerializeStruct, Deserialize, Serialize};
+use std::collections::HashMap;
+#[cfg(feature = "stream")]
+use std::pin::Pin;
+
+#[cfg(feature = "stream")]
+pub type ResponseStream = Pin<Box<dyn Stream<Item = Result<ResponseStreamEvent, APIError>> + Send>>;
 
 #[derive(Debug, Clone, PartialEq)]
 pub enum ResponseToolChoice {
