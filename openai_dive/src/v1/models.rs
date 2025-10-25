@@ -72,6 +72,14 @@ pub enum ImageModel {
     DallE2,
 }
 
+#[derive(Serialize, Deserialize, Debug, Clone, PartialEq)]
+pub enum VideoModel {
+    #[serde(rename = "sora-2")]
+    Sora2,
+    #[serde(rename = "sora-2-pro")]
+    Sora2Pro,
+}
+
 macro_rules! impl_display {
     ($t:ty) => {
         impl std::fmt::Display for $t {
@@ -92,3 +100,4 @@ impl_display!(EmbeddingModel);
 impl_display!(TranscriptionModel);
 impl_display!(TTSModel);
 impl_display!(ImageModel);
+impl_display!(VideoModel);

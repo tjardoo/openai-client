@@ -143,6 +143,22 @@ impl Client {
         Ok(response_text)
     }
 
+    pub(crate) async fn get_raw(&self, path: &str) -> Result<Bytes, APIError> {
+        let result = self.build_request(Method::GET, path, None).send().await;
+
+        let response = match check_status_code(result).await {
+            Ok(response) => response,
+            Err(error) => return Err(error),
+        };
+
+        let bytes = response
+            .bytes()
+            .await
+            .map_err(|error| APIError::ParseError(error.to_string()))?;
+
+        Ok(bytes)
+    }
+
     pub(crate) async fn get_with_query<Q>(&self, path: &str, query: &Q) -> Result<String, APIError>
     where
         Q: Serialize,

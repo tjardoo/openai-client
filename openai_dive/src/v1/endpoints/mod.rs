@@ -15,3 +15,4 @@ pub mod uploads;
 pub mod usage;
 pub mod vector_store_files;
 pub mod vector_stores;
+pub mod videos;
