@@ -1,4 +1,4 @@
-use openai_dive::v1::{api::Client, models::Gpt4Model};
+use openai_dive::v1::api::Client;
 
 #[tokio::main]
 async fn main() {
@@ -6,13 +6,7 @@ async fn main() {
 
     let result = client.models().list().await.unwrap();
 
-    println!("{result:#?}");
-
-    let result = client
-        .models()
-        .get(&Gpt4Model::Gpt4O.to_string())
-        .await
-        .unwrap();
-
-    println!("{result:#?}");
+    for model in result.data {
+        println!("{}", model.id);
+    }
 }

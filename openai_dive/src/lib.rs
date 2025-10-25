@@ -630,6 +630,11 @@
 //! - DallE3 (`dall-e-3`)
 //! - DallE2 (`dall-e-2`)
 //!
+//! #### Video Models
+//!
+//! - Sora2 (`sora-2`)
+//! - Sora2Pro (`sora-2-pro`)
+//!
 //! More information: [Models](https://platform.openai.com/docs/models)
 
 pub mod v1;
