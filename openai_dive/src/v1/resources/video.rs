@@ -15,12 +15,19 @@ pub struct CreateVideoParameters {
     /// The video generation model to use. Defaults to `sora-2`.
     #[serde(skip_serializing_if = "Option::is_none")]
     pub model: Option<String>,
-    /// Clip duration in seconds. Defaults to `4 seconds`.
+    /// Clip duration in seconds. Defaults to `4 seconds`. Supported values are 4, 8 and 12.
     #[serde(skip_serializing_if = "Option::is_none")]
     pub seconds: Option<String>,
     /// Output resolution formatted as width x height. Defaults to `720x1280`.
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub resolution: Option<String>,
+    pub size: Option<VideoSize>,
+}
+
+#[derive(Serialize, Deserialize, Debug, Clone, PartialEq)]
+
+pub struct CreateVideoRemixParameters {
+    /// Updated text prompt that directs the remix generation.
+    pub prompt: String,
 }
 
 #[derive(Serialize, Deserialize, Debug, Clone, PartialEq)]
@@ -50,7 +57,7 @@ pub struct VideoJob {
     /// Duration of the generated clip in seconds.
     pub seconds: String,
     /// The resolution of the generated video.
-    pub size: String,
+    pub size: VideoSize,
     /// Current lifecycle status of the video job.
     pub status: VideoJobStatus,
 }
@@ -62,4 +69,16 @@ pub enum VideoJobStatus {
     InProgress,
     Completed,
     Failed,
+}
+
+#[derive(Serialize, Deserialize, Debug, Clone, PartialEq)]
+pub enum VideoSize {
+    #[serde(rename = "720x1280")]
+    Size720x1280,
+    #[serde(rename = "1280x720")]
+    Size1280x720,
+    #[serde(rename = "1024x1792")]
+    Size1024x1792,
+    #[serde(rename = "1792x1024")]
+    Size1792x1024,
 }

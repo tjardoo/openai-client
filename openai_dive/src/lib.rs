@@ -40,6 +40,7 @@
 //! - [Responses](#responses)
 //! - [Images](#images)
 //! - [Audio](#audio)
+//! - [Videos](#videos)
 //! - [Models](#models)
 //! - [Files](#files)
 //! - [Embeddings](#embeddings)
@@ -363,6 +364,21 @@
 //! For more information see the examples in the [examples/audio](https://github.com/tjardoo/openai-client/tree/master/examples/audio) directory.
 //!
 //! More information [Audio](https://platform.openai.com/docs/api-reference/audio)
+//!
+//! ## Videos
+//!
+//! Create and remix videos.
+//!
+//! - Create video
+//! - Create remix
+//! - List videos
+//! - Retrieve video
+//! - Delete video
+//! - Retrieve video content
+//!
+//! For more information see the examples in the [examples/video](https://github.com/tjardoo/openai-client/tree/master/examples/video) directory.
+//!
+//! More information [Video](https://platform.openai.com/docs/api-reference/videos)
 //!
 //! ## Models
 //!
