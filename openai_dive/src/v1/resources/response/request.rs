@@ -22,6 +22,7 @@ pub struct ResponseParameters {
     /// Model ID used to generate the response.
     pub model: String,
     /// Reference to a prompt template and its variables.
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub prompt: Option<Prompt>,
     /// Specify additional output data to include in the model response.
     #[serde(skip_serializing_if = "Option::is_none")]
