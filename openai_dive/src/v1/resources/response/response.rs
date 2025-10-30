@@ -68,7 +68,8 @@ pub struct ResponseObject {
     #[serde(skip_serializing_if = "Option::is_none")]
     pub truncation: Option<TruncationStrategy>,
     /// Represents token usage details.
-    pub usage: Usage,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub usage: Option<Usage>,
     /// A unique identifier representing your end-user.
     #[serde(skip_serializing_if = "Option::is_none")]
     pub user: Option<String>,
