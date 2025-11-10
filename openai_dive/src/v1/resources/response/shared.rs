@@ -68,7 +68,7 @@ pub struct WebSearchUserLocation {
 }
 
 #[derive(Serialize, Deserialize, Debug, Clone, PartialEq)]
-#[serde(rename_all = "lowercase")]
+#[serde(rename_all = "snake_case")]
 pub enum UserLocationType {
     Approximate,
 }
@@ -87,14 +87,14 @@ pub enum ResponseFormat {
 }
 
 #[derive(Serialize, Deserialize, Debug, Clone, PartialEq)]
-#[serde(rename_all = "lowercase")]
+#[serde(rename_all = "snake_case")]
 pub enum TruncationStrategy {
     Auto,
     Disabled,
 }
 
 #[derive(Serialize, Deserialize, Debug, Clone, PartialEq)]
-#[serde(rename_all = "lowercase")]
+#[serde(rename_all = "snake_case")]
 pub enum ComputerUseEnvironment {
     Browser,
     Mac,
@@ -131,7 +131,7 @@ pub enum ComparisonFilterValue {
 }
 
 #[derive(Serialize, Deserialize, Debug, Clone, PartialEq)]
-#[serde(rename_all = "lowercase")]
+#[serde(rename_all = "snake_case")]
 pub enum CompoundFilterType {
     And,
     Or,

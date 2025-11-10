@@ -138,7 +138,7 @@ pub enum ImageSize {
 }
 
 #[derive(Serialize, Deserialize, Debug, Clone, PartialEq)]
-#[serde(rename_all = "lowercase")]
+#[serde(rename_all = "snake_case")]
 pub enum BackgroundStyle {
     Transparent,
     Opaque,
@@ -146,7 +146,7 @@ pub enum BackgroundStyle {
 }
 
 #[derive(Serialize, Deserialize, Debug, Clone, PartialEq)]
-#[serde(rename_all = "lowercase")]
+#[serde(rename_all = "snake_case")]
 pub enum ImageQuality {
     Standard,
     Hd,
@@ -156,7 +156,7 @@ pub enum ImageQuality {
 }
 
 #[derive(Serialize, Deserialize, Debug, Clone, PartialEq)]
-#[serde(rename_all = "lowercase")]
+#[serde(rename_all = "snake_case")]
 pub enum MimeType {
     #[serde(rename = "image/png")]
     Png,
@@ -169,7 +169,7 @@ pub enum MimeType {
 }
 
 #[derive(Serialize, Deserialize, Debug, Clone, PartialEq)]
-#[serde(rename_all = "lowercase")]
+#[serde(rename_all = "snake_case")]
 pub enum ImageStyle {
     Vivid,
     Natural,

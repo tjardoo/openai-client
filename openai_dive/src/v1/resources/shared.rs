@@ -196,7 +196,7 @@ pub enum FinishReason {
 }
 
 #[derive(Serialize, Deserialize, Debug, Clone, PartialEq)]
-#[serde(rename_all = "lowercase")]
+#[serde(rename_all = "snake_case")]
 pub enum ReasoningEffort {
     High,
     Medium,
@@ -205,7 +205,7 @@ pub enum ReasoningEffort {
 }
 
 #[derive(Serialize, Deserialize, Debug, Clone, PartialEq)]
-#[serde(rename_all = "lowercase")]
+#[serde(rename_all = "snake_case")]
 pub enum WebSearchContextSize {
     Low,
     Medium,
