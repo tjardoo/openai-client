@@ -18,7 +18,7 @@ pub struct User {
 }
 
 #[derive(Serialize, Deserialize, Debug, Clone, PartialEq)]
-#[serde(rename_all = "lowercase")]
+#[serde(rename_all = "snake_case")]
 pub enum UserRole {
     Owner,
     Reader,

@@ -36,7 +36,7 @@ pub enum VectorStoreFileStatus {
 
 #[derive(Serialize, Deserialize, Debug, Clone, PartialEq)]
 #[serde(tag = "type")]
-#[serde(rename_all = "lowercase")]
+#[serde(rename_all = "snake_case")]
 pub enum VectorStoreFileChunkingStrategy {
     Auto,
     Static {

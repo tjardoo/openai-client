@@ -129,7 +129,7 @@ pub enum AudioOutputFormat {
 }
 
 #[derive(Serialize, Deserialize, Debug, Clone, PartialEq)]
-#[serde(rename_all = "lowercase")]
+#[serde(rename_all = "snake_case")]
 pub enum AudioSpeechResponseFormat {
     Mp3,
     Opus,
@@ -140,7 +140,7 @@ pub enum AudioSpeechResponseFormat {
 }
 
 #[derive(Serialize, Deserialize, Debug, Default, Clone, PartialEq)]
-#[serde(rename_all = "lowercase")]
+#[serde(rename_all = "snake_case")]
 pub enum AudioVoice {
     #[default]
     Alloy,
@@ -155,7 +155,7 @@ pub enum AudioVoice {
 }
 
 #[derive(Serialize, Deserialize, Debug, Clone, PartialEq)]
-#[serde(rename_all = "lowercase")]
+#[serde(rename_all = "snake_case")]
 pub enum TimestampGranularity {
     Word,
     Segment,
