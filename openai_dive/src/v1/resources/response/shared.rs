@@ -2,7 +2,7 @@
 use crate::v1::error::APIError;
 #[cfg(feature = "stream")]
 use crate::v1::resources::response::response::ResponseStreamEvent;
-use crate::v1::resources::shared::WebSearchContextSize;
+use crate::v1::resources::shared::{InputTokensDetails, OutputTokensDetails, WebSearchContextSize};
 #[cfg(feature = "stream")]
 use futures::Stream;
 use serde::{de::Visitor, ser::SerializeStruct, Deserialize, Serialize};
@@ -22,6 +22,24 @@ pub enum ResponseToolChoice {
     FileSearch,
     WebSearchPreview,
     ComputerUsePreview,
+}
+
+#[derive(Serialize, Deserialize, Debug, Clone, PartialEq)]
+pub struct ResponseUsage {
+    /// The number of input tokens.
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub input_tokens: Option<u32>,
+    /// A detailed breakdown of the input tokens.
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub input_tokens_details: Option<InputTokensDetails>,
+    /// The number of output tokens.
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub output_tokens: Option<u32>,
+    /// A detailed breakdown of the output tokens.
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub output_tokens_details: Option<OutputTokensDetails>,
+    /// Number of tokens in the entire response.
+    pub total_tokens: u32,
 }
 
 #[derive(Serialize, Deserialize, Debug, Clone, PartialEq)]

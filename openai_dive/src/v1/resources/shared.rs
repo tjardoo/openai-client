@@ -7,19 +7,6 @@ use serde::{Deserialize, Serialize};
 
 #[derive(Serialize, Deserialize, Debug, Clone, PartialEq)]
 pub struct Usage {
-    /// The number of input tokens.
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub input_tokens: Option<u32>,
-    /// A detailed breakdown of the input tokens.
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub input_tokens_details: Option<InputTokensDetails>,
-    /// The number of output tokens.
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub output_tokens: Option<u32>,
-    /// A detailed breakdown of the output tokens.
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub output_tokens_details: Option<OutputTokensDetails>,
-
     /// Number of tokens in the prompt.
     #[serde(skip_serializing_if = "Option::is_none")]
     pub prompt_tokens: Option<u32>,

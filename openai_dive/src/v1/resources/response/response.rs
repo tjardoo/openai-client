@@ -6,9 +6,12 @@ use super::{
         FunctionToolCall, ImageGenerationCall, LocalShellCall, McpApprovalRequest, McpListTools,
         McpToolCall, Reasoning, WebSearchToolCall,
     },
-    shared::{Annotation, ResponseFormat, ResponseTool, ResponseToolChoice, TruncationStrategy},
+    shared::{
+        Annotation, ResponseFormat, ResponseTool, ResponseToolChoice, ResponseUsage,
+        TruncationStrategy,
+    },
 };
-use crate::v1::resources::shared::{ReasoningEffort, Usage};
+use crate::v1::resources::shared::ReasoningEffort;
 use serde::{Deserialize, Serialize};
 use std::collections::HashMap;
 
@@ -69,7 +72,7 @@ pub struct ResponseObject {
     pub truncation: Option<TruncationStrategy>,
     /// Represents token usage details.
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub usage: Option<Usage>,
+    pub usage: Option<ResponseUsage>,
     /// A unique identifier representing your end-user.
     #[serde(skip_serializing_if = "Option::is_none")]
     pub user: Option<String>,
