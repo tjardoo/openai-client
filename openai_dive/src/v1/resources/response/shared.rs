@@ -25,7 +25,7 @@ pub enum ResponseToolChoice {
 }
 
 #[derive(Serialize, Deserialize, Debug, Clone, PartialEq)]
-pub struct Usage {
+pub struct ResponseUsage {
     /// The number of input tokens.
     #[serde(skip_serializing_if = "Option::is_none")]
     pub input_tokens: Option<u32>,
