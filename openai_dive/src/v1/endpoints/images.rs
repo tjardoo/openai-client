@@ -92,6 +92,10 @@ impl Images<'_> {
             form = form.text("background", background.to_string());
         }
 
+        if let Some(input_fidelity) = parameters.input_fidelity {
+            form = form.text("input_fidelity", input_fidelity.to_string());
+        }
+
         if let Some(quality) = parameters.quality {
             form = form.text("quality", quality.to_string());
         }
@@ -109,8 +113,24 @@ impl Images<'_> {
             form = form.text("n", n.to_string());
         }
 
+        if let Some(output_compression) = parameters.output_compression {
+            form = form.text("output_compression", output_compression.to_string());
+        }
+
+        if let Some(output_format) = parameters.output_format {
+            form = form.text("output_format", output_format.to_string());
+        }
+
+        if let Some(partial_images) = parameters.partial_images {
+            form = form.text("partial_images", partial_images.to_string());
+        }
+
         if let Some(size) = parameters.size {
             form = form.text("size", size.to_string());
+        }
+
+        if let Some(stream) = parameters.stream {
+            form = form.text("stream", stream.to_string());
         }
 
         if let Some(response_format) = parameters.response_format {

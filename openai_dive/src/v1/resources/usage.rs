@@ -248,8 +248,14 @@ pub enum ImageSize {
     Size512X512,
     #[serde(rename = "1024x1024")]
     Size1024X1024,
-    #[serde(rename = "1792x1792")]
-    Size1792X1792,
+    #[serde(rename = "1024x1536")]
+    Size1024X1536,
+    #[serde(rename = "1536x1024")]
+    Size1536X1024,
+    #[serde(rename = "1792x1024")]
+    Size1792X1024,
     #[serde(rename = "1024x1792")]
     Size1024X1792,
+    #[serde(rename = "auto")]
+    Auto,
 }
