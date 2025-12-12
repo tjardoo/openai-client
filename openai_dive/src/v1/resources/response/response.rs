@@ -6,9 +6,9 @@ use super::{
         FunctionToolCall, ImageGenerationCall, LocalShellCall, McpApprovalRequest, McpListTools,
         McpToolCall, Reasoning, WebSearchToolCall,
     },
-    shared::{Annotation, ResponseFormat, ResponseTool, ResponseToolChoice, TruncationStrategy},
+    shared::{Annotation, ResponseFormat, ResponseTool, ResponseToolChoice, TruncationStrategy, Usage},
 };
-use crate::v1::resources::shared::{ReasoningEffort, Usage};
+use crate::v1::resources::shared::{ReasoningEffort};
 use serde::{Deserialize, Serialize};
 use std::collections::HashMap;
 
