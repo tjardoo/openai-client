@@ -4,7 +4,7 @@
 //!
 //! ```ini
 //! [dependencies]
-//! openai_dive = "1.3"
+//! openai_dive = "1.4"
 //! ```
 //!
 //! ## Get started
