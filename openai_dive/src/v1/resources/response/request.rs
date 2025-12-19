@@ -22,6 +22,7 @@ pub struct ResponseParameters {
     /// Model ID used to generate the response.
     pub model: String,
     /// Whether to run the model response in the background.
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub background: Option<bool>,
     /// Reference to a prompt template and its variables.
     #[serde(skip_serializing_if = "Option::is_none")]
