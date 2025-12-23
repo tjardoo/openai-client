@@ -1,5 +1,4 @@
 use openai_dive::v1::api::Client;
-use openai_dive::v1::models::ImageModel;
 use openai_dive::v1::resources::image::{
     CreateImageVariationParametersBuilder, ImageSize, ResponseFormat,
 };
@@ -13,7 +12,6 @@ async fn main() {
         .image(FileUpload::File(
             "./images/image_edit_original.png".to_string(),
         ))
-        .model(ImageModel::DallE3.to_string())
         .n(1u32)
         .response_format(ResponseFormat::Url)
         .size(ImageSize::Size1024X1024)
@@ -21,6 +19,10 @@ async fn main() {
         .unwrap();
 
     let result = client.images().variation(parameters).await.unwrap();
+
+    let paths = result.save("./images").await.unwrap();
+
+    println!("{paths:?}");
 
     println!("{result:#?}");
 }
