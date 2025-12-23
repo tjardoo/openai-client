@@ -1,5 +1,7 @@
 use openai_dive::v1::api::Client;
-use openai_dive::v1::resources::image::{CreateImageVariationParametersBuilder, ImageSize};
+use openai_dive::v1::resources::image::{
+    CreateImageVariationParametersBuilder, ImageSize, ResponseFormat,
+};
 use openai_dive::v1::resources::shared::FileUpload;
 
 #[tokio::main]
@@ -11,11 +13,16 @@ async fn main() {
             "./images/image_edit_original.png".to_string(),
         ))
         .n(1u32)
-        .size(ImageSize::Size256X256)
+        .response_format(ResponseFormat::Url)
+        .size(ImageSize::Size1024X1024)
         .build()
         .unwrap();
 
     let result = client.images().variation(parameters).await.unwrap();
+
+    let paths = result.save("./images").await.unwrap();
+
+    println!("{paths:?}");
 
     println!("{result:#?}");
 }
