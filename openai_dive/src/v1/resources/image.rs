@@ -161,24 +161,19 @@ pub struct CreateImageVariationParameters {
 #[derive(Serialize, Deserialize, Debug, Clone, PartialEq)]
 pub struct ImageResponse {
     /// The background parameter used for the image generation. Either transparent or opaque.
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub background: Option<BackgroundStyle>,
+    pub background: BackgroundStyle,
     /// The Unix timestamp (in seconds) for when the image was created.
     pub created: u32,
     /// The list of generated images.
     pub data: Vec<ImageData>,
     /// The output format of the image generation. Either png, webp, or jpeg.
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub output_format: Option<OutputFormat>,
+    pub output_format: OutputFormat,
     /// The quality of the image generated. Either low, medium, or high.
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub quality: Option<ImageQuality>,
+    pub quality: ImageQuality,
     /// The size of the image generated. Either 1024x1024, 1024x1536, or 1536x1024.
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub size: Option<ImageSizeResponse>,
+    pub size: ImageSizeResponse,
     /// For gpt-image-1 only, the token usage information for the image generation.
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub usage: Option<ImageUsage>,
+    pub usage: ImageUsage,
 }
 
 #[derive(Serialize, Deserialize, Debug, Clone, PartialEq)]
