@@ -135,7 +135,7 @@ pub struct ResponseReasoning {
     #[serde(skip_serializing_if = "Option::is_none")]
     pub effort: Option<ReasoningEffort>,
     // A summary of the reasoning performed by the model.
-    // pub generate_summary: Option<ReasoningSummary>,
+    pub summary: Option<ReasoningSummary>,
 }
 
 #[derive(Serialize, Deserialize, Debug, Clone, PartialEq)]
@@ -147,6 +147,7 @@ pub struct ResponseText {
 #[derive(Serialize, Deserialize, Debug, Clone, PartialEq)]
 #[serde(rename_all = "snake_case")]
 pub enum ReasoningSummary {
+    Auto,
     Concise,
     Detailed,
 }
