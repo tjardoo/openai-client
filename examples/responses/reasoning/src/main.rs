@@ -1,7 +1,7 @@
 use ftail::Ftail;
 use openai_dive::v1::api::Client;
 use openai_dive::v1::resources::response::request::{ResponseInput, ResponseParametersBuilder};
-use openai_dive::v1::resources::response::response::ResponseReasoning;
+use openai_dive::v1::resources::response::response::{ReasoningSummary, ResponseReasoning};
 use openai_dive::v1::resources::shared::ReasoningEffort;
 
 #[tokio::main]
@@ -19,7 +19,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
         ))
         .reasoning(ResponseReasoning {
             effort: Some(ReasoningEffort::Low),
-            // generate_summary: Some(ReasoningSummary::Concise),
+            summary: Some(ReasoningSummary::Concise),
         })
         .build()?;
 
