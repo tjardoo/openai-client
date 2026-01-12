@@ -41,7 +41,8 @@ pub struct FunctionToolCall {
     pub call_id: String,
     pub name: String,
     pub arguments: String,
-    pub status: InputItemStatus,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub status: Option<InputItemStatus>,
 }
 
 #[derive(Serialize, Deserialize, Debug, Clone, PartialEq)]
