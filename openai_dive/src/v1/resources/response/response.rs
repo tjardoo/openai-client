@@ -67,6 +67,9 @@ pub struct ResponseObject {
     /// An alternative to sampling with temperature.
     #[serde(skip_serializing_if = "Option::is_none")]
     pub top_p: Option<f32>,
+    /// An integer between 0 and 20 specifying the number of most likely tokens to return at each token position, each with an associated log probability.
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub top_logprobs: Option<u32>,
     /// The truncation strategy to use for the model response.
     #[serde(skip_serializing_if = "Option::is_none")]
     pub truncation: Option<TruncationStrategy>,
