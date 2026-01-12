@@ -37,7 +37,7 @@ pub struct WebSearchToolCall {
 
 #[derive(Serialize, Deserialize, Debug, Clone, PartialEq)]
 pub struct FunctionToolCall {
-    pub id: String,
+    pub id: Option<String>,
     pub call_id: String,
     pub name: String,
     pub arguments: String,
