@@ -66,6 +66,9 @@ pub struct ResponseParameters {
     /// An array of tools the model may call while generating a response.
     #[serde(skip_serializing_if = "Option::is_none")]
     pub tools: Option<Vec<ResponseTool>>,
+    /// An integer between 0 and 20 specifying the number of most likely tokens to return at each token position, each with an associated log probability.
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub top_logprobs: Option<u32>,
     /// An alternative to sampling with temperature.
     #[serde(skip_serializing_if = "Option::is_none")]
     pub top_p: Option<f32>,
@@ -175,6 +178,8 @@ pub enum ResponseInclude {
     MessageInputImageUrls,
     #[serde(rename = "computer_call_output.output.image_url")]
     ComputerCallOutputOutputImageUrls,
+    #[serde(rename = "message.output_text.logprobs")]
+    MessageOutputTextLogprobs,
 }
 
 #[derive(Serialize, Deserialize, Debug, Clone, PartialEq)]
