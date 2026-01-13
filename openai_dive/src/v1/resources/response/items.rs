@@ -1,16 +1,6 @@
 use serde::{Deserialize, Serialize};
 use std::collections::HashMap;
 
-use super::{request::ImageDetailLevel, response::Role, shared::Annotation};
-
-#[derive(Serialize, Deserialize, Debug, Clone, PartialEq)]
-pub struct Message {
-    pub id: String,
-    pub role: Role,
-    pub content: MessageContent,
-    pub status: InputItemStatus,
-}
-
 #[derive(Serialize, Deserialize, Debug, Clone, PartialEq)]
 pub struct FileSearchToolCall {
     pub id: String,
@@ -96,35 +86,6 @@ pub enum FileSearchStatus {
     Completed,
     Incomplete,
     Failed,
-}
-
-#[derive(Serialize, Deserialize, Debug, Clone, PartialEq)]
-#[serde(tag = "type")]
-pub enum MessageContent {
-    #[serde(rename = "input_text")]
-    InputText {
-        text: String,
-    },
-    #[serde(rename = "input_image")]
-    Image {
-        file_id: Option<String>,
-        image_url: Option<String>,
-        detail: ImageDetailLevel,
-    },
-    #[serde(rename = "input_file")]
-    File {
-        file_id: Option<String>,
-        filename: Option<String>,
-        file_data: Option<String>,
-    },
-    #[serde(rename = "output_text")]
-    OutputText {
-        text: String,
-        annotations: Vec<Annotation>,
-    },
-    Refusal {
-        refusal: String,
-    },
 }
 
 #[derive(Serialize, Deserialize, Debug, Clone, PartialEq)]
