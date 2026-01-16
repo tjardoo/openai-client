@@ -1,4 +1,5 @@
-use crate::v1::resources::response::items::ComputerToolCallOutput;
+use crate::v1::resources::response::items::{ComputerToolCallOutput, InputItemStatus};
+use crate::v1::resources::response::shared::Annotation;
 use crate::v1::resources::shared::WebSearchContextSize;
 use derive_builder::Builder;
 use serde::{Deserialize, Serialize};
@@ -6,8 +7,8 @@ use std::collections::HashMap;
 
 use super::{
     items::{
-        ComputerToolCall, FileSearchToolCall, FunctionToolCall, FunctionToolCallOutput, Message,
-        Reasoning, WebSearchToolCall,
+        ComputerToolCall, FileSearchToolCall, FunctionToolCall, FunctionToolCallOutput, Reasoning,
+        WebSearchToolCall,
     },
     response::{ResponseReasoning, ResponseText, Role},
     shared::{ResponseTool, ResponseToolChoice, TruncationStrategy, WebSearchUserLocation},
@@ -30,7 +31,7 @@ pub struct ResponseParameters {
     /// Specify additional output data to include in the model response.
     #[serde(skip_serializing_if = "Option::is_none")]
     pub include: Option<Vec<ResponseInclude>>,
-    /// serts a system (or developer) message as the first item in the model's context.
+    /// Inserts a system (or developer) message as the first item in the model's context.
     #[serde(skip_serializing_if = "Option::is_none")]
     pub instructions: Option<String>,
     /// An upper bound for the number of tokens that can be generated for a response.
@@ -82,6 +83,10 @@ pub struct ResponseParameters {
 
 #[derive(Serialize, Deserialize, Debug, Clone, PartialEq)]
 pub struct InputMessage {
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub id: Option<String>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub status: Option<InputItemStatus>,
     pub role: Role,
     pub content: ContentInput,
 }
@@ -107,7 +112,9 @@ pub enum ContentInput {
 #[serde(tag = "type")]
 pub enum ContentItem {
     #[serde(rename = "input_text")]
-    Text { text: String },
+    Text {
+        text: String,
+    },
     #[serde(rename = "input_image")]
     Image {
         detail: ImageDetailLevel,
@@ -119,6 +126,14 @@ pub enum ContentItem {
         file_data: Option<String>,
         file_id: Option<String>,
         filename: Option<String>,
+    },
+    #[serde(rename = "output_text")]
+    OutputText {
+        text: String,
+        annotations: Vec<Annotation>,
+    },
+    Refusal {
+        refusal: String,
     },
 }
 
@@ -139,15 +154,9 @@ impl Default for ResponseInput {
 #[serde(tag = "type", rename_all = "snake_case")]
 pub enum ResponseInputItem {
     Message(InputMessage),
-    ItemReference { id: String },
-    Item(InputItem),
-}
-
-#[derive(Serialize, Deserialize, Debug, Clone, PartialEq)]
-#[serde(tag = "type")]
-pub enum InputItem {
-    #[serde(rename = "message")]
-    Message(Message),
+    ItemReference {
+        id: String,
+    },
     #[serde(rename = "file_search_call")]
     FileSearchToolCall(FileSearchToolCall),
     #[serde(rename = "computer_call")]
