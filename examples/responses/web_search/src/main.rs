@@ -18,7 +18,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
     let parameters = ResponseParametersBuilder::default()
         .model(Gpt4Model::Gpt4O.to_string())
         .input(ResponseInput::Text(
-            "What was a positive news story from today?".to_string(),
+            "What was a positive news story from today in my area?".to_string(),
         ))
         .tools(vec![ResponseTool::WebSearch {
             search_context_size: Some(WebSearchContextSize::Low),
