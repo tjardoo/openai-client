@@ -145,6 +145,7 @@ pub enum AudioVoice {
     #[default]
     Alloy,
     Ash,
+    Ballad,
     Coral,
     Echo,
     Fable,
@@ -152,6 +153,9 @@ pub enum AudioVoice {
     Nova,
     Sage,
     Shimmer,
+    Verse,
+    Marin,
+    Cedar,
 }
 
 #[derive(Serialize, Deserialize, Debug, Clone, PartialEq)]
