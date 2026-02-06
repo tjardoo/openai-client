@@ -79,6 +79,9 @@ pub struct ResponseParameters {
     /// A unique identifier representing your end-user.
     #[serde(skip_serializing_if = "Option::is_none")]
     pub user: Option<String>,
+    /// The service tier used for processing the request.
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub service_tier: Option<String>,
 }
 
 #[derive(Serialize, Deserialize, Debug, Clone, PartialEq)]
