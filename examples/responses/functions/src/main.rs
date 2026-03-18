@@ -17,7 +17,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
     let client = Client::new_from_env();
 
     let parameters = ResponseParametersBuilder::default()
-        .model(Gpt5Model::Gpt5Mini.to_string())
+        .model(Gpt5Model::Gpt54Mini.to_string())
         .input(ResponseInput::Text(
             "What is the weather like in Ho Chi Minh City today?".to_string(),
         ))
@@ -61,7 +61,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
         .expect("No FunctionToolCall found in output");
 
     let parameters = ResponseParametersBuilder::default()
-        .model(Gpt5Model::Gpt5Mini.to_string())
+        .model(Gpt5Model::Gpt54Mini.to_string())
         .input(ResponseInput::List(vec![
             ResponseInputItem::FunctionToolCallOutput(FunctionToolCallOutput {
                 id: None,

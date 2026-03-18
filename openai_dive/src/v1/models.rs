@@ -2,12 +2,12 @@ use serde::{Deserialize, Serialize};
 
 #[derive(Serialize, Deserialize, Debug, Clone, PartialEq)]
 pub enum Gpt5Model {
-    #[serde(rename = "gpt-5")]
-    Gpt5,
-    #[serde(rename = "gpt-5-mini")]
-    Gpt5Mini,
-    #[serde(rename = "gpt-5-nano")]
-    Gpt5Nano,
+    #[serde(rename = "gpt-5.4")]
+    Gpt54,
+    #[serde(rename = "gpt-5.4-mini")]
+    Gpt54Mini,
+    #[serde(rename = "gpt-5.4-nano")]
+    Gpt54Nano,
 }
 
 #[derive(Serialize, Deserialize, Debug, Clone, PartialEq)]

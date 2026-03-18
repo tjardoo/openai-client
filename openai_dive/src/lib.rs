@@ -604,9 +604,9 @@
 //!
 //! #### GPT-5
 //!
-//! - Gpt51 (`gpt-5.1`)
-//! - Gpt5O (`gpt-5o`)
-//! - Gpt5OAudioPreview (`gpt-5o-audio-preview`)
+//! - Gpt54 (`gpt-5.4`)
+//! - Gpt54Mini (`gpt-5.4-mini`)
+//! - Gpt54Nano (`gpt-5.4-nano`)
 //!
 //! #### GPT-4
 //!

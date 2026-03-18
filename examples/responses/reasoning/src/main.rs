@@ -14,7 +14,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
     let client = Client::new_from_env();
 
     let parameters = ResponseParametersBuilder::default()
-        .model(Gpt5Model::Gpt5Nano.to_string())
+        .model(Gpt5Model::Gpt54Nano.to_string())
         .input(ResponseInput::Text(
             "How much wood would a woodchuck chuck?".to_string(),
         ))

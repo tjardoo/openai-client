@@ -185,6 +185,7 @@ pub enum FinishReason {
 #[derive(Serialize, Deserialize, Debug, Clone, PartialEq)]
 #[serde(rename_all = "snake_case")]
 pub enum ReasoningEffort {
+    None,
     High,
     Medium,
     Low,
