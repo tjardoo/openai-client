@@ -137,6 +137,7 @@ where
 
                     if let DeltaChatMessage::Untagged {
                         content,
+                        reasoning,
                         reasoning_content,
                         refusal,
                         name: _,
@@ -161,6 +162,7 @@ where
                                 choice.delta = DeltaChatMessage::Assistant {
                                     name: Some("assistant".to_string()),
                                     content: content.clone(),
+                                    reasoning: reasoning.clone(),
                                     reasoning_content: reasoning_content.clone(),
                                     refusal: refusal.clone(),
                                     tool_calls: tool_calls.clone(),

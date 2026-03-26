@@ -266,6 +266,9 @@ pub enum ChatMessage {
         /// The contents of the assistant message. Required unless tool_calls is specified.
         #[serde(skip_serializing_if = "Option::is_none")]
         content: Option<ChatMessageContent>,
+        /// The reasoning content by the assistant.
+        #[serde(skip_serializing_if = "Option::is_none")]
+        reasoning: Option<String>,
         /// The reasoning content by the assistant. (DeepSeek API only)
         #[serde(skip_serializing_if = "Option::is_none")]
         reasoning_content: Option<String>,
@@ -367,6 +370,9 @@ pub enum DeltaChatMessage {
         /// The contents of the assistant message. Required unless tool_calls is specified.
         #[serde(skip_serializing_if = "Option::is_none")]
         content: Option<ChatMessageContent>,
+        /// The reasoning content by the assistant.
+        #[serde(skip_serializing_if = "Option::is_none")]
+        reasoning: Option<String>,
         /// The reasoning content by the assistant. (DeepSeek API only)
         #[serde(skip_serializing_if = "Option::is_none")]
         reasoning_content: Option<String>,
@@ -390,6 +396,8 @@ pub enum DeltaChatMessage {
     Untagged {
         #[serde(skip_serializing_if = "Option::is_none")]
         content: Option<ChatMessageContent>,
+        #[serde(skip_serializing_if = "Option::is_none")]
+        reasoning: Option<String>,
         #[serde(skip_serializing_if = "Option::is_none")]
         reasoning_content: Option<String>,
         #[serde(skip_serializing_if = "Option::is_none")]
