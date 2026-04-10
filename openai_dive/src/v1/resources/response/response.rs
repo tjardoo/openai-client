@@ -722,6 +722,7 @@ impl ResponseStreamEvent {
                 "response.custom_tool_call_input.delta"
             }
             Self::ResponseCustomToolCallInputDone { .. } => "response.custom_tool_call_input.done",
+            Self::Keepalive { .. } => "keepalive",
             Self::Error { .. } => "error",
         }
     }
