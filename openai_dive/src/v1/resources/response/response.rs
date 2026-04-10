@@ -618,6 +618,11 @@ pub enum ResponseStreamEvent {
         input: String,
     },
 
+    // Keepalive
+    /// keepalive - A heartbeat was sent (it's undocumented, but it exists)
+    #[serde(rename = "keepalive")]
+    Keepalive { sequence_number: u32 },
+
     // Error event
     /// error - An error occurred
     #[serde(rename = "error")]
