@@ -179,7 +179,7 @@ pub enum ResponseFormat {
     JsonSchema {
         schema: serde_json::Value,
         name: String,
-        description: String,
+        description: Option<String>,
         strict: Option<bool>,
     },
 }
