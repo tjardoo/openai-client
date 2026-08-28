@@ -93,7 +93,7 @@ impl Client {
         path: &str,
         content_type: Option<&str>,
     ) -> RequestBuilder {
-        let url = format!("{}{}", &self.base_url, path);
+        let url = format!("{}{}", self.base_url, path);
 
         let mut request = self
             .http_client

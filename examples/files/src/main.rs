@@ -18,7 +18,7 @@ async fn main() {
 
     let file = client.files().upload(parameters).await.unwrap();
 
-    println!("{:#?}", &file);
+    println!("{:#?}", file);
 
     let result = client.files().retrieve(&file.id).await.unwrap();
     println!("{result:#?}");

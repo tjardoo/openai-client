@@ -56,8 +56,8 @@ async fn main() {
             if name == "get_random_number" {
                 let random_numbers: RandomNumber = serde_json::from_str(&arguments).unwrap();
 
-                println!("Min: {:?}", &random_numbers.min);
-                println!("Max: {:?}", &random_numbers.max);
+                println!("Min: {:?}", random_numbers.min);
+                println!("Max: {:?}", random_numbers.max);
 
                 let random_number_result = get_random_number(random_numbers);
 

@@ -14,7 +14,7 @@ async fn main() {
 
     let file = client.files().upload(parameters).await.unwrap();
 
-    println!("{:#?}", &file);
+    println!("{:#?}", file);
 
     let parameters = CreateBatchParametersBuilder::default()
         .input_file_id(file.id)
@@ -25,7 +25,7 @@ async fn main() {
 
     let batch = client.batches().create(parameters).await.unwrap();
 
-    println!("{:#?}", &batch);
+    println!("{:#?}", batch);
 
     let result = client.batches().retrieve(&batch.id).await.unwrap();
 

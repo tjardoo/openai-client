@@ -17,7 +17,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
         .build()?;
 
     let file = client.files().upload(parameters).await?;
-    println!("{:#?}", &file);
+    println!("{:#?}", file);
 
     let parameters = CreateFineTuningJobParametersBuilder::default()
         .model("gpt-4o-mini-2024-07-18".to_string())
