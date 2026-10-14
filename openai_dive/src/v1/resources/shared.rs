@@ -44,7 +44,6 @@ pub struct PromptTokensDetails {
     #[serde(skip_serializing_if = "Option::is_none")]
     pub cache_write_tokens: Option<u32>,
     /// Cached tokens present in the prompt.
-    /// optional (see https://developers.openai.com/api/reference/resources/chat/subresources/completions/methods/create?site_locale=en#(resource)%20chat.completions%20%3E%20(model)%20chat_completion%20%3E%20(schema)%20%3E%20(property)%20usage%20%2B%20(resource)%20completions%20%3E%20(model)%20completion_usage%20%3E%20(schema)%20%3E%20(property)%20prompt_tokens_details)
     #[serde(skip_serializing_if = "Option::is_none")]
     pub cached_tokens: Option<u32>,
     /// Image input tokens present in the prompt.
