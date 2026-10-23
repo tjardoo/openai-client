@@ -138,6 +138,7 @@ pub struct ResponseReasoning {
     #[serde(skip_serializing_if = "Option::is_none")]
     pub effort: Option<ReasoningEffort>,
     // A summary of the reasoning performed by the model.
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub summary: Option<ReasoningSummary>,
 }
 
