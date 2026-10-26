@@ -327,7 +327,7 @@ impl Client {
 
     #[cfg(feature = "stream")]
     pub(crate) async fn process_stream<O>(
-        mut event_soure: EventSource,
+        mut event_source: EventSource,
     ) -> Pin<Box<dyn Stream<Item = Result<O, APIError>> + Send>>
     where
         O: DeserializeOwned + Send + 'static,
@@ -337,7 +337,7 @@ impl Client {
         let (tx, rx) = tokio::sync::mpsc::unbounded_channel();
 
         tokio::spawn(async move {
-            while let Some(event_result) = event_soure.next().await {
+            while let Some(event_result) = event_source.next().await {
                 match event_result {
                     Ok(event) => match event {
                         Event::Open => continue,
@@ -376,7 +376,7 @@ impl Client {
                 }
             }
 
-            event_soure.close();
+            event_source.close();
         });
 
         Box::pin(tokio_stream::wrappers::UnboundedReceiverStream::new(rx))

@@ -1,7 +1,6 @@
 use std::collections::HashMap;
 
 use openai_dive::v1::api::Client;
-use openai_dive::v1::models::Gpt4Model;
 use openai_dive::v1::resources::response::request::{
     Prompt, ResponseInput, ResponseParametersBuilder,
 };
@@ -11,7 +10,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
     let client = Client::new_from_env();
 
     let parameters = ResponseParametersBuilder::default()
-        .model(Gpt4Model::Gpt41.to_string())
+        .model("gpt-4.1")
         .prompt(Prompt {
             id: "pmpt_687f87cf5ef08193aa802807cdec714a0759a65210f9a772".to_string(),
             version: None,

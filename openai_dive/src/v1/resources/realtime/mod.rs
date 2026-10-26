@@ -1,6 +1,6 @@
 use client::*;
 use server::{
-    ConversationCreated, ConversationItemCreated, ConversationItemDeleted,
+    ConversationItemCreated, ConversationItemDeleted,
     ConversationItemInputAudioTranscriptionCompleted,
     ConversationItemInputAudioTranscriptionFailed, ConversationItemTruncated, Error,
     InputAudioBufferCleared, InputAudioBufferCommitted, InputAudioBufferSpeechStarted,
@@ -86,8 +86,10 @@ fn add_server_deserializers(deserializers: &mut DeserializeHashMap) {
     deserializers.insert("session.updated", |text| {
         Ok(Box::new(serde_json::from_str::<SessionUpdated>(text)?))
     });
-    deserializers.insert("conversation.item.retieved", |text| {
-        Ok(Box::new(serde_json::from_str::<ConversationCreated>(text)?))
+    deserializers.insert("conversation.item.retrieved", |text| {
+        Ok(Box::new(serde_json::from_str::<ConversationItemCreated>(
+            text,
+        )?))
     });
     deserializers.insert("input_audio_buffer.committed", |text| {
         Ok(Box::new(serde_json::from_str::<InputAudioBufferCommitted>(

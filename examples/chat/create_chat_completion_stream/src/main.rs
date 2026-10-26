@@ -1,7 +1,6 @@
 use futures::StreamExt;
 use openai_dive::v1::api::Client;
 use openai_dive::v1::endpoints::chat::RoleTrackingStream;
-use openai_dive::v1::models::Gpt4Model;
 use openai_dive::v1::resources::chat::{
     ChatCompletionParametersBuilder, ChatCompletionResponseFormat, ChatMessage, ChatMessageContent,
     DeltaChatMessage,
@@ -12,7 +11,7 @@ async fn main() {
     let client = Client::new_from_env();
 
     let parameters = ChatCompletionParametersBuilder::default()
-        .model(Gpt4Model::Gpt4O.to_string())
+        .model("gpt-4o")
         .messages(vec![
             ChatMessage::User {
                 content: ChatMessageContent::Text("Hello!".to_string()),

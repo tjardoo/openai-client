@@ -1,6 +1,5 @@
 use ftail::Ftail;
 use openai_dive::v1::api::Client;
-use openai_dive::v1::models::Gpt5Model;
 use openai_dive::v1::resources::response::request::{ResponseInput, ResponseParametersBuilder};
 use openai_dive::v1::resources::response::response::{ReasoningSummary, ResponseReasoning};
 use openai_dive::v1::resources::shared::ReasoningEffort;
@@ -14,7 +13,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
     let client = Client::new_from_env();
 
     let parameters = ResponseParametersBuilder::default()
-        .model(Gpt5Model::Gpt54Nano.to_string())
+        .model("gpt-5.4-nano")
         .input(ResponseInput::Text(
             "How much wood would a woodchuck chuck?".to_string(),
         ))

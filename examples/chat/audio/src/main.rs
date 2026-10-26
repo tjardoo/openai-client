@@ -1,5 +1,4 @@
 use openai_dive::v1::api::Client;
-use openai_dive::v1::models::Gpt4Model;
 use openai_dive::v1::resources::chat::{
     AudioFormat, AudioParameters, ChatCompletionParametersBuilder, ChatMessage,
     ChatMessageAudioContentPart, ChatMessageContent, ChatMessageContentPart, InputAudioData, Voice,
@@ -12,7 +11,7 @@ async fn main() {
     let recording = std::fs::read("example-audio.txt").unwrap();
 
     let parameters = ChatCompletionParametersBuilder::default()
-        .model(Gpt4Model::Gpt4OAudioPreview.to_string())
+        .model("gpt-4o-audio-preview")
         .audio(AudioParameters {
             voice: Voice::Alloy,
             format: AudioFormat::Mp3,

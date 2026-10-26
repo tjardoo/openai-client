@@ -1,6 +1,5 @@
 use ftail::Ftail;
 use openai_dive::v1::api::Client;
-use openai_dive::v1::models::ToolModel;
 use openai_dive::v1::resources::chat::{
     ApproximateUserLocation, ChatCompletionParametersBuilder, ChatCompletionResponseFormat,
     ChatMessage, ChatMessageContent, UserLocationType, WebSearchOptions, WebSearchUserLocation,
@@ -16,7 +15,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
     let client = Client::new_from_env();
 
     let parameters = ChatCompletionParametersBuilder::default()
-        .model(ToolModel::Gpt4OMiniSearchPreview.to_string())
+        .model("gpt-4o-mini-search-preview")
         .messages(vec![ChatMessage::User {
             content: ChatMessageContent::Text(
                 "What was a positive news story from today?!".to_string(),

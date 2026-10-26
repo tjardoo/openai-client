@@ -1,6 +1,5 @@
 use ftail::Ftail;
 use openai_dive::v1::api::Client;
-use openai_dive::v1::models::Gpt5Model;
 use openai_dive::v1::resources::response::items::{FunctionToolCallOutput, InputItemStatus};
 use openai_dive::v1::resources::response::request::{
     ResponseInput, ResponseInputItem, ResponseParametersBuilder,
@@ -17,7 +16,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
     let client = Client::new_from_env();
 
     let parameters = ResponseParametersBuilder::default()
-        .model(Gpt5Model::Gpt54Mini.to_string())
+        .model("gpt-5.4-mini")
         .input(ResponseInput::Text(
             "What is the weather like in Ho Chi Minh City today?".to_string(),
         ))
@@ -61,7 +60,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
         .expect("No FunctionToolCall found in output");
 
     let parameters = ResponseParametersBuilder::default()
-        .model(Gpt5Model::Gpt54Mini.to_string())
+        .model("gpt-5.4-mini")
         .input(ResponseInput::List(vec![
             ResponseInputItem::FunctionToolCallOutput(FunctionToolCallOutput {
                 id: None,

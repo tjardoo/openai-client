@@ -234,7 +234,7 @@ pub struct Amount {
 pub enum ImageSource {
     #[serde(rename = "image.generation")]
     ImageGeneration,
-    #[serde(rename = "unsplimage.editash")]
+    #[serde(rename = "image.edit")]
     ImageEdit,
     #[serde(rename = "image.variation")]
     ImageVariation,

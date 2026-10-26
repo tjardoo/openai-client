@@ -1,5 +1,4 @@
 use openai_dive::v1::api::Client;
-use openai_dive::v1::models::ImageModel;
 use openai_dive::v1::resources::image::{
     BackgroundStyle, CreateImageParametersBuilder, ImageQuality, ImageSize, ModerationLevel,
     OutputFormat,
@@ -9,11 +8,11 @@ use openai_dive::v1::resources::image::{
 async fn main() {
     let client = Client::new_from_env();
 
-    // some parameters are commented out as they're only available for the ImageModel::DallE3
+    // some parameters are commented out as they're only available for dall-e-3
     let parameters = CreateImageParametersBuilder::default()
         .prompt("A cute dog in the park")
         .background(BackgroundStyle::Auto)
-        .model(ImageModel::GptImage1.to_string())
+        .model("gpt-image-1")
         .moderation(ModerationLevel::Auto)
         .n(1u32)
         .output_compression(100u32)

@@ -62,7 +62,7 @@
 //!
 //! ```rust
 //! let parameters = ChatCompletionParametersBuilder::default()
-//!     .model(Gpt4Model::Gpt4O.to_string())
+//!     .model("gpt-4o")
 //!     .messages(vec![
 //!         ChatMessage::User {
 //!             content: ChatMessageContent::Text("Hello!".to_string()),
@@ -90,7 +90,7 @@
 //!
 //! ```rust
 //! let parameters = ChatCompletionParametersBuilder::default()
-//!     .model(Gpt4Model::Gpt4O.to_string())
+//!     .model("gpt-4o")
 //!     .messages(vec![
 //!         ChatMessage::User {
 //!             content: ChatMessageContent::Text("What is in this image?".to_string()),
@@ -129,7 +129,7 @@
 //! let recording = std::fs::read("example-audio.txt").unwrap();
 //!
 //! let parameters = ChatCompletionParametersBuilder::default()
-//!     .model(Gpt4Model::Gpt4OAudioPreview.to_string())
+//!     .model("gpt-4o-audio-preview")
 //!     .messages(vec![
 //!         ChatMessage::User {
 //!             content: ChatMessageContent::Text(
@@ -171,7 +171,7 @@
 //! }];
 //!
 //! let parameters = ChatCompletionParametersBuilder::default()
-//!     .model(Gpt4Model::Gpt4O.to_string())
+//!     .model("gpt-4o")
 //!     .messages(messages)
 //!     .tools(vec![ChatCompletionTool {
 //!         r#type: ChatCompletionToolType::Function,
@@ -300,7 +300,7 @@
 //!
 //! ```rust
 //! let parameters = ChatCompletionParametersBuilder::default()
-//!     .model(ToolModel::Gpt4OMiniSearchPreview.to_string())
+//!     .model("gpt-4o-mini-search-preview")
 //!     .messages(vec![ChatMessage::User {
 //!         content: ChatMessageContent::Text(
 //!             "What was a positive news story from today?!".to_string(),
@@ -600,57 +600,10 @@
 //!
 //! ### Available Models
 //!
-//! You can use these predefined constants to set the model in the parameters or use any string representation (ie. for your custom models).
+//! Pass the model ID as a string, e.g. `.model("gpt-5.4")`. Any model ID works, including fine-tuned models and models of OpenAI-compatible APIs.
 //!
-//! #### GPT-5
+//! See the [OpenAI models overview](https://developers.openai.com/api/docs/models) for the available models, or use the [Models](#models) endpoint to list the models available to your API key.
 //!
-//! - Gpt54 (`gpt-5.4`)
-//! - Gpt54Mini (`gpt-5.4-mini`)
-//! - Gpt54Nano (`gpt-5.4-nano`)
-//!
-//! #### GPT-4
-//!
-//! - Gpt41 (`gpt-4.1`)
-//! - Gpt4O (`gpt-4o`)
-//! - Gpt4OAudioPreview (`gpt-4o-audio-preview`)
-//!
-//! #### Tool Models
-//!
-//! - Gpt4OSearchPreview (`gpt-4o-search-preview`)
-//! - Gpt4OMiniSearchPreview (`gpt-4o-mini-search-preview`)
-//! - ComputerUsePreview (`computer-use-preview`)
-//!
-//! #### Moderation Models
-//!
-//! - OmniModerationLatest (`omni-moderation-latest`)
-//!
-//! #### Embedding Models
-//!
-//! - TextEmbedding3Small (`text-embedding-3-small`)
-//! - TextEmbedding3Large (`text-embedding-3-large`)
-//!
-//! #### Transcription Models
-//!
-//! - Gpt4OTranscribe (`gpt-4o-transcribe`)
-//! - Whisper1 (`whisper-1`)
-//!
-//! #### TTS Models
-//!
-//! - Gpt4OMiniTts (`gpt-4o-mini-tts`)
-//! - Tts1 (`tts-1`)
-//! - Tts1HD (`tts-1-hd`)
-//!
-//! #### Image Models
-//!
-//! - GptImage1 (`gpt-image-1`)
-//! - DallE3 (`dall-e-3`)
-//! - DallE2 (`dall-e-2`)
-//!
-//! #### Video Models
-//!
-//! - Sora2 (`sora-2`)
-//! - Sora2Pro (`sora-2-pro`)
-//!
-//! More information: [Models](https://platform.openai.com/docs/models)
+//! > The model enums in `openai_dive::v1::models` are no longer updated when new models are released and will be deprecated in a future release.
 
 pub mod v1;

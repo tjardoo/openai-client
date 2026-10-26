@@ -1,6 +1,5 @@
 use ftail::Ftail;
 use openai_dive::v1::api::Client;
-use openai_dive::v1::models::Gpt4Model;
 use openai_dive::v1::resources::response::request::{ResponseInput, ResponseParametersBuilder};
 use openai_dive::v1::resources::response::shared::{
     ResponseTool, ResponseToolChoice, UserLocationType, WebSearchUserLocation,
@@ -16,7 +15,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
     let client = Client::new_from_env();
 
     let parameters = ResponseParametersBuilder::default()
-        .model(Gpt4Model::Gpt4O.to_string())
+        .model("gpt-4o")
         .input(ResponseInput::Text(
             "What was a positive news story from today in my area?".to_string(),
         ))

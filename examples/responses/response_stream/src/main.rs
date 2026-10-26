@@ -1,6 +1,5 @@
 use futures::stream::StreamExt;
 use openai_dive::v1::api::Client;
-use openai_dive::v1::models::Gpt4Model;
 use openai_dive::v1::resources::response::request::{ResponseInput, ResponseParametersBuilder};
 use openai_dive::v1::resources::response::response::ResponseStreamEvent;
 
@@ -9,7 +8,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
     let client = Client::new_from_env();
 
     let parameters = ResponseParametersBuilder::default()
-        .model(Gpt4Model::Gpt41.to_string())
+        .model("gpt-4.1")
         .input(ResponseInput::Text(
             "Who's the president of the European Union?".to_string(),
         ))

@@ -1,5 +1,4 @@
 use openai_dive::v1::api::Client;
-use openai_dive::v1::models::Gpt4Model;
 use openai_dive::v1::resources::chat::{
     ChatCompletionParametersBuilder, ChatMessage, ChatMessageContent, ChatMessageContentPart,
     ChatMessageImageContentPart, ChatMessageTextContentPart, ImageUrlType,
@@ -10,7 +9,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
     let client = Client::new_from_env();
 
     let parameters = ChatCompletionParametersBuilder::default()
-        .model(Gpt4Model::Gpt4O.to_string())
+        .model("gpt-4o")
         .messages(vec![
             ChatMessage::User {
                 content: ChatMessageContent::Text("What is in this image?".to_string()),

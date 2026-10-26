@@ -1,5 +1,4 @@
 use openai_dive::v1::api::Client;
-use openai_dive::v1::models::VideoModel;
 use openai_dive::v1::resources::video::{CreateVideoParametersBuilder, VideoJobStatus, VideoSize};
 
 #[tokio::main]
@@ -8,7 +7,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
 
     let parameters = CreateVideoParametersBuilder::default()
         .prompt("Wide shot of a school bus driving down a busy street, camera follows the bus as it weaves through traffic.")
-        .model(VideoModel::Sora2.to_string())
+        .model("sora-2")
         .seconds("4")
         .size(VideoSize::Size720x1280)
         .build()?;

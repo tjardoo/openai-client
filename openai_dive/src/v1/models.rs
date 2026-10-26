@@ -1,3 +1,9 @@
+//! Predefined model IDs.
+//!
+//! These enums are no longer updated when new models are released and will be deprecated in a
+//! future release. Pass the model ID as a string instead, e.g. `.model("gpt-5.4")`.
+//! See <https://developers.openai.com/api/docs/models> for the available models.
+
 use serde::{Deserialize, Serialize};
 
 #[derive(Serialize, Deserialize, Debug, Clone, PartialEq)]

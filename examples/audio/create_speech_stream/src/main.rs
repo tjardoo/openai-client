@@ -1,7 +1,6 @@
 use futures::future;
 use futures::stream::StreamExt;
 use openai_dive::v1::api::Client;
-use openai_dive::v1::models::TTSModel;
 use openai_dive::v1::resources::audio::{
     AudioSpeechParametersBuilder, AudioSpeechResponseFormat, AudioVoice,
 };
@@ -13,7 +12,7 @@ async fn main() {
     let client = Client::new_from_env();
 
     let parameters = AudioSpeechParametersBuilder::default()
-        .model(TTSModel::Tts1.to_string())
+        .model("tts-1")
         .input("The quick brown fox jumped over the lazy dog.")
         .voice(AudioVoice::Alloy)
         .response_format(AudioSpeechResponseFormat::Mp3)
