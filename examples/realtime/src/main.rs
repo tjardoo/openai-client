@@ -82,7 +82,9 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
                                                     .unwrap();
 
                                                 let pcm_samples: Vec<i16> = decoded_audio
-                                                    .as_chunks::<2>().0.iter()
+                                                    .as_chunks::<2>()
+                                                    .0
+                                                    .iter()
                                                     .map(|c| i16::from_le_bytes([c[0], c[1]]))
                                                     .collect();
 

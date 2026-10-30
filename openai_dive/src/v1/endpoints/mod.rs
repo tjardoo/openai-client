@@ -2,6 +2,7 @@ pub mod administration;
 pub mod audio;
 pub mod batch;
 pub mod chat;
+pub mod decisions;
 pub mod embeddings;
 pub mod files;
 pub mod fine_tuning;
