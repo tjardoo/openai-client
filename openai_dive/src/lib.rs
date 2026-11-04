@@ -45,6 +45,7 @@
 //! - [Files](#files)
 //! - [Embeddings](#embeddings)
 //! - [Moderation](#moderation)
+//! - [Decisions](#decisions)
 //! - [Uploads](#uploads)
 //! - [Fine-tuning](#fine-tuning)
 //! - [Batches](#batches)
@@ -425,6 +426,16 @@
 //! - Create moderation
 //!
 //! More information [Moderation](https://platform.openai.com/docs/api-reference/moderations)
+//!
+//! ## Decisions
+//!
+//! Quickly answer classification or scoring questions about some input. Each request can ask up to 400 predicate, choice or score questions.
+//!
+//! For more information see the examples in the [examples/decisions](https://github.com/tjardoo/openai-client/tree/master/examples/decisions) directory.
+//!
+//! - Create decision
+//!
+//! More information [Decisions](https://developers.openai.com/api/reference/resources/decisions)
 //!
 //! ## Uploads
 //!
