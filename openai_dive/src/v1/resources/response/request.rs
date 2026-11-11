@@ -28,6 +28,12 @@ pub struct ResponseParameters {
     /// Reference to a prompt template and its variables.
     #[serde(skip_serializing_if = "Option::is_none")]
     pub prompt: Option<Prompt>,
+    /// Configures prompt caching for `gpt-5.6` and later models.
+    ///
+    /// Use this to choose automatic or explicit cache boundaries, set the default cache lifetime, or fill the cache
+    /// without generating a response.
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub prompt_cache_options: Option<PromptCacheOptions>,
     /// Specify additional output data to include in the model response.
     #[serde(skip_serializing_if = "Option::is_none")]
     pub include: Option<Vec<ResponseInclude>>,
@@ -117,18 +123,27 @@ pub enum ContentItem {
     #[serde(rename = "input_text")]
     Text {
         text: String,
+        /// Marks the end of this content part as a cacheable prompt prefix.
+        #[serde(default, skip_serializing_if = "Option::is_none")]
+        prompt_cache_breakpoint: Option<PromptCacheBreakpoint>,
     },
     #[serde(rename = "input_image")]
     Image {
         detail: ImageDetailLevel,
         file_id: Option<String>,
         image_url: Option<String>,
+        /// Marks the end of this content part as a cacheable prompt prefix.
+        #[serde(default, skip_serializing_if = "Option::is_none")]
+        prompt_cache_breakpoint: Option<PromptCacheBreakpoint>,
     },
     #[serde(rename = "input_file")]
     File {
         file_data: Option<String>,
         file_id: Option<String>,
         filename: Option<String>,
+        /// Marks the end of this content part as a cacheable prompt prefix.
+        #[serde(default, skip_serializing_if = "Option::is_none")]
+        prompt_cache_breakpoint: Option<PromptCacheBreakpoint>,
     },
     #[serde(rename = "output_text")]
     OutputText {
@@ -138,6 +153,65 @@ pub enum ContentItem {
     Refusal {
         refusal: String,
     },
+}
+
+/// Controls how the Responses API caches reusable prompt prefixes.
+///
+/// Caching applies only when the prompt contains at least 1,024 input tokens. Cache hits reduce the cost of repeated
+/// input, while cache writes cost more than normal input.
+#[derive(Serialize, Deserialize, Debug, Default, Clone, PartialEq)]
+pub struct PromptCacheOptions {
+    /// Chooses where the API may cache the prompt. The default, [`PromptCacheMode::Implicit`], adds an automatic
+    /// boundary in addition to any explicit breakpoints. [`PromptCacheMode::Explicit`] uses only explicit breakpoints.
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub mode: Option<PromptCacheMode>,
+    /// Sets the cache lifetime for the automatic boundary and for explicit breakpoints without their own `ttl`.
+    /// Defaults to 30 minutes.
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub ttl: Option<PromptCacheTtl>,
+    /// Set to `true` to fill the prompt cache without generating model output.
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub prewarm: Option<bool>,
+}
+
+/// Determines whether the API adds an automatic prompt cache boundary.
+#[derive(Serialize, Deserialize, Debug, Clone, PartialEq)]
+#[serde(rename_all = "lowercase")]
+pub enum PromptCacheMode {
+    Implicit,
+    Explicit,
+}
+
+/// How long a cached prompt prefix remains available.
+///
+/// The 30-minute lifetime is the default and its writes cost 1.25 times normal input. Twelve-hour writes cost 2.5
+/// times normal input. Cache hits receive the cached-input discount for either lifetime.
+#[derive(Serialize, Deserialize, Debug, Clone, Copy, PartialEq)]
+pub enum PromptCacheTtl {
+    #[serde(rename = "30m")]
+    ThirtyMinutes,
+    #[serde(rename = "12h")]
+    TwelveHours,
+}
+
+/// Marks the end of an input content part as a cacheable prompt prefix.
+///
+/// Include the same breakpoint in every request that should reuse the prefix; the API checks only breakpoints present
+/// in the current request. The prompt must contain at least 1,024 input tokens for caching to apply.
+#[derive(Serialize, Deserialize, Debug, Default, Clone, PartialEq)]
+pub struct PromptCacheBreakpoint {
+    pub mode: PromptCacheBreakpointMode,
+    /// Overrides [`PromptCacheOptions::ttl`] for this boundary. When omitted, the request-wide lifetime applies.
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub ttl: Option<PromptCacheTtl>,
+}
+
+/// The kind of explicit prompt cache boundary.
+#[derive(Serialize, Deserialize, Debug, Default, Clone, PartialEq)]
+#[serde(rename_all = "lowercase")]
+pub enum PromptCacheBreakpointMode {
+    #[default]
+    Explicit,
 }
 
 #[derive(Serialize, Deserialize, Debug, Clone, PartialEq)]

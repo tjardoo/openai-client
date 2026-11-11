@@ -367,11 +367,21 @@ impl Client {
                             }
                         }
                     },
+                    // Treat the server closing the stream as the end of this response. Do not poll
+                    // again after any error: the event source's default retry resends the original
+                    // POST, creating a second billable response.
+                    Err(reqwest_eventsource::Error::StreamEnded) => break,
+
+                    // Preserve the response body when the server rejects the request.
+                    Err(reqwest_eventsource::Error::InvalidStatusCode(status, response)) => {
+                        let _ = tx.send(Err(Client::status_error(status, response).await));
+                        break;
+                    }
+
+                    // Report any other connection or event-stream failure, then stop reading.
                     Err(error) => {
-                        if let Err(_error) = tx.send(Err(APIError::StreamError(error.to_string())))
-                        {
-                            break;
-                        }
+                        let _ = tx.send(Err(APIError::StreamError(error.to_string())));
+                        break;
                     }
                 }
             }
@@ -380,6 +390,20 @@ impl Client {
         });
 
         Box::pin(tokio_stream::wrappers::UnboundedReceiverStream::new(rx))
+    }
+
+    /// Returns an API error for a rejected streaming request, preserving its response body.
+    #[cfg(feature = "stream")]
+    async fn status_error(status: reqwest::StatusCode, response: reqwest::Response) -> APIError {
+        match check_status_code(Ok(response)).await {
+            Err(error) => error,
+
+            // Preserve unexpected non-client statuses with their numeric status and response body.
+            Ok(response) => {
+                let text = response.text().await.unwrap_or_default();
+                APIError::UnknownError(status.as_u16(), text)
+            }
+        }
     }
 }
 
