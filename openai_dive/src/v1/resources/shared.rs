@@ -27,6 +27,21 @@ pub struct Usage {
 pub struct InputTokensDetails {
     /// The number of tokens that were retrieved from the cache.
     pub cached_tokens: u32,
+    /// Number of input tokens added to the prompt cache by `gpt-5.6` and later models.
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub cache_write_tokens: Option<u32>,
+    /// Cache-write token counts grouped by lifetime, when reported by `gpt-5.6` and later models.
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub cache_write_tokens_details: Option<CacheWriteTokensDetails>,
+}
+
+/// Breaks down prompt cache writes by the lifetime selected for each cached prefix.
+#[derive(Serialize, Deserialize, Debug, Clone, PartialEq)]
+pub struct CacheWriteTokensDetails {
+    /// Number of tokens written to the 30-minute cache.
+    pub ttl_30m_tokens: u32,
+    /// Number of tokens written to the 12-hour cache.
+    pub ttl_12h_tokens: u32,
 }
 
 #[derive(Serialize, Deserialize, Debug, Clone, PartialEq)]

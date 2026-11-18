@@ -50,14 +50,18 @@ pub struct ResponseUsage {
 pub enum ResponseTool {
     Function {
         name: String,
+        #[serde(skip_serializing_if = "Option::is_none")]
         description: Option<String>,
         parameters: serde_json::Value,
         strict: bool,
     },
     FileSearch {
         vector_store_ids: Vec<String>,
+        #[serde(skip_serializing_if = "Option::is_none")]
         filters: Option<FileSearchFilters>,
+        #[serde(skip_serializing_if = "Option::is_none")]
         max_num_results: Option<u32>,
+        #[serde(skip_serializing_if = "Option::is_none")]
         ranking_options: Option<FileSearchRankingOption>,
     },
     #[serde(rename = "web_search_preview")]
@@ -70,18 +74,25 @@ pub enum ResponseTool {
         // A label for this MCP server, used to identify it in tool calls.
         server_label: String,
         // The URL for the MCP server. One of server_url or connector_id must be provided.
+        #[serde(skip_serializing_if = "Option::is_none")]
         server_url: Option<String>,
         // Optional description of the MCP server, used to provide more context.
+        #[serde(skip_serializing_if = "Option::is_none")]
         server_description: Option<String>,
         // A string array of allowed tool names
+        #[serde(skip_serializing_if = "Option::is_none")]
         allowed_tools: Option<Vec<String>>,
         // An OAuth access token that can be used with a remote MCP server, either with a custom MCP server URL or a service connector. Your application must handle the OAuth authorization flow and provide the token here.
-        authorization: String,
+        #[serde(skip_serializing_if = "Option::is_none")]
+        authorization: Option<String>,
         // Identifier for service connectors. One of server_url or connector_id must be provided.
+        #[serde(skip_serializing_if = "Option::is_none")]
         connector_id: Option<String>,
         // Optional HTTP headers to send to the MCP server. Use for authentication or other purposes.
+        #[serde(skip_serializing_if = "Option::is_none")]
         headers: Option<HashMap<String, String>>,
         // Specify which of the MCP server's tools require approval.
+        #[serde(skip_serializing_if = "Option::is_none")]
         require_approval: Option<McpToolApproval>,
     },
     #[serde(rename = "image_generation")]

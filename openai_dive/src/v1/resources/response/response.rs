@@ -163,6 +163,8 @@ pub enum ReasoningStatus {
     Failed,
     InProgress,
     Incomplete,
+    Queued,
+    Cancelled,
 }
 
 #[derive(Serialize, Deserialize, Debug, Clone, PartialEq)]
@@ -364,7 +366,10 @@ pub enum ResponseStreamEvent {
         sequence_number: u32,
         item_id: String,
         output_index: usize,
-        name: String,
+        /// Name is now deprecated and no longer exists in the OpenAI OpenAPI spec.
+        /// Leaving it in for now for other OpenAI compatible services.
+        #[serde(default, skip_serializing_if = "Option::is_none")]
+        name: Option<String>,
         arguments: String,
     },
 
@@ -629,9 +634,9 @@ pub enum ResponseStreamEvent {
     #[serde(rename = "error")]
     Error {
         sequence_number: u32,
-        code: String,
+        #[serde(default)]
+        code: Option<String>,
         message: String,
-        #[serde(skip_serializing_if = "Option::is_none")]
         param: Option<String>,
     },
 }
